@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import Test from '@/components/Test.vue'
+import GlobalHeader from '@/components/GlobalHeader.vue'
 </script>
 
 <template>
-  <Test />
+  <GlobalHeader />
 </template>
 
 <style lang="scss">
