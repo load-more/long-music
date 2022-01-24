@@ -6,7 +6,7 @@
     default-active="2"
     text-color="#fff"
   >
-    <el-scrollbar height="600px">
+    <el-scrollbar class="scroll-bar">
       <el-menu-item>
         <span>发现音乐</span>
       </el-menu-item>
@@ -67,12 +67,19 @@
 </script>
 
 <style scoped lang="scss">
+$sideWidth: 200px;
+$menuItemHeight: 44px;
+$menuItemPaddingLeft: 20px;
 .el-menu {
-  width: 200px;
+  width: $sideWidth;
+  height: 100%;
   border: none;
+  .scroll-bar {
+    height: 100%;
+  }
   .el-menu-item {
-    height: 44px;
-    padding-left: 5px !important;
+    height: $menuItemHeight;
+    padding-left: $menuItemPaddingLeft !important;
     &:hover {
       background-color: #333;
     }
@@ -84,7 +91,7 @@
       }
       .icon-add {
         font-size: 18px;
-        margin-left: 80px;
+        margin-left: 70px;
       }
       &:hover {
         background-color: transparent;

@@ -1,5 +1,5 @@
 <template>
-  <el-row class="container" :gutter="20">
+  <el-row class="container">
     <el-col :span="4" class="left">
       <a href="/#">
         <img src="@/assets/logo.png" alt="logo">
