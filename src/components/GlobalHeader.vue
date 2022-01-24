@@ -27,7 +27,7 @@
       </a>
     </el-col>
     <el-col :span="6" class="right">
-      <div class="user-info">
+      <div class="user-info" v-if="isLogin">
         <el-avatar
           :size="40"
           src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
@@ -48,6 +48,10 @@
           </template>
         </el-dropdown>
       </div>
+      <div class="login-info" v-else>
+        <a href="/#">登录</a>&nbsp;
+        <a href="/#">注册</a>
+      </div>
       <a href="/#">
         <i class="iconfont icon-Message"></i>
       </a>
@@ -62,7 +66,9 @@
 </template>
 
 <script setup lang="ts">
-
+import { storeToRefs } from 'pinia'
+import { useMainStore } from '@/store/index'
+const { isLogin } = storeToRefs(useMainStore())
 </script>
 
 <style scoped lang="scss">
@@ -112,6 +118,12 @@
       i {
         color: gray;
         font-size: 12px;
+      }
+    }
+    .login-info {
+      a {
+        font-size: 14px;
+        color: #fff;
       }
     }
     i {
