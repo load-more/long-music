@@ -49,8 +49,8 @@
         </el-dropdown>
       </div>
       <div class="login-info" v-else>
-        <a href="/#">登录</a>&nbsp;
-        <a href="/#">注册</a>
+        <span @click="isShowLoginDialog=true">未登录</span>&nbsp;
+        <i class="iconfont icon-drop-down-arrow"></i>
       </div>
       <a href="/#">
         <i class="iconfont icon-Message"></i>
@@ -63,12 +63,20 @@
       </a>
     </el-col>
   </el-row>
+  <LoginDialog v-if="isShowLoginDialog" @closeDialog="closeDialog" />
 </template>
 
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
 import { useMainStore } from '@/store/index'
+import LoginDialog from './LoginDialog.vue'
+import { ref } from 'vue'
+
 const { isLogin } = storeToRefs(useMainStore())
+const isShowLoginDialog = ref(false)
+const closeDialog = (dialogVisible: boolean) => {
+  isShowLoginDialog.value = dialogVisible
+}
 </script>
 
 <style scoped lang="scss">
@@ -115,16 +123,17 @@ const { isLogin } = storeToRefs(useMainStore())
       justify-content: space-between;
       align-items: center;
       width: 130px;
-      i {
-        color: gray;
-        font-size: 12px;
-      }
     }
     .login-info {
-      a {
+      span {
         font-size: 14px;
         color: #fff;
+        cursor: pointer;
       }
+    }
+    .user-info i, .login-info i {
+      color: gray;
+      font-size: 12px;
     }
     i {
       font-size: 18px;
