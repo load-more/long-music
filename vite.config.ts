@@ -21,19 +21,20 @@ export default defineConfig({
 			'@': '/src'
 		}
 	},
-  server: {
-    proxy: { // 设置服务器代理
-      '/api': {
-        // 将 /api 开头的请求拼接到 target 后面
-        // 比如请求 /api => https://neteasecloudmusicapi.vercel.app/api
-        target: 'https://neteasecloudmusicapi.vercel.app/',
-        changeOrigin: true, // 是否跨域
-        ws: true, // 是否代理 websockets
-        secure: false,
-        // 将 /api 开头的请求的 /api 字符串替换成空字符，然后再拼接
-        // 比如请求 /api => '' => https://neteasecloudmusicapi.vercel.app/
-        rewrite: (path) => path.replace(/^\/api/, '')
-      }
-    }
-  }
+  // vite@2.7.13 存在 bug，无效，暂时不用
+  // server: {
+  //   proxy: { // 设置服务器代理
+  //     '/api': {
+  //       // 将 /api 开头的请求拼接到 target 后面
+  //       // 比如请求 /api => https://netease-cloud-music-api-pi-nine.vercel.app/api
+  //       target: 'https://netease-cloud-music-api-pi-nine.vercel.app/',
+  //       changeOrigin: true, // 是否跨域
+  //       ws: true, // 是否代理 websockets
+  //       secure: false,
+  //       // 将 /api 开头的请求的 /api 字符串替换成空字符，然后再拼接
+  //       // 比如请求 /api => '' => https://netease-cloud-music-api-pi-nine.vercel.app/
+  //       rewrite: (path) => path.replace(/^\/api/, '')
+  //     }
+  //   }
+  // }
 })

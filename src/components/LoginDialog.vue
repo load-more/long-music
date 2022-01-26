@@ -104,9 +104,8 @@ const onClickLogin = () => {
       if (result) {
         // 表单校验成功，发送请求
         console.log('validate successfully!')
-        // const result = phoneLogin(phoneLoginForm)
-        // console.log(result)
-        fetch('/api/index')
+        const result = phoneLogin(phoneLoginForm)
+        console.log(result)
       }
     })
   }
