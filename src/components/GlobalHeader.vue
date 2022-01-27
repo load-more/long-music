@@ -68,8 +68,8 @@
 
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import { useMainStore } from '@/store/index'
-import LoginDialog from './login-dialog/LoginDialog.vue'
+import { useMainStore } from '../store/index'
+import LoginDialog from './login-dialog/index.vue'
 import { ref } from 'vue'
 
 const { isLogin } = storeToRefs(useMainStore())
