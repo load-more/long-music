@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onUnmounted } from 'vue'
 import { generateQrKey, generateQrCode, checkQrCode } from '../../api/login'
 import { ElMessage } from 'element-plus'
 
@@ -29,6 +29,11 @@ const imgUrl = ref('')
 const isLoading = ref(false)
 let timer: number | null = null
 const prompt = ref('')
+
+onUnmounted(() => {
+  clearInterval(timer as number)
+  timer = null
+})
 
 const displayQrCode = async () => {
   let key = ''
@@ -48,11 +53,14 @@ const displayQrCode = async () => {
       // 如果成功，将图片替换
       if (qrRst.data.code === 200) {
         imgUrl.value = qrRst.data.data.qrimg
-        console.log(imgUrl.value)
       }
     }
   } catch (error) {
-    console.log(error)
+    ElMessage({
+      type: 'error',
+      message: '加载失败',
+      appendTo: document.body
+    })
   }
   isLoading.value = false
   
@@ -66,7 +74,6 @@ const displayQrCode = async () => {
 
   timer = setInterval(async () => {
     const rst = await getQrCodeStatus(key)
-    console.log(rst)
     switch(rst) {
       case 800:
         prompt.value = '二维码已过期'

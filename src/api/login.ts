@@ -62,3 +62,28 @@ export const checkQrCode = (params: checkQrCodeParams) => {
     params
   })
 }
+
+interface sendCaptchaParams {
+  phone: string
+  ctcode?: number
+}
+export const sendCaptcha = (params: sendCaptchaParams) => {
+  return request({
+    method: 'GET',
+    url: '/captcha/sent',
+    params
+  })
+}
+
+interface verifyCaptchaParams {
+  phone: string
+  captcha: string
+  ctcode?: number
+}
+export const verifyCaptcha = (params: verifyCaptchaParams) => {
+  return request({
+    method: 'GET',
+    url: '/captcha/verify',
+    params
+  })
+}

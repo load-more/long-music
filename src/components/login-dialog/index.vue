@@ -18,6 +18,12 @@
         @on-toggle-loading="toggleLoading"
         @close-dialog="dialogVisible=false"
       />
+      <LoginForm
+        v-else-if="currentLoginMethod === 'sms'"
+        type="sms"
+        @on-toggle-loading="toggleLoading"
+        @close-dialog="dialogVisible=false"
+      />
       <QrLoginPage
         v-else
         @close-dialog="dialogVisible=false"
@@ -25,28 +31,14 @@
       <div class="bottom">
         <el-row class="other-methods">
           <span>其他登录方式：</span>
-          <span v-if="currentLoginMethod === 'phone'">
-            <el-button circle @click="currentLoginMethod = 'email'">
-              <i class="iconfont icon-email"></i>
-            </el-button>
-            <el-button circle @click="currentLoginMethod = 'qrcode'">
-              <i class="iconfont icon-qr-code"></i>
-            </el-button>
-          </span>
-          <span v-else-if="currentLoginMethod === 'email'">
-            <el-button circle @click="currentLoginMethod = 'phone'">
-              <i class="iconfont icon-phone"></i>
-            </el-button>
-            <el-button circle @click="currentLoginMethod = 'qrcode'">
-              <i class="iconfont icon-qr-code"></i>
-            </el-button>
-          </span>
-          <span v-else>
-            <el-button circle @click="currentLoginMethod = 'phone'">
-              <i class="iconfont icon-phone"></i>
-            </el-button>
-            <el-button circle @click="currentLoginMethod = 'email'">
-              <i class="iconfont icon-email"></i>
+          <span>
+            <el-button
+              v-for="item in otherMethods"
+              :key="item"
+              @click="currentLoginMethod = item"
+              circle
+            >
+              <i :class="`iconfont icon-${item}`"></i>
             </el-button>
           </span>
         </el-row>
@@ -59,7 +51,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { reactive, ref, watch, computed } from 'vue'
 import LoginForm from './LoginForm.vue'
 import QrLoginPage from './QrLoginPage.vue'
 
@@ -69,19 +61,26 @@ const isLoading = ref(false)
 const toggleLoading = (status: boolean) => {
   isLoading.value = status
 }
-const currentLoginMethod = ref<'phone' | 'email' | 'qrcode'>('phone')
+type loginType = 'phone' | 'sms' | 'email' | 'qrcode'
+const currentLoginMethod = ref<loginType>('phone')
 const dialogTitle = ref('手机登录')
+const loginMethods: loginType[] = reactive(['phone', 'sms', 'email', 'qrcode'])
+const otherMethods = computed(() => {
+  return loginMethods.filter(item => item !== currentLoginMethod.value)
+})
 
 watch(dialogVisible, () => {
   emit('closeDialog', dialogVisible.value)
 })
 watch(currentLoginMethod, () => {
   if (currentLoginMethod.value === 'phone') {
-    dialogTitle.value = '手机登录'
+    dialogTitle.value = '手机号登录'
   } else if (currentLoginMethod.value === 'email') {
     dialogTitle.value = '邮箱登录'
   } else if (currentLoginMethod.value === 'qrcode') {
     dialogTitle.value = '二维码登录'
+  } else if (currentLoginMethod.value === 'sms') {
+    dialogTitle.value = '短信登陆'
   }
 })
 </script>
