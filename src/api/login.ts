@@ -5,7 +5,7 @@ interface phoneLoginParams {
   password: string
 }
 export const phoneLogin = (params: phoneLoginParams) => {
-  request({
+  return request({
     method: 'GET',
     url: '/login/cellphone',
     params

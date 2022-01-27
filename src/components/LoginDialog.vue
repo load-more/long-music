@@ -54,6 +54,7 @@ import { ref, watch, reactive } from 'vue'
 // 导入 ElForm 组件的类型，后续定义 ref 可以获取组件的属性和方法
 import type { ElForm } from 'element-plus'
 import { phoneLogin } from '../api/login'
+import { ElMessage } from 'element-plus'
 
 const emit = defineEmits(['closeDialog'])
 const dialogVisible = ref(true)
@@ -100,12 +101,19 @@ watch(dialogVisible, () => {
 const formRef = ref<InstanceType<typeof ElForm>>()
 const onClickLogin = () => {
   if (formRef.value) {
-    formRef.value.validate((result, notPass) => {
+    formRef.value.validate(async (result, notPass) => {
       if (result) {
         // 表单校验成功，发送请求
-        console.log('validate successfully!')
-        const result = phoneLogin(phoneLoginForm)
-        console.log(result)
+        try {
+          const result = await phoneLogin(phoneLoginForm)
+          console.log(result)
+        } catch (error: any) {
+          ElMessage({
+            type: 'error',
+            message: error.response.data.message,
+            appendTo: document.body
+          })
+        }
       }
     })
   }
