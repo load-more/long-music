@@ -5,6 +5,9 @@
       :model="phoneLoginForm"
       :rules="phoneLoginRules"
       ref="formRef"
+      v-loading="isLoading"
+      element-loading-text="操作中..."
+      element-loading-background="rgba(255, 255, 255, 0.8)"
     >
       <el-form-item class="form-item-phone" prop="phone">
         <el-input
@@ -18,17 +21,26 @@
       </el-form-item>
       <el-form-item class="form-item-password" prop="password">
         <el-input
-          type="password"
+          :type="isPasswordVisible ? 'text' : 'password'"
           v-model="phoneLoginForm.password"
           placeholder="请输入密码"
         >
           <template #prefix>
             <i class="iconfont icon-password"></i>
           </template>
+          <template #suffix>
+            <div @click="isPasswordVisible = !isPasswordVisible" class="password-eye">
+              <i v-if="isPasswordVisible" class="iconfont icon-nosee"></i>
+              <i v-else class="iconfont icon-see"></i>
+            </div>
+          </template>
         </el-input>
       </el-form-item>
       <el-form-item class="form-item-auto-login">
         <el-checkbox v-model="isAutoLogin" label="自动登录" size="small"></el-checkbox>
+      </el-form-item>
+      <el-form-item>
+        <el-checkbox v-model="isTest" label="测试数据" size="small"></el-checkbox>
       </el-form-item>
       <el-form-item class="form-item-login">
         <el-button type="primary" style="width: 100%;" @click="onClickLogin">登录</el-button>
@@ -50,17 +62,24 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, reactive } from 'vue'
+import { ref, watch, reactive, computed } from 'vue'
 // 导入 ElForm 组件的类型，后续定义 ref 可以获取组件的属性和方法
 import type { ElForm } from 'element-plus'
 import { phoneLogin } from '../api/login'
 import { ElMessage } from 'element-plus'
+import md5 from 'js-md5'
 
 const emit = defineEmits(['closeDialog'])
 const dialogVisible = ref(true)
 const phoneLoginForm = reactive({
   phone: '',
   password: ''
+})
+const phoneLoginEncryptedForm = computed(() => {
+  return {
+    phone: phoneLoginForm.phone,
+    md5_password: md5(phoneLoginForm.password) // 密码加密
+  }
 })
 const isAutoLogin = ref(false)
 const phoneLoginRules = reactive({
@@ -84,9 +103,17 @@ const phoneLoginRules = reactive({
     }
   ]
 })
+const isLoading = ref(false)
+const isPasswordVisible = ref(false)
+const isTest = ref(false)
 
 watch(dialogVisible, () => {
   emit('closeDialog', dialogVisible.value)
+})
+
+watch(isTest, () => {
+  phoneLoginForm.phone = '18470415369'
+  phoneLoginForm.password = 'test#123'
 })
 
 /*
@@ -104,9 +131,24 @@ const onClickLogin = () => {
     formRef.value.validate(async (result, notPass) => {
       if (result) {
         // 表单校验成功，发送请求
+        isLoading.value = true
         try {
-          const result = await phoneLogin(phoneLoginForm)
+          const result = await phoneLogin(phoneLoginEncryptedForm.value)
           console.log(result)
+          if (result.data.code === 200) { // 登录成功
+            ElMessage({
+              type: 'success',
+              message: '登录成功！',
+              appendTo: document.body
+            })
+            dialogVisible.value = false // 关闭对话框
+          } else if (result.data.code === 502) { // 登录失败
+            ElMessage({
+              type: 'error',
+              message: result.data.message,
+              appendTo: document.body
+            })
+          }
         } catch (error: any) {
           ElMessage({
             type: 'error',
@@ -114,6 +156,7 @@ const onClickLogin = () => {
             appendTo: document.body
           })
         }
+        isLoading.value = false
       }
     })
   }
@@ -128,6 +171,10 @@ const onClickLogin = () => {
   // .form-item-password, .form-item-auto-login {
   //   margin-bottom: 10px;
   // }
+  .password-eye {
+    pointer-events: auto;
+    cursor: pointer;
+  }
   .other-methods {
     font-size: 12px;
     color: gray;

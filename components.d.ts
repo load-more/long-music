@@ -22,6 +22,7 @@ declare module 'vue' {
     ElScrollbar: typeof import('element-plus/es')['ElScrollbar']
     GlobalFooter: typeof import('./src/components/GlobalFooter.vue')['default']
     GlobalHeader: typeof import('./src/components/GlobalHeader.vue')['default']
+    Loading: typeof import('element-plus/es')['ElLoadingDirective']
     LoginDialog: typeof import('./src/components/LoginDialog.vue')['default']
     SidebarMenu: typeof import('./src/components/SidebarMenu.vue')['default']
   }
