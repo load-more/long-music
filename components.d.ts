@@ -20,11 +20,12 @@ declare module 'vue' {
     ElProgress: typeof import('element-plus/es')['ElProgress']
     ElRow: typeof import('element-plus/es')['ElRow']
     ElScrollbar: typeof import('element-plus/es')['ElScrollbar']
-    ElTooltip: typeof import('element-plus/es')['ElTooltip']
     GlobalFooter: typeof import('./src/components/GlobalFooter.vue')['default']
     GlobalHeader: typeof import('./src/components/GlobalHeader.vue')['default']
     Loading: typeof import('element-plus/es')['ElLoadingDirective']
-    LoginDialog: typeof import('./src/components/LoginDialog.vue')['default']
+    LoginDialog: typeof import('./src/components/login-dialog/index.vue')['default']
+    LoginForm: typeof import('./src/components/login-dialog/LoginForm.vue')['default']
+    QrLogin: typeof import('./src/components/login-dialog/QrLogin.vue')['default']
     SidebarMenu: typeof import('./src/components/SidebarMenu.vue')['default']
   }
 }
