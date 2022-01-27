@@ -18,6 +18,10 @@
         @on-toggle-loading="toggleLoading"
         @close-dialog="dialogVisible=false"
       />
+      <QrLoginPage
+        v-else
+        @close-dialog="dialogVisible=false"
+      />
       <div class="bottom">
         <el-row class="other-methods">
           <span>其他登录方式：</span>
@@ -25,7 +29,7 @@
             <el-button circle @click="currentLoginMethod = 'email'">
               <i class="iconfont icon-email"></i>
             </el-button>
-            <el-button circle>
+            <el-button circle @click="currentLoginMethod = 'qrcode'">
               <i class="iconfont icon-qr-code"></i>
             </el-button>
           </span>
@@ -33,15 +37,15 @@
             <el-button circle @click="currentLoginMethod = 'phone'">
               <i class="iconfont icon-phone"></i>
             </el-button>
-            <el-button circle>
+            <el-button circle @click="currentLoginMethod = 'qrcode'">
               <i class="iconfont icon-qr-code"></i>
             </el-button>
           </span>
           <span v-else>
-            <el-button circle @click="currentLoginMethod = 'email'">
+            <el-button circle @click="currentLoginMethod = 'phone'">
               <i class="iconfont icon-phone"></i>
             </el-button>
-            <el-button circle>
+            <el-button circle @click="currentLoginMethod = 'email'">
               <i class="iconfont icon-email"></i>
             </el-button>
           </span>
@@ -57,6 +61,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import LoginForm from './LoginForm.vue'
+import QrLoginPage from './QrLoginPage.vue'
 
 const emit = defineEmits(['closeDialog'])
 const dialogVisible = ref(true)
@@ -64,7 +69,7 @@ const isLoading = ref(false)
 const toggleLoading = (status: boolean) => {
   isLoading.value = status
 }
-const currentLoginMethod = ref<'phone' | 'email'>('phone')
+const currentLoginMethod = ref<'phone' | 'email' | 'qrcode'>('phone')
 const dialogTitle = ref('手机登录')
 
 watch(dialogVisible, () => {
@@ -75,6 +80,8 @@ watch(currentLoginMethod, () => {
     dialogTitle.value = '手机登录'
   } else if (currentLoginMethod.value === 'email') {
     dialogTitle.value = '邮箱登录'
+  } else if (currentLoginMethod.value === 'qrcode') {
+    dialogTitle.value = '二维码登录'
   }
 })
 </script>
