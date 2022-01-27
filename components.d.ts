@@ -20,6 +20,7 @@ declare module 'vue' {
     ElProgress: typeof import('element-plus/es')['ElProgress']
     ElRow: typeof import('element-plus/es')['ElRow']
     ElScrollbar: typeof import('element-plus/es')['ElScrollbar']
+    ElTooltip: typeof import('element-plus/es')['ElTooltip']
     GlobalFooter: typeof import('./src/components/GlobalFooter.vue')['default']
     GlobalHeader: typeof import('./src/components/GlobalHeader.vue')['default']
     Loading: typeof import('element-plus/es')['ElLoadingDirective']
