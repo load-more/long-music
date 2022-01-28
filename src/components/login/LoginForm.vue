@@ -88,6 +88,7 @@
             <el-button
               @click="onClickCaptcha"
               :disabled="counter !== countdownTime"
+              v-loading="isCaptchaLoading"
             >{{ counter === countdownTime ? '获取验证码' : `重新获取${counter}s`}}</el-button>
           </template>
         </el-input>
@@ -112,20 +113,19 @@ import type { ElForm } from 'element-plus'
 import { phoneLogin, emailLogin, sendCaptcha, verifyCaptcha } from '../../api/login'
 import { ElMessage } from 'element-plus'
 import md5 from 'js-md5'
+import emitter from '../../utils/emitter'
 
-const emit = defineEmits(['closeDialog', 'onToggleLoading'])
 const props = defineProps<{
   type: 'phone' | 'email' | 'sms'
 }>()
 
 const isAutoLogin = ref(false)
-const isLoading = ref(false)
 const isPasswordVisible = ref(false)
 const isTest = ref(false)
 const countdownTime = 60
 const counter = ref(countdownTime)
 let timer: number | null = null
-const captcha = ref('')
+const isCaptchaLoading = ref(false)
 
 const loginForm = reactive({
   phone: '',
@@ -194,15 +194,22 @@ const encryptedLoginForm = computed(() => {
 })
 
 watch(isTest, () => {
-  if (props.type === 'phone') {
-    loginForm.phone = '18470415369'
-    loginForm.password = 'test#123'
-  } else if (props.type === 'email') {
-    loginForm.email = 'shylobing@163.com'
-    loginForm.password = 'test.123'
-  } else if (props.type === 'sms') {
-    loginForm.phone = '18470415369'
-    loginForm.captcha = '123456'
+  if (isTest.value) {
+    if (props.type === 'phone') {
+      loginForm.phone = '18470415369'
+      loginForm.password = 'test#123'
+    } else if (props.type === 'email') {
+      loginForm.email = 'shylobing@163.com'
+      loginForm.password = 'test.123'
+    } else if (props.type === 'sms') {
+      loginForm.phone = '18470415369'
+      loginForm.captcha = '123456'
+    }
+  } else {
+    loginForm.phone = ''
+    loginForm.password = ''
+    loginForm.email = ''
+    loginForm.captcha = ''
   }
 })
 
@@ -221,7 +228,7 @@ const onClickLogin = () => {
     formRef.value.validate(async (result, notPass) => {
       if (result) {
         // 表单校验成功，发送请求
-        emit('onToggleLoading', true) // 开启 loading
+        emitter.emit('onToggleLoginLoading', true) // 开启 loading
         try {
           let result = null
           if (props.type === 'phone') {
@@ -240,7 +247,6 @@ const onClickLogin = () => {
               message: '登录成功！',
               appendTo: document.body
             })
-            emit('closeDialog') // 关闭对话框
           } else if (result.data.code === 502) { // 登录失败
             ElMessage({
               type: 'error',
@@ -256,7 +262,7 @@ const onClickLogin = () => {
             appendTo: document.body
           })
         }
-        emit('onToggleLoading', false) // 关闭 loading
+        emitter.emit('onToggleLoginLoading', false) // 关闭 loading
       }
     })
   }
@@ -265,10 +271,12 @@ const onClickCaptcha = () => {
   // 校验手机号
   formRef.value?.validateField('phone', async (notPass) => {
     if (!notPass) {
+      isCaptchaLoading.value = true
       try {
         const rst = await sendCaptcha({
           phone: loginForm.phone
         })
+        isCaptchaLoading.value = false
         if (rst.data.code === 200) {
           counter.value--
           timer = setInterval(() => {
@@ -281,6 +289,7 @@ const onClickCaptcha = () => {
           }, 1000)
         }
       } catch (error) {
+        isCaptchaLoading.value = false
         ElMessage({
           type: 'error',
           message: '发送失败',

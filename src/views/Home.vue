@@ -1,11 +1,11 @@
 <template>
-  <router-view />
+  <h1>main</h1>
 </template>
 
 <script setup lang="ts">
 
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 
 </style>

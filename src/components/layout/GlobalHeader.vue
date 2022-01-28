@@ -49,7 +49,7 @@
         </el-dropdown>
       </div>
       <div class="login-info" v-else>
-        <span @click="isShowLoginDialog=true">未登录</span>&nbsp;
+        <span @click="router.push('/login')">未登录</span>&nbsp;
         <i class="iconfont icon-drop-down-arrow"></i>
       </div>
       <a href="/#">
@@ -63,20 +63,15 @@
       </a>
     </el-col>
   </el-row>
-  <LoginDialog v-if="isShowLoginDialog" @closeDialog="closeDialog" />
 </template>
 
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import { useMainStore } from '../store/index'
-import LoginDialog from './login-dialog/index.vue'
-import { ref } from 'vue'
+import { useMainStore } from '../../store/index'
+import { useRouter } from 'vue-router'
 
 const { isLogin } = storeToRefs(useMainStore())
-const isShowLoginDialog = ref(false)
-const closeDialog = (dialogVisible: boolean) => {
-  isShowLoginDialog.value = dialogVisible
-}
+const router = useRouter()
 </script>
 
 <style scoped lang="scss">
