@@ -77,6 +77,7 @@ import { sendCaptcha } from '../../api/login'
 import { ElMessage } from 'element-plus'
 import { register, checkIsRegistered } from '../../api/register'
 import emitter from '../../utils/emitter'
+import { useRouter } from 'vue-router'
 
 const formRef = ref<InstanceType<typeof ElForm>>()
 const isPasswordVisible = ref(false)
@@ -85,6 +86,7 @@ const counter = ref(countdownTime)
 let timer: number | null = null
 const isTest = ref(false)
 const isCaptchaLoading = ref(false)
+const router = useRouter()
 
 const registerForm = reactive({
   phone: '',
@@ -186,6 +188,7 @@ const onClickRegister = () => {
         try {
           const result = await register(registerForm)
           if (result.data.code === 200) { // 登录成功
+            router.push({ name: 'home' })
             ElMessage({
               type: 'success',
               message: '注册成功！',

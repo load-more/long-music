@@ -114,6 +114,8 @@ import { phoneLogin, emailLogin, sendCaptcha, verifyCaptcha } from '../../api/lo
 import { ElMessage } from 'element-plus'
 import md5 from 'js-md5'
 import emitter from '../../utils/emitter'
+import { useRouter } from 'vue-router'
+import { useMainStore } from '../../store/index'
 
 const props = defineProps<{
   type: 'phone' | 'email' | 'sms'
@@ -126,6 +128,8 @@ const countdownTime = 60
 const counter = ref(countdownTime)
 let timer: number | null = null
 const isCaptchaLoading = ref(false)
+const router = useRouter()
+const mainStore = useMainStore()
 
 const loginForm = reactive({
   phone: '',
@@ -197,7 +201,7 @@ watch(isTest, () => {
   if (isTest.value) {
     if (props.type === 'phone') {
       loginForm.phone = '18470415369'
-      loginForm.password = 'test#123'
+      loginForm.password = 'test.123'
     } else if (props.type === 'email') {
       loginForm.email = 'shylobing@163.com'
       loginForm.password = 'test.123'
@@ -230,7 +234,7 @@ const onClickLogin = () => {
         // 表单校验成功，发送请求
         emitter.emit('onToggleLoginLoading', true) // 开启 loading
         try {
-          let result = null
+          let result: any = null
           if (props.type === 'phone') {
             result = await phoneLogin(encryptedLoginForm.value as any)
           } else if (props.type === 'email') {
@@ -242,6 +246,11 @@ const onClickLogin = () => {
             })
           }
           if (result.data.code === 200) { // 登录成功
+            router.push({ name: 'home' }) // 跳转路由
+            mainStore.$patch((state) => {
+              state.isLogin = true
+              state.profile = result.data.profile
+            })
             ElMessage({
               type: 'success',
               message: '登录成功！',

@@ -1,5 +1,5 @@
 <template>
-  <el-row class="container">
+  <el-row class="container" v-loading.fullscreen.lock="isFullLoading">
     <el-col :span="4" class="left">
       <a href="/#">
         <img src="@/assets/logo.png" alt="logo">
@@ -29,12 +29,13 @@
     <el-col :span="6" class="right">
       <div class="user-info" v-if="isLogin">
         <el-avatar
+          fit="cover"
           :size="40"
-          src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
+          :src="profile['avatarUrl']"
         ></el-avatar>
-        <el-dropdown>
+        <el-dropdown trigger="click" @command="handleCommand">
           <span class="el-dropdown-link">
-            nickname
+            {{ profile['nickname'] }}
             <i class="iconfont icon-drop-down-arrow"></i>
           </span>
           <template #dropdown>
@@ -42,8 +43,7 @@
               <el-dropdown-item>Action 1</el-dropdown-item>
               <el-dropdown-item>Action 2</el-dropdown-item>
               <el-dropdown-item>Action 3</el-dropdown-item>
-              <el-dropdown-item disabled>Action 4</el-dropdown-item>
-              <el-dropdown-item divided>Action 5</el-dropdown-item>
+              <el-dropdown-item divided command="logout">退出登录</el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
@@ -69,9 +69,29 @@
 import { storeToRefs } from 'pinia'
 import { useMainStore } from '../../store/index'
 import { useRouter } from 'vue-router'
+import { logout } from '../../api/login'
+import { ElMessage } from 'element-plus'
+import { ref } from 'vue'
 
-const { isLogin } = storeToRefs(useMainStore())
+const { isLogin, profile } = storeToRefs(useMainStore())
 const router = useRouter()
+const isFullLoading = ref(false)
+
+const handleCommand = async (command: string) => {
+  if (command === 'logout') {
+    isFullLoading.value = true
+    const rst = await logout()
+    if (rst.data.code === 200) {
+      isLogin.value = false
+      ElMessage({
+        type: 'success',
+        message: '退出成功',
+        appendTo: document.body
+      })
+    }
+    isFullLoading.value = false
+  }
+}
 </script>
 
 <style scoped lang="scss">
@@ -118,6 +138,9 @@ const router = useRouter()
       justify-content: space-between;
       align-items: center;
       width: 130px;
+    }
+    .el-dropdown-link {
+      cursor: pointer;
     }
     .login-info {
       span {

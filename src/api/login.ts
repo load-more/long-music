@@ -87,3 +87,10 @@ export const verifyCaptcha = (params: verifyCaptchaParams) => {
     params
   })
 }
+
+export const logout = () => {
+  return request({
+    method: 'GET',
+    url: '/logout'
+  })
+}
