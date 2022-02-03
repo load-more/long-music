@@ -6,12 +6,12 @@
       </a>
     </el-col>
     <el-col :span="6" class="mid">
-      <a href="/#">
+      <span @click="router.back()">
         <i class="iconfont icon-left-arrow"></i>
-      </a>
-      <a href="/#">
+      </span>
+      <span @click="router.forward()">
         <i class="iconfont icon-right-arrow"></i>
-      </a>
+      </span>
       <el-input
         class="w-50 m-2"
         placeholder="Pick a date"
@@ -29,9 +29,11 @@
     <el-col :span="6" class="right">
       <div class="user-info" v-if="isLogin">
         <el-avatar
+          class="avatar"
           fit="cover"
           :size="40"
           :src="profile['avatarUrl']"
+          @click="router.push({ name: 'profile' })"
         ></el-avatar>
         <el-dropdown trigger="click" @command="handleCommand">
           <span class="el-dropdown-link">
@@ -128,6 +130,9 @@ const handleCommand = async (command: string) => {
     .icon-search {
       color: #000;
     }
+    span {
+      cursor: pointer;
+    }
   }
   .right {
     display: flex;
@@ -138,6 +143,9 @@ const handleCommand = async (command: string) => {
       justify-content: space-between;
       align-items: center;
       width: 130px;
+      .avatar {
+        cursor: pointer;
+      }
     }
     .el-dropdown-link {
       cursor: pointer;

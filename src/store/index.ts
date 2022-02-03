@@ -4,7 +4,9 @@ export const useMainStore = defineStore('main', {
   state: () => {
     return {
       isLogin: false,
-      profile: {}
+      profile: {},
+      detail: {},
+      levelInfo: {}
     }
   }
 })

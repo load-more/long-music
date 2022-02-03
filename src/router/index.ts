@@ -37,9 +37,14 @@ const routes: RouteRecordRaw[] = [
         ]
       },
       {
-        path: '/register',
+        path: 'register',
         name: 'register',
         component: () => import('@/views/Register.vue')
+      },
+      {
+        path: 'profile',
+        name: 'profile',
+        component: () => import('@/views/Profile.vue')
       }
     ]
   },
