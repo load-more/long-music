@@ -20,7 +20,7 @@
             <i :class="`iconfont icon-${genderArr[detail['gender']]}`"></i>
           </span>
         </div>
-        <el-button round>
+        <el-button round @click="router.push({ name: 'editProfile' })">
           <i class="iconfont icon-edit"></i>
           编辑资料
         </el-button>
@@ -54,8 +54,10 @@
 import { getUserDetail, getUserPlaylist, getUserLevel } from '../api/User'
 import { useMainStore } from '../store/index'
 import { storeToRefs } from 'pinia'
+import { useRouter } from 'vue-router'
 
 const mainStore = useMainStore()
+const router = useRouter()
 const { profile, detail, levelInfo } = storeToRefs(mainStore)
 const genderArr = ['unknown', 'male', 'female']
 

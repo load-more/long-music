@@ -42,3 +42,20 @@ export const getUserBindings = () => {
     url: '/user/binding'
   })
 }
+
+interface updateUserProfileParams {
+  nickname: string
+  gender: string
+  birthday: string
+  province: string
+  city: string
+  signature: string
+}
+// 更新用户信息
+export const updateUserProfile = (params: updateUserProfileParams) => {
+  return request({
+    method: 'GET',
+    url: '/user/update',
+    params
+  })
+}
