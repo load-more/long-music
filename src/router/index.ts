@@ -10,6 +10,7 @@ const routes: RouteRecordRaw[] = [
         name: 'home',
         component: () => import('@/views/Home.vue')
       },
+      // vite Server.Proxy does not work because of nested routes
       {
         path: 'login',
         component: () => import('@/views/LoginLayout.vue'),
