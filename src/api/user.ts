@@ -59,3 +59,21 @@ export const updateUserProfile = (params: updateUserProfileParams) => {
     params
   })
 }
+
+interface updateUserAvatarParams {
+  imgSize?: number
+  imgX?: number
+  imgY?: number
+}
+// 更新用户头像
+export const updateUserAvatar = (formData: FormData, params: updateUserAvatarParams) => {
+  return request({
+    method: 'POST',
+    url: '/avatar/upload',
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+    data: formData,
+    params
+  })
+}
