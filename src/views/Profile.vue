@@ -74,7 +74,7 @@
 
 <script setup lang="ts">
 import { onBeforeMount, reactive, ref } from 'vue'
-import { getUserDetail, getUserLevel, getUserPlaylist } from '@/api/User'
+import { getUserDetail, getUserLevel, getUserPlaylist } from '@/api/user'
 import { useRouter } from 'vue-router'
 import { Decrypt } from '@/utils/secret'
 import ListItem, { infoType } from '@/components/playlist/ListItem.vue'
