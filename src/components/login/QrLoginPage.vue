@@ -20,7 +20,7 @@
 
 <script setup lang="ts">
 import { ref, onUnmounted } from 'vue'
-import { generateQrKey, generateQrCode, checkQrCode } from '../../api/login'
+import { generateQrKey, generateQrCode, checkQrCode } from '@/api/login'
 import { ElMessage } from 'element-plus'
 
 const emit = defineEmits(['closeDialog'])

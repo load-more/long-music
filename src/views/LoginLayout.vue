@@ -15,7 +15,7 @@
 import Footer from '@/components/login/Footer.vue'
 import { ref, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
-import emitter from '../utils/emitter';
+import emitter from '@/utils/emitter'
 
 const isLoading = ref(false)
 const route = useRoute()

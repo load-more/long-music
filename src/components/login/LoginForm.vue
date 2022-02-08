@@ -110,13 +110,13 @@
 import { ref, watch, reactive, computed } from 'vue'
 // 导入 ElForm 组件的类型，后续定义 ref 可以获取组件的属性和方法
 import type { ElForm } from 'element-plus'
-import { phoneLogin, emailLogin, sendCaptcha, verifyCaptcha } from '../../api/login'
+import { phoneLogin, emailLogin, sendCaptcha, verifyCaptcha } from '@/api/login'
 import { ElMessage } from 'element-plus'
 import md5 from 'js-md5'
-import emitter from '../../utils/emitter'
+import emitter from '@/utils/emitter'
 import { useRouter } from 'vue-router'
-import { useMainStore } from '../../store/index'
-import { Encrypt } from '../../utils/secret'
+import { useMainStore } from '@/store/index'
+import { Encrypt } from '@/utils/secret'
 
 const props = defineProps<{
   type: 'phone' | 'email' | 'sms'

@@ -69,13 +69,13 @@
 
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import { useMainStore } from '../../store/index'
+import { useMainStore } from '@/store/index'
 import { useRouter } from 'vue-router'
-import { logout } from '../../api/login'
-import { getUserDetail } from '../../api/user'
+import { logout } from '@/api/login'
+import { getUserDetail } from '@/api/user'
 import { ElMessage } from 'element-plus'
 import { ref, reactive, watch } from 'vue'
-import { Decrypt } from '../../utils/secret'
+import { Decrypt } from '@/utils/secret'
 
 /* 路由管理 */
 const router = useRouter()

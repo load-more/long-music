@@ -52,9 +52,9 @@
 
 <script setup lang="ts">
 import { onBeforeMount, reactive } from 'vue'
-import { getUserDetail, getUserLevel } from '../api/User'
+import { getUserDetail, getUserLevel } from '@/api/User'
 import { useRouter } from 'vue-router'
-import { Decrypt } from '../utils/secret'
+import { Decrypt } from '@/utils/secret'
 
 /* 路由管理 */
 const router = useRouter()

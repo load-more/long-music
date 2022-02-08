@@ -73,10 +73,10 @@
 <script setup lang="ts">
 import { ref, reactive, watch } from 'vue'
 import type { ElForm } from 'element-plus'
-import { sendCaptcha } from '../../api/login'
+import { sendCaptcha } from '@/api/login'
 import { ElMessage } from 'element-plus'
-import { register, checkIsRegistered } from '../../api/register'
-import emitter from '../../utils/emitter'
+import { register, checkIsRegistered } from '@/api/register'
+import emitter from '@/utils/emitter'
 import { useRouter } from 'vue-router'
 
 const formRef = ref<InstanceType<typeof ElForm>>()

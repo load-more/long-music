@@ -91,11 +91,11 @@
 import { reactive, watch, ref, onBeforeMount } from 'vue'
 import RegionSelect from '@/components/form/RegionSelect.vue'
 import { useRouter } from 'vue-router'
-import { updateUserProfile, updateUserAvatar, getUserDetail } from '../api/user'
+import { updateUserProfile, updateUserAvatar, getUserDetail } from '@/api/user'
 import { ElMessage } from 'element-plus'
 import 'cropperjs/dist/cropper.css' // 加载样式【必须引入】
 import Cropper from 'cropperjs'
-import { Decrypt } from '../utils/secret'
+import { Decrypt } from '@/utils/secret'
 
 /* 路由管理 */
 const router = useRouter()

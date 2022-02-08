@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import region from '../../utils/region'
+import region from '@/utils/region'
 import { watch } from 'vue'
 
 const props = defineProps({
