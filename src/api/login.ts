@@ -28,10 +28,7 @@ export const emailLogin = (params: emailLoginParams) => {
   })
 }
 
-interface generateQrKeyParams {
-  timestamp: number
-}
-export const generateQrKey = (params: generateQrKeyParams) => {
+export const generateQrKey = () => {
   return request({
     method: 'GET',
     url: '/login/qr/key'
@@ -41,7 +38,6 @@ export const generateQrKey = (params: generateQrKeyParams) => {
 interface generateQrCodeParams {
   key: string
   qrimg?: boolean
-  timestamp: number
 }
 export const generateQrCode = (params: generateQrCodeParams) => {
   return request({
@@ -53,7 +49,6 @@ export const generateQrCode = (params: generateQrCodeParams) => {
 
 interface checkQrCodeParams {
   key: string
-  timestamp: number
 }
 export const checkQrCode = (params: checkQrCodeParams) => {
   return request({
@@ -99,9 +94,5 @@ export const getLoginStatus = () => {
   return request({
     method: 'GET',
     url: '/login/status',
-    params: {
-      // 添加时间戳，防止请求被缓存
-      timestamp: new Date().valueOf()
-    }
   })
 }

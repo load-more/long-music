@@ -248,8 +248,12 @@ const onClickLogin = () => {
           }
           if (result.data.code === 200) { // 登录成功
             router.push({ name: 'home' }) // 跳转路由
+            // 登录成功后，存储用户 id 和 cookie
             const uid = Encrypt(result.data.account.id)
+            const cookie = result.data.cookie
             window.localStorage.setItem('uid', uid)
+            window.localStorage.setItem('cookie', cookie)
+            // 切换登录状态
             mainStore.$patch((state) => {
               state.isLogin = true
             })

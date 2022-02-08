@@ -40,15 +40,14 @@ const displayQrCode = async () => {
   try {
     isLoading.value = true
     // 生成二维码 key
-    const keyRst = await generateQrKey({ timestamp: (new Date()).valueOf() })
+    const keyRst = await generateQrKey()
 
     if (keyRst.data.code === 200) {
       key = keyRst.data.data.unikey
       // 如果成功，则生成二维码图片
       const qrRst = await generateQrCode({
         key,
-        qrimg: true,
-        timestamp: (new Date()).valueOf()
+        qrimg: true
       })
       // 如果成功，将图片替换
       if (qrRst.data.code === 200) {
@@ -66,8 +65,7 @@ const displayQrCode = async () => {
   
   const getQrCodeStatus = async (key: string) => {
     const rst = await checkQrCode({
-      key,
-      timestamp: (new Date()).valueOf()
+      key
     })
     return rst.data.code
   }

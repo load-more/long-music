@@ -104,8 +104,12 @@ const handleCommand = async (command: string) => {
     isFullLoading.value = true
     const rst = await logout()
     if (rst.data.code === 200) {
+      // 切换登录状态
       isLogin.value = false
+      // 跳转到首页
       router.push({ name: 'home' })
+      // 清除 localStorage
+      window.localStorage.clear()
       ElMessage({
         type: 'success',
         message: '退出成功',
