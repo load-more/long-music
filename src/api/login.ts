@@ -94,3 +94,14 @@ export const logout = () => {
     url: '/logout'
   })
 }
+
+export const getLoginStatus = () => {
+  return request({
+    method: 'GET',
+    url: '/login/status',
+    params: {
+      // 添加时间戳，防止请求被缓存
+      timestamp: new Date().valueOf()
+    }
+  })
+}

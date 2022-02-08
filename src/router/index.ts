@@ -14,6 +14,9 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'login',
         component: () => import('@/views/LoginLayout.vue'),
+        meta: {
+          requiresLogout: true
+        },
         children: [
           {
             path: '', // 注意，子路由不能带上 / ，否则无法显示路由
@@ -40,16 +43,25 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'register',
         name: 'register',
+        meta: {
+          requiresLogout: true
+        },
         component: () => import('@/views/Register.vue')
       },
       {
         path: 'profile',
         name: 'profile',
+        meta: {
+          requiresLogin: true
+        },
         component: () => import('@/views/Profile.vue')
       },
       {
         path: 'edit-profile',
         name: 'editProfile',
+        meta: {
+          requiresLogin: true
+        },
         component: () => import('@/views/EditProfile.vue')
       }
     ]
@@ -59,6 +71,25 @@ const routes: RouteRecordRaw[] = [
 const router = createRouter({
   history: createWebHistory(),
   routes: routes 
+})
+
+const checkCookie = (cName: string) => {
+  const cookie = document.cookie
+  const arr = cookie.split('; ')
+  return !!arr.find(item => item.split('=')[0] === cName)
+}
+
+router.beforeEach(async (to, from) => {
+  const cName = 'MUSIC_U'
+  const isLogin = checkCookie(cName)
+  if (to.meta.requiresLogin && !isLogin) {
+    // 如果路由需要登录且用户未登录，则跳转到登录页
+    return { name: 'phone' }
+  }
+  if (to.meta.requiresLogout && isLogin) {
+    // 如果路由需要登出且用户已登录，则停止跳转
+    return { path: from.path }
+  }
 })
 
 export default router
