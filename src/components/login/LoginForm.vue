@@ -127,7 +127,7 @@ const isPasswordVisible = ref(false)
 const isTest = ref(false)
 const countdownTime = 60
 const counter = ref(countdownTime)
-let timer: number | null = null
+let timer: NodeJS.Timer | null = null
 const isCaptchaLoading = ref(false)
 const router = useRouter()
 const mainStore = useMainStore()
@@ -293,7 +293,7 @@ const onClickCaptcha = () => {
           timer = setInterval(() => {
             counter.value--
             if (counter.value === 0) {
-              clearInterval(timer as number)
+              clearInterval(timer!)
               timer = null
               counter.value = countdownTime
             }

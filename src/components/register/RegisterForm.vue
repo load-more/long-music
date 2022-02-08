@@ -83,7 +83,7 @@ const formRef = ref<InstanceType<typeof ElForm>>()
 const isPasswordVisible = ref(false)
 const countdownTime = 60
 const counter = ref(countdownTime)
-let timer: number | null = null
+let timer: NodeJS.Timer | null = null
 const isTest = ref(false)
 const isCaptchaLoading = ref(false)
 const router = useRouter()
@@ -160,7 +160,7 @@ const onClickCaptcha = () => {
           timer = setInterval(() => {
             counter.value--
             if (counter.value === 0) {
-              clearInterval(timer as number)
+              clearInterval(timer!)
               timer = null
               counter.value = countdownTime
             }

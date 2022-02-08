@@ -27,11 +27,11 @@ const emit = defineEmits(['closeDialog'])
 
 const imgUrl = ref('')
 const isLoading = ref(false)
-let timer: number | null = null
+let timer: NodeJS.Timer | null = null
 const prompt = ref('')
 
 onUnmounted(() => {
-  clearInterval(timer as number)
+  clearInterval(timer!)
   timer = null
 })
 
@@ -92,7 +92,7 @@ const displayQrCode = async () => {
           appendTo: document.body
         })
         emit('closeDialog')
-        clearInterval(timer as number)
+        clearInterval(timer!)
         timer = null
         break
     }
