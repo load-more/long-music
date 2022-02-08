@@ -22,14 +22,6 @@ export const getUserAccount = () => {
   })
 }
 
-// 获取歌单信息
-export const getUserPlaylist = () => {
-  return request({
-    method: 'GET',
-    url: '/user/subcount'
-  })
-}
-
 // 获取等级信息
 export const getUserLevel = () => {
   return request({
@@ -77,6 +69,19 @@ export const updateUserAvatar = (formData: FormData, params: updateUserAvatarPar
       'Content-Type': 'multipart/form-data',
     },
     data: formData,
+    params
+  })
+}
+
+interface getUserPlaylistParams {
+  uid: number
+  limit?: number
+  offset?: number
+}
+export const getUserPlaylist = (params: getUserPlaylistParams) => {
+  return request({
+    method: 'GET',
+    url: '/user/playlist',
     params
   })
 }
