@@ -7,7 +7,10 @@ export const getUserDetail = (params: getUserDetailParams) => {
   return request({
     method: 'GET',
     url: '/user/detail',
-    params
+    params: {
+      timestamp: new Date().valueOf(),
+      ...params
+    }
   })
 }
 

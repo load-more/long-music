@@ -1,4 +1,6 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+import { useMainStore } from '../store/index'
+import { storeToRefs } from 'pinia'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -73,20 +75,21 @@ const router = createRouter({
   routes: routes 
 })
 
-const checkCookie = (cName: string) => {
-  const cookie = document.cookie
-  const arr = cookie.split('; ')
-  return !!arr.find(item => item.split('=')[0] === cName)
-}
+// const checkCookie = (cName: string) => {
+//   const cookie = document.cookie
+//   const arr = cookie.split('; ')
+//   return !!arr.find(item => item.split('=')[0] === cName)
+// }
 
 router.beforeEach(async (to, from) => {
-  const cName = 'MUSIC_U'
-  const isLogin = checkCookie(cName)
-  if (to.meta.requiresLogin && !isLogin) {
+  // const cName = 'MUSIC_U'
+  // const isLogin = checkCookie(cName)
+  const { isLogin } = storeToRefs(useMainStore())
+  if (to.meta.requiresLogin && !isLogin.value) {
     // 如果路由需要登录且用户未登录，则跳转到登录页
     return { name: 'phone' }
   }
-  if (to.meta.requiresLogout && isLogin) {
+  if (to.meta.requiresLogout && isLogin.value) {
     // 如果路由需要登出且用户已登录，则停止跳转
     return { path: from.path }
   }

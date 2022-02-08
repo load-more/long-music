@@ -1,23 +1,23 @@
 <template>
-  <div v-if="detail['nickname']" class="wrap">
+  <div class="wrap">
     <div class="left">
-      <el-avatar :size="200" fit="fit" :src="profile['avatarUrl']"></el-avatar>
+      <el-avatar :size="200" fit="fit" :src="state.avatarUrl"></el-avatar>
     </div>
     <div class="right">
       <div class="top-profile">
         <div class="info">
-          <span class="name">{{ detail['nickname'] }}</span>
+          <span class="name">{{ state.nickname }}</span>
           <el-tooltip placement="top">
             <template #content>
-              当前等级：Lv.{{ detail['level'] }}<br>
+              当前等级：Lv.{{ state.level }}<br>
               距离下一等级还需：<br>
-              1. 听歌：{{ levelInfo['nextPlayCount'] - levelInfo['nowPlayCount'] }} 首<br>
-              2. 登录：{{ levelInfo['nextLoginCount'] - levelInfo['nowLoginCount'] }} 天
+              1. 听歌：{{ state.nextPlayCount - state.nowPlayCount }} 首<br>
+              2. 登录：{{ state.nextLoginCount - state.nowLoginCount }} 天
             </template>
-            <span class="level">Lv.{{ detail['level'] }}</span>
+            <span class="level">Lv.{{ state.level }}</span>
           </el-tooltip>
           <span class="gender">
-            <i :class="`iconfont icon-${genderArr[detail['gender']]}`"></i>
+            <i :class="`iconfont icon-${genderArr[state.level]}`"></i>
           </span>
         </div>
         <el-button round @click="router.push({ name: 'editProfile' })">
@@ -28,22 +28,22 @@
       <el-divider />
       <div class="mid-profile">
         <div class="item">
-          <span class="num">{{ detail['follows'] }}</span>
+          <span class="num">{{ state.follows }}</span>
           <span class="label">关注</span>
         </div>
         <div class="item mid-item">
-          <span class="num">{{ detail['followeds'] }}</span>
+          <span class="num">{{ state.followeds }}</span>
           <span class="label">粉丝</span>
         </div>
         <div class="item">
-          <span class="num">{{ detail['listenSongs'] }}</span>
+          <span class="num">{{ state.listenSongs }}</span>
           <span class="label">已听</span>
         </div>
       </div>
       <div class="bottom-profile">
         <div class="signature">
           <span class="label">个人介绍：</span>
-          <span class="content">{{ detail['signature'] }}</span>
+          <span class="content">{{ state.signature }}</span>
         </div>
       </div>
     </div>
@@ -51,32 +51,48 @@
 </template>
 
 <script setup lang="ts">
-import { getUserDetail, getUserPlaylist, getUserLevel } from '../api/User'
-import { useMainStore } from '../store/index'
-import { storeToRefs } from 'pinia'
+import { onBeforeMount, reactive } from 'vue'
+import { getUserDetail, getUserLevel } from '../api/User'
 import { useRouter } from 'vue-router'
+import { Decrypt } from '../utils/secret'
 
-const mainStore = useMainStore()
+/* 路由管理 */
 const router = useRouter()
-const { profile, detail, levelInfo } = storeToRefs(mainStore)
+
+/* 渲染数据 */
+const state = reactive({
+  nickname: '',
+  level: '',
+  avatarUrl: '',
+  gender: '',
+  signature: '',
+  nextPlayCount: 0,
+  nowPlayCount: 0,
+  nextLoginCount: 0,
+  nowLoginCount: 0,
+  follows: '',
+  followeds: '',
+  listenSongs: ''
+})
 const genderArr = ['unknown', 'male', 'female']
+onBeforeMount(async () => {
+  const uid = Decrypt(String(window.localStorage.getItem('uid')))
+  const { data: detailData } = await getUserDetail({ uid })
+  state.level = detailData.level
+  state.listenSongs = detailData.listenSongs
+  state.nickname = detailData.profile.nickname
+  state.avatarUrl = detailData.profile.avatarUrl
+  state.gender = detailData.profile.gender
+  state.signature = detailData.profile.signature
+  state.follows = detailData.profile.follows
+  state.followeds = detailData.profile.followeds
 
-const renderPage = async () => {
-  const detailRst = await getUserDetail({
-    uid: profile.value['userId']
-  })
-  mainStore.$patch((state) => {
-    state.detail = detailRst.data.profile
-    state.detail['level'] = detailRst.data.level
-    state.detail['listenSongs'] = detailRst.data.listenSongs
-  })
-  const levelRst = await getUserLevel()
-  mainStore.$patch((state) => {
-    state.levelInfo = levelRst.data.data
-  })
-}
-
-renderPage()
+  const { data: levelData } = await getUserLevel()
+  state.nextPlayCount = levelData.data.nextPlayCount
+  state.nowPlayCount = levelData.data.nowPlayCount
+  state.nextLoginCount = levelData.data.nextLoginCount
+  state.nowLoginCount = levelData.data.nowLoginCount
+})
 </script>
 
 <style scoped lang="scss">

@@ -32,12 +32,12 @@
           class="avatar"
           fit="cover"
           :size="40"
-          :src="profile['avatarUrl']"
+          :src="state.avatarUrl"
           @click="router.push({ name: 'profile' })"
         ></el-avatar>
         <el-dropdown trigger="click" @command="handleCommand">
           <span class="el-dropdown-link">
-            {{ profile['nickname'] }}
+            {{ state.nickname }}
             <i class="iconfont icon-drop-down-arrow"></i>
           </span>
           <template #dropdown>
@@ -72,11 +72,31 @@ import { storeToRefs } from 'pinia'
 import { useMainStore } from '../../store/index'
 import { useRouter } from 'vue-router'
 import { logout } from '../../api/login'
+import { getUserDetail } from '../../api/user'
 import { ElMessage } from 'element-plus'
-import { ref } from 'vue'
+import { ref, reactive, watch } from 'vue'
+import { Decrypt } from '../../utils/secret'
 
-const { isLogin, profile } = storeToRefs(useMainStore())
+/* 路由管理 */
 const router = useRouter()
+
+/* 渲染顶部栏用户数据 */
+const { isLogin } = storeToRefs(useMainStore())
+const state = reactive({
+  nickname: '',
+  avatarUrl: ''
+})
+
+watch(isLogin, async () => { // 一旦登录状态改变，请求数据或不执行操作
+  if (isLogin.value) {
+    const uid = Decrypt(String(window.localStorage.getItem('uid')))
+    const { data } = await getUserDetail({ uid })
+    state.nickname = data.profile.nickname
+    state.avatarUrl = data.profile.avatarUrl
+  }
+}, { immediate: true })
+
+/* 退出登录 */
 const isFullLoading = ref(false)
 
 const handleCommand = async (command: string) => {
@@ -85,6 +105,7 @@ const handleCommand = async (command: string) => {
     const rst = await logout()
     if (rst.data.code === 200) {
       isLogin.value = false
+      router.push({ name: 'home' })
       ElMessage({
         type: 'success',
         message: '退出成功',

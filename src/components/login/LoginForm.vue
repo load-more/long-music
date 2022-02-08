@@ -116,6 +116,7 @@ import md5 from 'js-md5'
 import emitter from '../../utils/emitter'
 import { useRouter } from 'vue-router'
 import { useMainStore } from '../../store/index'
+import { Encrypt } from '../../utils/secret'
 
 const props = defineProps<{
   type: 'phone' | 'email' | 'sms'
@@ -247,9 +248,10 @@ const onClickLogin = () => {
           }
           if (result.data.code === 200) { // 登录成功
             router.push({ name: 'home' }) // 跳转路由
+            const uid = Encrypt(result.data.account.id)
+            window.localStorage.setItem('uid', uid)
             mainStore.$patch((state) => {
               state.isLogin = true
-              state.profile = result.data.profile
             })
             ElMessage({
               type: 'success',

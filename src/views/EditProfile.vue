@@ -40,7 +40,7 @@
       <div class="avatar-wrap">
         <el-image
           class="avatar"
-          :src="detail['avatarUrl']"
+          :src="profileForm.avatarUrl"
           fit="fit"
         ></el-image>
         <el-button
@@ -88,30 +88,44 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, watch, ref, onMounted } from 'vue'
-import { useMainStore } from '../store/index'
-import { storeToRefs } from 'pinia'
+import { reactive, watch, ref, onBeforeMount } from 'vue'
 import RegionSelect from '@/components/form/RegionSelect.vue'
 import { useRouter } from 'vue-router'
-import { updateUserProfile, updateUserAvatar } from '../api/user'
+import { updateUserProfile, updateUserAvatar, getUserDetail } from '../api/user'
 import { ElMessage } from 'element-plus'
 import 'cropperjs/dist/cropper.css' // 加载样式【必须引入】
 import Cropper from 'cropperjs'
+import { Decrypt } from '../utils/secret'
 
-const { detail } = storeToRefs(useMainStore())
-const profileForm = reactive({
-  nickname: detail.value['nickname'],
-  gender: detail.value['gender'],
-  birthday: detail.value['birthday'],
-  province: String(detail.value['province']),
-  city: String(detail.value['city']),
-  signature: detail.value['signature']
-})
-const isFormChange = ref(true)
+/* 路由管理 */
 const router = useRouter()
+
+/* 渲染数据 */
+const profileForm = reactive({
+  nickname: '',
+  gender: '',
+  birthday: '',
+  province: '',
+  city: '',
+  signature: '',
+  avatarUrl: ''
+})
+onBeforeMount(async () => {
+  const uid = Decrypt(String(window.localStorage.getItem('uid')))
+  const { data } = await getUserDetail({ uid })
+  profileForm.nickname = data.profile.nickname
+  profileForm.gender = data.profile.gender
+  profileForm.birthday = data.profile.birthday
+  profileForm.province = String(data.profile.province)
+  profileForm.city = String(data.profile.city)
+  profileForm.signature = data.profile.signature
+  profileForm.avatarUrl = data.profile.avatarUrl
+})
+
+const isFormChange = ref(true)
 const isLoading = ref(false)
 
-// image cropper
+/* 图像裁剪 */
 const inputRef = ref<HTMLInputElement | null>(null)
 const imgRef = ref<HTMLImageElement | null>(null)
 const previewRef = ref<HTMLElement | null>(null)
@@ -245,7 +259,7 @@ watch(profileForm, () => {
 
 const onDateChange = (val: Date) => {
   // 将 DatePicker 选择的日期转为时间戳
-  profileForm.birthday = val.valueOf()
+  profileForm.birthday = String(val.valueOf())
 }
 const onSave = async () => {
   isLoading.value = true
