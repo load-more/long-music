@@ -19,7 +19,7 @@ export default defineConfig({
 	],
   resolve: {
 		alias: { // 设置路径别名
-			'@': path.resolve(__dirname, 'src')
+			'@': path.join(__dirname, './src')
 		}
 	},
   // vite@2.7.13 存在 bug，无效，暂时不用

@@ -11,10 +11,10 @@
     "esModuleInterop": true,
     "lib": ["esnext", "dom"],
     "suppressImplicitAnyIndexErrors": true,
-    // 配置路径别名
-    "baseUrl": ".",
+    // 配置路径别名【参考：https://blog.csdn.net/lx1996082566/article/details/121595946】
+    "baseUrl": "./",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["./src/*"]
     }
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"]
