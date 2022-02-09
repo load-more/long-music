@@ -23,7 +23,7 @@ const pathDict = {
   '/login': '手机登录',
   '/login/sms': '短信登录',
   '/login/email': '邮箱登录',
-  '/login/qrcode': '二维码登录'
+  '/login/qrcode': '二维码登录',
 }
 emitter.on('onToggleLoginLoading', (status) => {
   isLoading.value = status

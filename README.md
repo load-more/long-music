@@ -68,3 +68,88 @@
 
 参考：https://vuejscode.com/vercel-vite-404-not-found
 
+
+
+### 代码规范
+
+**ESLint**
+
+首先，在项目下安装 ESLint：`npm install -D eslint`；
+
+然后，初始化 ESLint 的配置文件：`npm init @eslint/config`，按照提示安装配置即可。这样，就得到了 `.eslintrc.js` 配置文件。
+
+此时，如果要进行代码检查的话，需要通过命令行工具，比如可以在 `package.json` 中自定义一个用于代码检查的命令：`"lint": "eslint --ext .js,.ts,.vue --ignore-path .gitignore --fix ./test.js"`。
+
+当然，每次进行代码检查都要输入 `npm run lint` 这个命令，显然有点傻。
+
+更加便捷的方式是将 ESLint 集成到编辑器中。首先，在 vscode 中安装插件 `eslint`，这样只要项目中有 `.eslintrc.js` 这个配置文件，vscode 就会自动根据配置项对代码进行检查，十分方便。
+
+**Prettier**
+
+有时候，不同开发者可能用到不同的代码规范，比如 A 用到了 Airbnb 的代码规范，而 B 用到了 Standard 的代码规范，虽然这两种规范大部分要求相同，但仍会有一些要求不同，这样就会产生差异。
+
+而 Prettier 的作用就是抹除这种差异，比如 A 和 B 都使用 Prettier 进行代码格式化，Prettier 就会根据自己的一套标准产生一套普适的代码规范。这样即使 Airbnb 和 Standard 两套代码规范有不同的地方，但经过 Prettier 处理过后都会趋于一致。
+
+首先，安装 Prettier：`npm i -D prettier eslint-plugin-prettier @vue/eslint-config-prettier`；
+
+然后在项目根目录下创建配置文件 `.prettierrc`；
+
+写入一些配置：
+
+```json
+{
+  "singleQuote": true, // 使用单引号
+  "semi": false, // 不加分号
+  "vueIndentScriptAndStyle": true // 给vue文件的script和style标签添加缩进
+}
+```
+
+最后，命令行输入 `npx prettier -w -u .` 即可进行代码格式化，当然这种方式仍然有点傻。
+
+我们可以将 Prettier 集成到编辑器中，因此需要在 vscode 中安装 prettier 插件。
+
+然后，为了方便起见，我们设置每次保存代码后使用 Prettier 进行代码格式化：
+
+```json
+// setting.json
+{
+ // 显示底部栏的 ESLint 状态
+  "eslint.alwaysShowStatus": true, 
+
+// 开启编辑器保存代码后，自动格式化
+  "editor.formatOnSave": true,
+
+// 设置所有文件的代码格式器为 Prettier
+  "editor.defaultFormatter": "esbenp.prettier-vscode" 
+}
+```
+
+参考：
+
+- https://zhuanlan.zhihu.com/p/81764012?from_voters_page=true
+- https://miyauchi.dev/posts/vite-vue3-typescript/
+- https://www.cnblogs.com/ssaylo/p/12806757.html#eslint
+
+**解决 ESLint 不能解析路径别名的问题**
+
+本项目使用的是 Typescript，当使用 @ 作为 src 别名时，ESLint 会报 `Unable to resolve path to module '@/xxx/xxx.xxx'.eslint` 的错误。
+
+谷歌了一下，在 StackOverflow 中找到了解决办法：
+
+1. 安装：`npm install eslint-import-resolver-typescript -D`
+
+2. 修改 `.eslintrc.js`：
+
+   ```js
+   {
+     // other configuration are omitted for brevity
+     settings: {
+       "import/resolver": {
+         typescript: {} // this loads <rootdir>/tsconfig.json to eslint
+       },
+     },
+   }
+   ```
+
+参考：https://stackoverflow.com/questions/67835072/vue-3-on-vite-js-with-eslint-unable-to-resolve-path-to-module-eslintimport-no?rq=1
+

@@ -10,8 +10,8 @@
 </template>
 
 <script setup lang="ts">
-import Register from '@/components/register/RegisterForm.vue'
 import { ref, onUnmounted } from 'vue'
+import Register from '@/components/register/RegisterForm.vue'
 import emitter from '@/utils/emitter'
 
 const isLoading = ref(false)

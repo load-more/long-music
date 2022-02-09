@@ -18,8 +18,8 @@ const request = axios.create({
   // },
   baseURL,
   params: {
-    timestamp: new Date().valueOf()
-  }
+    timestamp: new Date().valueOf(),
+  },
 })
 
 export default request

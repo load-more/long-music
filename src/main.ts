@@ -1,5 +1,4 @@
 import { createApp } from 'vue'
-import App from './App.vue'
 import { createPinia } from 'pinia'
 // 导入 Message 样式，因为使用自动导入组件会导致样式失效
 import 'element-plus/theme-chalk/src/message.scss'
@@ -9,6 +8,7 @@ import 'element-plus/theme-chalk/src/message.scss'
 // 导入中文样式
 import ElementPlus from 'element-plus'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
+import App from './App.vue'
 
 import router from './router'
 

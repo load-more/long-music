@@ -27,7 +27,7 @@ export interface infoType {
   starCount: number
   playCount: number
 }
-const props = defineProps<{
+defineProps<{
   info: infoType
 }>()
 </script>

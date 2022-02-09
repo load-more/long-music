@@ -47,7 +47,7 @@ const displayQrCode = async () => {
       // 如果成功，则生成二维码图片
       const qrRst = await generateQrCode({
         key,
-        qrimg: true
+        qrimg: true,
       })
       // 如果成功，将图片替换
       if (qrRst.data.code === 200) {
@@ -58,21 +58,21 @@ const displayQrCode = async () => {
     ElMessage({
       type: 'error',
       message: '加载失败',
-      appendTo: document.body
+      appendTo: document.body,
     })
   }
   isLoading.value = false
-  
-  const getQrCodeStatus = async (key: string) => {
+
+  const getQrCodeStatus = async (keyStr: string) => {
     const rst = await checkQrCode({
-      key
+      key: keyStr,
     })
     return rst.data.code
   }
 
   timer = setInterval(async () => {
     const rst = await getQrCodeStatus(key)
-    switch(rst) {
+    switch (rst) {
       case 800:
         prompt.value = '二维码已过期'
         break
@@ -87,11 +87,13 @@ const displayQrCode = async () => {
         ElMessage({
           type: 'success',
           message: '登录成功！',
-          appendTo: document.body
+          appendTo: document.body,
         })
         emit('closeDialog')
         clearInterval(timer!)
         timer = null
+        break
+      default:
         break
     }
   }, 500)

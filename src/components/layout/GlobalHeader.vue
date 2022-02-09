@@ -2,7 +2,7 @@
   <el-row class="container" v-loading.fullscreen.lock="isFullLoading">
     <el-col :span="4" class="left">
       <a href="/#">
-        <img src="@/assets/logo.png" alt="logo">
+        <img src="@/assets/logo.png" alt="logo" />
       </a>
     </el-col>
     <el-col :span="6" class="mid">
@@ -12,10 +12,7 @@
       <span @click="router.forward()">
         <i class="iconfont icon-right-arrow"></i>
       </span>
-      <el-input
-        class="w-50 m-2"
-        placeholder="Pick a date"
-      >
+      <el-input class="w-50 m-2" placeholder="Pick a date">
         <template #prefix>
           <a href="/#">
             <i class="iconfont icon-search"></i>
@@ -45,7 +42,9 @@
               <el-dropdown-item>Action 1</el-dropdown-item>
               <el-dropdown-item>Action 2</el-dropdown-item>
               <el-dropdown-item>Action 3</el-dropdown-item>
-              <el-dropdown-item divided command="logout">退出登录</el-dropdown-item>
+              <el-dropdown-item divided command="logout"
+                >退出登录</el-dropdown-item
+              >
             </el-dropdown-menu>
           </template>
         </el-dropdown>
@@ -69,7 +68,7 @@
 
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import { useMainStore } from '@/store/index'
+import useMainStore from '@/store/index'
 import { useRouter } from 'vue-router'
 import { logout } from '@/api/login'
 import { getUserDetail } from '@/api/user'
@@ -84,17 +83,22 @@ const router = useRouter()
 const { isLogin } = storeToRefs(useMainStore())
 const state = reactive({
   nickname: '',
-  avatarUrl: ''
+  avatarUrl: '',
 })
 
-watch(isLogin, async () => { // 一旦登录状态改变，请求数据或不执行操作
-  if (isLogin.value) {
-    const uid = Decrypt(String(window.localStorage.getItem('uid')))
-    const { data } = await getUserDetail({ uid })
-    state.nickname = data.profile.nickname
-    state.avatarUrl = data.profile.avatarUrl
-  }
-}, { immediate: true })
+watch(
+  isLogin,
+  async () => {
+    // 一旦登录状态改变，请求数据或不执行操作
+    if (isLogin.value) {
+      const uid = Decrypt(String(window.localStorage.getItem('uid')))
+      const { data } = await getUserDetail({ uid })
+      state.nickname = data.profile.nickname
+      state.avatarUrl = data.profile.avatarUrl
+    }
+  },
+  { immediate: true },
+)
 
 /* 退出登录 */
 const isFullLoading = ref(false)
@@ -113,7 +117,7 @@ const handleCommand = async (command: string) => {
       ElMessage({
         type: 'success',
         message: '退出成功',
-        appendTo: document.body
+        appendTo: document.body,
       })
     }
     isFullLoading.value = false
@@ -146,7 +150,9 @@ const handleCommand = async (command: string) => {
     .el-input {
       width: 200px;
     }
-    .icon-left-arrow, .icon-right-arrow, .icon-microphone {
+    .icon-left-arrow,
+    .icon-right-arrow,
+    .icon-microphone {
       color: #fff;
     }
     .icon-microphone {
@@ -182,7 +188,8 @@ const handleCommand = async (command: string) => {
         cursor: pointer;
       }
     }
-    .user-info i, .login-info i {
+    .user-info i,
+    .login-info i {
       color: gray;
       font-size: 12px;
     }

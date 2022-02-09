@@ -4,27 +4,29 @@ import vue from '@vitejs/plugin-vue'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
-import path from 'path'
+import { resolve } from 'path'
 
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-		vue(),
-		AutoImport({
+    vue(),
+    AutoImport({
       resolvers: [ElementPlusResolver()],
     }),
     Components({
       resolvers: [ElementPlusResolver()],
-    })
-	],
+    }),
+  ],
   resolve: {
-		alias: { // 设置路径别名
-			'@': path.join(__dirname, './src')
-		}
-	},
+    alias: {
+      // 设置路径别名
+      '@': resolve(__dirname, './src'),
+    },
+  },
   // vite@2.7.13 存在 bug，无效，暂时不用
   server: {
-    proxy: { // 设置服务器代理
+    proxy: {
+      // 设置服务器代理
       '/api-dev': {
         // 将 /api 开头的请求拼接到 target 后面
         // 比如请求 /api => https://netease-cloud-music-api-pi-nine.vercel.app/api
@@ -34,8 +36,8 @@ export default defineConfig({
         secure: false,
         // 将 /api 开头的请求的 /api 字符串替换成空字符，然后再拼接
         // 比如请求 /api => '' => https://netease-cloud-music-api-pi-nine.vercel.app/
-        rewrite: (path) => path.replace(/^\/api-dev/, '')
-      }
-    }
-  }
+        rewrite: (path) => path.replace(/^\/api-dev/, ''),
+      },
+    },
+  },
 })

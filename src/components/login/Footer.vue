@@ -6,7 +6,7 @@
         <el-button
           v-for="item in otherMethods"
           :key="item"
-          @click="router.push({name: item})"
+          @click="router.push({ name: item })"
           circle
         >
           <i :class="`iconfont icon-${item}`"></i>
@@ -14,29 +14,33 @@
       </span>
     </el-row>
     <el-row class="register">
-      <span @click="router.push({name: 'register'})">注册</span>
+      <span @click="router.push({ name: 'register' })">注册</span>
     </el-row>
   </div>
 </template>
 
 <script setup lang="ts">
-import { reactive, computed, ref, watch } from 'vue'
+import {
+  reactive,
+  computed,
+  ref,
+  watch,
+} from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 const pathDict = {
   '/login': 'phone',
   '/login/sms': 'sms',
   '/login/email': 'email',
-  '/login/qrcode': 'qrcode'
+  '/login/qrcode': 'qrcode',
 }
 const route = useRoute()
 const router = useRouter()
 type loginType = 'phone' | 'sms' | 'email' | 'qrcode'
 const currentLoginMethod = ref<loginType>(pathDict[route.path])
 const loginMethods: loginType[] = reactive(['phone', 'sms', 'email', 'qrcode'])
-const otherMethods = computed(() => {
-  return loginMethods.filter(item => item !== currentLoginMethod.value)
-})
+const otherMethods = computed(() => loginMethods
+  .filter((item) => item !== currentLoginMethod.value))
 watch(route, () => {
   currentLoginMethod.value = pathDict[route.path]
 })

@@ -32,6 +32,7 @@
         </el-form-item>
         <el-form-item label="地区：">
           <RegionSelect
+            v-if="profileForm.province"
             v-model:province="profileForm.province"
             v-model:city="profileForm.city"
           />
@@ -43,15 +44,8 @@
           :src="profileForm.avatarUrl"
           fit="fit"
         ></el-image>
-        <el-button
-          @click="inputRef?.click()"
-        >修改头像</el-button>
-        <input
-          type="file"
-          ref="inputRef"
-          @change="handleFileChange"
-          hidden
-        >
+        <el-button @click="inputRef?.click()">修改头像</el-button>
+        <input type="file" ref="inputRef" @change="handleFileChange" hidden />
       </div>
     </div>
     <el-button
@@ -59,7 +53,8 @@
       :disabled="isFormChange"
       @click="onSave"
       v-loading.fullscreen.lock="isLoading"
-    >保存</el-button>
+      >保存</el-button
+    >
     <el-button @click="router.back()">取消</el-button>
   </div>
   <el-dialog
@@ -72,23 +67,23 @@
   >
     <div class="img-wrap">
       <div class="img-src">
-        <img
-          ref="imgRef"
-          :src="previewUrl"
-        >
+        <img ref="imgRef" :src="previewUrl" />
       </div>
       <div class="img-preview" ref="previewRef"></div>
     </div>
     <el-button @click="handleReselect">重选</el-button>
-    <el-button
-      v-loading.fullscreen.lock="isLoading"
-      @click="handleUpload"
-    >上传</el-button>
+    <el-button v-loading.fullscreen.lock="isLoading" @click="handleUpload"
+      >上传</el-button>
   </el-dialog>
 </template>
 
 <script setup lang="ts">
-import { reactive, watch, ref, onBeforeMount } from 'vue'
+import {
+  reactive,
+  watch,
+  ref,
+  onBeforeMount,
+} from 'vue'
 import RegionSelect from '@/components/form/RegionSelect.vue'
 import { useRouter } from 'vue-router'
 import { updateUserProfile, updateUserAvatar, getUserDetail } from '@/api/user'
@@ -108,7 +103,7 @@ const profileForm = reactive({
   province: '',
   city: '',
   signature: '',
-  avatarUrl: ''
+  avatarUrl: '',
 })
 onBeforeMount(async () => {
   const uid = Decrypt(String(window.localStorage.getItem('uid')))
@@ -149,7 +144,7 @@ const handleFileChange = async () => {
           resolve(image)
         }
         image.onerror = () => {
-          reject(false)
+          reject(new Error('image load failed.'))
         }
       })
       const image: any = await p
@@ -169,20 +164,20 @@ const handleFileChange = async () => {
 
     inputRef.value!.value = '' // 将 input 内容置空，防止选择同一文件不触发 fileChange 事件
 
-    const _URL = window.URL || window.webkitURL // 兼容处理
-    previewUrl.value = _URL.createObjectURL(file) // 创建文件对象 URL
+    const URL = window.URL || window.webkitURL // 兼容处理
+    previewUrl.value = URL.createObjectURL(file) // 创建文件对象 URL
 
-    if (!await checkImgSize(previewUrl.value)) {
+    if (!(await checkImgSize(previewUrl.value))) {
       ElMessage({
         type: 'error',
         message: '请选择分辨率超过320*320的图片',
-        appendTo: document.body
+        appendTo: document.body,
       })
     } else if (!checkImgStorage()) {
       ElMessage({
         type: 'error',
         message: '请选择大小不超过5M的图片',
-        appendTo: document.body
+        appendTo: document.body,
       })
     } else {
       isShowDialog.value = true
@@ -203,7 +198,7 @@ const handleDialogOpen = async () => {
       minCropBoxWidth: 50,
       minCropBoxHeight: 50,
       preview: previewRef.value as HTMLElement,
-      background: false // 去除背景
+      background: false, // 去除背景
     })
   }, 0)
 }
@@ -226,27 +221,27 @@ const handleUpload = () => {
       const rst = await updateUserAvatar(fd, {
         imgSize: cropperData?.width,
         imgX: cropperData?.x,
-        imgY: cropperData?.y
+        imgY: cropperData?.y,
       })
       if (rst.data.code === 200) {
         isShowDialog.value = false
         ElMessage({
           type: 'success',
           message: '头像修改成功',
-          appendTo: document.body
-        })     
+          appendTo: document.body,
+        })
       } else {
         ElMessage({
           type: 'error',
           message: rst.data.message,
-          appendTo: document.body
-        }) 
+          appendTo: document.body,
+        })
       }
     } catch (error) {
       ElMessage({
         type: 'error',
         message: '未知错误',
-        appendTo: document.body
+        appendTo: document.body,
       })
     }
     isLoading.value = false
@@ -269,20 +264,20 @@ const onSave = async () => {
       ElMessage({
         type: 'success',
         message: '修改成功',
-        appendTo: document.body
+        appendTo: document.body,
       })
     } else {
       ElMessage({
         type: 'error',
         message: rst.data.message,
-        appendTo: document.body
+        appendTo: document.body,
       })
     }
   } catch (error: any) {
     ElMessage({
       type: 'error',
       message: error.response.data.message,
-      appendTo: document.body
+      appendTo: document.body,
     })
   }
   isLoading.value = false

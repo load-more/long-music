@@ -11,9 +11,12 @@
               <span class="name">{{ state.nickname }}</span>
               <el-tooltip placement="top">
                 <template #content>
-                  当前等级：Lv.{{ state.level }}<br>
-                  距离下一等级还需：<br>
-                  1. 听歌：{{ state.nextPlayCount - state.nowPlayCount }} 首<br>
+                  当前等级：Lv.{{ state.level }}<br />
+                  距离下一等级还需：<br />
+                  1. 听歌：{{
+                    state.nextPlayCount - state.nowPlayCount
+                  }}
+                  首<br />
                   2. 登录：{{ state.nextLoginCount - state.nowLoginCount }} 天
                 </template>
                 <span class="level">Lv.{{ state.level }}</span>
@@ -54,14 +57,14 @@
         <el-tabs v-model="activeTab">
           <el-tab-pane label="创建的歌单" name="created">
             <ListItem
-              v-for="(item) in createdPlaylist"
+              v-for="item in createdPlaylist"
               :key="item.id"
               :info="item"
             />
           </el-tab-pane>
           <el-tab-pane label="收藏的歌单" name="starred">
             <ListItem
-              v-for="(item) in starredPlaylist"
+              v-for="item in starredPlaylist"
               :key="item.id"
               :info="item"
             />
@@ -95,7 +98,7 @@ const state = reactive({
   nowLoginCount: 0,
   follows: '',
   followeds: '',
-  listenSongs: ''
+  listenSongs: '',
 })
 const genderArr = ['unknown', 'male', 'female']
 const createdPlaylist = reactive<infoType[]>([])
@@ -128,11 +131,13 @@ onBeforeMount(async () => {
       songCount: item.trackCount,
       creator: item.creator.nickname,
       starCount: item.subscribedCount,
-      playCount: item.playCount
+      playCount: item.playCount,
     }
-    if (String(item.creator.userId) === uid) { // 如果是用户创建的歌单
+    if (String(item.creator.userId) === uid) {
+      // 如果是用户创建的歌单
       createdPlaylist.push(obj)
-    } else { // 如果是用户收藏的歌单
+    } else {
+      // 如果是用户收藏的歌单
       starredPlaylist.push(obj)
     }
   })
@@ -196,7 +201,7 @@ const activeTab = ref('created')
           display: flex;
           flex-direction: column;
           justify-content: space-between;
-          align-items: center ;
+          align-items: center;
           height: 40px;
           padding: 0 30px;
           .num {

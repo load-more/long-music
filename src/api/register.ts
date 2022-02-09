@@ -1,4 +1,4 @@
-import request from "../utils/request"
+import request from '@/utils/request'
 
 interface registerParams {
   phone: string
@@ -7,13 +7,11 @@ interface registerParams {
   nickname: string
   countrycode?: string
 }
-export const register = (params: registerParams) => {
-  return request({
-    method: 'GET',
-    url: '/register/cellphone',
-    params
-  })
-}
+export const register = (params: registerParams) => request({
+  method: 'GET',
+  url: '/register/cellphone',
+  params,
+})
 
 export const changePassword = () => {
 
@@ -23,10 +21,8 @@ interface checkIsRegisteredParams {
   phone: string
   countrycode?: string
 }
-export const checkIsRegistered = (params: checkIsRegisteredParams) => {
-  return request({
-    method: 'GET',
-    url: '/cellphone/existence/check',
-    params
-  })
-}
+export const checkIsRegistered = (params: checkIsRegisteredParams) => request({
+  method: 'GET',
+  url: '/cellphone/existence/check',
+  params,
+})
