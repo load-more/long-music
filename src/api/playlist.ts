@@ -10,4 +10,21 @@ export const getPlaylistDetail = (params: getPlaylistDetailParams) => request({
   params,
 })
 
-export const otherApi = ''
+// 获取精品歌单标签列表
+export const getTagList = () => request({
+  method: 'GET',
+  url: '/playlist/highquality/tags',
+})
+
+interface updatePlaylistParams {
+  id: number
+  name: string
+  desc: string
+  tags: string
+}
+// 更新歌单信息
+export const updatePlaylist = (params: updatePlaylistParams) => request({
+  method: 'GET',
+  url: '/playlist/update',
+  params,
+})

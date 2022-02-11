@@ -15,6 +15,7 @@
           <i
            class="iconfont icon-edit"
            v-if="uid === String(state.creatorId)"
+           @click="router.push({ name: 'editPlaylist', params: { id: state.playlistId } })"
           ></i>
         </div>
         <div class="creator">
@@ -71,7 +72,7 @@
 </template>
 
 <script setup lang="ts">
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import {
   onBeforeMount,
   reactive,
@@ -84,9 +85,11 @@ import { Decrypt } from '@/utils/secret'
 
 /* 路由管理 */
 const route = useRoute()
+const router = useRouter()
 
 /* 渲染数据 */
 const state = reactive({
+  playlistId: 0,
   coverImgUrl: '',
   title: '',
   creatorName: '',
@@ -112,6 +115,7 @@ onBeforeMount(async () => {
   const { data } = await getPlaylistDetail({
     id: Number(id),
   })
+  state.playlistId = data.playlist.id
   state.coverImgUrl = data.playlist.coverImgUrl
   state.title = data.playlist.name
   state.creatorName = data.playlist.creator.nickname
@@ -159,7 +163,7 @@ const toggleReadMore = () => {
       display: flex;
       flex-direction: column;
       .title, .creator, .controls {
-        padding-bottom: 18px;
+        padding-bottom: 16px;
       }
       .title {
         font-size: 22px;
