@@ -60,6 +60,7 @@
               v-for="item in createdPlaylist"
               :key="item.id"
               :info="item"
+              @click="router.push({ name: 'playlist', params: { id: item.id } })"
             />
           </el-tab-pane>
           <el-tab-pane label="收藏的歌单" name="starred">
@@ -67,6 +68,7 @@
               v-for="item in starredPlaylist"
               :key="item.id"
               :info="item"
+              @click="router.push({ name: 'playlist', params: { id: item.id } })"
             />
           </el-tab-pane>
         </el-tabs>

@@ -66,6 +66,11 @@ const routes: RouteRecordRaw[] = [
         },
         component: () => import('@/views/EditProfile.vue'),
       },
+      {
+        path: 'playlist/:id',
+        name: 'playlist',
+        component: () => import('@/views/PlayList.vue'),
+      },
     ],
   },
 ]
