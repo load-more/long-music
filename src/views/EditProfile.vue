@@ -220,8 +220,8 @@ const handleUpload = () => {
     try {
       const rst = await updateUserAvatar(fd, {
         imgSize: cropperData?.width,
-        imgX: cropperData?.x,
-        imgY: cropperData?.y,
+        // imgX: cropperData?.x, // 不需要设置偏移量
+        // imgY: cropperData?.y,
       })
       if (rst.data.code === 200) {
         isShowDialog.value = false
