@@ -7,7 +7,8 @@ import mitt, { Emitter } from 'mitt'
 */
 type Events = {
   'onToggleLoginLoading': boolean,
-  'onToggleRegisterLoading': boolean
+  'onToggleRegisterLoading': boolean,
+  'onRefreshGlobalHeader': boolean,
 }
 
 const emitter: Emitter<Events> = mitt<Events>()

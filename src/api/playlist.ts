@@ -28,3 +28,22 @@ export const updatePlaylist = (params: updatePlaylistParams) => request({
   url: '/playlist/update',
   params,
 })
+
+interface updatePlaylistCoverParams {
+  id: number
+  imgSize?: number
+  imgX?: number
+  imgY?: number
+}
+// 更新歌单封面
+export const updatePlaylistCover = (
+  formData: FormData,
+  params: updatePlaylistCoverParams,
+) => request({
+  method: 'POST',
+  url: '/playlist/cover/update',
+  headers: {
+    'Content-Type': 'multipart/form-data',
+  },
+  params,
+})

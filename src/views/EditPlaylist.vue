@@ -29,15 +29,11 @@
           ></el-input>
         </el-form-item>
       </el-form>
-      <div class="cover-wrap">
-        <el-image
-          class="cover"
-          :src="coverImgUrl"
-          fit="fit"
-        ></el-image>
-        <el-button @click="inputRef?.click()">修改封面</el-button>
-        <input type="file" ref="inputRef" @change="handleFileChange" hidden />
-      </div>
+      <ImageUpdater
+        :img-url="coverImgUrl"
+        edit-button-label="修改封面"
+        :update-img-api="updatePlaylistCoverApi"
+      />
     </div>
     <el-button
       type="primary"
@@ -51,7 +47,6 @@
   <el-dialog
     v-model="dialogVisible"
     title="添加标签"
-    @open="handleDialogOpen"
     :before-close="handleDialogClose"
   >
     <div class="container">
@@ -87,8 +82,14 @@
 <script setup lang="ts">
 import { useRoute, useRouter } from 'vue-router'
 import { onBeforeMount, reactive, ref } from 'vue'
-import { getPlaylistDetail, getTagList, updatePlaylist } from '@/api/playlist'
+import {
+  getPlaylistDetail,
+  getTagList,
+  updatePlaylist,
+  updatePlaylistCover,
+} from '@/api/playlist'
 import { ElMessage } from 'element-plus'
+import ImageUpdater from '@/components/image/ImageUpdater.vue'
 
 /* 路由管理 */
 const route = useRoute()
@@ -181,15 +182,15 @@ const handleUpdatePlaylist = async () => {
   isLoading.value = false
 }
 
-/* 修改封面 */
-const inputRef = ref<HTMLInputElement | null>(null)
 const isFormChange = ref(false)
-
-const handleDialogOpen = async () => {
-  //
-}
-const handleFileChange = () => {
-  //
+/* 修改封面 */
+const updatePlaylistCoverApi = (file: File, imgSize: number) => {
+  const fd = new FormData()
+  fd.append('imgFile', file)
+  return updatePlaylistCover(fd, {
+    id: Number(playlistId),
+    imgSize,
+  })
 }
 </script>
 

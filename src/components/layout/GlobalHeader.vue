@@ -75,6 +75,7 @@ import { getUserDetail } from '@/api/user'
 import { ElMessage } from 'element-plus'
 import { ref, reactive, watch } from 'vue'
 import { Decrypt } from '@/utils/secret'
+import emitter from '@/utils/emitter'
 
 /* 路由管理 */
 const router = useRouter()
@@ -86,15 +87,19 @@ const state = reactive({
   avatarUrl: '',
 })
 
+const getData = async () => {
+  const uid = Decrypt(String(window.localStorage.getItem('uid')))
+  const { data } = await getUserDetail({ uid })
+  state.nickname = data.profile.nickname
+  state.avatarUrl = data.profile.avatarUrl
+}
+
 watch(
   isLogin,
   async () => {
     // 一旦登录状态改变，请求数据或不执行操作
     if (isLogin.value) {
-      const uid = Decrypt(String(window.localStorage.getItem('uid')))
-      const { data } = await getUserDetail({ uid })
-      state.nickname = data.profile.nickname
-      state.avatarUrl = data.profile.avatarUrl
+      await getData()
     }
   },
   { immediate: true },
@@ -123,6 +128,11 @@ const handleCommand = async (command: string) => {
     isFullLoading.value = false
   }
 }
+
+/* 监听是否更新头部数据 */
+emitter.on('onRefreshGlobalHeader', async () => {
+  await getData()
+})
 </script>
 
 <style scoped lang="scss">
