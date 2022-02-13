@@ -47,3 +47,15 @@ export const updatePlaylistCover = (
   },
   params,
 })
+
+interface getPlaylistAllSongsParams {
+  id: number
+  limit?: number
+  offset?: number
+}
+// 获取歌单所有歌曲
+export const getPlaylistAllSongs = (params: getPlaylistAllSongsParams) => request({
+  method: 'GET',
+  url: '/playlist/track/all',
+  params,
+})
