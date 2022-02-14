@@ -12,8 +12,8 @@ export const getLocalTime = (seconds: number) => {
 }
 
 // 格式化歌曲时间
-export const formatDuration = (ms: number) => {
-  const sec = Math.round(ms / 1000)
+export const formatDuration = (duration: number, unit: 'ms' | 's' = 'ms') => {
+  const sec = Math.round(unit === 'ms' ? duration / 1000 : duration)
   const secDigit = sec % 60
   const minDigit = Math.floor(sec / 60)
   return `${String(minDigit).padStart(2, '0')}:${String(secDigit).padStart(2, '0')}`

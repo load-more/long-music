@@ -39,6 +39,7 @@ declare module 'vue' {
     Loading: typeof import('element-plus/es')['ElLoadingDirective']
     LoginForm: typeof import('./src/components/login/LoginForm.vue')['default']
     MusicList: typeof import('./src/components/music/MusicList.vue')['default']
+    ProgressBar: typeof import('./src/components/music/ProgressBar.vue')['default']
     QrLoginPage: typeof import('./src/components/login/QrLoginPage.vue')['default']
     RegionSelect: typeof import('./src/components/form/RegionSelect.vue')['default']
     RegisterForm: typeof import('./src/components/register/RegisterForm.vue')['default']
