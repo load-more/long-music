@@ -1,11 +1,16 @@
 <template>
-  <div class="wrap">
+  <div class="wrap" @dblclick="handleDbClick" :class="{ 'active': isActive }">
     <div class="operation">
-      <span>{{ songIndex }}</span>
+      <span v-if="!isActive">{{ songIndex }}</span>
+      <i v-else-if="currentSong.isPlay" class="iconfont icon-volume"></i>
+      <i v-else class="iconfont icon-close-volume"></i>
       <i class="iconfont icon-like"></i>
       <i class="iconfont icon-download"></i>
     </div>
-    <div class="title" :title="`${songInfo.name} (${songInfo.alias})`">
+    <div
+      class="title"
+      :title="`${songInfo.name} ${currentSong.alias ? '(' + currentSong.alias + ')' : ''}`"
+    >
       <span>{{ songInfo.name }}</span>
       <span v-if="songInfo.alias" class="alias">&nbsp;({{ songInfo.alias }})</span>
     </div>
@@ -27,7 +32,10 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue'
 import { formatDuration } from '@/utils/time'
+import useMainStore from '@/store/index'
+import { storeToRefs } from 'pinia'
 
 export interface songType {
   id: number
@@ -37,10 +45,19 @@ export interface songType {
   album: { name: string }
   duration: number
 }
-defineProps<{
+const props = defineProps<{
   songInfo: songType
   songIndex: number
 }>()
+
+/* 双击播放音乐 */
+const { currentSong } = storeToRefs(useMainStore())
+const handleDbClick = () => {
+  currentSong.value = props.songInfo
+}
+
+/* 判断当前音乐是否播放 */
+const isActive = computed(() => props.songInfo.id === currentSong.value.id)
 </script>
 
 <style scoped lang="scss">
@@ -56,11 +73,20 @@ defineProps<{
     background-color: rgb(184, 184, 184);
   }
   .operation {
-    width: 100px;
-    display: flex;
-    justify-content: space-evenly;
+    // width: 100px;
+    // display: flex;
+    // justify-content: space-evenly;
     color: gray;
-    i {
+    span, i {
+      display: inline-block;
+      box-sizing: border-box;
+      width: 30px;
+      text-align: center;
+    }
+    .icon-volume, .icon-close-volume {
+      color: red;
+    }
+    .icon-like, .icon-download {
       cursor: pointer;
       &:hover {
         color: white;
@@ -96,5 +122,8 @@ defineProps<{
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+}
+.active {
+  background-color: rgb(255, 166, 166);
 }
 </style>

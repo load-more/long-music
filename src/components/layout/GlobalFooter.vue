@@ -3,17 +3,31 @@
     <el-col :span="8" class="left">
       <div class="song-image">
         <el-avatar
-          shape="square" :size="60"
-          src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
+          shape="square"
+          :size="60"
+          fit="fit"
+          :src="currentSong.album['picUrl']"
         ></el-avatar>
       </div>
-      <div class="song-info">
+      <div
+        class="song-info"
+        :title="`${currentSong.name} ${currentSong.alias ? '(' + currentSong.alias + ')' : ''}`"
+      >
         <div class="title">
-          <span>song-title</span>
+          <span>{{ currentSong.name }}</span>
+          <span v-if="currentSong.alias">&nbsp;({{ currentSong.alias }})</span>
           <i class="iconfont icon-like"></i>
         </div>
-        <div class="author">
-          <span>song-author</span>
+        <div class="singer" :title="currentSong.author.map(item => item.name).join(' / ')">
+          <span v-for="(item, index) in currentSong.author" :key="item.id">
+            <span class="name">
+              {{ item.name }}
+            </span>
+            <span
+              class="seperator"
+              v-if="index !== currentSong.author.length - 1"
+            >&nbsp;/&nbsp;</span>
+          </span>
         </div>
       </div>
     </el-col>
@@ -50,20 +64,43 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import ProgressBar from '@/components/music/ProgressBar.vue'
+import useMainStore from '@/store/index'
+import { storeToRefs } from 'pinia'
 
 /* 音乐播放 */
+const { currentSong } = storeToRefs(useMainStore())
 const music = new Audio()
-music.src = 'https://music.163.com/song/media/outer/url?id=28864472.mp3'
+watch(() => currentSong.value.id, () => {
+  music.src = `https://music.163.com/song/media/outer/url?id=${currentSong.value.id}.mp3`
+})
 const isPlay = ref(false)
 const duration = ref(0)
 const currentTime = ref(0)
 
+// 暂停或播放音乐
+const playMusic = () => {
+  music.play()
+  isPlay.value = true
+  useMainStore().$patch((state) => {
+    // eslint-disable-next-line no-param-reassign
+    state.currentSong.isPlay = true
+  })
+}
+const pauseMusic = () => {
+  music.pause()
+  isPlay.value = false
+  useMainStore().$patch((state) => {
+    // eslint-disable-next-line no-param-reassign
+    state.currentSong.isPlay = false
+  })
+}
 // 当音乐文件加载完成，初始化数据
 music.addEventListener('canplaythrough', () => {
   duration.value = music.duration
   currentTime.value = music.currentTime
+  playMusic()
 })
 // 每当音乐文件的时间更新，则更新 currentTime
 music.addEventListener('timeupdate', () => {
@@ -72,15 +109,13 @@ music.addEventListener('timeupdate', () => {
   }
   currentTime.value = music.currentTime
 })
-// 暂停或播放音乐
+// 切换音乐状态
 const toggleMusicPlayStatus = () => {
   if (music) {
     if (music.paused) {
-      music.play()
-      isPlay.value = true
+      playMusic()
     } else {
-      music.pause()
-      isPlay.value = false
+      pauseMusic()
     }
   }
 }

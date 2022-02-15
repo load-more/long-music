@@ -7,9 +7,27 @@ const checkCookie = (cName: string) => {
 }
 const cName = 'MUSIC_U'
 const isLogin = checkCookie(cName)
+interface songType {
+  id: number
+  name: string
+  alias: string
+  author: { id: number, name: string }[]
+  album: { name: string }
+  duration: number
+  isPlay?: boolean
+}
+const currentSong: songType = {
+  id: 0,
+  name: '',
+  alias: '',
+  author: [],
+  album: { name: '' },
+  duration: 0,
+}
 
 export default defineStore('main', {
   state: () => ({
     isLogin,
+    currentSong,
   }),
 })
