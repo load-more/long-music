@@ -5,7 +5,6 @@
         <el-avatar
           shape="square"
           :size="60"
-          fit="fit"
           :src="currentSong.album['picUrl']"
         ></el-avatar>
       </div>

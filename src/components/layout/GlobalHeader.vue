@@ -1,9 +1,9 @@
 <template>
   <el-row class="container" v-loading.fullscreen.lock="isFullLoading">
     <el-col :span="4" class="left">
-      <a href="/#">
+      <div @click="router.push({ name: 'home' })">
         <img src="@/assets/logo.png" alt="logo" />
-      </a>
+      </div>
     </el-col>
     <el-col :span="6" class="mid">
       <span @click="router.back()">
@@ -143,11 +143,12 @@ emitter.on('onRefreshGlobalHeader', async () => {
   justify-content: space-between;
   .left {
     height: 100%;
-    a {
+    div {
       display: flex;
       align-items: center;
       justify-content: center;
       height: 100%;
+      cursor: pointer;
       img {
         height: 70%;
       }

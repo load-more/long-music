@@ -3,7 +3,6 @@
     <el-image
       class="qrcode"
       :src="imgUrl"
-      fit="fit"
       v-loading="isLoading"
       element-loading-text="加载中..."
       element-loading-background="rgba(255,255,255,0.8)"

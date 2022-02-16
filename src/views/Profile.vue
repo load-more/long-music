@@ -3,7 +3,7 @@
     <el-scrollbar height="450px">
       <div class="desc">
         <div class="left">
-          <el-avatar :size="200" fit="fit" :src="state.avatarUrl"></el-avatar>
+          <el-avatar :size="200" :src="state.avatarUrl"></el-avatar>
         </div>
         <div class="right">
           <div class="top-profile">

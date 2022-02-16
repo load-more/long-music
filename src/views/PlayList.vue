@@ -6,7 +6,6 @@
           <el-image
             class="cover-image"
             :src="state.coverImgUrl"
-            fit="fit"
           />
         </div>
         <div class="info">

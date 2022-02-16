@@ -4,7 +4,6 @@
       <el-image
         class="image"
         :src="info.coverImg"
-        fit="fit"
       />
       <span>{{ info.title }}</span>
     </div>

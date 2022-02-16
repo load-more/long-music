@@ -3,7 +3,6 @@
     <el-image
       class="image"
       :src="imgUrl"
-      fit="fit"
     ></el-image>
     <el-button @click="inputRef?.click()">{{ editButtonLabel }}</el-button>
     <input type="file" ref="inputRef" @change="handleFileChange" hidden />
