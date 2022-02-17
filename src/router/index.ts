@@ -4,6 +4,14 @@ import { storeToRefs } from 'pinia'
 
 const routes: RouteRecordRaw[] = [
   {
+    path: '/login',
+    name: 'login',
+    component: () => import('@/views/LoginPage.vue'),
+    meta: {
+      requiresLogout: true,
+    },
+  },
+  {
     path: '/',
     component: () => import('@/views/Layout.vue'),
     children: [
@@ -12,46 +20,8 @@ const routes: RouteRecordRaw[] = [
         name: 'home',
         component: () => import('@/views/HomePage.vue'),
       },
-      // vite Server.Proxy does not work because of nested routes
       {
-        path: 'login',
-        component: () => import('@/views/LoginLayout.vue'),
-        meta: {
-          requiresLogout: true,
-        },
-        children: [
-          {
-            path: '', // 注意，子路由不能带上 / ，否则无法显示路由
-            name: 'phone',
-            component: () => import('@/views/PhoneLogin.vue'),
-          },
-          {
-            path: 'sms',
-            name: 'sms',
-            component: () => import('@/views/SmsLogin.vue'),
-          },
-          {
-            path: 'email',
-            name: 'email',
-            component: () => import('@/views/EmailLogin.vue'),
-          },
-          {
-            path: 'qrcode',
-            name: 'qrcode',
-            component: () => import('@/views/QrcodeLogin.vue'),
-          },
-        ],
-      },
-      {
-        path: 'register',
-        name: 'register',
-        meta: {
-          requiresLogout: true,
-        },
-        component: () => import('@/views/Register.vue'),
-      },
-      {
-        path: 'profile',
+        path: 'profile', // 注意，子路由不能带上 / ，否则无法显示路由
         name: 'profile',
         meta: {
           requiresLogin: true,

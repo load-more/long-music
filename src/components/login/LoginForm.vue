@@ -94,9 +94,6 @@
       ></el-checkbox>
     </el-form-item>
     <el-form-item>
-      <el-checkbox v-model="isTest" label="测试数据" size="small"></el-checkbox>
-    </el-form-item>
-    <el-form-item>
       <el-button type="primary" style="width: 100%" @click="onClickLogin"
         >登录</el-button
       >
@@ -107,7 +104,6 @@
 <script setup lang="ts">
 import {
   ref,
-  watch,
   reactive,
   computed,
 } from 'vue'
@@ -132,7 +128,6 @@ const props = defineProps<{
 
 const isAutoLogin = ref(false)
 const isPasswordVisible = ref(false)
-const isTest = ref(false)
 const countdownTime = 60
 const counter = ref(countdownTime)
 let timer: NodeJS.Timer | null = null
@@ -209,26 +204,6 @@ const encryptedLoginForm = computed(() => {
     }
   }
   return null
-})
-
-watch(isTest, () => {
-  if (isTest.value) {
-    if (props.type === 'phone') {
-      loginForm.phone = '18470415369'
-      loginForm.password = 'test.123'
-    } else if (props.type === 'email') {
-      loginForm.email = 'shylobing@163.com'
-      loginForm.password = 'test.123'
-    } else if (props.type === 'sms') {
-      loginForm.phone = '18470415369'
-      loginForm.captcha = '123456'
-    }
-  } else {
-    loginForm.phone = ''
-    loginForm.password = ''
-    loginForm.email = ''
-    loginForm.captcha = ''
-  }
 })
 
 /*

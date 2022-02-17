@@ -59,9 +59,6 @@
       </el-input>
     </el-form-item>
     <el-form-item>
-      <el-checkbox v-model="isTest" label="测试数据" size="small"></el-checkbox>
-    </el-form-item>
-    <el-form-item>
       <el-button type="primary" style="width: 100%" @click="onClickRegister"
         >注册</el-button
       >
@@ -70,7 +67,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, watch } from 'vue'
+import { ref, reactive } from 'vue'
 import type { ElForm } from 'element-plus'
 import { sendCaptcha } from '@/api/login'
 import { ElMessage } from 'element-plus'
@@ -83,7 +80,6 @@ const isPasswordVisible = ref(false)
 const countdownTime = 60
 const counter = ref(countdownTime)
 let timer: NodeJS.Timer | null = null
-const isTest = ref(false)
 const isCaptchaLoading = ref(false)
 const router = useRouter()
 
@@ -215,20 +211,6 @@ const onClickRegister = () => {
     })
   }
 }
-
-watch(isTest, () => {
-  if (isTest.value) {
-    registerForm.phone = '18470415369'
-    registerForm.password = 'test.123'
-    registerForm.nickname = 'test'
-    registerForm.captcha = '123456'
-  } else {
-    registerForm.phone = ''
-    registerForm.password = ''
-    registerForm.nickname = ''
-    registerForm.captcha = ''
-  }
-})
 </script>
 
 <style scoped lang="scss">

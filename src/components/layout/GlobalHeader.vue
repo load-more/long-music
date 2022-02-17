@@ -116,7 +116,7 @@ const handleCommand = async (command: string) => {
       // 切换登录状态
       isLogin.value = false
       // 跳转到首页
-      router.push({ name: 'home' })
+      router.push({ name: 'login' })
       // 清除 localStorage
       window.localStorage.clear()
       ElMessage({
