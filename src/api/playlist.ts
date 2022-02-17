@@ -46,6 +46,7 @@ export const updatePlaylistCover = (
     'Content-Type': 'multipart/form-data',
   },
   params,
+  data: formData,
 })
 
 interface getPlaylistAllSongsParams {
