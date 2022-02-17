@@ -59,3 +59,8 @@ export const getPlaylistAllSongs = (params: getPlaylistAllSongsParams) => reques
   url: '/playlist/track/all',
   params,
 })
+
+export const getRecommendPlaylist = () => request({
+  method: 'GET',
+  url: '/recommend/resource',
+})

@@ -1,29 +1,38 @@
 <template>
   <div class="wrap">
-    <el-carousel
-      class="banner-carousel"
-      v-if="bannerArr.length"
-      type="card"
-      :interval="5000"
-      height="208px"
-    >
-      <el-carousel-item
-        v-for="(item) in bannerArr"
-        :key="item.targetId"
-      >
-        <div class="image-wrap">
-          <el-image
-            class="image"
-            :src="item.imgUrl"
-            @click="handleBannerClick(item.targetId)"
-          ></el-image>
-          <div
-            class="label"
-            :style="{ backgroundColor: item.titleColor }"
-          >{{ item.typeTitle }}</div>
-        </div>
-      </el-carousel-item>
-    </el-carousel>
+    <el-scrollbar height="450px">
+      <div class="banner">
+        <span class="label">个性推荐</span>
+        <el-carousel
+          class="banner-carousel"
+          v-if="bannerArr.length"
+          type="card"
+          :interval="5000"
+          height="208px"
+        >
+          <el-carousel-item
+            v-for="(item) in bannerArr"
+            :key="item.targetId"
+          >
+            <div class="image-wrap">
+              <el-image
+                class="image"
+                :src="item.imgUrl"
+                @click="handleBannerClick(item.targetId)"
+              ></el-image>
+              <div
+                class="label"
+                :style="{ backgroundColor: item.titleColor }"
+              >{{ item.typeTitle }}</div>
+            </div>
+          </el-carousel-item>
+        </el-carousel>
+      </div>
+      <div class="rcmd-playlist">
+        <span class="label">每日推荐</span>
+        <RcmdPlaylist />
+      </div>
+    </el-scrollbar>
   </div>
 </template>
 
@@ -33,6 +42,7 @@ import { getHomeBanner } from '@/api/home'
 import { getMusicDetail } from '@/api/music'
 import useMainStore from '@/store/index'
 import { storeToRefs } from 'pinia'
+import RcmdPlaylist from '@/views/RcmdPlaylist.vue'
 
 /* 渲染数据 */
 interface bannerType {
@@ -43,8 +53,9 @@ interface bannerType {
 }
 const bannerArr = reactive<bannerType[]>([])
 const getData = async () => {
-  const { data } = await getHomeBanner()
-  data.banners.forEach((item: any) => {
+  // 获取 banner
+  const { data: bannerData } = await getHomeBanner()
+  bannerData.banners.forEach((item: any) => {
     const obj = {
       imgUrl: item.imageUrl,
       targetId: item.targetId,
