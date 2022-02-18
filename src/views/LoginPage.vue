@@ -1,6 +1,7 @@
 <template>
   <div class="box-wrap">
     <a href="https://github.com/load-more/long-music"
+      target="_blank"
       class="github-corner" aria-label="View source on GitHub"
     >
       <svg
@@ -59,9 +60,6 @@
         返回
       </span>
     </div>
-    <div class="footer">
-      <span>本项目采用网易云音乐后端接口，仅作学习使用。</span>
-    </div>
   </div>
 </template>
 
@@ -104,12 +102,6 @@ onUnmounted(() => {
       pointer-events: none;
     }
   }
-  .footer {
-    position: absolute;
-    right: 10px;
-    bottom: 10px;
-    color: white;
-  }
   .register, .back {
     display: inline-block;
     color: gray;
@@ -131,7 +123,7 @@ onUnmounted(() => {
     }
   }
 }
-::v-deep .el-tabs {
+:deep .el-tabs {
   border-radius: 20px;
   .el-tabs__header {
     border-radius: 20px;
@@ -146,7 +138,7 @@ onUnmounted(() => {
     border-radius: 20px;
   }
 }
-::v-deep .el-loading-mask {
+:deep .el-loading-mask {
   border-radius: 20px;
 }
 // github corner

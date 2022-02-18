@@ -86,17 +86,23 @@
         </el-input>
       </el-form-item>
     </template>
-    <el-form-item>
-      <el-checkbox
-        v-model="isAutoLogin"
-        label="自动登录"
-        size="small"
-      ></el-checkbox>
-    </el-form-item>
-    <el-form-item>
-      <el-button type="primary" style="width: 100%" @click="onClickLogin"
+    <el-form-item class="btn-button">
+      <el-button
+        :disabled="!isChecked"
+        type="primary" style="width: 100%" @click="onClickLogin"
         >登录</el-button
       >
+    </el-form-item>
+    <el-form-item class="check-item">
+      <el-checkbox
+        v-model="isChecked"
+        size="small"
+      >
+        <span class="agree-label">
+          本项目采用网易云音乐后端接口，仅作学习使用。如有需要，请访问
+          <a href="https://music.163.com/" target="_blank">网易云音乐</a>。
+        </span>
+      </el-checkbox>
     </el-form-item>
   </el-form>
 </template>
@@ -126,7 +132,7 @@ const props = defineProps<{
   type: 'phone' | 'email' | 'sms'
 }>()
 
-const isAutoLogin = ref(false)
+const isChecked = ref(false)
 const isPasswordVisible = ref(false)
 const countdownTime = 60
 const counter = ref(countdownTime)
@@ -316,6 +322,32 @@ const onClickCaptcha = () => {
   .captcha-wrap {
     display: flex;
     align-items: center;
+  }
+  .btn-button {
+    height: 60px;
+  }
+  .agree-label {
+    color: rgb(170, 170, 170);
+    a {
+      color: red;
+    }
+  }
+  :deep .check-item {
+    .el-form-item__error {
+      padding-top: 10px;
+    }
+  }
+  :deep .el-checkbox {
+    white-space: normal;
+    cursor: default;
+    align-items: flex-start;
+    .el-checkbox__label {
+      line-height: 15px;
+    }
+    .el-checkbox__inner {
+      border-radius: 50%;
+      margin-top: 2px;
+    }
   }
 }
 </style>
