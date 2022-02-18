@@ -101,6 +101,12 @@ onUnmounted(() => {
       width: 100%;
       pointer-events: none;
     }
+    @media screen and (max-width: 768px) {
+      width: 320px;
+      right: 50%;
+      bottom: 50%;
+      transform: translate(50%, 50%);
+    }
   }
   .register, .back {
     display: inline-block;

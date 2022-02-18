@@ -5,6 +5,7 @@ import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import { resolve } from 'path'
+import pxToVw from 'postcss-px-to-viewport'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -17,6 +18,19 @@ export default defineConfig({
       resolvers: [ElementPlusResolver()],
     }),
   ],
+  css: {
+    postcss: {
+      plugins: [
+        // vw 适配
+        pxToVw({
+          viewportWidth: 640, // 移动端以 iphone5 宽度为标准
+          mediaQuery: true, // 转换媒体查询尺寸
+          minPixelValue: 1, // 小于 1px 的尺寸不转换
+          propList: [''], // 全部属性不转换单位，只转换媒体查询
+        }),
+      ],
+    },
+  },
   resolve: {
     alias: {
       // 设置路径别名
