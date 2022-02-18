@@ -1,35 +1,48 @@
 <template>
-  <div class="wrap">
-    <el-scrollbar height="450px">
-      <div class="banner">
-        <span class="label">个性推荐</span>
-        <el-carousel
-          class="banner-carousel"
-          v-if="bannerArr.length"
-          type="card"
-          :interval="5000"
-          height="208px"
+  <div class="home-wrap">
+    <el-scrollbar class="scroll-bar">
+      <div class="banner-wrap">
+        <span class="home-label">个性推荐</span>
+        <el-skeleton
+          :loading="isLoadingBanner"
+          animated
         >
-          <el-carousel-item
-            v-for="(item) in bannerArr"
-            :key="item.targetId"
-          >
-            <div class="image-wrap">
-              <el-image
-                class="image"
-                :src="item.imgUrl"
-                @click="handleBannerClick(item.targetId)"
-              ></el-image>
-              <div
-                class="label"
-                :style="{ backgroundColor: item.titleColor }"
-              >{{ item.typeTitle }}</div>
-            </div>
-          </el-carousel-item>
-        </el-carousel>
+          <template #template>
+            <el-skeleton-item
+              class="banner-skeleton"
+              variant="image"
+            ></el-skeleton-item>
+          </template>
+          <template #default>
+            <el-carousel
+              class="banner-carousel"
+              v-if="bannerArr.length"
+              type="card"
+              :interval="5000"
+              height="208px"
+            >
+              <el-carousel-item
+                v-for="(item) in bannerArr"
+                :key="item.targetId"
+              >
+                <div class="image-wrap">
+                  <el-image
+                    class="image"
+                    :src="item.imgUrl"
+                    @click="handleBannerClick(item.targetId)"
+                  ></el-image>
+                  <div
+                    class="label"
+                    :style="{ backgroundColor: item.titleColor }"
+                  >{{ item.typeTitle }}</div>
+                </div>
+              </el-carousel-item>
+            </el-carousel>
+          </template>
+        </el-skeleton>
       </div>
-      <div class="rcmd-playlist">
-        <span class="label">每日推荐</span>
+      <div class="rcmd-playlist-wrap">
+        <span class="home-label">每日推荐</span>
         <RcmdPlaylist />
       </div>
     </el-scrollbar>
@@ -37,7 +50,7 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, reactive } from 'vue'
+import { onBeforeMount, reactive, ref } from 'vue'
 import { getHomeBanner } from '@/api/home'
 import { getMusicDetail } from '@/api/music'
 import useMainStore from '@/store/index'
@@ -52,6 +65,7 @@ interface bannerType {
   typeTitle: string
 }
 const bannerArr = reactive<bannerType[]>([])
+const isLoadingBanner = ref(true)
 const getData = async () => {
   // 获取 banner
   const { data: bannerData } = await getHomeBanner()
@@ -64,6 +78,7 @@ const getData = async () => {
     }
     bannerArr.push(obj)
   })
+  isLoadingBanner.value = false
 }
 onBeforeMount(() => {
   getData()
@@ -93,22 +108,41 @@ const handleBannerClick = async (id: number) => {
 </script>
 
 <style scoped lang="scss">
-.wrap {
-  padding: 20px;
-  .banner-carousel {
-    .image-wrap {
-      position: relative;
-      .label {
-        padding: 5px 10px;
-        position: absolute;
-        color: white;
-        font-size: 14px;
-        border-radius: 5px;
-        z-index: 999;
-        right: 0;
-        bottom: 0;
+.home-wrap {
+  height: 100%;
+  .scroll-bar {
+    height: 100%;
+  }
+  .home-label {
+    font-size: 20px;
+    font-family: 'yahei';
+    display: inline-block;
+    padding-bottom: 10px;
+  }
+  .banner-wrap {
+    padding: 20px;
+    height: 268px;
+    .banner-skeleton {
+      height: 208px;
+    }
+    .banner-carousel {
+      .image-wrap {
+        position: relative;
+        .label {
+          padding: 5px 10px;
+          position: absolute;
+          color: white;
+          font-size: 14px;
+          border-radius: 5px;
+          z-index: 999;
+          right: 0;
+          bottom: 0;
+        }
       }
     }
+  }
+  .rcmd-playlist-wrap {
+    padding: 20px;
   }
 }
 </style>

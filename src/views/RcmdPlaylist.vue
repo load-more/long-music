@@ -1,15 +1,30 @@
 <template>
-  <div class="wrap">
-    <RcmdListItem
-      v-for="(item) in rcmdArr"
-      :key="item.id"
-      :info="item"
-    />
+  <div class="rcmd-playlist-wrap">
+    <el-skeleton
+      :loading="isLoading"
+      animated
+      class="skeleton"
+      :count="5"
+    >
+      <template #template>
+        <div class="item">
+          <el-skeleton-item variant="image" class="image-skeleton"></el-skeleton-item>
+          <el-skeleton-item class="title-skeleton"></el-skeleton-item>
+        </div>
+      </template>
+      <template #default>
+        <RcmdListItem
+          v-for="(item) in rcmdArr"
+          :key="item.id"
+          :info="item"
+        />
+      </template>
+    </el-skeleton>
   </div>
 </template>
 
 <script setup lang="ts">
-import { reactive, onBeforeMount } from 'vue'
+import { reactive, onBeforeMount, ref } from 'vue'
 import { getRecommendPlaylist } from '@/api/playlist'
 import RcmdListItem from '@/components/playlist/RcmdListItem.vue'
 
@@ -21,7 +36,7 @@ interface rcmdType {
   playCount: number
 }
 const rcmdArr = reactive<rcmdType[]>([])
-
+const isLoading = ref(true)
 onBeforeMount(async () => {
   // 获取推荐歌单
   const { data: rcmdData } = await getRecommendPlaylist()
@@ -34,13 +49,29 @@ onBeforeMount(async () => {
     }
     rcmdArr.push(obj)
   })
+  isLoading.value = false
 })
 </script>
 
 <style scoped lang="scss">
-.wrap {
+.rcmd-playlist-wrap, .skeleton {
   display: flex;
   flex-wrap: wrap;
   padding: 0;
+}
+.skeleton .item {
+  width: 20%;
+}
+.rcmd-playlist-wrap {
+  .image-skeleton {
+    width: 200px;
+    height: 200px;
+    border-radius: 5px;
+  }
+  .title-skeleton {
+    margin-top: 10px;
+    width: 200px;
+    height: 30px;
+  }
 }
 </style>

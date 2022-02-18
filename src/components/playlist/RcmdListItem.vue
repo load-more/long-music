@@ -1,5 +1,5 @@
 <template>
-  <div class="wrap">
+  <div class="rcmd-playlist-item-wrap">
     <el-image
       class="image"
       :src="info.picUrl"
@@ -27,7 +27,7 @@ defineProps<{
 </script>
 
 <style scoped lang="scss">
-.wrap {
+.rcmd-playlist-item-wrap {
   width: 20%;
   height: 250px;
   display: flex;
@@ -45,6 +45,11 @@ defineProps<{
     color: rgb(173, 173, 173);
     font-size: 14px;
     cursor: pointer;
+    overflow : hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
     &:hover {
       color: white;
     }
