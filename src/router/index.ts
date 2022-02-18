@@ -7,9 +7,6 @@ const routes: RouteRecordRaw[] = [
     path: '/login',
     name: 'login',
     component: () => import('@/views/LoginPage.vue'),
-    meta: {
-      requiresLogout: true,
-    },
   },
   {
     path: '/',
@@ -23,17 +20,11 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'profile', // 注意，子路由不能带上 / ，否则无法显示路由
         name: 'profile',
-        meta: {
-          requiresLogin: true,
-        },
         component: () => import('@/views/Profile.vue'),
       },
       {
         path: 'edit-profile',
         name: 'editProfile',
-        meta: {
-          requiresLogin: true,
-        },
         component: () => import('@/views/EditProfile.vue'),
       },
       {
@@ -60,23 +51,15 @@ const router = createRouter({
   routes,
 })
 
-// const checkCookie = (cName: string) => {
-//   const cookie = document.cookie
-//   const arr = cookie.split('; ')
-//   return !!arr.find(item => item.split('=')[0] === cName)
-// }
-
-router.beforeEach(async (to, from) => {
-  // const cName = 'MUSIC_U'
-  // const isLogin = checkCookie(cName)
+router.beforeEach((to, from) => {
   const { isLogin } = storeToRefs(useMainStore())
-  if (to.meta.requiresLogin && !isLogin.value) {
-    // 如果路由需要登录且用户未登录，则跳转到登录页
-    return { name: 'phone' }
+  // 如果用户未登录且目标页面不是登录页，则跳转到登录页
+  if (!isLogin.value && to.name !== 'login') { // 注意，一定要写后面的判断逻辑，否则会死循环
+    return { name: 'login' }
   }
-  if (to.meta.requiresLogout && isLogin.value) {
-    // 如果路由需要登出且用户已登录，则停止跳转
-    return { path: from.path }
+  // 如果用户已登录且目标页面是登录页，则停止跳转
+  if (isLogin.value && to.name === 'login') {
+    return from.fullPath
   }
   return true
 })
