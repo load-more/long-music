@@ -28,7 +28,7 @@ defineProps<{
 
 <style scoped lang="scss">
 .rcmd-playlist-item-wrap {
-  width: 20%;
+  width: 100%;
   height: 250px;
   display: flex;
   flex-direction: column;

@@ -3,21 +3,24 @@
     <el-skeleton
       :loading="isLoading"
       animated
-      class="skeleton"
+      class="skeleton-wrap"
       :count="5"
     >
       <template #template>
-        <div class="item">
+        <div class="skeleton-item">
           <el-skeleton-item variant="image" class="image-skeleton"></el-skeleton-item>
           <el-skeleton-item class="title-skeleton"></el-skeleton-item>
         </div>
       </template>
       <template #default>
-        <RcmdListItem
-          v-for="(item) in rcmdArr"
-          :key="item.id"
-          :info="item"
-        />
+        <div class="list-wrap">
+          <RcmdListItem
+            class="list-item"
+            v-for="(item) in rcmdArr"
+            :key="item.id"
+            :info="item"
+          />
+        </div>
       </template>
     </el-skeleton>
   </div>
@@ -54,24 +57,46 @@ onBeforeMount(async () => {
 </script>
 
 <style scoped lang="scss">
-.rcmd-playlist-wrap, .skeleton {
-  display: flex;
-  flex-wrap: wrap;
-  padding: 0;
-}
-.skeleton .item {
-  width: 20%;
-}
 .rcmd-playlist-wrap {
-  .image-skeleton {
-    width: 200px;
-    height: 200px;
-    border-radius: 5px;
+  .skeleton-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    .skeleton-item {
+      flex: 1;
+      .image-skeleton {
+        width: 200px;
+        height: 200px;
+        border-radius: 5px;
+      }
+      .title-skeleton {
+        margin-top: 10px;
+        width: 200px;
+        height: 30px;
+      }
+    }
   }
-  .title-skeleton {
-    margin-top: 10px;
-    width: 200px;
-    height: 30px;
+  .list-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    .list-item {
+      flex: 1;
+      // width: 200px;
+      // @media screen and (max-width: 1200px) {
+      //   width: 25%;
+      // }
+      // @media screen and (max-width: 992px) {
+      //   width: 33.3%;
+      // }
+      // @media screen and (max-width: 768px) {
+      //   width: 50%;
+      // }
+    }
+  }
+  // 使用伪元素实现最后一行排列方式一致
+  .skeleton-wrap::after, .list-wrap::after {
+    content: '';
+    flex: 1;
   }
 }
 </style>
