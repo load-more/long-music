@@ -36,7 +36,7 @@ defineProps<{
   .image {
     width: 200px;
     height: 200px;
-    border-radius: 5px;
+    border-radius: 10px;
     cursor: pointer;
   }
   .title {

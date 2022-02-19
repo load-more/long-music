@@ -4,13 +4,13 @@
       :loading="isLoading"
       animated
       class="skeleton-wrap"
-      :count="5"
     >
       <template #template>
-        <div class="skeleton-item">
+        <div class="skeleton-item" v-for="(item, index) in 5" :key="index">
           <el-skeleton-item variant="image" class="image-skeleton"></el-skeleton-item>
           <el-skeleton-item class="title-skeleton"></el-skeleton-item>
         </div>
+        <i></i><i></i><i></i><i></i><i></i>
       </template>
       <template #default>
         <div class="list-wrap">
@@ -20,6 +20,8 @@
             :key="item.id"
             :info="item"
           />
+          <!-- 占位元素，解决最后一行排列不一致 -->
+          <i></i><i></i><i></i><i></i><i></i>
         </div>
       </template>
     </el-skeleton>
@@ -61,9 +63,10 @@ onBeforeMount(async () => {
   .skeleton-wrap {
     display: flex;
     flex-wrap: wrap;
-    width: 100%;
+    justify-content: space-between;
     .skeleton-item {
-      flex: 1;
+      width: 200px;
+      margin-right: 20px;
       .image-skeleton {
         width: 200px;
         height: 200px;
@@ -75,13 +78,18 @@ onBeforeMount(async () => {
         height: 30px;
       }
     }
+    i {
+      width: 200px;
+      margin-right: 20px;
+    }
   }
   .list-wrap {
     display: flex;
     flex-wrap: wrap;
+    justify-content: space-between;
     .list-item {
-      flex: 1;
-      // width: 200px;
+      width: 200px;
+      margin-right: 20px;
       // @media screen and (max-width: 1200px) {
       //   width: 25%;
       // }
@@ -92,11 +100,10 @@ onBeforeMount(async () => {
       //   width: 50%;
       // }
     }
-  }
-  // 使用伪元素实现最后一行排列方式一致
-  .skeleton-wrap::after, .list-wrap::after {
-    content: '';
-    flex: 1;
+    i {
+      width: 200px;
+      margin-right: 20px;
+    }
   }
 }
 </style>
