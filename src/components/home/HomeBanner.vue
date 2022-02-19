@@ -12,11 +12,34 @@
       </template>
       <template #default>
         <el-carousel
-          class="banner-carousel"
+          class="card-banner-carousel"
           v-if="bannerArr.length"
           type="card"
-          :interval="5000"
-          height="208px"
+          :autoplay="false"
+        >
+          <el-carousel-item
+            v-for="(item) in bannerArr"
+            :key="item.targetId"
+          >
+            <div class="image-wrap">
+              <el-image
+                ref="cardImage"
+                class="image"
+                :src="item.imgUrl"
+                @click="handleBannerClick(item.targetId)"
+              ></el-image>
+              <div
+                class="label"
+                :style="{ backgroundColor: item.titleColor }"
+              >{{ item.typeTitle }}</div>
+            </div>
+          </el-carousel-item>
+        </el-carousel>
+        <el-carousel
+          class="normal-banner-carousel"
+          v-if="bannerArr.length"
+          :autoplay="false"
+          height="278px"
         >
           <el-carousel-item
             v-for="(item) in bannerArr"
@@ -99,25 +122,69 @@ const handleBannerClick = async (id: number) => {
 
 <style scoped lang="scss">
 .banner-wrap {
-  padding: 20px;
-  height: 268px;
-  .banner-skeleton {
+  :deep .el-carousel__container {
     height: 208px;
   }
-  .banner-carousel {
+  .banner-skeleton {
+    height: 242px;
+  }
+  .card-banner-carousel {
     .image-wrap {
       position: relative;
+      width: 100%;
+      .image {
+        // width: 600px;
+        border-radius: 10px;
+        // 去除图片垂直方向上的间隙
+        vertical-align: bottom;
+      }
       .label {
         padding: 5px 10px;
         position: absolute;
         color: white;
         font-size: 14px;
-        border-radius: 5px;
+        border-top-left-radius: 10px;
+        border-bottom-right-radius: 10px;
         z-index: 999;
         right: 0;
         bottom: 0;
       }
     }
+    @media screen and (max-width: 992px) {
+      display: none;
+    }
+  }
+  .normal-banner-carousel {
+    display: none;
+    .image-wrap {
+      position: relative;
+      width: 100%;
+      .image {
+        border-radius: 10px;
+        // 去除图片垂直方向上的间隙
+        vertical-align: bottom;
+      }
+      .label {
+        padding: 5px 10px;
+        position: absolute;
+        color: white;
+        font-size: 14px;
+        border-top-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+        z-index: 999;
+        right: 0;
+        bottom: 0;
+      }
+    }
+    @media screen and (max-width: 992px) {
+      display: block;
+    }
+  }
+  :deep .el-carousel__button {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: gray;
   }
 }
 </style>
