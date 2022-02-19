@@ -29,7 +29,7 @@
 <script setup lang="ts">
 import { reactive, onBeforeMount, ref } from 'vue'
 import { getRecommendPlaylist } from '@/api/playlist'
-import RcmdListItem from '@/components/playlist/RcmdListItem.vue'
+import RcmdListItem from '@/components/home/RcmdPlaylistItem.vue'
 
 /* 渲染数据 */
 interface rcmdType {

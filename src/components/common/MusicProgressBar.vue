@@ -1,5 +1,5 @@
 <template>
-  <div class="wrap">
+  <div class="music-progress-bar-wrap">
     <span class="left-label">{{ formatDuration(currentTimeLabel, 's') }}</span>
     <div
       class="bar-wrap"
@@ -99,7 +99,7 @@ const handleDotMouseDown = (event: MouseEvent) => {
 </script>
 
 <style scoped lang="scss">
-.wrap {
+.music-progress-bar-wrap {
   display: flex;
   align-items: center;
   .left-label, .right-label {

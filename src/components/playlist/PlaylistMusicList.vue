@@ -1,5 +1,5 @@
 <template>
-  <div class="wrap">
+  <div class="playlist-music-list-wrap">
     <el-tabs v-model="activeTab">
       <el-tab-pane label="歌曲列表" name="list">
         <div class="topbar">
@@ -26,7 +26,7 @@
             :infinite-scroll-disabled="isScrollDisabled"
             :infinite-scroll-immediate="false"
           >
-            <ListItem
+            <MusicListItem
               v-for="(item, index) in songArr"
               :key="item.id"
               :song-info="item"
@@ -47,13 +47,15 @@
 
 <script setup lang="ts">
 import { ref, reactive, onBeforeMount } from 'vue'
-import ListItem, { songType } from '@/components/music/ListItem.vue'
+import MusicListItem, { songType } from '@/components/common/MusicListItem.vue'
 import { getPlaylistAllSongs } from '@/api/playlist'
 import { useRoute } from 'vue-router'
+import emitter from '@/utils/emitter'
 
-const props = defineProps<{
-  songCount: number
-}>()
+const songCount = ref(0)
+emitter.on('onSendPlaylistMusicCount', (count: number) => {
+  songCount.value = count
+})
 
 /* 路由管理 */
 const route = useRoute()
@@ -94,10 +96,10 @@ const loadItem = async () => {
   // 之前加载的歌曲数量
   const previousSongs = offset.value * limit
   // 如果还剩最后一组未加载，则加载完之后关闭无限滚动
-  if (previousSongs + limit > props.songCount) {
+  if (previousSongs + limit > songCount.value) {
     // 如果 offset 超出了最大偏移量，则 offset 重置为最大偏移量
     // 所以 offset 设置为最大安全整数，是获取最后一组数据
-    await getData(props.songCount - previousSongs, Number.MAX_SAFE_INTEGER)
+    await getData(songCount.value - previousSongs, Number.MAX_SAFE_INTEGER)
     isScrollDisabled.value = true
   } else {
     await getData(limit, offset.value)
@@ -108,7 +110,7 @@ const activeTab = ref('list')
 </script>
 
 <style scoped lang="scss">
-.wrap {
+.playlist-music-list-wrap {
   .topbar {
     display: flex;
     text-align: center;

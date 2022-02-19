@@ -1,5 +1,5 @@
 <template>
-  <div class="wrap" @dblclick="handleDbClick" :class="{ 'active': isActive }">
+  <div class="music-list-item-wrap" @dblclick="handleDbClick" :class="{ 'active': isActive }">
     <div class="operation">
       <span v-if="!isActive">{{ songIndex }}</span>
       <i v-else-if="currentSong.isPlay" class="iconfont icon-volume"></i>
@@ -61,7 +61,7 @@ const isActive = computed(() => props.songInfo.id === currentSong.value.id)
 </script>
 
 <style scoped lang="scss">
-.wrap {
+.music-list-item-wrap {
   display: flex;
   background-color: rgb(206, 206, 206);
   color: rgb(43, 43, 43);

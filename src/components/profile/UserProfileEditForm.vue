@@ -1,6 +1,5 @@
 <template>
-  <div class="wrap">
-    <h2>编辑资料</h2>
+  <div class="user-profile-edit-form-wrap">
     <div class="content">
       <el-form ref="formRef" :model="profileForm" class="form">
         <el-form-item label="昵称：">
@@ -31,7 +30,7 @@
           ></el-date-picker>
         </el-form-item>
         <el-form-item label="地区：">
-          <RegionSelect
+          <RegionSelector
             v-if="profileForm.province"
             v-model:province="profileForm.province"
             v-model:city="profileForm.city"
@@ -63,12 +62,12 @@ import {
   ref,
   onBeforeMount,
 } from 'vue'
-import RegionSelect from '@/components/form/RegionSelect.vue'
+import RegionSelector from '@/components/common/RegionSelector.vue'
 import { useRouter } from 'vue-router'
 import { updateUserProfile, updateUserAvatar, getUserDetail } from '@/api/user'
 import { ElMessage } from 'element-plus'
 import { Decrypt } from '@/utils/secret'
-import ImageUpdater from '@/components/image/ImageUpdater.vue'
+import ImageUpdater from '@/components/common/ImageUpdater.vue'
 import emitter from '@/utils/emitter'
 
 /* 路由管理 */
@@ -153,8 +152,7 @@ const onSave = async () => {
 </script>
 
 <style scoped lang="scss">
-.wrap {
-  padding: 20px;
+.user-profile-edit-form-wrap {
   .content {
     display: flex;
     .form {

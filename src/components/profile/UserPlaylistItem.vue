@@ -1,5 +1,5 @@
 <template>
-  <div class="wrap">
+  <div class="user-playlist-item-wrap">
     <div class="left">
       <el-image
         class="image"
@@ -32,7 +32,7 @@ defineProps<{
 </script>
 
 <style scoped lang="scss">
-.wrap {
+.user-playlist-item-wrap {
   display: flex;
   justify-content: space-between;
   cursor: pointer;

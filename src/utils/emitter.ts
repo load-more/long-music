@@ -6,9 +6,10 @@ import mitt, { Emitter } from 'mitt'
   所以 Vue3 中无法继续沿用 Vue2 的事件总线进行组件通信，推荐使用 mitt 库。
 */
 type Events = {
-  'onToggleLoginLoading': boolean,
-  'onToggleRegisterLoading': boolean,
-  'onRefreshGlobalHeader': boolean,
+  'onToggleLoginLoading': boolean
+  'onToggleRegisterLoading': boolean
+  'onRefreshGlobalHeader': boolean
+  'onSendPlaylistMusicCount': number
 }
 
 const emitter: Emitter<Events> = mitt<Events>()

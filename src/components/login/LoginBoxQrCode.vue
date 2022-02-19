@@ -1,5 +1,5 @@
 <template>
-  <div class="wrap">
+  <div class="login-box-qr-code-wrap">
     <el-image
       class="qrcode"
       :src="imgUrl"
@@ -102,7 +102,7 @@ displayQrCode()
 </script>
 
 <style scoped lang="scss">
-.wrap {
+.login-box-qr-code-wrap {
   text-align: center;
   .qrcode {
     width: 150px;

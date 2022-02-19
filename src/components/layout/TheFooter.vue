@@ -48,7 +48,7 @@
         <i class="iconfont icon-lyrics"></i>
       </div>
       <div class="progress-bar">
-        <ProgressBar
+        <MusicProgressBar
           :duration="duration"
           :current-time="currentTime"
           @update-current-time="handleUpdateCurrentTime"
@@ -64,7 +64,7 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import ProgressBar from '@/components/music/ProgressBar.vue'
+import MusicProgressBar from '@/components/common/MusicProgressBar.vue'
 import useMainStore from '@/store/index'
 import { storeToRefs } from 'pinia'
 

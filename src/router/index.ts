@@ -10,7 +10,7 @@ const routes: RouteRecordRaw[] = [
   },
   {
     path: '/',
-    component: () => import('@/views/Layout.vue'),
+    component: () => import('@/views/LayoutPage.vue'),
     children: [
       {
         path: '', // 默认子路由
@@ -20,22 +20,22 @@ const routes: RouteRecordRaw[] = [
       {
         path: 'profile', // 注意，子路由不能带上 / ，否则无法显示路由
         name: 'profile',
-        component: () => import('@/views/Profile.vue'),
+        component: () => import('@/views/ProfilePage.vue'),
       },
       {
         path: 'edit-profile',
         name: 'editProfile',
-        component: () => import('@/views/EditProfile.vue'),
+        component: () => import('@/views/ProfileEditPage.vue'),
       },
       {
         path: 'playlist/:id',
         name: 'playlist',
-        component: () => import('@/views/PlayList.vue'),
+        component: () => import('@/views/PlaylistPage.vue'),
       },
       {
         path: 'edit-playlist/:id',
         name: 'editPlaylist',
-        component: () => import('@/views/EditPlaylist.vue'),
+        component: () => import('@/views/PlaylistEditPage.vue'),
       },
     ],
   },
