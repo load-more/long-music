@@ -2,6 +2,8 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 // 导入 Message 样式，因为使用自动导入组件会导致样式失效
 import 'element-plus/theme-chalk/src/message.scss'
+// 导入隐藏样式
+import 'element-plus/theme-chalk/display.css'
 // import 'element-plus/theme-chalk/src/image.scss'
 // 导入总样式
 // import 'element-plus/theme-chalk/src/index.scss'

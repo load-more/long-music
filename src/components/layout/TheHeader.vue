@@ -1,15 +1,15 @@
 <template>
   <el-row class="container" v-loading.fullscreen.lock="isFullLoading">
-    <el-col :span="4" class="left">
-      <div @click="router.push({ name: 'home' })">
-        <img src="@/assets/logo.png" alt="logo" />
+    <el-col :sm="7" :xs="0" class="left">
+      <div>
+        <img src="@/assets/logo.png" alt="logo" @click="router.push({ name: 'home' })" />
       </div>
     </el-col>
-    <el-col :span="6" class="mid">
-      <span @click="router.back()">
+    <el-col :sm="9" :xs="12" class="mid">
+      <span @click="router.back()" class="hidden-xs-only">
         <i class="iconfont icon-left-arrow"></i>
       </span>
-      <span @click="router.forward()">
+      <span @click="router.forward()" class="hidden-xs-only">
         <i class="iconfont icon-right-arrow"></i>
       </span>
       <el-input class="w-50 m-2" placeholder="Pick a date">
@@ -23,7 +23,7 @@
         <i class="iconfont icon-microphone"></i>
       </a>
     </el-col>
-    <el-col :span="6" class="right">
+    <el-col :sm="8" :xs="12" class="right">
       <div class="user-info" v-if="isLogin">
         <el-avatar
           class="avatar"
@@ -32,7 +32,7 @@
           :src="state.avatarUrl"
           @click="router.push({ name: 'profile' })"
         ></el-avatar>
-        <el-dropdown trigger="click" @command="handleCommand">
+        <el-dropdown trigger="click" @command="handleCommand" class="name-wrap">
           <span class="el-dropdown-link">
             {{ state.nickname }}
             <i class="iconfont icon-drop-down-arrow"></i>
@@ -49,19 +49,11 @@
           </template>
         </el-dropdown>
       </div>
-      <div class="login-info" v-else>
-        <span @click="router.push('/login')">未登录</span>&nbsp;
-        <i class="iconfont icon-drop-down-arrow"></i>
-      </div>
-      <a href="/#">
+      <div class="tools hidden-xs-only">
         <i class="iconfont icon-Message"></i>
-      </a>
-      <a href="/#">
         <i class="iconfont icon-theme"></i>
-      </a>
-      <a href="/#">
         <i class="iconfont icon-setting"></i>
-      </a>
+      </div>
     </el-col>
   </el-row>
 </template>
@@ -146,25 +138,37 @@ emitter.on('onRefreshGlobalHeader', async () => {
     div {
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
       height: 100%;
-      cursor: pointer;
       img {
+        margin-left: 20px;
         height: 70%;
+        cursor: pointer;
+        &:hover {
+          height: 73%;
+        }
+        transition: all 0.1s ease-in;
       }
     }
+    // @media screen and (max-width: 768px) {
+    //   display: none;
+    // }
   }
   .mid {
     display: flex;
-    justify-content: space-around;
     align-items: center;
     .el-input {
       width: 200px;
+      margin-left: 10px;
     }
     .icon-left-arrow,
     .icon-right-arrow,
     .icon-microphone {
-      color: #fff;
+      color: #ddd;
+      padding-left: 10px;
+      &:hover {
+        color: #fff;
+      }
     }
     .icon-microphone {
       font-size: 24px;
@@ -179,34 +183,39 @@ emitter.on('onRefreshGlobalHeader', async () => {
   .right {
     display: flex;
     align-items: center;
-    justify-content: space-around;
+    justify-content: flex-end;
     .user-info {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      width: 130px;
+      justify-content: flex-end;
       .avatar {
         cursor: pointer;
+      }
+      .name-wrap {
+        margin: 0 15px;
       }
     }
     .el-dropdown-link {
       cursor: pointer;
-    }
-    .login-info {
-      span {
-        font-size: 14px;
+      &:hover {
         color: #fff;
-        cursor: pointer;
+        i {
+          color: #fff;
+        }
       }
     }
-    .user-info i,
-    .login-info i {
+    .user-info i {
       color: gray;
       font-size: 12px;
     }
-    i {
+    .tools i {
       font-size: 18px;
-      color: #fff;
+      margin-right: 15px;
+      cursor: pointer;
+      color: #ddd;
+      &:hover {
+        color: #fff;
+      }
     }
   }
 }

@@ -8,7 +8,7 @@
       <div id="main-container">
         <router-view />
       </div>
-      <div id="sidebar-container">
+      <div id="sidebar-container" class="hidden-xs-only">
         <TheSidebar />
       </div>
     </div>
@@ -65,6 +65,9 @@ $sideWidth: 200px;
       margin-left: -100%;
       position: relative;
       left: -$sideWidth;
+    }
+    @media screen and (max-width: 768px) {
+      padding-left: 0;
     }
   }
 }
