@@ -7,10 +7,13 @@
     >
       <template #template>
         <div class="skeleton-item" v-for="(item, index) in 5" :key="index">
-          <el-skeleton-item variant="image" class="image-skeleton"></el-skeleton-item>
-          <el-skeleton-item class="title-skeleton"></el-skeleton-item>
+          <div class="image-wrap">
+            <el-skeleton-item variant="image" class="image-skeleton"></el-skeleton-item>
+          </div>
+          <div class="title-wrap">
+            <el-skeleton-item class="title-skeleton"></el-skeleton-item>
+          </div>
         </div>
-        <i></i><i></i><i></i><i></i><i></i>
       </template>
       <template #default>
         <div class="list-wrap">
@@ -20,8 +23,8 @@
             :key="item.id"
             :info="item"
           />
-          <!-- 占位元素，解决最后一行排列不一致 -->
-          <i></i><i></i><i></i><i></i><i></i>
+          <!-- 占位元素，解决最后一行排列不一致(放弃这种做法，改用百分比) -->
+          <!-- <i></i><i></i><i></i><i></i><i></i> -->
         </div>
       </template>
     </el-skeleton>
@@ -63,19 +66,36 @@ onBeforeMount(async () => {
   .skeleton-wrap {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
     .skeleton-item {
-      width: 200px;
-      margin-right: 20px;
-      .image-skeleton {
-        width: 200px;
-        height: 200px;
-        border-radius: 5px;
+      box-sizing: border-box;
+      width: 20%;
+      padding-right: 20px;
+      @media screen and (max-width: 992px) {
+        width: 25%;
       }
-      .title-skeleton {
-        margin-top: 10px;
-        width: 200px;
-        height: 30px;
+      @media screen and (max-width: 768px) {
+        width: 33.3%;
+      }
+      .image-wrap {
+        width: 100%;
+        height: 0;
+        padding-bottom: 100%;
+        overflow: hidden;
+        position: relative;
+        .image-skeleton {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          border-radius: 10px;
+        }
+      }
+      .title-wrap {
+        width: 100%;
+        .title-skeleton {
+          margin-top: 10px;
+          margin-bottom: 15px;
+          height: 40px;
+        }
       }
     }
     i {
@@ -86,24 +106,6 @@ onBeforeMount(async () => {
   .list-wrap {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
-    .list-item {
-      width: 200px;
-      margin-right: 20px;
-      // @media screen and (max-width: 1200px) {
-      //   width: 25%;
-      // }
-      // @media screen and (max-width: 992px) {
-      //   width: 33.3%;
-      // }
-      // @media screen and (max-width: 768px) {
-      //   width: 50%;
-      // }
-    }
-    i {
-      width: 200px;
-      margin-right: 20px;
-    }
   }
 }
 </style>

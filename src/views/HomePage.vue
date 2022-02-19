@@ -33,5 +33,8 @@ import RcmdPlaylist from '@/components/home/RcmdPlaylist.vue'
   .banner-container, .rcmd-playlist-container {
     padding: 20px;
   }
+  .rcmd-playlist-container {
+    padding-right: 0;
+  }
 }
 </style>
