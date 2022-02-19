@@ -153,3 +153,38 @@
 
 参考：https://stackoverflow.com/questions/67835072/vue-3-on-vite-js-with-eslint-unable-to-resolve-path-to-module-eslintimport-no?rq=1
 
+
+
+### 项目结构规范
+
+随着项目开发的进行，代码量越来越大，我发现自己的项目结构越来越混乱，所以在中途重构了好几遍代码。如下，总结了几个要点：
+
+1. 组件分离。
+
+   `views` 和 `components` 目录应当各司其职，不应有重叠的部分。
+
+   `views` 负责页面的视图，往往只需要引入几个组件，然后调整这些组件的样式即可，不应到涉及到其他 js 控制部分；
+
+   而 `components` 则是放一些组件，这里我分为了两种组件：**通用组件（放在 common 子目录下）** 和 **视图组件（放在以视图命名的子目录下）**。通用组件表示可能被多个视图引用的组件，比如图片上传组件；而视图组件表示仅仅适用在某个视图下的组件，比如登录页面用到的登录表单组件。
+
+2. 组件命名。
+
+   规范的组件命名可以使代码结构更加清晰。
+
+   - `views` 下的视图文件名通常采用 `XxxPage.vue` 的形式，表示 xx 视图；
+   - `components` 下的组件通常根据依赖的视图或通用功能命名，如果两个组件有较强的耦合性，应当采用相同的前缀，比如：`MusicList.vue` 和 `MusicListItem.vue`；
+   - 组件命名尽量采用驼峰规范，且至少要有两个首字母大写的单词，比如 `Banner.vue` 通常不使用，而是根据其所在的目录功能加上合适的前缀，比如 banner 放在 `home` 目录下，则可以命名为 `HomeBanner.vue`；
+   - 如果一个组件具有唯一性，即只在某处适用，则可以适用 `TheXxx.vue` 的形式命名，比如全局适用的头部栏：`TheHeader.vue`。
+
+3. css 类命名。
+
+   为了避免类名之间重复，可以在最外层的元素类名上加上后缀。
+
+   `views` 中的视图文件中，最外层元素采用 `xxx-container` 的形式命名；
+
+   `components` 中的组件中，最外层元素采用 `xxx-wrap` 的形式命名。
+
+![](https://gitee.com/gainmore/imglib/raw/master/img/20220219160044.png)
+
+
+
