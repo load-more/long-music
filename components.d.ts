@@ -40,6 +40,7 @@ declare module 'vue' {
     GithubCorner: typeof import('./src/components/common/GithubCorner.vue')['default']
     HomeBanner: typeof import('./src/components/home/HomeBanner.vue')['default']
     ImageUpdater: typeof import('./src/components/common/ImageUpdater.vue')['default']
+    InfiniteScroll: typeof import('element-plus/es')['ElInfiniteScroll']
     Loading: typeof import('element-plus/es')['ElLoadingDirective']
     LoginBox: typeof import('./src/components/login/LoginBox.vue')['default']
     LoginBoxForm: typeof import('./src/components/login/LoginBoxForm.vue')['default']
