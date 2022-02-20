@@ -1,20 +1,75 @@
 ## Preview
 
-- https://long-music.vercel.app/
+预览地址：[悠长音乐 LongMusic](https://long-music.vercel.app/)
+
+
+
+## Stack
+
+- Vue3
+- TypeScript
+- ElementPlus
+- Vite
+- Pinia
+- Vue-router
+- Axios
+- EsLint
 
 
 
 ## References
 
-- 后端接口：https://netease-cloud-music-api-pi-nine.vercel.app/
-- logo 设计：http://uugai.com/
-- logo 设计：http://diugai.com/
-- 组件库：https://element-plus.gitee.io/zh-CN/component/button.html
-- 状态管理：https://pinia.vuejs.org/introduction.html
-- 图标字体：https://www.iconfont.cn/manage/index?manage_type=myprojects&projectId=3156169
-- 请求库：http://www.axios-js.com/zh-cn/docs/
-- 路由管理：https://next.router.vuejs.org/guide/#html
-- vue3 新特性：https://v3.cn.vuejs.org/guide/introduction.html
+文档参考：
+
+- 前端框架：
+  - [介绍 | Vue.js](https://v3.cn.vuejs.org/guide/introduction.html)
+
+- 后端接口：
+  - [后台API-网易云音乐 API](https://netease-cloud-music-api-pi-nine.vercel.app/)
+
+- 图标制作：
+  - [logo制作-U钙网](http://uugai.com/)
+  - [logo制作-丢盖网](http://diugai.com/)
+  - [favicon制作 - 在线工具](https://tool.lu/favicon/)
+
+- 组件库：
+  - [组件库-Element Plus](https://element-plus.gitee.io/zh-CN/component/button.html)
+
+- 状态管理：
+  - [状态管理-Pinia](https://pinia.vuejs.org/introduction.html)
+
+- 图标字体：
+  - [图标库-iconfont](https://www.iconfont.cn/manage/index?manage_type=myprojects&projectId=3156169)
+
+- 请求库：
+  - [axios中文文档](http://www.axios-js.com/zh-cn/docs/)
+
+- 路由管理：
+  - [Vue Router 4.x](https://next.router.vuejs.org/guide/#html)
+
+- 跨域：
+  - [CORS跨域](https://www.jianshu.com/p/89a377c52b48/)
+  - [Vercel跨域](https://zhuanlan.zhihu.com/p/450039194)
+  - [vercel跨域2](https://cloud.tencent.com/developer/article/1830950)
+
+- EsLint：
+  - [代码规范1](https://zhuanlan.zhihu.com/p/81764012?from_voters_page=true)
+  - [代码规范2](https://miyauchi.dev/posts/vite-vue3-typescript/)
+  - [代码规范3](https://www.cnblogs.com/ssaylo/p/12806757.html#eslint)
+
+- CSS：
+  - [vw适配](https://github.com/evrone/postcss-px-to-viewport/blob/master/README_CN.md)
+  - [Sass教程](https://www.sass.hk/docs/)
+  - [GitHub Corners](https://tholman.com/github-corners/)
+  - [让CSS flex布局最后一行列表左对齐的N种方法 « 张鑫旭-鑫空间-鑫生活](https://www.zhangxinxu.com/wordpress/2019/08/css-flex-last-align/)
+  - [CSS图片间隙产生的原因及解决方法](https://blog.csdn.net/qq_37855074/article/details/88826617)
+  - [css实现保持图片宽高比](https://www.cnblogs.com/chen214/p/15152774.html)
+  - [CSS hover 父对子、子对父、同级之间的控制](https://blog.csdn.net/coycleipenghui/article/details/108439007?utm_medium=distribute.pc_relevant.none-task-blog-2~default~baidujs_baidulandingword~default-0.pc_relevant_default&spm=1001.2101.3001.4242.1&utm_relevant_index=2)
+  - [css扫光效果](https://www.haorooms.com/post/css_saoguang)
+
+- 其他：
+  - [解决history模式404问题](https://vuejscode.com/vercel-vite-404-not-found)
+
 
 
 
@@ -187,4 +242,82 @@
 ![](https://gitee.com/gainmore/imglib/raw/master/img/20220219160044.png)
 
 
+
+### 适配
+
+说实话，这是我第一个认真考虑适配问题的项目，以前对 `适配` 这个概念只是一知半解，没有深入实现过。经过几天的研究，我也是对这个问题有了初步的了解。以下是我的见解：
+
+Web 前端适配可以这样分类：
+
+- PC 端适配
+  - 响应式布局（使用一套代码适应 PC 端和移动端）
+    - PC 端优先
+    - 移动端优先
+  - 自适应布局（针对 PC 端和移动端开发多套代码）
+- 移动端适配
+  - vw / vh 适配（postcss-px-to-viewport）
+  - rem 适配
+  - ...
+
+其实，也不用特意分为两大类，可以直接这两项归类到响应式开发之中，响应式开发就会涉及到 PC 端适配和移动端适配这两类。然后根据开发优先级编写代码，比如，如果你的网站主要在移动端上运行，那么就是用移动端优先的优先级开发，即先按照移动端的设计图开发界面，后面再根据媒体查询适配 PC 端；如果网站主要运行在 PC 端，那就先根据 PC 端设计图开发界面，之后再通过媒体查询适配移动端，这就是 PC 端优先。
+
+响应式布局利用到最多的一个特性就是 `媒体查询`，通过查询设备屏幕的宽度信息，根据设置的断点判断是否是移动端，以下是 BootStrap 的断点参考：
+
+```css
+/* 大屏幕（大桌面显示器） width > 1200px */
+body {
+  background-color: yellow;
+}
+
+/* 中等屏幕（桌面显示器） 992px - 1200px */
+@media screen and (max-width: 1200px) {
+  body {
+    background-color: #f5c8f5;
+  }
+}
+
+/* 小屏幕（平板） 768px - 992px */
+@media screen and (max-width: 992px) {
+  body {
+    background-color: #FF00FF;
+  }
+}
+
+/* 超小屏幕（手机） < 768px */
+@media screen and (max-width: 768px) {
+  body {
+    background-color: green;
+  }
+}
+
+/*
+	以上是基于 PC 端优先实现的媒体查询，因为是 PC 端优先，所以一开始用户设备的屏幕很大，然后通过响应式逐步缩小屏幕宽度，所以这里使用到的是 max-width，屏幕尺寸逐渐缩小；
+	如果是移动端优先，则应该采用 min-width，屏幕尺寸逐渐增大。
+*/
+```
+
+然后，就可以控制元素的显隐，实现布局的响应式。这里，ElementPlus 设置了基于断点的隐藏类，可以直接添加给元素，更加便捷。
+
+由于本项目是基于 PC 端优先的理念开发的，所以会先设计 PC 端页面，之后转入移动端适配。
+
+因为移动端宽度通常比 PC 端小，所以如果直接将 PC 端的那套代码搬到移动端，肯定会导致移动端显示的内容过大，为了实现元素的等比例缩放，这里我会用到 `postcss-px-to-viewport` 这个插件，将项目中的 px 单位转为 vw。
+
+而 `postcss-px-to-viewport` 这个插件默认是将所有类的尺寸 px 都转换，这样就会导致 PC 端的元素也一同等比例缩放，为了解决这个问题，我设置这个插件不转换所有尺寸，然后只转换媒体查询的尺寸，这样就解决了这个问题。如此，我只要先正常按照 PC 端页面尺寸开发，之后需要适配移动端的话，再在媒体查询中写上移动端的设计尺寸即可。
+
+```typescript
+// vite.config.ts
+  css: {
+    postcss: {
+      plugins: [
+        // vw 适配
+        pxToVw({
+          viewportWidth: 640, // 移动端以 iphone5 宽度为标准
+          mediaQuery: true, // 转换媒体查询尺寸
+          minPixelValue: 1, // 小于 1px 的尺寸不转换
+          propList: [''], // 全部属性不转换单位，只转换媒体查询
+        }),
+      ],
+    },
+  },
+```
 
