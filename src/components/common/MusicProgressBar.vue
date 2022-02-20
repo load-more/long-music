@@ -1,6 +1,6 @@
 <template>
   <div class="music-progress-bar-wrap">
-    <span class="left-label">{{ formatDuration(currentTimeLabel, 's') }}</span>
+    <span class="left-label" v-if="showLabel">{{ formatDuration(currentTimeLabel, 's') }}</span>
     <div
       class="bar-wrap"
       ref="barWrap"
@@ -16,7 +16,7 @@
         @mousedown="handleDotMouseDown($event)"
       ></div>
     </div>
-    <span class="right-label">{{ formatDuration(duration, 's') }}</span>
+    <span class="right-label" v-if="showLabel">{{ formatDuration(duration, 's') }}</span>
   </div>
 </template>
 
@@ -24,10 +24,20 @@
 import { ref, watch } from 'vue'
 import { formatDuration } from '@/utils/time'
 
-const props = defineProps<{
-  duration: number
-  currentTime: number
-}>()
+const props = defineProps({
+  duration: {
+    type: Number,
+    required: true,
+  },
+  currentTime: {
+    type: Number,
+    required: true,
+  },
+  showLabel: {
+    type: Boolean,
+    default: true,
+  },
+})
 const emit = defineEmits(['updateCurrentTime'])
 
 const bar = ref<HTMLElement | null>(null)
@@ -102,15 +112,21 @@ const handleDotMouseDown = (event: MouseEvent) => {
 .music-progress-bar-wrap {
   display: flex;
   align-items: center;
+  width: 100%;
   .left-label, .right-label {
     font-size: 12px;
     color: gray;
   }
+  .left-label {
+    margin-right: 10px;
+  }
+  .right-label {
+    margin-left: 10px;
+  }
   .bar-wrap {
-    width: 300px;
+    width: 100%;
     height: 3px;
     border-radius: 100px;
-    margin: 0 10px;
     background-color: gray;
     display: flex;
     align-items: center;
