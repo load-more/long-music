@@ -77,7 +77,7 @@ const onProvinceChange = () => {
 
 <style scoped lang="scss">
 .select {
-  width: 160px;
+  width: 105px;
   margin-right: 10px;
 }
 </style>

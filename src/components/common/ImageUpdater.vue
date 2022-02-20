@@ -174,8 +174,8 @@ const handleUpload = () => {
   display: flex;
   flex-direction: column;
   .image {
-    width: 200px;
-    height: 200px;
+    width: 100%;
+    border-radius: 10px;
   }
 }
 .el-dialog {

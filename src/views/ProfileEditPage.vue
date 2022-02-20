@@ -1,7 +1,11 @@
 <template>
   <div class="profile-edit-container">
-    <h2>编辑资料</h2>
-    <UserProfileEditForm />
+    <el-scrollbar class="scroll-bar">
+      <div class="user-profile-edit-form-container">
+        <span class="label">编辑资料</span>
+        <UserProfileEditForm />
+      </div>
+    </el-scrollbar>
   </div>
 </template>
 
@@ -11,6 +15,18 @@ import UserProfileEditForm from '@/components/profile/UserProfileEditForm.vue'
 
 <style scoped lang="scss">
 .profile-edit-container {
-  padding: 20px;
+  height: 100%;
+  .scroll-bar {
+    height: 100%;
+  }
+  .label {
+    font-family: 'yahei';
+    font-size: 20px;
+    display: inline-block;
+    padding-bottom: 20px;
+  }
+  .user-profile-edit-form-container {
+    padding: 20px;
+  }
 }
 </style>

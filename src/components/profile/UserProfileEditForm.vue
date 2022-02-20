@@ -1,57 +1,121 @@
 <template>
   <div class="user-profile-edit-form-wrap">
-    <div class="content">
-      <el-form ref="formRef" :model="profileForm" class="form">
-        <el-form-item label="昵称：">
-          <el-input v-model="profileForm.nickname"></el-input>
-        </el-form-item>
-        <el-form-item label="介绍：">
-          <el-input
-            v-model="profileForm.signature"
-            type="textarea"
-            maxlength="300"
-            show-word-limit
-          ></el-input>
-        </el-form-item>
-        <el-form-item label="性别：">
-          <el-radio-group v-model="profileForm.gender">
-            <el-radio :label="0">保密</el-radio>
-            <el-radio :label="1">男</el-radio>
-            <el-radio :label="2">女</el-radio>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item label="生日：">
-          <el-date-picker
-            class="date-picker"
-            v-model="profileForm.birthday"
-            type="date"
-            placeholder="选择日期"
-            @change="onDateChange"
-          ></el-date-picker>
-        </el-form-item>
-        <el-form-item label="地区：">
-          <RegionSelector
-            v-if="profileForm.province"
-            v-model:province="profileForm.province"
-            v-model:city="profileForm.city"
+    <div class="hidden-xs-only">
+      <div class="content">
+        <el-form ref="formRef" :model="profileForm" class="form">
+          <el-form-item label="昵称：">
+            <el-input v-model="profileForm.nickname"></el-input>
+          </el-form-item>
+          <el-form-item label="介绍：">
+            <el-input
+              v-model="profileForm.signature"
+              type="textarea"
+              maxlength="300"
+              show-word-limit
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="性别：">
+            <el-radio-group v-model="profileForm.gender">
+              <el-radio :label="0">保密</el-radio>
+              <el-radio :label="1">男</el-radio>
+              <el-radio :label="2">女</el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item label="生日：">
+            <el-date-picker
+              class="date-picker"
+              v-model="profileForm.birthday"
+              type="date"
+              placeholder="选择日期"
+              @change="onDateChange"
+            ></el-date-picker>
+          </el-form-item>
+          <el-form-item label="地区：">
+            <RegionSelector
+              v-if="profileForm.province"
+              v-model:province="profileForm.province"
+              v-model:city="profileForm.city"
+            />
+          </el-form-item>
+        </el-form>
+        <div class="updater-wrap">
+          <ImageUpdater
+            :img-url="profileForm.avatarUrl"
+            edit-button-label="修改头像"
+            :update-img-api="updateUserAvatarApi"
+            @on-updated="handleImgUpdated"
           />
-        </el-form-item>
-      </el-form>
-      <ImageUpdater
-        :img-url="profileForm.avatarUrl"
-        edit-button-label="修改头像"
-        :update-img-api="updateUserAvatarApi"
-        @on-updated="handleImgUpdated"
-      />
+        </div>
+      </div>
+      <div class="buttons">
+        <el-button
+          type="primary"
+          :disabled="isFormChange"
+          @click="onSave"
+          v-loading.fullscreen.lock="isLoading"
+          >保存</el-button
+        >
+        <el-button @click="router.back()">取消</el-button>
+      </div>
     </div>
-    <el-button
-      type="primary"
-      :disabled="isFormChange"
-      @click="onSave"
-      v-loading.fullscreen.lock="isLoading"
-      >保存</el-button
-    >
-    <el-button @click="router.back()">取消</el-button>
+    <div class="mobile hidden-sm-and-up">
+      <div class="content">
+        <el-form ref="formRef" :model="profileForm" class="form">
+          <el-form-item label="昵称：">
+            <el-input v-model="profileForm.nickname"></el-input>
+          </el-form-item>
+          <el-form-item label="介绍：">
+            <el-input
+              v-model="profileForm.signature"
+              type="textarea"
+              maxlength="300"
+              show-word-limit
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="性别：">
+            <el-radio-group v-model="profileForm.gender">
+              <el-radio :label="0">保密</el-radio>
+              <el-radio :label="1">男</el-radio>
+              <el-radio :label="2">女</el-radio>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item label="生日：">
+            <el-date-picker
+              class="date-picker"
+              v-model="profileForm.birthday"
+              type="date"
+              placeholder="选择日期"
+              @change="onDateChange"
+            ></el-date-picker>
+          </el-form-item>
+          <el-form-item label="地区：">
+            <RegionSelector
+              v-if="profileForm.province"
+              v-model:province="profileForm.province"
+              v-model:city="profileForm.city"
+            />
+          </el-form-item>
+        </el-form>
+        <div class="updater-wrap">
+          <ImageUpdater
+            :img-url="profileForm.avatarUrl"
+            edit-button-label="修改头像"
+            :update-img-api="updateUserAvatarApi"
+            @on-updated="handleImgUpdated"
+          />
+        </div>
+      </div>
+      <div class="buttons">
+        <el-button
+          type="primary"
+          :disabled="isFormChange"
+          @click="onSave"
+          v-loading.fullscreen.lock="isLoading"
+          >保存</el-button
+        >
+        <el-button @click="router.back()">取消</el-button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -155,9 +219,25 @@ const onSave = async () => {
 .user-profile-edit-form-wrap {
   .content {
     display: flex;
-    .form {
-      width: 500px;
-      margin-right: 200px;
+    justify-content: space-between;
+    .updater-wrap {
+      width: 200px;
+      padding: 0 20px;
+    }
+  }
+  .mobile {
+    .content {
+      display: flex;
+      flex-direction: column-reverse;
+      .updater-wrap {
+        width: 40%;
+        margin-bottom: 40px;
+      }
+      align-items: center;
+    }
+    .buttons {
+      display: flex;
+      justify-content: center;
     }
   }
 }
