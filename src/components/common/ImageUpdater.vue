@@ -1,30 +1,41 @@
 <template>
-  <div class="image-wrap">
+  <div class="image-updater-wrap">
     <el-image
       class="image"
       :src="imgUrl"
     ></el-image>
     <el-button @click="inputRef?.click()">{{ editButtonLabel }}</el-button>
     <input type="file" ref="inputRef" @change="handleFileChange" hidden />
-  </div>
-  <el-dialog
-    class="dialog"
-    title="上传头像"
-    v-model="isShowDialog"
-    :append-to-body="true"
-    @open="handleDialogOpen"
-    @closed="handleDialogClose"
-  >
-    <div class="img-wrap">
-      <div class="img-src">
-        <img ref="imgRef" :src="previewUrl" />
-      </div>
-      <div class="img-preview" ref="previewRef"></div>
+    <div class="dialog-wrap">
+      <el-dialog
+        v-model="isShowDialog"
+        @open="handleDialogOpen"
+        @closed="handleDialogClose"
+      >
+        <template #title>
+          <span class="dialog-title">上传头像</span>
+        </template>
+        <div class="img-wrap">
+          <div class="img-src">
+            <span>原图</span>
+            <img ref="imgRef" :src="previewUrl" />
+          </div>
+          <div class="img-preview-wrap">
+            <span>预览</span>
+            <div class="img-preview" ref="previewRef"></div>
+          </div>
+        </div>
+        <template #footer>
+          <el-button @click="handleReselect">重选</el-button>
+          <el-button
+            v-loading.fullscreen.lock="isLoading"
+            @click="handleUpload"
+            type="primary"
+          >上传</el-button>
+        </template>
+      </el-dialog>
     </div>
-    <el-button @click="handleReselect">重选</el-button>
-    <el-button v-loading.fullscreen.lock="isLoading" @click="handleUpload"
-      >上传</el-button>
-  </el-dialog>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -170,33 +181,57 @@ const handleUpload = () => {
 </script>
 
 <style scoped lang="scss">
-.image-wrap {
+.image-updater-wrap {
   display: flex;
   flex-direction: column;
   .image {
     width: 100%;
     border-radius: 10px;
   }
-}
-.el-dialog {
-  .img-wrap {
-    display: flex;
-    .img-src {
-      width: 220px;
-      height: 220px;
-      border-radius: 5px;
-      img {
-        width: 0;
-        height: 0;
-        display: block;
-        max-width: 100%;
+  .dialog-wrap {
+    :deep .el-dialog {
+      border-radius: 10px;
+      @media screen and (max-width: 768px) {
+        width: 95%;
       }
     }
-    .img-preview {
-      width: 100px;
-      height: 100px;
-      border-radius: 5px;
-      overflow: hidden;
+    .dialog-title {
+      font-family: 'yahei';
+    }
+    .img-wrap {
+      display: flex;
+      justify-content: space-evenly;
+      .img-src {
+        width: 220px;
+        height: 220px;
+        border-radius: 15px;
+        text-align: center;
+        img {
+          width: 0;
+          height: 0;
+          display: block;
+          max-width: 100%;
+        }
+        span {
+          font-family: 'yahei';
+          display: inline-block;
+          margin-bottom: 10px;
+        }
+      }
+      .img-preview-wrap {
+        text-align: center;
+        .img-preview {
+          width: 100px;
+          height: 100px;
+          border-radius: 5px;
+          overflow: hidden;
+        }
+        span {
+          font-family: 'yahei';
+          display: inline-block;
+          margin-bottom: 10px;
+        }
+      }
     }
   }
 }
