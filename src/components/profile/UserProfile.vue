@@ -1,7 +1,7 @@
 <template>
   <div class="profile-wrap">
     <div class="left">
-      <el-avatar :size="200" :src="state.avatarUrl"></el-avatar>
+      <el-image class="avatar" :src="state.avatarUrl"></el-image>
     </div>
     <div class="right">
       <div class="top-profile">
@@ -19,8 +19,8 @@
             </template>
             <span class="level">Lv.{{ state.level }}</span>
           </el-tooltip>
-          <span class="gender">
-            <i :class="`iconfont icon-${genderArr[state.level]}`"></i>
+          <span class="gender" v-if="state.gender">
+            <i :class="`iconfont icon-${genderArr[state.gender]}`"></i>
           </span>
         </div>
         <el-button round @click="router.push({ name: 'editProfile' })">
@@ -44,6 +44,14 @@
         </div>
       </div>
       <div class="bottom-profile">
+        <div class="createTime">
+          <span class="label">注册时间：</span>
+          <span class="content">{{ createTime }}</span>
+        </div>
+        <div class="region">
+          <span class="label">所在地区：</span>
+          <span class="content">{{ region }}</span>
+        </div>
         <div class="signature">
           <span class="label">个人介绍：</span>
           <span class="content">{{ state.signature }}</span>
@@ -54,10 +62,12 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, reactive } from 'vue'
+import { onBeforeMount, reactive, computed } from 'vue'
 import { getUserDetail, getUserLevel } from '@/api/user'
 import { useRouter } from 'vue-router'
 import { Decrypt } from '@/utils/secret'
+import { getLocalTime } from '@/utils/time'
+import regionData from '@/utils/region'
 
 /* 路由管理 */
 const router = useRouter()
@@ -76,6 +86,9 @@ const state = reactive({
   follows: '',
   followeds: '',
   listenSongs: '',
+  createTime: 0,
+  province: 0,
+  city: 0,
 })
 const genderArr = ['unknown', 'male', 'female']
 
@@ -91,6 +104,9 @@ const getData = async () => {
   state.signature = detailData.profile.signature
   state.follows = detailData.profile.follows
   state.followeds = detailData.profile.followeds
+  state.createTime = detailData.profile.createTime
+  state.province = detailData.profile.province
+  state.city = detailData.profile.city
   // 获取用户等级信息
   const { data: levelData } = await getUserLevel()
   state.nextPlayCount = levelData.data.nextPlayCount
@@ -101,20 +117,56 @@ const getData = async () => {
 onBeforeMount(() => {
   getData()
 })
+
+/* 格式化日期 */
+const createTime = computed(() => {
+  const obj = getLocalTime(state.createTime)
+  return `${obj.year}-${obj.month}-${obj.date}`
+})
+
+/* 所在地区 */
+const region = computed(() => {
+  let province = ''
+  let city = ''
+  if (state.province) {
+    regionData.forEach((p) => {
+      if (p.code === String(state.province)) {
+        province = p.value
+        if (p.children.length) {
+          p.children.forEach((c) => {
+            if (c.code === String(state.city)) {
+              city = c.value
+              return null
+            }
+            return null
+          })
+        }
+        return null
+      }
+      return null
+    })
+  }
+  return `${province}-${city}`
+})
 </script>
 
 <style scoped lang="scss">
 .profile-wrap {
   display: flex;
   .left {
-    width: 200px;
-    height: 200px;
+    width: 220px;
+    .avatar {
+      width: 200px;
+      height: 200px;
+      border-radius: 10px;
+      box-shadow: 2px 2px 10px black;
+    }
   }
   .right {
     display: flex;
     flex-direction: column;
-    flex-grow: 1;
-    padding: 0 20px;
+    // flex-grow: 1;
+    // padding: 0 20px;
     .top-profile {
       display: flex;
       justify-content: space-between;
@@ -135,17 +187,16 @@ onBeforeMount(() => {
           padding: 1px 5px;
           border-radius: 20px;
           cursor: pointer;
+          margin: 0 10px;
         }
         .gender {
+          font-weight: bold;
           font-size: 12px;
           .icon-male {
             color: blue;
           }
           .icon-female {
-            color: pink;
-          }
-          .icon-unknown {
-            color: gray;
+            color: red;
           }
         }
       }
@@ -174,14 +225,28 @@ onBeforeMount(() => {
     }
     .bottom-profile {
       margin-top: 30px;
-      .signature {
-        .label {
-          font-size: 16px;
-        }
-        .content {
-          font-size: 14px;
-          color: gray;
-        }
+      .label {
+        font-size: 15px;
+      }
+      .content {
+        font-size: 14px;
+        color: gray;
+      }
+      .region {
+        margin: 10px 0;
+      }
+    }
+  }
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+    .left {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 20px;
+      .avatar {
+        width: 40%;
+        height: auto;
       }
     }
   }
