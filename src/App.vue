@@ -16,4 +16,9 @@ html, body, #app {
   height: 100%;
   overflow-x: hidden;
 }
+.single-line-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 </style>

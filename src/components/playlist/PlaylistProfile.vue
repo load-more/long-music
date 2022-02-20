@@ -7,7 +7,7 @@
       />
     </div>
     <div class="info">
-      <div class="title">
+      <div class="title single-line-ellipsis">
         <span class="label">歌单</span>
         <span>{{ state.title }}</span>
         <i
@@ -16,12 +16,12 @@
           @click="router.push({ name: 'editPlaylist', params: { id: state.playlistId } })"
         ></i>
       </div>
-      <div class="creator">
+      <div class="creator single-line-ellipsis">
         <span class="name">{{ state.creatorName }}</span>
         <span class="create-time" v-if="state.createTime">创建时间：{{ createTime }}</span>
       </div>
-      <div class="controls">
-        <el-button type="primary" round>播放全部<i class="iconfont icon-play"></i></el-button>
+      <div class="controls single-line-ellipsis">
+        <el-button type="primary" round>播放<i class="iconfont icon-play-circle"></i></el-button>
         <el-button round>收藏<i class="iconfont icon-collection"></i></el-button>
         <el-button round>分享<i class="iconfont icon-share"></i></el-button>
         <el-button round>下载<i class="iconfont icon-download"></i></el-button>
@@ -35,25 +35,25 @@
             :key="index"
           >{{ item }}</span>
         </div>
-        <div class="song-data">
+        <div class="song-data single-line-ellipsis">
           <span class="item">
             <span class="label">歌曲：</span>
             <span class="content">{{ state.songCount }}</span>
           </span>
           <span class="item">
             <span class="label">播放量：</span>
-            <span class="content">{{ state.playCount }}</span>
+            <span class="content">{{ formatPlayCount(state.playCount) }}</span>
           </span>
           <span class="item">
             <span class="label">收藏量：</span>
-            <span class="content">{{ state.subscribedCount }}</span>
+            <span class="content">{{ formatPlayCount(state.subscribedCount) }}</span>
           </span>
           <span class="item">
             <span class="label">分享量：</span>
-            <span class="content">{{ state.shareCount }}</span>
+            <span class="content">{{ formatPlayCount(state.shareCount) }}</span>
           </span>
         </div>
-        <div class="desc" ref="descRef">
+        <div class="desc single-line-ellipsis" ref="descRef">
           <span class="label">简介：</span>
           <span
             class="content"
@@ -77,6 +77,7 @@ import { getPlaylistDetail } from '@/api/playlist'
 import { getLocalTime } from '@/utils/time'
 import { Decrypt } from '@/utils/secret'
 import emitter from '@/utils/emitter'
+import { formatPlayCount } from '@/utils/format'
 
 /* 路由管理 */
 const route = useRoute()
@@ -149,18 +150,23 @@ const toggleReadMore = () => {
     .cover-image {
       width: 200px;
       height: 200px;
-      border-radius: 5px;
+      border-radius: 10px;
       margin-right: 20px;
+      box-shadow: 2px 2px 10px black;
     }
   }
   .info {
-    width: 80%;
-    display: flex;
-    flex-direction: column;
+    flex: 1;
+    overflow: hidden;
     .title, .creator, .controls {
       padding-bottom: 16px;
     }
+    .controls i {
+      padding-left: 5px;
+    }
     .title {
+      width: 100%;
+      min-width: 0;
       font-size: 22px;
       font-weight: bold;
       .label {
@@ -224,13 +230,39 @@ const toggleReadMore = () => {
       }
     }
     .desc {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+      width: 100%;
       .content {
         cursor: pointer;
         &:hover {
           text-decoration: underline;
+        }
+      }
+    }
+  }
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+    .image-wrap {
+      width: 100%;
+      text-align: center;
+      .cover-image {
+        width: 40%;
+        height: auto;
+        margin-right: 0;
+        margin-bottom: 20px;
+      }
+    }
+    .info {
+      .title, .creator, .controls, .song-data {
+        overflow: auto;
+        text-overflow: unset;
+        white-space: normal;
+      }
+      .controls {
+        display: flex;
+        flex-wrap: wrap;
+        > * {
+          flex: 1;
+          margin-left: 0;
         }
       }
     }

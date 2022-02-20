@@ -1,8 +1,12 @@
 <template>
   <div class="playlist-container">
-    <el-scrollbar height="450px">
-      <PlaylistProfile />
-      <PlaylistMusicList />
+    <el-scrollbar class="scroll-bar">
+      <div class="playlist-profile-container">
+        <PlaylistProfile />
+      </div>
+      <div class="playlist-music-list-container">
+        <PlaylistMusicList />
+      </div>
     </el-scrollbar>
   </div>
 </template>
@@ -14,6 +18,12 @@ import PlaylistMusicList from '@/components/playlist/PlaylistMusicList.vue'
 
 <style scoped lang="scss">
 .playlist-container {
-  padding: 20px;
+  height: 100%;
+  .scroll-bar {
+    height: 100%;
+  }
+  .playlist-profile-container, .playlist-music-list-container {
+    padding: 20px;
+  }
 }
 </style>
