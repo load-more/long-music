@@ -165,8 +165,7 @@ const region = computed(() => {
   .right {
     display: flex;
     flex-direction: column;
-    // flex-grow: 1;
-    // padding: 0 20px;
+    flex-grow: 1;
     .top-profile {
       display: flex;
       justify-content: space-between;
