@@ -42,6 +42,7 @@ declare module 'vue' {
     ImageUpdater: typeof import('./src/components/common/ImageUpdater.vue')['default']
     InfiniteScroll: typeof import('element-plus/es')['ElInfiniteScroll']
     Loading: typeof import('element-plus/es')['ElLoadingDirective']
+    LoadingSvg: typeof import('./src/components/common/LoadingSvg.vue')['default']
     LoginBox: typeof import('./src/components/login/LoginBox.vue')['default']
     LoginBoxForm: typeof import('./src/components/login/LoginBoxForm.vue')['default']
     LoginBoxQrCode: typeof import('./src/components/login/LoginBoxQrCode.vue')['default']

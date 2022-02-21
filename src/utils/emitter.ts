@@ -10,6 +10,7 @@ type Events = {
   'onToggleRegisterLoading': boolean
   'onRefreshGlobalHeader': boolean
   'onSendPlaylistMusicCount': number
+  'onLoadMusicListItem': boolean
 }
 
 const emitter: Emitter<Events> = mitt<Events>()
