@@ -88,7 +88,6 @@ const handleDotMouseDown = (event: MouseEvent) => {
         bar.value!.style.width = '0px'
         controlProgress(0, 1)
       } else if (e.clientX >= leftVal + barWrap.value!.clientWidth) { // 如果超出右边界
-        // console.log()
         bar.value!.style.width = '100%'
         controlProgress(1, 1)
       } else { // 如果在正常范围内
@@ -154,6 +153,6 @@ const handleDotMouseDown = (event: MouseEvent) => {
     .dot {
       display: block;
     }
-}
+  }
 }
 </style>

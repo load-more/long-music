@@ -10,6 +10,9 @@ import 'element-plus/theme-chalk/display.css'
 // 导入中文样式
 import ElementPlus from 'element-plus'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
+// 导入全局样式
+import '@/style/global.scss';
+
 import App from './App.vue'
 
 import router from './router'

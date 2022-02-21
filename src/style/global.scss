@@ -1,0 +1,28 @@
+@font-face {
+  font-family: 'yahei';
+  src: url('@/assets/font/yahei.ttf');
+}
+
+html, body, #app {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+}
+
+.single-line-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// popper
+body {
+  .el-popper.volume-popper {
+    width: 30px !important;
+    min-width: 0;
+    padding: 10px 0;
+  }
+  .el-popper__arrow {
+    transform: translate(10px, 0) !important;
+  }
+}

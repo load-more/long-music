@@ -69,7 +69,19 @@
       </div>
     </div>
     <div class="right hidden-xs-only">
-      <i class="iconfont icon-volume"></i>
+      <el-popover
+        placement="top-start"
+        :width="200"
+        trigger="hover"
+        popper-class="volume-popper"
+      >
+        <MusicVolumeBar
+          v-model:volume="volume"
+        />
+        <template #reference>
+          <i class="iconfont icon-volume"></i>
+        </template>
+      </el-popover>
       <i class="iconfont icon-list"></i>
     </div>
   </div>
@@ -80,6 +92,7 @@ import { ref, watch } from 'vue'
 import MusicProgressBar from '@/components/common/MusicProgressBar.vue'
 import useMainStore from '@/store/index'
 import { storeToRefs } from 'pinia'
+import MusicVolumeBar from '@/components/common/MusicVolumeBar.vue'
 
 /* 音乐播放 */
 const { currentSong } = storeToRefs(useMainStore())
@@ -90,6 +103,7 @@ watch(() => currentSong.value.id, () => {
 const isPlay = ref(false)
 const duration = ref(0)
 const currentTime = ref(0)
+const volume = ref(0)
 
 // 暂停或播放音乐
 const playMusic = () => {
@@ -112,6 +126,7 @@ const pauseMusic = () => {
 music.addEventListener('canplaythrough', () => {
   duration.value = music.duration
   currentTime.value = music.currentTime
+  volume.value = music.volume * 100
   playMusic()
 })
 // 每当音乐文件的时间更新，则更新 currentTime
@@ -135,6 +150,10 @@ const toggleMusicPlayStatus = () => {
 const handleUpdateCurrentTime = (ct: number) => {
   music.currentTime = ct
 }
+// 控制音量
+watch(volume, () => {
+  music.volume = volume.value / 100
+})
 </script>
 
 <style scoped lang="scss">
