@@ -36,6 +36,7 @@ declare module 'vue' {
     ElSkeletonItem: typeof import('element-plus/es')['ElSkeletonItem']
     ElTabPane: typeof import('element-plus/es')['ElTabPane']
     ElTabs: typeof import('element-plus/es')['ElTabs']
+    ElTag: typeof import('element-plus/es')['ElTag']
     ElTooltip: typeof import('element-plus/es')['ElTooltip']
     GithubCorner: typeof import('./src/components/common/GithubCorner.vue')['default']
     HomeBanner: typeof import('./src/components/home/HomeBanner.vue')['default']

@@ -1,7 +1,11 @@
 <template>
   <div class="playlist-edit-container">
-    <h2>编辑歌单信息</h2>
-    <PlaylistEditForm />
+    <el-scrollbar class="scroll-bar">
+      <div class="playlist-edit-form-container">
+        <span class="label">编辑歌单信息</span>
+        <PlaylistEditForm />
+      </div>
+    </el-scrollbar>
   </div>
 </template>
 
@@ -11,6 +15,18 @@ import PlaylistEditForm from '@/components/playlist/PlaylistEditForm.vue'
 
 <style scoped lang="scss">
 .playlist-edit-container {
-  padding: 20px;
+  height: 100%;
+  .scroll-bar {
+    height: 100%;
+  }
+  .label {
+    font-family: 'yahei';
+    font-size: 20px;
+    display: inline-block;
+    padding-bottom: 20px;
+  }
+  .playlist-edit-form-container {
+    padding: 20px;
+  }
 }
 </style>

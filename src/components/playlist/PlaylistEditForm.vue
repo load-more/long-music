@@ -19,11 +19,13 @@
           ></el-input>
         </el-form-item>
       </el-form>
-      <ImageUpdater
-        :img-url="coverImgUrl"
-        edit-button-label="修改封面"
-        :update-img-api="updatePlaylistCoverApi"
-      />
+      <div class="updater-wrap">
+        <ImageUpdater
+          :img-url="coverImgUrl"
+          edit-button-label="修改封面"
+          :update-img-api="updatePlaylistCoverApi"
+        />
+      </div>
     </div>
     <el-button
       type="primary"
@@ -121,6 +123,21 @@ const updatePlaylistCoverApi = (file: File, imgSize: number) => {
       .cover {
         width: 200px;
         height: 200px;
+      }
+    }
+  }
+  @media screen and (max-width: 768px) {
+    .content {
+      display: flex;
+      flex-direction: column-reverse;
+      align-items: center;
+      .updater-wrap {
+        width: 40%;
+        margin-bottom: 40px;
+      }
+      .form {
+        width: 100%;
+        margin-right: 0;
       }
     }
   }
