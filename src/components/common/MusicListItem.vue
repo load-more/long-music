@@ -1,32 +1,68 @@
 <template>
   <div class="music-list-item-wrap" @dblclick="handleDbClick" :class="{ 'active': isActive }">
-    <div class="operation">
-      <span v-if="!isActive">{{ songIndex }}</span>
-      <i v-else-if="currentSong.isPlay" class="iconfont icon-volume"></i>
-      <i v-else class="iconfont icon-close-volume"></i>
-      <i class="iconfont icon-like"></i>
-      <i class="iconfont icon-download"></i>
-    </div>
-    <div
-      class="title"
-      :title="`${songInfo.name} ${currentSong.alias ? '(' + currentSong.alias + ')' : ''}`"
-    >
-      <span>{{ songInfo.name }}</span>
-      <span v-if="songInfo.alias" class="alias">&nbsp;({{ songInfo.alias }})</span>
-    </div>
-    <div class="singer" :title="songInfo.author.map(item => item.name).join(' / ')">
-      <span v-for="(item, index) in songInfo.author" :key="item.id">
-        <span class="name">
-          {{ item.name }}
+    <div class="pc hidden-xs-only">
+      <div class="operation">
+        <span v-if="!isActive">{{ songIndex }}</span>
+        <i v-else-if="currentSong.isPlay" class="iconfont icon-volume"></i>
+        <i v-else class="iconfont icon-close-volume"></i>
+        <i class="iconfont icon-like"></i>
+        <i class="iconfont icon-download"></i>
+      </div>
+      <div
+        class="title"
+        :title="`${songInfo.name} ${currentSong.alias ? '(' + currentSong.alias + ')' : ''}`"
+      >
+        <span>{{ songInfo.name }}</span>
+        <span v-if="songInfo.alias" class="alias">&nbsp;({{ songInfo.alias }})</span>
+      </div>
+      <div class="singer" :title="songInfo.author.map(item => item.name).join(' / ')">
+        <span v-for="(item, index) in songInfo.author" :key="item.id">
+          <span class="name">
+            {{ item.name }}
+          </span>
+          <span class="seperator" v-if="index !== songInfo.author.length - 1">&nbsp;/&nbsp;</span>
         </span>
-        <span class="seperator" v-if="index !== songInfo.author.length - 1">&nbsp;/&nbsp;</span>
-      </span>
+      </div>
+      <div class="album" :title="songInfo.album.name">
+        <span>{{ songInfo.album.name }}</span>
+      </div>
+      <div class="duration">
+        <span>{{ formatDuration(songInfo.duration) }}</span>
+      </div>
     </div>
-    <div class="album" :title="songInfo.album.name">
-      <span>{{ songInfo.album.name }}</span>
-    </div>
-    <div class="duration">
-      <span>{{ formatDuration(songInfo.duration) }}</span>
+    <div class="mobile hidden-sm-and-up">
+      <div class="left">
+        <div class="operation">
+          <span v-if="!isActive">{{ songIndex }}</span>
+          <i v-else-if="currentSong.isPlay" class="iconfont icon-volume"></i>
+          <i v-else class="iconfont icon-close-volume"></i>
+        </div>
+      </div>
+      <div class="mid">
+        <div
+          class="title single-line-ellipsis"
+          :title="`${songInfo.name} ${currentSong.alias ? '(' + currentSong.alias + ')' : ''}`"
+        >
+          <span>{{ songInfo.name }}</span>
+          <span v-if="songInfo.alias" class="alias">&nbsp;({{ songInfo.alias }})</span>
+        </div>
+        <div
+          class="singer single-line-ellipsis"
+          :title="songInfo.author.map(item => item.name).join(' / ')"
+        >
+          <span v-for="(item, index) in songInfo.author" :key="item.id">
+            <span class="name">
+              {{ item.name }}
+            </span>
+            <span class="seperator" v-if="index !== songInfo.author.length - 1">&nbsp;/&nbsp;</span>
+          </span>
+          <span> - </span>
+          <span>{{ songInfo.album.name }}</span>
+        </div>
+      </div>
+      <div class="right">
+        <i class="iconfont icon-play"></i>
+      </div>
     </div>
   </div>
 </template>
@@ -62,65 +98,124 @@ const isActive = computed(() => props.songInfo.id === currentSong.value.id)
 
 <style scoped lang="scss">
 .music-list-item-wrap {
-  display: flex;
-  background-color: rgb(206, 206, 206);
-  color: rgb(43, 43, 43);
-  font-size: 14px;
-  padding: 5px 0;
-  line-height: 20px;
-  cursor: default;
-  &:hover {
-    background-color: rgb(184, 184, 184);
-  }
-  .operation {
-    // width: 100px;
-    // display: flex;
-    // justify-content: space-evenly;
-    color: gray;
-    span, i {
-      display: inline-block;
-      box-sizing: border-box;
-      width: 30px;
-      text-align: center;
+  .pc {
+    display: flex;
+    background-color: rgb(206, 206, 206);
+    color: rgb(43, 43, 43);
+    font-size: 14px;
+    padding: 10px 0;
+    border-radius: 5px;
+    margin-bottom: 5px;
+    line-height: 20px;
+    cursor: default;
+    &:hover {
+      background-color: rgb(184, 184, 184);
     }
-    .icon-volume, .icon-close-volume {
-      color: red;
+    .operation {
+      width: 100px;
+      color: gray;
+      span, i {
+        display: inline-block;
+        box-sizing: border-box;
+        width: 30px;
+        text-align: center;
+      }
+      .icon-volume, .icon-close-volume {
+        color: red;
+      }
+      .icon-like, .icon-download {
+        cursor: pointer;
+        &:hover {
+          color: white;
+        }
+      }
     }
-    .icon-like, .icon-download {
-      cursor: pointer;
-      &:hover {
+    .title {
+      .alias {
+        color: gray;
+      }
+    }
+    .singer {
+      .name:hover {
+        cursor: pointer;
         color: white;
       }
     }
-  }
-  .title {
-    flex: 1;
-    .alias {
+    .album {
+      span:hover {
+        cursor: pointer;
+        color: white;
+      }
+    }
+    .title, .singer, .album {
+      flex: 1;
+      box-sizing: border-box;
+      padding-left: 4px;
+    }
+    .duration {
+      width: 70px;
       color: gray;
+      text-align: center;
+    }
+    .title, .singer, .album {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
-  .singer {
-    flex: 1;
-    .name:hover {
-      cursor: pointer;
-      color: white;
+  @media screen and (max-width: 768px) {
+    .mobile {
+      display: flex;
+      align-items: center;
+      background-color: rgb(206, 206, 206);
+      color: rgb(43, 43, 43);
+      font-size: 14px;
+      padding: 10px 0;
+      border-radius: 5px;
+      margin-bottom: 5px;
+      line-height: 20px;
+      cursor: default;
+      &:hover {
+        background-color: rgb(184, 184, 184);
+      }
+      .operation {
+        width: 40px;
+        text-align: center;
+        color: gray;
+        span, i {
+          display: inline-block;
+          box-sizing: border-box;
+          width: 30px;
+          text-align: center;
+        }
+        .icon-volume, .icon-close-volume {
+          color: red;
+        }
+        .icon-like, .icon-download {
+          cursor: pointer;
+          &:hover {
+            color: white;
+          }
+        }
+      }
+      .mid {
+        width: 70%;
+        overflow: hidden;
+        .title {
+          font-size: 16px;
+          font-weight: bold;
+        }
+        .singer {
+          font-size: 13px;
+          color: gray;
+        }
+      }
+      .right {
+        flex: 1;
+        text-align: center;
+        color: gray;
+      }
     }
-  }
-  .album {
-    flex: 1;
-    span:hover {
-      cursor: pointer;
-      color: white;
-    }
-  }
-  .duration {
-    width: 70px;
-    color: gray;
-  }
-  .title, .singer, .album {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
   }
 }
 .active {

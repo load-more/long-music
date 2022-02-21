@@ -2,7 +2,7 @@
   <div class="playlist-music-list-wrap">
     <el-tabs v-model="activeTab">
       <el-tab-pane label="歌曲列表" name="list">
-        <div class="topbar">
+        <div class="topbar hidden-xs-only">
           <div class="operation">
             <span>操作</span>
           </div>
@@ -130,23 +130,38 @@ onUnmounted(() => {
 
 <style scoped lang="scss">
 .playlist-music-list-wrap {
+  :deep .el-tabs__header {
+    margin: 0;
+  }
+  :deep .el-tabs__content {
+    margin-top: 10px;
+  }
   .topbar {
     display: flex;
-    padding-bottom: 10px;
+    font-family: 'yahei';
+    font-size: 14px;
+    background-color: #adadad;
+    border-radius: 5px;
+    > *:hover {
+      background-color: gray;
+      border-radius: 5px;
+    }
+    > * span {
+      display: inline-block;
+      padding: 10px 0;
+    }
     .operation {
       width: 100px;
+      text-align: center;
     }
-    .title {
+    .title, .singer, .album {
       flex: 1;
-    }
-    .singer {
-      flex: 1;
-    }
-    .album {
-      flex: 1;
+      box-sizing: border-box;
+      padding-left: 4px;
     }
     .duration {
       width: 70px;
+      text-align: center;
     }
   }
   .list {
