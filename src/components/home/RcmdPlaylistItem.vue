@@ -4,12 +4,13 @@
       <el-image
         class="image"
         :src="info.picUrl"
+        @click="enterPlaylist"
       ></el-image>
       <div class="play-icon">
         <i class="iconfont icon-play-circle"></i>
       </div>
     </div>
-    <div class="title">{{ info.name }}</div>
+    <div class="title" @click="enterPlaylist">{{ info.name }}</div>
     <div class="play-count">
       <i class="iconfont icon-play"></i>
       <span>{{ formatPlayCount(info.playCount) }}</span>
@@ -18,6 +19,7 @@
 </template>
 
 <script setup lang="ts">
+import { useRouter } from 'vue-router'
 import { formatPlayCount } from '@/utils/format'
 
 interface rcmdType {
@@ -26,9 +28,14 @@ interface rcmdType {
   picUrl: string
   playCount: number
 }
-defineProps<{
+const props = defineProps<{
   info: rcmdType
 }>()
+
+const router = useRouter()
+const enterPlaylist = () => {
+  router.push({ name: 'playlist', params: { id: props.info.id } })
+}
 </script>
 
 <style scoped lang="scss">
