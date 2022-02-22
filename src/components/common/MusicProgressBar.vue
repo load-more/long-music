@@ -54,7 +54,10 @@ watch(() => props.currentTime, () => {
     // 更新 currentTimeLabel
     currentTimeLabel.value = props.currentTime
     // 更新进度条
-    const per = `${(props.currentTime / props.duration) * 100}%`
+    let per = '0px'
+    if (props.duration !== 0) { // 防止出现除以 0 等于 NaN
+      per = `${(props.currentTime / props.duration) * 100}%`
+    }
     bar.value.style.width = per
   }
 }, { immediate: true })

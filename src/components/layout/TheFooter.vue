@@ -1,5 +1,6 @@
 <template>
-  <div class="footer-wrap">
+  <div class="footer-wrap" :class="{'disabled': !currentSong.id}">
+    <div class="overlay"></div>
     <div class="left">
       <div class="song-image-wrap">
         <el-avatar
@@ -13,23 +14,25 @@
         <div
           class="title"
           v-if="currentSong.name"
-          :title="`${currentSong.name} ${
-            currentSong.alias ? '(' + currentSong.alias + ')' : ''
-          }`"
         >
-          <span>{{ currentSong.name }}</span>
-          <span v-if="currentSong.alias">&nbsp;({{ currentSong.alias }})</span>
+          <span
+            :title="`${currentSong.name} ${ currentSong.alias ?
+            '(' + currentSong.alias + ')' : '' }`"
+          >
+            <span>{{ currentSong.name }}</span>
+            <span v-if="currentSong.alias">&nbsp;({{ currentSong.alias }})</span>
+          </span>
           <i class="iconfont icon-like"></i>
         </div>
         <div class="title-holder" v-else>
           <span>匆匆岁月</span>
           <span>余音悠长</span>
         </div>
-        <div
-          class="singer"
-          :title="currentSong.author.map((item) => item.name).join(' / ')"
-        >
-          <span v-for="(item, index) in currentSong.author" :key="item.id">
+        <div class="singer">
+          <span
+            v-for="(item, index) in currentSong.author" :key="item.id"
+            :title="currentSong.author.map((item) => item.name).join(' / ')"
+          >
             <span class="name">
               {{ item.name }}
             </span>
@@ -104,6 +107,7 @@ import useMainStore from '@/store/index'
 import { storeToRefs } from 'pinia'
 import MusicVolumeBar from '@/components/common/MusicVolumeBar.vue'
 import CurrentPlaylist from '@/components/common/CurrentPlaylist.vue'
+import emitter from '@/utils/emitter'
 
 const { currentSong, currentSongList, listenedSongSet } = storeToRefs(useMainStore())
 
@@ -133,6 +137,7 @@ const togglePlayOrder = () => {
 
 /* 音乐切换上一首或下一首 */
 const toggleCurrentMusic = (order: number) => {
+  if (!currentSongList.value.length) return
   const index = currentSongList.value.findIndex(
     (item) => item.id === currentSong.value.id,
   )
@@ -225,7 +230,7 @@ music.addEventListener('ended', () => {
 })
 // 切换音乐状态
 const toggleMusicPlayStatus = () => {
-  if (music) {
+  if (music.src) {
     if (music.paused) {
       playMusic()
     } else {
@@ -241,17 +246,37 @@ const handleUpdateCurrentTime = (ct: number) => {
 watch(volume, () => {
   music.volume = volume.value / 100
 })
+
+emitter.on('onRemoveCurrentSong', () => {
+  currentSong.value = {
+    id: 0,
+    name: '',
+    alias: '',
+    author: [],
+    album: { name: '' },
+    duration: 0,
+  }
+  isPlay.value = false
+  duration.value = 0
+  currentTime.value = 0
+})
 </script>
 
 <style scoped lang="scss">
 .footer-wrap {
+  width: 100%;
+  height: 100%;
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
   height: 80px;
   background-color: #000;
   position: relative;
+  .overlay {
+    display: none;
+  }
   .left {
+    width: 25%;
     height: 100%;
     display: flex;
     align-items: center;
@@ -270,11 +295,12 @@ watch(volume, () => {
       }
     }
     .song-info {
+      flex: 1;
+      overflow: hidden;
       display: flex;
       flex-direction: column;
       justify-content: space-evenly;
       color: #ddd;
-      width: 200px;
       @media screen and (max-width: 768px) {
         // 由于 flex 元素会脱离文档流，使用 inherit 可以继承原来的宽度
         width: inherit;
@@ -284,6 +310,9 @@ watch(volume, () => {
         margin-bottom: 10px;
         .icon-like {
           margin-left: 5px;
+        }
+        span, i {
+          cursor: pointer;
         }
       }
       .title-holder {
@@ -328,13 +357,15 @@ watch(volume, () => {
       }
       .singer {
         font-size: 14px;
+        span {
+          cursor: pointer;
+        }
       }
-      .title,
-      .singer {
+      .title, .singer {
+        width: 100%;
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;
-        cursor: pointer;
         &:hover {
           color: #fff;
         }
@@ -342,7 +373,7 @@ watch(volume, () => {
     }
   }
   .mid {
-    width: 50%;
+    width: 500px;
     height: 60px;
     display: flex;
     flex-direction: column;
@@ -376,6 +407,7 @@ watch(volume, () => {
     }
   }
   .right {
+    width: 25%;
     display: flex;
     align-items: center;
     justify-content: flex-end;
@@ -388,6 +420,17 @@ watch(volume, () => {
         color: #fff;
       }
     }
+  }
+}
+.disabled {
+  pointer-events: none;
+  .overlay {
+    display: block;
+    background-color: rgba(0, 0, 0, 0.4);
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
   }
 }
 </style>
