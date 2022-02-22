@@ -44,9 +44,14 @@ import { getPlaylistAllSongs } from '@/api/playlist'
 import { useRoute } from 'vue-router'
 import emitter from '@/utils/emitter'
 import LoadingSvg from '@/components/common/LoadingSvg.vue'
+import useMainStore from '@/store/index'
+import { storeToRefs } from 'pinia'
 
 /* 路由管理 */
 const route = useRoute()
+
+/* 状态管理 */
+const { currentSongList } = storeToRefs(useMainStore())
 
 /* 渲染数据 */
 const songCount = ref<null | number>(null)
@@ -89,9 +94,13 @@ const activeTab = ref('list')
 emitter.on('onSendPlaylistMusicCount', (count: number) => {
   songCount.value = count
 })
+emitter.on('onChangeCurrentPlaylist', () => {
+  currentSongList.value = songArr
+})
 
 onUnmounted(() => {
   emitter.off('onSendPlaylistMusicCount')
+  emitter.off('onChangeCurrentPlaylist')
 })
 </script>
 

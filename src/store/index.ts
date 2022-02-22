@@ -25,9 +25,12 @@ const currentSong: songType = {
   duration: 0,
 }
 
+const currentSongList: songType[] = []
+
 export default defineStore('main', {
   state: () => ({
     isLogin,
     currentSong,
+    currentSongList,
   }),
 })

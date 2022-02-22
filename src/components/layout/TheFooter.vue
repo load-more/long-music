@@ -9,11 +9,12 @@
           :src="currentSong.album['picUrl'] || '/album.png'"
         ></el-avatar>
       </div>
-      <div
-        class="song-info"
-        :title="`${currentSong.name} ${currentSong.alias ? '(' + currentSong.alias + ')' : ''}`"
-      >
-        <div class="title" v-if="currentSong.name">
+      <div class="song-info">
+        <div
+          class="title"
+          v-if="currentSong.name"
+          :title="`${currentSong.name} ${currentSong.alias ? '(' + currentSong.alias + ')' : ''}`"
+        >
           <span>{{ currentSong.name }}</span>
           <span v-if="currentSong.alias">&nbsp;({{ currentSong.alias }})</span>
           <i class="iconfont icon-like"></i>
@@ -82,24 +83,7 @@
           <i class="iconfont icon-volume"></i>
         </template>
       </el-popover>
-      <el-drawer
-        v-model="isOpenList"
-        custom-class="list-drawer"
-        :show-close="false"
-      >
-        <template #title>
-          <div class="title-wrap">
-            <div class="top">
-              <span>当前播放列表</span>
-            </div>
-            <div class="bottom">
-              <span class="song-count">总共 100 首</span>
-              <span class="clear-all">清空列表</span>
-            </div>
-          </div>
-        </template>
-        <CurrentPlaylist />
-      </el-drawer>
+      <CurrentPlaylist v-model="isOpenList" />
       <i class="iconfont icon-list" @click="isOpenList = !isOpenList"></i>
     </div>
   </div>
@@ -317,46 +301,6 @@ const isOpenList = ref(false)
       cursor: pointer;
       &:hover {
         color: #fff;
-      }
-    }
-    :deep .el-overlay {
-      // 设置遮罩层高度
-      bottom: 80px;
-      height: auto;
-      .list-drawer {
-        background-color: #222225;
-        color: #ddd;
-        .title-wrap {
-          display: flex;
-          flex-direction: column;
-          .top {
-            font-size: 18px;
-            font-weight: bold;
-          }
-          .bottom {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 20px 0;
-            .song-count {
-              font-size: 13px;
-              color: #616161;
-            }
-            .clear-all {
-              font-size: 14px;
-              color: rgb(95, 77, 77);
-              cursor: pointer;
-            }
-          }
-        }
-      }
-      #el-drawer__title {
-        margin-bottom: 0;
-      }
-      .el-drawer__body {
-        padding-top: 0;
-        padding-right: 0;
-        padding-bottom: 0;
       }
     }
   }

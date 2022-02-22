@@ -72,6 +72,7 @@ import { computed } from 'vue'
 import { formatDuration } from '@/utils/time'
 import useMainStore from '@/store/index'
 import { storeToRefs } from 'pinia'
+import emitter from '@/utils/emitter'
 
 export interface songType {
   id: number
@@ -90,6 +91,7 @@ const props = defineProps<{
 const { currentSong } = storeToRefs(useMainStore())
 const handleDbClick = () => {
   currentSong.value = props.songInfo
+  emitter.emit('onChangeCurrentPlaylist', true)
 }
 
 /* 判断当前音乐是否播放 */
