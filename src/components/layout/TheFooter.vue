@@ -13,7 +13,9 @@
         <div
           class="title"
           v-if="currentSong.name"
-          :title="`${currentSong.name} ${currentSong.alias ? '(' + currentSong.alias + ')' : ''}`"
+          :title="`${currentSong.name} ${
+            currentSong.alias ? '(' + currentSong.alias + ')' : ''
+          }`"
         >
           <span>{{ currentSong.name }}</span>
           <span v-if="currentSong.alias">&nbsp;({{ currentSong.alias }})</span>
@@ -23,7 +25,10 @@
           <span>匆匆岁月</span>
           <span>余音悠长</span>
         </div>
-        <div class="singer" :title="currentSong.author.map(item => item.name).join(' / ')">
+        <div
+          class="singer"
+          :title="currentSong.author.map((item) => item.name).join(' / ')"
+        >
           <span v-for="(item, index) in currentSong.author" :key="item.id">
             <span class="name">
               {{ item.name }}
@@ -31,26 +36,28 @@
             <span
               class="seperator"
               v-if="index !== currentSong.author.length - 1"
-            >&nbsp;/&nbsp;</span>
+              >&nbsp;/&nbsp;</span
+            >
           </span>
         </div>
       </div>
     </div>
     <div class="mid">
       <div class="play-controls">
-        <i class="iconfont icon-order-play hidden-xs-only"></i>
-        <i class="iconfont icon-previous"></i>
+        <span class="hidden-xs-only">
+          <i
+            :class="`iconfont icon-${playOrder[playOrderIndex]}`"
+            @click="togglePlayOrder"
+          ></i>
+        </span>
+        <i class="iconfont icon-previous" @click="toggleCurrentMusic(-1)"></i>
         <i
           class="iconfont icon-pause"
           v-if="isPlay"
           @click="toggleMusicPlayStatus"
         ></i>
-        <i
-          class="iconfont icon-play"
-          v-else
-          @click="toggleMusicPlayStatus"
-        ></i>
-        <i class="iconfont icon-next"></i>
+        <i class="iconfont icon-play" v-else @click="toggleMusicPlayStatus"></i>
+        <i class="iconfont icon-next" @click="toggleCurrentMusic(1)"></i>
         <i class="iconfont icon-lyrics hidden-xs-only"></i>
       </div>
       <div class="progress-bar hidden-xs-only">
@@ -76,9 +83,7 @@
         trigger="hover"
         popper-class="volume-popper"
       >
-        <MusicVolumeBar
-          v-model:volume="volume"
-        />
+        <MusicVolumeBar v-model:volume="volume" />
         <template #reference>
           <i class="iconfont icon-volume"></i>
         </template>
@@ -98,11 +103,14 @@ import MusicVolumeBar from '@/components/common/MusicVolumeBar.vue'
 import CurrentPlaylist from '@/components/common/CurrentPlaylist.vue'
 
 /* 音乐播放 */
-const { currentSong } = storeToRefs(useMainStore())
+const { currentSong, currentSongList, listenedSongSet } = storeToRefs(useMainStore())
 const music = new Audio()
-watch(() => currentSong.value.id, () => {
-  music.src = `https://music.163.com/song/media/outer/url?id=${currentSong.value.id}.mp3`
-})
+watch(
+  () => currentSong.value.id,
+  () => {
+    music.src = `https://music.163.com/song/media/outer/url?id=${currentSong.value.id}.mp3`
+  },
+)
 const isPlay = ref(false)
 const duration = ref(0)
 const currentTime = ref(0)
@@ -160,6 +168,49 @@ watch(volume, () => {
 
 /* 当前播放列表 */
 const isOpenList = ref(false)
+
+/* 切换播放顺序 */
+const playOrder = [
+  'order-play',
+  'loop',
+  'single-loop',
+  'random-play',
+  'heartbeat',
+]
+const playOrderIndex = ref(0)
+
+const togglePlayOrder = () => {
+  playOrderIndex.value = (playOrderIndex.value + 1) % playOrder.length
+}
+
+/* 音乐切换上一首或下一首 */
+const toggleCurrentMusic = (order: number) => {
+  const index = currentSongList.value.findIndex(
+    (item) => item.id === currentSong.value.id,
+  )
+  const currentPlayOrder = playOrder[playOrderIndex.value]
+
+  let newIndex = null
+  if (currentPlayOrder === 'random-play') { // 如果是“随机播放”模式
+    // 随机生成一个不重复的索引
+    newIndex = Math.floor(Math.random() * currentSongList.value.length)
+    while (listenedSongSet.value.has(newIndex)) {
+      newIndex = Math.floor(Math.random() * currentSongList.value.length)
+    }
+  } else { // 如果是其他模式
+    // 考虑 index 小于 0 或大于最大长度的情况
+    newIndex = (index + order + currentSongList.value.length) % currentSongList.value.length
+  }
+  // 切换当前歌曲
+  currentSong.value = currentSongList.value[newIndex]
+  // 将歌曲存入已播放集合中
+  listenedSongSet.value.add(newIndex)
+  // 如果集合满了，则清空集合并重新记录
+  if (listenedSongSet.value.size === currentSongList.value.length) {
+    listenedSongSet.value = new Set()
+    listenedSongSet.value.add(newIndex)
+  }
+}
 </script>
 
 <style scoped lang="scss">
@@ -220,11 +271,14 @@ const isOpenList = ref(false)
         &:after {
           width: 300%;
           height: 100%;
-          content: "";
+          content: '';
           position: absolute;
           top: 0;
           left: 0;
-          background: -webkit-gradient(linear, left top, right top,
+          background: -webkit-gradient(
+            linear,
+            left top,
+            right top,
             color-stop(0, rgba(0, 0, 0, 0.7)),
             color-stop(0.4, rgba(0, 0, 0, 0.7)),
             color-stop(0.5, rgba(0, 0, 0, 0)),
@@ -235,17 +289,18 @@ const isOpenList = ref(false)
         }
         @keyframes slide {
           0% {
-            -webkit-transform:translateX(-66.666%);
+            -webkit-transform: translateX(-66.666%);
           }
           100% {
-            -webkit-transform:translateX(0);
+            -webkit-transform: translateX(0);
           }
         }
       }
       .singer {
         font-size: 14px;
       }
-      .title, .singer {
+      .title,
+      .singer {
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;

@@ -27,10 +27,13 @@ const currentSong: songType = {
 
 const currentSongList: songType[] = []
 
+const listenedSongSet = new Set()
+
 export default defineStore('main', {
   state: () => ({
     isLogin,
     currentSong,
     currentSongList,
+    listenedSongSet,
   }),
 })

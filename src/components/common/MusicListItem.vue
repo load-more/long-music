@@ -88,9 +88,12 @@ const props = defineProps<{
 }>()
 
 /* 双击播放音乐 */
-const { currentSong } = storeToRefs(useMainStore())
+const { currentSong, listenedSongSet } = storeToRefs(useMainStore())
 const handleDbClick = () => {
   currentSong.value = props.songInfo
+  // 清空已听歌曲索引，并将点击的歌曲作为新索引加入
+  listenedSongSet.value = new Set()
+  listenedSongSet.value.add(props.songIndex - 1)
   emitter.emit('onChangeCurrentPlaylist', true)
 }
 
