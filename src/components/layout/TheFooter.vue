@@ -45,10 +45,13 @@
     <div class="mid">
       <div class="play-controls">
         <span class="hidden-xs-only">
-          <i
-            :class="`iconfont icon-${playOrder[playOrderIndex]}`"
-            @click="togglePlayOrder"
-          ></i>
+          <el-tooltip placement="top" :show-arrow="false">
+            <template #content>{{ playOrderLabel[playOrderIndex] }}</template>
+            <i
+              :class="`iconfont icon-${playOrder[playOrderIndex]}`"
+              @click="togglePlayOrder"
+            ></i>
+          </el-tooltip>
         </span>
         <i class="iconfont icon-previous" @click="toggleCurrentMusic(-1)"></i>
         <i
@@ -102,80 +105,25 @@ import { storeToRefs } from 'pinia'
 import MusicVolumeBar from '@/components/common/MusicVolumeBar.vue'
 import CurrentPlaylist from '@/components/common/CurrentPlaylist.vue'
 
-/* 音乐播放 */
 const { currentSong, currentSongList, listenedSongSet } = storeToRefs(useMainStore())
-const music = new Audio()
-watch(
-  () => currentSong.value.id,
-  () => {
-    music.src = `https://music.163.com/song/media/outer/url?id=${currentSong.value.id}.mp3`
-  },
-)
-const isPlay = ref(false)
-const duration = ref(0)
-const currentTime = ref(0)
-const volume = ref(0)
 
-// 暂停或播放音乐
-const playMusic = () => {
-  music.play()
-  isPlay.value = true
-  useMainStore().$patch((state) => {
-    // eslint-disable-next-line no-param-reassign
-    state.currentSong.isPlay = true
-  })
-}
-const pauseMusic = () => {
-  music.pause()
-  isPlay.value = false
-  useMainStore().$patch((state) => {
-    // eslint-disable-next-line no-param-reassign
-    state.currentSong.isPlay = false
-  })
-}
-// 当音乐文件加载完成，初始化数据
-music.addEventListener('canplaythrough', () => {
-  duration.value = music.duration
-  currentTime.value = music.currentTime
-  volume.value = music.volume * 100
-  playMusic()
-})
-// 每当音乐文件的时间更新，则更新 currentTime
-music.addEventListener('timeupdate', () => {
-  if (music.ended) {
-    isPlay.value = false
-  }
-  currentTime.value = music.currentTime
-})
-// 切换音乐状态
-const toggleMusicPlayStatus = () => {
-  if (music) {
-    if (music.paused) {
-      playMusic()
-    } else {
-      pauseMusic()
-    }
-  }
-}
-// 当用户调整进度条后，更新音乐的 currentTime
-const handleUpdateCurrentTime = (ct: number) => {
-  music.currentTime = ct
-}
-// 控制音量
-watch(volume, () => {
-  music.volume = volume.value / 100
-})
-
-/* 当前播放列表 */
+/* 是否显示当前播放列表 */
 const isOpenList = ref(false)
 
-/* 切换播放顺序 */
+/* 切换播放模式 */
 const playOrder = [
   'order-play',
   'loop',
   'single-loop',
   'random-play',
   'heartbeat',
+]
+const playOrderLabel = [
+  '顺序播放',
+  '列表循环',
+  '单曲循环',
+  '随机播放',
+  '心动模式',
 ]
 const playOrderIndex = ref(0)
 
@@ -211,6 +159,88 @@ const toggleCurrentMusic = (order: number) => {
     listenedSongSet.value.add(newIndex)
   }
 }
+
+/* 音乐播放 */
+const music = new Audio()
+watch(
+  () => currentSong.value.id,
+  () => {
+    music.src = `https://music.163.com/song/media/outer/url?id=${currentSong.value.id}.mp3`
+  },
+)
+const isPlay = ref(false)
+const duration = ref(0)
+const currentTime = ref(0)
+const volume = ref(0)
+
+// 暂停或播放音乐
+const playMusic = () => {
+  music.play()
+  useMainStore().$patch((state) => {
+    // eslint-disable-next-line no-param-reassign
+    state.currentSong.isPlay = true
+  })
+}
+const pauseMusic = () => {
+  music.pause()
+  useMainStore().$patch((state) => {
+    // eslint-disable-next-line no-param-reassign
+    state.currentSong.isPlay = false
+  })
+}
+// 当音乐文件加载完成，初始化数据
+music.addEventListener('canplaythrough', () => {
+  duration.value = music.duration
+  currentTime.value = music.currentTime
+  volume.value = music.volume * 100
+  playMusic()
+})
+// 每当音乐文件的时间更新，则更新 currentTime
+music.addEventListener('timeupdate', () => {
+  currentTime.value = music.currentTime
+})
+// 当音乐开始播放
+music.addEventListener('play', () => {
+  isPlay.value = true
+})
+// 当音乐暂停
+music.addEventListener('pause', () => {
+  isPlay.value = false
+})
+// 当音乐结束
+music.addEventListener('ended', () => {
+  isPlay.value = false
+  const currentPlayOrder = playOrder[playOrderIndex.value]
+  if (currentPlayOrder === 'order-play' || currentPlayOrder === 'heartbeat') {
+    // 如果不是最后一首歌，则直接下一首
+    if (currentSong.value.id !== currentSongList.value[currentSongList.value.length - 1].id) {
+      toggleCurrentMusic(1)
+    }
+  } else if (currentPlayOrder === 'single-loop') {
+    // 单曲循环播放
+    music.play()
+  } else { // 如果是“随机播放”或“列表循环”
+    toggleCurrentMusic(1)
+  }
+})
+// 切换音乐状态
+const toggleMusicPlayStatus = () => {
+  if (music) {
+    if (music.paused) {
+      playMusic()
+    } else {
+      pauseMusic()
+    }
+  }
+}
+// 当用户调整进度条后，更新音乐的 currentTime
+const handleUpdateCurrentTime = (ct: number) => {
+  music.currentTime = ct
+}
+// 控制音量
+watch(volume, () => {
+  music.volume = volume.value / 100
+})
 </script>
 
 <style scoped lang="scss">
