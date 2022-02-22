@@ -45,26 +45,17 @@ import { useRoute } from 'vue-router'
 import emitter from '@/utils/emitter'
 import LoadingSvg from '@/components/common/LoadingSvg.vue'
 
-const emit = defineEmits(['after-load-all'])
-
 /* 路由管理 */
 const route = useRoute()
 
 /* 渲染数据 */
 const songCount = ref<null | number>(null)
-const isRequesting = ref(false)
 const { id } = route.params
-const offset = ref(0)
-const limit = 20
 const isLoading = ref(false)
 const songArr = reactive<songType[]>([])
 
-const getData = async (lim: number, offs: number) => {
-  const { data } = await getPlaylistAllSongs({
-    id: Number(id),
-    limit: lim,
-    offset: offs,
-  })
+const getData = async () => {
+  const { data } = await getPlaylistAllSongs({ id: Number(id) })
   data.songs.forEach((item: any) => {
     const obj: songType = {
       id: item.id,
@@ -87,44 +78,20 @@ const waitSongCount = () => new Promise((resolve) => {
   })
 })
 
-/* 加载数据 */
-const loadItem = async () => {
-  if (!isRequesting.value) { // 避免重复请求相同的数据
-    isRequesting.value = true
-    isLoading.value = true
-    // 之前加载的歌曲数量
-    const previousSongs = offset.value * limit
-    // 如果还剩最后一组未加载，则加载完之后关闭无限滚动
-    if (previousSongs + limit >= songCount.value!) {
-      // 如果 offset 超出了最大偏移量，则 offset 重置为最大偏移量
-      // 所以 offset 设置为最大安全整数，是获取最后一组数据
-      await getData(songCount.value! - previousSongs, Number.MAX_SAFE_INTEGER)
-      emit('after-load-all')
-    } else {
-      await getData(limit, offset.value)
-      offset.value += 1
-    }
-    isRequesting.value = false
-    isLoading.value = false
-  }
-}
-
 onBeforeMount(async () => {
+  isLoading.value = true
   await waitSongCount()
-  await loadItem()
+  await getData()
+  isLoading.value = false
 })
 const activeTab = ref('list')
 
 emitter.on('onSendPlaylistMusicCount', (count: number) => {
   songCount.value = count
 })
-emitter.on('onLoadMusicListItem', async () => {
-  await loadItem()
-})
 
 onUnmounted(() => {
   emitter.off('onSendPlaylistMusicCount')
-  emitter.off('onLoadMusicListItem')
 })
 </script>
 
@@ -138,7 +105,6 @@ onUnmounted(() => {
   }
   .topbar {
     display: flex;
-    font-family: 'yahei';
     font-size: 14px;
     background-color: #adadad;
     border-radius: 5px;
