@@ -1,16 +1,18 @@
 <template>
   <div class="search-input-wrap">
     <el-popover
+      v-model:visible="popperVisible"
       placement="bottom"
-      trigger="click"
+      trigger="munual"
       :show-arrow="false"
       popper-class="search-popper"
-      :hide-after="0"
     >
       <template #reference>
-        <el-input :placeholder="defaultKeyword" v-model="keyword">
+        <el-input :placeholder="defaultKeyword" v-model="keyword"
+          @click.stop="popperVisible = true"
+        >
           <template #prefix v-if="defaultKeyword">
-            <i class="iconfont icon-search" @click.stop="handleSearch"></i>
+            <i class="iconfont icon-search" @click="handleSearch"></i>
           </template>
         </el-input>
       </template>
@@ -87,6 +89,7 @@ const realKeyword = ref('')
 const hotSearchList = ref()
 const historyList = ref(getSearchHistory())
 const dialogVisible = ref(false)
+const popperVisible = ref(false)
 
 const getData = async () => {
   // 获取默认搜索关键词
@@ -112,11 +115,21 @@ const handleSearch = () => {
 const handleClearHistory = () => {
   historyList.value = []
   clearSearchHistory()
+  dialogVisible.value = false
 }
 const handleRemoveHistory = (kw: string) => {
   removeHistory(kw)
   historyList.value = getSearchHistory()
 }
+window.addEventListener('click', (event: MouseEvent) => {
+  const isClickPopper = document.querySelector('.search-popper')?.contains(event.target as any)
+  const isClickOverlay = (event.target as any).className === 'el-overlay-dialog'
+  if (isClickPopper || isClickOverlay) {
+    popperVisible.value = true
+  } else {
+    popperVisible.value = false
+  }
+})
 </script>
 
 <style scoped lang="scss">
