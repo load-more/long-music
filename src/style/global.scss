@@ -51,6 +51,22 @@ body {
           color: #ddd;
         }
       }
+      .search-history {
+        .el-tag {
+          background-color: #ddd;
+          border: none;
+          color: gray;
+          margin-right: 10px;
+          margin-bottom: 10px;
+          i {
+            color: gray;
+            &:hover {
+              color: red;
+              background-color: unset;
+            }
+          }
+        }
+      }
       .hot-search {
         .index {
           display: inline-block;
@@ -171,5 +187,11 @@ body {
         }
       }
     }
+  }
+
+  // clear search history dialog
+  .clear-search-history-dialog {
+    border-radius: 10px;
+    background-color: #222225;
   }
 }

@@ -5,6 +5,7 @@
       trigger="click"
       :show-arrow="false"
       popper-class="search-popper"
+      :hide-after="0"
     >
       <template #reference>
         <el-input :placeholder="defaultKeyword" v-model="keyword">
@@ -15,9 +16,37 @@
       </template>
       <el-scrollbar class="scroll-bar">
         <div class="search-board-wrap">
-          <div class="search-history">
-           <span class="label">搜索历史</span>
-           <i class="iconfont icon-remove"></i>
+          <div class="search-history" v-if="historyList.length">
+            <span class="label">搜索历史</span>
+            <i
+              class="iconfont icon-remove"
+              @click="dialogVisible = true"
+            ></i>
+            <el-dialog
+              v-model="dialogVisible"
+              :show-close="false"
+              :append-to-body="true"
+              :close-on-click-modal="false"
+              custom-class="clear-search-history-dialog"
+            >
+              <span>确定删除所有历史记录吗？</span>
+              <template #footer>
+                <el-button type="primary" @click="handleClearHistory"
+                >确定</el-button>
+                <el-button @click="dialogVisible = false">取消</el-button>
+              </template>
+            </el-dialog>
+           <div class="history-tags">
+            <el-tag
+              v-for="(history, index) in historyList"
+              :key="index"
+              @close="handleRemoveHistory(history)"
+              closable
+              type="plain"
+            >
+              {{ history }}
+            </el-tag>
+           </div>
           </div>
           <div class="hot-search">
             <span class="label">热门搜索</span>
@@ -45,19 +74,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onBeforeMount, reactive } from 'vue'
+import { ref, onBeforeMount } from 'vue'
 import { getSearchKeyword, getHotSearch } from '@/api/search'
+import {
+  setSearchHistory, getSearchHistory, clearSearchHistory,
+  removeHistory,
+} from '@/utils/storage'
 
 const keyword = ref('')
 const defaultKeyword = ref('')
 const realKeyword = ref('')
-interface hotSearchType {
-  searchWord: string
-  score: number
-  content: string
-  iconUrl: string
-}
-const hotSearchList = reactive<hotSearchType[]>([])
+const hotSearchList = ref()
+const historyList = ref(getSearchHistory())
+const dialogVisible = ref(false)
+
 const getData = async () => {
   // 获取默认搜索关键词
   const { data: keywordData } = await getSearchKeyword()
@@ -65,15 +95,7 @@ const getData = async () => {
   realKeyword.value = keywordData.data.realkeyword
   // 获取热搜列表
   const { data: hotSearchData } = await getHotSearch()
-  hotSearchData.data.forEach((item: any) => {
-    const obj: hotSearchType = {
-      searchWord: item.searchWord,
-      score: item.score,
-      content: item.content,
-      iconUrl: item.iconUrl,
-    }
-    hotSearchList.push(obj)
-  })
+  hotSearchList.value = hotSearchData.data
 }
 onBeforeMount(() => {
   getData()
@@ -83,6 +105,17 @@ const handleSearch = () => {
   if (!keyword.value) {
     keyword.value = realKeyword.value
   }
+  setSearchHistory(keyword.value)
+  historyList.value = getSearchHistory()
+}
+
+const handleClearHistory = () => {
+  historyList.value = []
+  clearSearchHistory()
+}
+const handleRemoveHistory = (kw: string) => {
+  removeHistory(kw)
+  historyList.value = getSearchHistory()
 }
 </script>
 
