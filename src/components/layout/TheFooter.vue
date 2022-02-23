@@ -130,6 +130,7 @@ const playOrderLabel = [
   '心动模式',
 ]
 const playOrderIndex = ref(0)
+const ctCache = ref(0) // 缓存 currentTime，防止暂停状态下修改时间后自动播放
 
 const togglePlayOrder = () => {
   playOrderIndex.value = (playOrderIndex.value + 1) % playOrder.length
@@ -138,6 +139,7 @@ const togglePlayOrder = () => {
 /* 音乐切换上一首或下一首 */
 const toggleCurrentMusic = (order: number) => {
   if (!currentSongList.value.length) return
+  ctCache.value = 0
   const index = currentSongList.value.findIndex(
     (item) => item.id === currentSong.value.id,
   )
@@ -206,6 +208,7 @@ music.addEventListener('timeupdate', () => {
 })
 // 当音乐开始播放
 music.addEventListener('play', () => {
+  music.currentTime = ctCache.value
   isPlay.value = true
 })
 // 当音乐暂停
@@ -215,6 +218,7 @@ music.addEventListener('pause', () => {
 // 当音乐结束
 music.addEventListener('ended', () => {
   isPlay.value = false
+  ctCache.value = 0
   const currentPlayOrder = playOrder[playOrderIndex.value]
   if (currentPlayOrder === 'order-play' || currentPlayOrder === 'heartbeat') {
     // 如果不是最后一首歌，则直接下一首
@@ -240,7 +244,11 @@ const toggleMusicPlayStatus = () => {
 }
 // 当用户调整进度条后，更新音乐的 currentTime
 const handleUpdateCurrentTime = (ct: number) => {
-  music.currentTime = ct
+  if (music.paused) {
+    ctCache.value = ct
+  } else {
+    music.currentTime = ct
+  }
 }
 // 控制音量
 watch(volume, () => {
@@ -373,6 +381,7 @@ emitter.on('onRemoveCurrentSong', () => {
     }
   }
   .mid {
+    flex-shrink: 0;
     width: 500px;
     height: 60px;
     display: flex;

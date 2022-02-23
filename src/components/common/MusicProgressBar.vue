@@ -74,6 +74,7 @@ const handleWrapMousedown = (event: MouseEvent) => {
   isAdjustProgress.value = true
   const { offsetX } = event
   const wrapWidth = barWrap.value!.clientWidth
+  bar.value!.style.width = `${offsetX}px`
   controlProgress(offsetX, wrapWidth)
   emit('updateCurrentTime', currentTimeLabel.value)
   isAdjustProgress.value = false
@@ -84,14 +85,14 @@ const handleDotMouseDown = (event: MouseEvent) => {
   event.stopPropagation() // 阻止 mousedown 事件冒泡
   isMouseDown.value = true
   barWrap.value?.classList.add('active')
-  const leftVal = event.clientX - dot.value!.offsetLeft // 父元素相对于浏览器左边界的横向距离
+  const leftVal = event.clientX - (dot.value!.offsetLeft + 5) // 父元素相对于浏览器左边界的横向距离
   document.addEventListener('mousemove', (e: MouseEvent) => {
     if (isMouseDown.value) {
       if (e.clientX < leftVal) { // 如果鼠标超出左边界
         bar.value!.style.width = '0px'
         controlProgress(0, 1)
       } else if (e.clientX >= leftVal + barWrap.value!.clientWidth) { // 如果超出右边界
-        bar.value!.style.width = '100%'
+        bar.value!.style.width = `${leftVal + barWrap.value!.clientWidth}px`
         controlProgress(1, 1)
       } else { // 如果在正常范围内
         bar.value!.style.width = `${e.clientX - leftVal}px`
@@ -113,26 +114,22 @@ const handleDotMouseDown = (event: MouseEvent) => {
 <style scoped lang="scss">
 .music-progress-bar-wrap {
   display: flex;
+  justify-content: center;
   align-items: center;
   width: 100%;
   .left-label, .right-label {
     font-size: 12px;
     color: gray;
   }
-  .left-label {
-    margin-right: 10px;
-  }
-  .right-label {
-    margin-left: 10px;
-  }
   .bar-wrap {
-    width: 100%;
+    width: 400px;
     height: 3px;
     border-radius: 100px;
     background-color: gray;
     display: flex;
     align-items: center;
     position: relative;
+    margin: 0 10px;
     .bar {
       background-color: red;
       border-radius: 100px;
@@ -145,7 +142,7 @@ const handleDotMouseDown = (event: MouseEvent) => {
       height: 10px;
       border-radius: 50%;
       background-color: red;
-      margin-left: -1px;
+      margin-left: -5px;
       display: none;
       box-shadow: 0 0 15px white;
     }
