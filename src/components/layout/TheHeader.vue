@@ -12,16 +12,7 @@
       <span @click="router.forward()" class="hidden-xs-only">
         <i class="iconfont icon-right-arrow"></i>
       </span>
-      <el-input class="w-50 m-2" placeholder="Pick a date">
-        <template #prefix>
-          <a href="/#">
-            <i class="iconfont icon-search"></i>
-          </a>
-        </template>
-      </el-input>
-      <a href="/#">
-        <i class="iconfont icon-microphone"></i>
-      </a>
+      <SearchInput />
     </el-col>
     <el-col :sm="8" :xs="12" class="right">
       <div class="user-info" v-if="isLogin">
@@ -68,6 +59,7 @@ import { ElMessage } from 'element-plus'
 import { ref, reactive, watch } from 'vue'
 import { Decrypt } from '@/utils/secret'
 import emitter from '@/utils/emitter'
+import SearchInput from '@/components/common/SearchInput.vue'
 
 /* 路由管理 */
 const router = useRouter()
@@ -150,31 +142,16 @@ emitter.on('onRefreshGlobalHeader', async () => {
         transition: all 0.1s ease-in;
       }
     }
-    // @media screen and (max-width: 768px) {
-    //   display: none;
-    // }
   }
   .mid {
     display: flex;
     align-items: center;
-    .el-input {
-      width: 200px;
-      margin-left: 10px;
-    }
-    .icon-left-arrow,
-    .icon-right-arrow,
-    .icon-microphone {
+    .icon-left-arrow, .icon-right-arrow {
       color: #ddd;
       padding-left: 10px;
       &:hover {
         color: #fff;
       }
-    }
-    .icon-microphone {
-      font-size: 24px;
-    }
-    .icon-search {
-      color: #000;
     }
     span {
       cursor: pointer;
