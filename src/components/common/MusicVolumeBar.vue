@@ -1,7 +1,8 @@
 <template>
   <div class="volume-bar-wrap">
+    <span class="percent">{{ percent }}</span>
     <div class="bar-wrap" @mousedown="handleWrapMousedown($event)">
-      <div class="bar" ref="barRef" :style="{height: `${props.volume}px`}"></div>
+      <div class="bar" ref="barRef" :style="{height: `${props.modelValue}px`}"></div>
       <div class="dot" @mousedown="handleDotMousedown"></div>
     </div>
   </div>
@@ -11,15 +12,16 @@
 import { ref } from 'vue'
 
 const props = defineProps({
-  volume: {
+  modelValue: {
     type: Number,
     required: true,
   },
 })
-const emit = defineEmits(['update:volume'])
+const emit = defineEmits(['update:modelValue'])
 
 const barRef = ref<HTMLElement | null>(null)
 const isMouseDown = ref(false)
+const percent = ref(props.modelValue)
 
 const getOffsetY = (event: MouseEvent) => {
   const barHeight = barRef.value?.clientHeight
@@ -41,8 +43,9 @@ const getOffsetY = (event: MouseEvent) => {
 // 是为了防止子元素的 mousedown 和 mouseup 通过冒泡触发父元素的 click 事件。
 const handleWrapMousedown = (event: MouseEvent) => {
   const offsetY = getOffsetY(event)
+  percent.value = offsetY
   barRef.value!.style.height = `${offsetY}px`
-  emit('update:volume', offsetY)
+  emit('update:modelValue', offsetY)
 }
 
 const handleDotMousedown = (event: MouseEvent) => {
@@ -62,12 +65,13 @@ const handleDotMousedown = (event: MouseEvent) => {
         height = 0
       }
       barRef.value!.style.height = `${height}px`
+      percent.value = height
+      emit('update:modelValue', height)
     }
   })
   document.addEventListener('mouseup', () => {
     if (isMouseDown.value) {
       isMouseDown.value = false
-      emit('update:volume', height)
     }
   })
 }
@@ -77,6 +81,12 @@ const handleDotMousedown = (event: MouseEvent) => {
 .volume-bar-wrap {
   display: flex;
   justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  .percent {
+    font-size: 12px;
+  }
+
   .bar-wrap {
     width: 5px;
     height: 100px;

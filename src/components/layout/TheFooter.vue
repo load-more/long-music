@@ -85,11 +85,11 @@
     <div class="right hidden-xs-only">
       <el-popover
         placement="top-start"
-        :width="200"
         trigger="hover"
         popper-class="volume-popper"
+        :show-arrow="false"
       >
-        <MusicVolumeBar v-model:volume="volume" />
+        <MusicVolumeBar v-model="volume" />
         <template #reference>
           <i class="iconfont icon-volume"></i>
         </template>
@@ -178,7 +178,7 @@ watch(
 const isPlay = ref(false)
 const duration = ref(0)
 const currentTime = ref(0)
-const volume = ref(0)
+const volume = ref(100)
 
 // 暂停或播放音乐
 const playMusic = () => {
