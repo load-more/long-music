@@ -53,11 +53,15 @@ body {
       }
       .search-history {
         .el-tag {
-          background-color: #ddd;
+          background-color: gray;
           border: none;
-          color: gray;
+          color: #ddd;
           margin-right: 10px;
           margin-bottom: 10px;
+          cursor: pointer;
+          &:hover {
+            background-color: rgb(161, 161, 161);
+          }
           i {
             color: gray;
             &:hover {

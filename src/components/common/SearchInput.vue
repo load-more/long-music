@@ -12,7 +12,7 @@
           @click.stop="popperVisible = true"
         >
           <template #prefix v-if="defaultKeyword">
-            <i class="iconfont icon-search" @click="handleSearch"></i>
+            <i class="iconfont icon-search" @click="handleSearch()"></i>
           </template>
         </el-input>
       </template>
@@ -45,6 +45,7 @@
               @close="handleRemoveHistory(history)"
               closable
               type="plain"
+              @click="handleSearch(history)"
             >
               {{ history }}
             </el-tag>
@@ -52,7 +53,9 @@
           </div>
           <div class="hot-search">
             <span class="label">热门搜索</span>
-            <div v-for="(item, index) in hotSearchList" :key="index" class="item">
+            <div v-for="(item, index) in hotSearchList" :key="index"
+              class="item" @click="handleSearch(item.searchWord)"
+            >
               <span class="index">{{ index + 1 }}</span>
               <div class="right">
                 <div class="title">
@@ -82,6 +85,7 @@ import {
   setSearchHistory, getSearchHistory, clearSearchHistory,
   removeHistory,
 } from '@/utils/storage'
+import { useRouter } from 'vue-router'
 
 const keyword = ref('')
 const defaultKeyword = ref('')
@@ -90,6 +94,7 @@ const hotSearchList = ref()
 const historyList = ref(getSearchHistory())
 const dialogVisible = ref(false)
 const popperVisible = ref(false)
+const router = useRouter()
 
 const getData = async () => {
   // 获取默认搜索关键词
@@ -104,10 +109,18 @@ onBeforeMount(() => {
   getData()
 })
 
-const handleSearch = () => {
+const handleSearch = (word?: string) => {
+  if (word) {
+    keyword.value = word
+  }
   if (!keyword.value) {
     keyword.value = realKeyword.value
   }
+  // 跳转页面
+  router.push({ name: 'search', query: { kw: keyword.value } })
+  // 关闭 popover
+  popperVisible.value = false
+  // 添加历史记录
   setSearchHistory(keyword.value)
   historyList.value = getSearchHistory()
 }
