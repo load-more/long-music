@@ -1,5 +1,5 @@
 <template>
-  <div class="search-recommend-item-wrap" v-if="info">
+  <div class="search-recommend-item-wrap" v-if="info && imgSrc">
     <el-image :src="imgSrc" class="image" fit="cover"></el-image>
     <div class="right">
       <div class="title single-line-ellipsis">
@@ -34,7 +34,8 @@ const imgSrc = computed(() => {
   // artist / album
   if (props.category === 'artist' || props.category === 'album') return (info).picUrl
   // concert
-  return (info).cover
+  if (props.category === 'concert') return (info).cover
+  return null
 })
 const title = computed(() => {
   if (props.category === 'artist') {
@@ -43,13 +44,10 @@ const title = computed(() => {
     }
     return `歌手：${info.name}`
   }
-  if (props.category === 'playlist') {
-    return `歌单：${info.name}`
-  }
-  if (props.category === 'album') {
-    return `专辑：${info.name}`
-  }
-  return `演出：${info.title}`
+  if (props.category === 'playlist') return `歌单：${info.name}`
+  if (props.category === 'album') return `专辑：${info.name}`
+  if (props.category === 'concert') return `演出：${info.title}`
+  return null
 })
 const desc = computed(() => {
   if (props.category === 'artist') {
@@ -61,10 +59,13 @@ const desc = computed(() => {
   if (props.category === 'album') {
     return `${info.artist.name}`
   }
-  const start = getLocalTime(info.time[0])
-  const end = getLocalTime(info.time[1])
-  return `${start.month}月${start.date}日-${end.month}月${end.date}日
-   ${info.simpleAddress.address}`
+  if (props.category === 'concert') {
+    const start = getLocalTime(info.time[0])
+    const end = getLocalTime(info.time[1])
+    return `${start.month}月${start.date}日-${end.month}月${end.date}日
+     ${info.simpleAddress.address}`
+  }
+  return null
 })
 </script>
 

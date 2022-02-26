@@ -32,9 +32,11 @@ export const getSearchMatch = (params: getSearchMatchParams) => request({
 interface getSearchResultParams {
   keywords: string
   limit?: number
+  offset?: number
+  type?: number
 }
 export const getSearchResult = (params: getSearchResultParams) => request({
   method: 'GET',
-  url: '/search',
+  url: '/cloudsearch',
   params,
 })

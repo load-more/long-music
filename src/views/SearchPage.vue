@@ -9,6 +9,9 @@
       <div class="search-recommend-container">
         <SearchRecommend :keyword="(keyword as string)" />
       </div>
+      <div class="search-result-container">
+        <SearchResult :keyword="(keyword as string)" />
+      </div>
     </el-scrollbar>
   </div>
 </template>
@@ -17,6 +20,7 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import SearchRecommend from '@/components/search/SearchRecommend.vue'
+import SearchResult from '@/components/search/SearchResult.vue'
 
 const route = useRoute()
 const keyword = computed(() => {
@@ -46,7 +50,7 @@ const keyword = computed(() => {
   .scroll-bar {
     height: 100%;
   }
-  .search-recommend-container {
+  .search-recommend-container, .search-result-container {
     padding: 20px;
   }
 }

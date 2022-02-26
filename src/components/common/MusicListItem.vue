@@ -10,7 +10,7 @@
       </div>
       <div
         class="title"
-        :title="`${songInfo.name} ${currentSong.alias ? '(' + currentSong.alias + ')' : ''}`"
+        :title="`${songInfo.name} ${songInfo.alias ? '(' + songInfo.alias + ')' : ''}`"
       >
         <span>{{ songInfo.name }}</span>
         <span v-if="songInfo.alias" class="alias">&nbsp;({{ songInfo.alias }})</span>
@@ -41,7 +41,7 @@
       <div class="mid">
         <div
           class="title single-line-ellipsis"
-          :title="`${songInfo.name} ${currentSong.alias ? '(' + currentSong.alias + ')' : ''}`"
+          :title="`${songInfo.name} ${songInfo.alias ? '(' + songInfo.alias + ')' : ''}`"
         >
           <span>{{ songInfo.name }}</span>
           <span v-if="songInfo.alias" class="alias">&nbsp;({{ songInfo.alias }})</span>
@@ -81,6 +81,7 @@ export interface songType {
   author: { id: number, name: string }[]
   album: { name: string }
   duration: number
+  index?: number
 }
 const props = defineProps<{
   songInfo: songType
