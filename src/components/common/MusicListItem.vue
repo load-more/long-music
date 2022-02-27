@@ -68,7 +68,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, withDefaults } from 'vue'
 import { formatDuration } from '@/utils/time'
 import useMainStore from '@/store/index'
 import { storeToRefs } from 'pinia'
@@ -83,19 +83,29 @@ export interface songType {
   duration: number
   index?: number
 }
-const props = defineProps<{
+interface Props {
   songInfo: songType
   songIndex: number
-}>()
+  isPlaylistItem: boolean
+}
+const props = withDefaults(defineProps<Props>(), {
+  isPlaylistItem: true,
+})
 
 /* 双击播放音乐 */
-const { currentSong, listenedSongSet } = storeToRefs(useMainStore())
+const { currentSong, listenedSongSet, currentSongList } = storeToRefs(useMainStore())
 const handleDbClick = () => {
+  const index = currentSongList.value.findIndex((item) => item.id === currentSong.value.id)
   currentSong.value = props.songInfo
-  // 清空已听歌曲索引，并将点击的歌曲作为新索引加入
-  listenedSongSet.value = new Set()
-  listenedSongSet.value.add(props.songIndex - 1)
-  emitter.emit('onChangeCurrentPlaylist', true)
+  if (props.isPlaylistItem) { // 如果是歌单里的歌曲，直接切换整个播放列表
+    // 清空已听歌曲索引，并将点击的歌曲的 id 加入
+    listenedSongSet.value = new Set()
+    listenedSongSet.value.add(props.songInfo.id)
+    emitter.emit('onChangeCurrentPlaylist', true)
+  } else { // 如果是搜索结果里的歌曲，则添加单曲到播放列表里
+    listenedSongSet.value.add(props.songInfo.id)
+    currentSongList.value.splice(index + 1, 0, currentSong.value)
+  }
 }
 
 /* 判断当前音乐是否播放 */

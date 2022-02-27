@@ -149,7 +149,7 @@ const toggleCurrentMusic = (order: number) => {
   if (currentPlayOrder === 'random-play') { // 如果是“随机播放”模式
     // 随机生成一个不重复的索引
     newIndex = Math.floor(Math.random() * currentSongList.value.length)
-    while (listenedSongSet.value.has(newIndex)) {
+    while (listenedSongSet.value.has(currentSongList.value[newIndex].id)) {
       newIndex = Math.floor(Math.random() * currentSongList.value.length)
     }
   } else { // 如果是其他模式
@@ -159,11 +159,11 @@ const toggleCurrentMusic = (order: number) => {
   // 切换当前歌曲
   currentSong.value = currentSongList.value[newIndex]
   // 将歌曲存入已播放集合中
-  listenedSongSet.value.add(newIndex)
+  listenedSongSet.value.add(currentSong.value.id)
   // 如果集合满了，则清空集合并重新记录
   if (listenedSongSet.value.size === currentSongList.value.length) {
     listenedSongSet.value = new Set()
-    listenedSongSet.value.add(newIndex)
+    listenedSongSet.value.add(currentSong.value.id)
   }
 }
 
@@ -205,6 +205,7 @@ music.addEventListener('canplaythrough', () => {
 // 每当音乐文件的时间更新，则更新 currentTime
 music.addEventListener('timeupdate', () => {
   currentTime.value = music.currentTime
+  ctCache.value = music.currentTime
 })
 // 当音乐开始播放
 music.addEventListener('play', () => {

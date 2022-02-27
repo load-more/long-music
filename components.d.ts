@@ -53,6 +53,7 @@ declare module 'vue' {
     SearchRecommendItem: typeof import('./src/components/search/SearchRecommendItem.vue')['default']
     SearchResult: typeof import('./src/components/search/SearchResult.vue')['default']
     SearchResultMusic: typeof import('./src/components/search/SearchResultMusic.vue')['default']
+    SearchResultMusicList: typeof import('./src/components/search/SearchResultMusicList.vue')['default']
     TagSelector: typeof import('./src/components/common/TagSelector.vue')['default']
     TheFooter: typeof import('./src/components/layout/TheFooter.vue')['default']
     TheHeader: typeof import('./src/components/layout/TheHeader.vue')['default']

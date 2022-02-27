@@ -20,14 +20,14 @@
     </div>
     <div class="list">
       <LoadingSvg v-if="isLoading" />
-      <MusicListItem
-        v-for="(item) in songArr.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
-        :key="item.id"
-        :song-info="item"
-        :song-index="(item.index as number) + 1"
-      />
+      <keep-alive>
+        <SearchResultMusicList
+          :song-arr="songArr.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
+        />
+      </keep-alive>
       <el-pagination
         v-if="!isLoading"
+        class="pagination"
         background
         layout="prev, pager, next"
         :page-size="pageSize"
@@ -46,7 +46,8 @@ import {
 } from 'vue'
 import LoadingSvg from '@/components/common/LoadingSvg.vue'
 import { getSearchResult } from '@/api/search'
-import MusicListItem, { songType } from '@/components/common/MusicListItem.vue'
+import SearchResultMusicList from '@/components/search/SearchResultMusicList.vue'
+import { songType } from '@/components/common/MusicListItem.vue'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
@@ -86,6 +87,7 @@ const getData = async (offset: number) => {
     songArr.splice(i, 0, obj)
   })
   isLoading.value = false
+  offsetSet.add(offset)
 }
 
 onBeforeMount(() => {
@@ -154,6 +156,10 @@ const handleCurrentChange = () => {
       margin-inline-end: 0;
       padding-inline-start: 0;
     }
+  }
+  .pagination {
+    display: flex;
+    justify-content: center;
   }
 }
 </style>
