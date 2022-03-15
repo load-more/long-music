@@ -22,7 +22,7 @@
             <span class="label">搜索历史</span>
             <i
               class="iconfont icon-remove"
-              @click="dialogVisible = true"
+              @click.stop="dialogVisible = true"
             ></i>
             <el-dialog
               v-model="dialogVisible"
@@ -45,7 +45,7 @@
               @close="handleRemoveHistory(history)"
               closable
               type="plain"
-              @click="handleSearch(history)"
+              @click.stop="handleSearch(history)"
             >
               {{ history }}
             </el-tag>
@@ -54,7 +54,7 @@
           <div class="hot-search">
             <span class="label">热门搜索</span>
             <div v-for="(item, index) in hotSearchList" :key="index"
-              class="item" @click="handleSearch(item.searchWord)"
+              class="item" @click.stop="handleSearch(item.searchWord)"
             >
               <span class="index">{{ index + 1 }}</span>
               <div class="right">
