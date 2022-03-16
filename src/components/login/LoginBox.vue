@@ -2,25 +2,26 @@
   <div class="login-box-wrap">
     <img src="@/assets/logo.png">
     <el-tabs
+      v-model="currentTab"
       type="border-card"
       :stretch="true"
       v-loading="isLoading"
       element-loading-text="登录中..."
       element-loading-background="rgba(255, 255, 255, 0.5)"
     >
-      <el-tab-pane label="账号登录" v-if="isLogin">
+      <el-tab-pane label="账号登录" v-if="isLogin" name="phone">
         <LoginBoxForm type="phone" />
       </el-tab-pane>
-      <el-tab-pane label="短信登录" v-if="isLogin">
+      <el-tab-pane label="短信登录" v-if="isLogin" name="sms">
         <LoginBoxForm type="sms" />
       </el-tab-pane>
-      <el-tab-pane label="邮箱登录" v-if="isLogin">
+      <el-tab-pane label="邮箱登录" v-if="isLogin" name="email">
         <LoginBoxForm type="email" />
       </el-tab-pane>
-      <el-tab-pane label="扫码登录" v-if="isLogin">
-        <LoginBoxQrCode />
+      <el-tab-pane label="扫码登录" v-if="isLogin" name="qrcode">
+        <LoginBoxQrCode v-if="currentTab === 'qrcode'" />
       </el-tab-pane>
-      <el-tab-pane label="注册" v-else>
+      <el-tab-pane label="注册" v-else name="register">
         <RegisterForm />
       </el-tab-pane>
     </el-tabs>
@@ -43,6 +44,7 @@ import emitter from '@/utils/emitter'
 
 const isLoading = ref(false)
 const isLogin = ref(true)
+const currentTab = 'phone'
 emitter.on('onToggleLoginLoading', (status) => {
   isLoading.value = status
 })

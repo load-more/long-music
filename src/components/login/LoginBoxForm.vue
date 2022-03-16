@@ -121,6 +121,7 @@ import {
   sendCaptcha,
   verifyCaptcha,
 } from '@/api/login'
+import { getUserAccount } from '@/api/user'
 import { ElMessage } from 'element-plus'
 import md5 from 'js-md5'
 import emitter from '@/utils/emitter'
@@ -229,40 +230,80 @@ const onClickLogin = () => {
         // 表单校验成功，发送请求
         emitter.emit('onToggleLoginLoading', true) // 开启 loading
         try {
-          let rst: any = null
           if (props.type === 'phone') {
-            rst = await phoneLogin(encryptedLoginForm.value as any)
+            const { data } = await phoneLogin(encryptedLoginForm.value as any)
+            if (data.code === 200) {
+              // 登录成功
+              router.push({ name: 'home' }) // 跳转路由
+              // 登录成功后，存储用户 id 和 cookie
+              const uid = Encrypt(data.account.id)
+              window.localStorage.setItem('uid', uid)
+              // 切换登录状态
+              mainStore.$patch((state) => {
+                // eslint-disable-next-line no-param-reassign
+                state.isLogin = true
+              })
+              ElMessage({
+                type: 'success',
+                message: '登录成功！',
+                appendTo: document.body,
+              })
+            } else if (data.code === 502) {
+              // 登录失败
+              ElMessage({
+                type: 'error',
+                message: data.message,
+                appendTo: document.body,
+              })
+            }
           } else if (props.type === 'email') {
-            rst = await emailLogin(encryptedLoginForm.value as any)
+            const { data } = await emailLogin(encryptedLoginForm.value as any)
+            if (data.code === 200) {
+              // 登录成功
+              router.push({ name: 'home' }) // 跳转路由
+              // 登录成功后，存储用户 id 和 cookie
+              const uid = Encrypt(data.account.id)
+              window.localStorage.setItem('uid', uid)
+              // 切换登录状态
+              mainStore.$patch((state) => {
+                // eslint-disable-next-line no-param-reassign
+                state.isLogin = true
+              })
+              ElMessage({
+                type: 'success',
+                message: '登录成功！',
+                appendTo: document.body,
+              })
+            } else {
+              ElMessage({
+                type: 'error',
+                message: data.message,
+                appendTo: document.body,
+              })
+            }
           } else {
-            rst = await verifyCaptcha({
+            const { data } = await verifyCaptcha({
               phone: loginForm.phone,
               captcha: loginForm.captcha,
             })
-          }
-          if (rst.data.code === 200) {
-            // 登录成功
-            router.push({ name: 'home' }) // 跳转路由
-            // 登录成功后，存储用户 id 和 cookie
-            const uid = Encrypt(rst.data.account.id)
-            window.localStorage.setItem('uid', uid)
-            // 切换登录状态
-            mainStore.$patch((state) => {
-              // eslint-disable-next-line no-param-reassign
-              state.isLogin = true
-            })
-            ElMessage({
-              type: 'success',
-              message: '登录成功！',
-              appendTo: document.body,
-            })
-          } else if (rst.data.code === 502) {
-            // 登录失败
-            ElMessage({
-              type: 'error',
-              message: rst.data.message,
-              appendTo: document.body,
-            })
+            if (data.data === true) {
+              const { data: userData } = await getUserAccount()
+              // 登录成功
+              router.push({ name: 'home' }) // 跳转路由
+              // 登录成功后，存储用户 id 和 cookie
+              const uid = Encrypt(userData.account.id)
+              window.localStorage.setItem('uid', uid)
+              // 切换登录状态
+              mainStore.$patch((state) => {
+                // eslint-disable-next-line no-param-reassign
+                state.isLogin = true
+              })
+              ElMessage({
+                type: 'success',
+                message: '登录成功！',
+                appendTo: document.body,
+              })
+            }
           }
         } catch (error: any) {
           const errorMsg = error.response.data.message

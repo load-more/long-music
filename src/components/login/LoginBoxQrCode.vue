@@ -20,14 +20,18 @@
 <script setup lang="ts">
 import { ref, onUnmounted } from 'vue'
 import { generateQrKey, generateQrCode, checkQrCode } from '@/api/login'
+import { getUserAccount } from '@/api/user'
 import { ElMessage } from 'element-plus'
-
-const emit = defineEmits(['closeDialog'])
+import { useRouter } from 'vue-router'
+import useMainStore from '@/store/index'
+import { Encrypt } from '@/utils/secret'
 
 const imgUrl = ref('')
 const isLoading = ref(false)
 let timer: NodeJS.Timer | null = null
 const prompt = ref('')
+const router = useRouter()
+const mainStore = useMainStore()
 
 onUnmounted(() => {
   clearInterval(timer!)
@@ -39,18 +43,18 @@ const displayQrCode = async () => {
   try {
     isLoading.value = true
     // 生成二维码 key
-    const keyRst = await generateQrKey()
+    const { data: keyData } = await generateQrKey()
 
-    if (keyRst.data.code === 200) {
-      key = keyRst.data.data.unikey
+    if (keyData.code === 200) {
+      key = keyData.data.unikey
       // 如果成功，则生成二维码图片
-      const qrRst = await generateQrCode({
+      const { data: qrData } = await generateQrCode({
         key,
         qrimg: true,
       })
       // 如果成功，将图片替换
-      if (qrRst.data.code === 200) {
-        imgUrl.value = qrRst.data.data.qrimg
+      if (qrData.code === 200) {
+        imgUrl.value = qrData.data.qrimg
       }
     }
   } catch (error) {
@@ -71,29 +75,45 @@ const displayQrCode = async () => {
 
   timer = setInterval(async () => {
     const rst = await getQrCodeStatus(key)
-    switch (rst) {
-      case 800:
-        prompt.value = '二维码已过期'
-        break
-      case 801:
-        prompt.value = '等待扫码'
-        break
-      case 802:
-        prompt.value = '授权中'
-        break
-      case 803:
-        prompt.value = '授权登录成功'
+    if (rst === 800) {
+      prompt.value = '二维码已过期'
+    } else if (rst === 801) {
+      prompt.value = '等待扫码'
+    } else if (rst === 802) {
+      prompt.value = '授权中'
+    } else if (rst === 803) {
+      const { data } = await getUserAccount()
+      if (data.code === 200) {
+        // 登录成功
+        router.push({ name: 'home' }) // 跳转路由
+        // 登录成功后，存储用户 id 和 cookie
+        const uid = Encrypt(data.account.id)
+        window.localStorage.setItem('uid', uid)
+        // 切换登录状态
+        mainStore.$patch((state) => {
+          // eslint-disable-next-line no-param-reassign
+          state.isLogin = true
+        })
         ElMessage({
           type: 'success',
           message: '登录成功！',
           appendTo: document.body,
         })
-        emit('closeDialog')
-        clearInterval(timer!)
-        timer = null
-        break
-      default:
-        break
+      } else {
+        ElMessage({
+          type: 'error',
+          message: data.message,
+          appendTo: document.body,
+        })
+      }
+      prompt.value = '授权登录成功'
+      ElMessage({
+        type: 'success',
+        message: '登录成功！',
+        appendTo: document.body,
+      })
+      clearInterval(timer!)
+      timer = null
     }
   }, 500)
 }

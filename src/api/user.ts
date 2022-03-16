@@ -9,7 +9,6 @@ export const getUserDetail = (params: getUserDetailParams) => request({
   params,
 })
 
-// 获取账号信息【暂时没用】
 export const getUserAccount = () => request({
   method: 'GET',
   url: '/user/account',
