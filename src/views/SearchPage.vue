@@ -7,27 +7,37 @@
         <span class="left">的结果：</span>
       </span>
       <div class="search-recommend-container">
-        <SearchRecommend :keyword="(keyword as string)" />
+        <SearchRecommend :keyword="(keyword as string)" v-if="isShowCpn" />
       </div>
       <div class="search-result-container">
-        <SearchResult :keyword="(keyword as string)" />
+        <SearchResult :keyword="(keyword as string)" v-if="isShowCpn" />
       </div>
     </el-scrollbar>
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import {
+  computed, ref, watch, nextTick,
+} from 'vue'
 import { useRoute } from 'vue-router'
 import SearchRecommend from '@/components/search/SearchRecommend.vue'
 import SearchResult from '@/components/search/SearchResult.vue'
 
 const route = useRoute()
+const isShowCpn = ref(true)
 const keyword = computed(() => {
   if (Array.isArray(route.query.kw)) {
     return route.query.kw.join(' ')
   }
   return route.query.kw
+})
+watch(() => route.query, () => {
+  // 当路由的 query 内容改变，刷新组件
+  isShowCpn.value = false
+  nextTick(() => {
+    isShowCpn.value = true
+  })
 })
 </script>
 
