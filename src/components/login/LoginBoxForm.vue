@@ -248,7 +248,7 @@ const onClickLogin = () => {
                 message: '登录成功！',
                 appendTo: document.body,
               })
-            } else if (data.code === 502) {
+            } else {
               // 登录失败
               ElMessage({
                 type: 'error',
@@ -340,6 +340,12 @@ const onClickCaptcha = () => {
               counter.value = countdownTime
             }
           }, 1000)
+        } else {
+          ElMessage({
+            type: 'error',
+            message: rst.data.message,
+            appendTo: document.body,
+          })
         }
       } catch (error) {
         isCaptchaLoading.value = false
@@ -356,6 +362,9 @@ const onClickCaptcha = () => {
 
 <style scoped lang="scss">
 .form {
+  ::v-deep .circular {
+      width: 20px;
+  }
   .password-eye {
     pointer-events: auto;
     cursor: pointer;
