@@ -23,22 +23,7 @@
           :src="state.avatarUrl"
           @click="router.push({ name: 'profile' })"
         ></el-avatar>
-        <el-dropdown trigger="click" @command="handleCommand" class="name-wrap">
-          <span class="el-dropdown-link">
-            {{ state.nickname }}
-            <i class="iconfont icon-drop-down-arrow"></i>
-          </span>
-          <template #dropdown>
-            <el-dropdown-menu>
-              <el-dropdown-item>Action 1</el-dropdown-item>
-              <el-dropdown-item>Action 2</el-dropdown-item>
-              <el-dropdown-item>Action 3</el-dropdown-item>
-              <el-dropdown-item divided command="logout"
-                >退出登录</el-dropdown-item
-              >
-            </el-dropdown-menu>
-          </template>
-        </el-dropdown>
+        <UserDropdown :nickname="state.nickname" @logout="isFullLoading = true" />
       </div>
       <div class="tools hidden-xs-only">
         <i class="iconfont icon-Message"></i>
@@ -53,13 +38,11 @@
 import { storeToRefs } from 'pinia'
 import useMainStore from '@/store/index'
 import { useRouter } from 'vue-router'
-import { logout } from '@/api/login'
 import { getUserDetail } from '@/api/user'
-import { ElMessage } from 'element-plus'
-import { ref, reactive, watch } from 'vue'
+import { ref, reactive } from 'vue'
 import { Decrypt } from '@/utils/secret'
-import emitter from '@/utils/emitter'
 import SearchInput from '@/components/common/SearchInput.vue'
+import UserDropdown from '@/components/common/UserDropdown.vue'
 
 /* 路由管理 */
 const router = useRouter()
@@ -78,45 +61,10 @@ const getData = async () => {
   state.avatarUrl = data.profile.avatarUrl
 }
 
-watch(
-  isLogin,
-  async () => {
-    // 一旦登录状态改变，请求数据或不执行操作
-    if (isLogin.value) {
-      await getData()
-    }
-  },
-  { immediate: true },
-)
-
 /* 退出登录 */
 const isFullLoading = ref(false)
 
-const handleCommand = async (command: string) => {
-  if (command === 'logout') {
-    isFullLoading.value = true
-    const rst = await logout()
-    if (rst.data.code === 200) {
-      // 切换登录状态
-      isLogin.value = false
-      // 跳转到首页
-      router.push({ name: 'login' })
-      // 清除 localStorage
-      window.localStorage.clear()
-      ElMessage({
-        type: 'success',
-        message: '退出成功',
-        appendTo: document.body,
-      })
-    }
-    isFullLoading.value = false
-  }
-}
-
-/* 监听是否更新头部数据 */
-emitter.on('onRefreshGlobalHeader', async () => {
-  await getData()
-})
+getData()
 </script>
 
 <style scoped lang="scss">
@@ -167,18 +115,6 @@ emitter.on('onRefreshGlobalHeader', async () => {
       justify-content: flex-end;
       .avatar {
         cursor: pointer;
-      }
-      .name-wrap {
-        margin: 0 15px;
-      }
-    }
-    .el-dropdown-link {
-      cursor: pointer;
-      &:hover {
-        color: #fff;
-        i {
-          color: #fff;
-        }
       }
     }
     .user-info i {

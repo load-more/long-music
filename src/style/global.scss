@@ -116,6 +116,20 @@ body {
     }
   }
 
+  .el-popper.profile-dropdown {
+    background-color: #222225 !important;
+    border: none;
+    .el-dropdown-menu {
+      background-color: unset;
+    }
+    > span {
+      display: none;
+    }
+    i {
+      font-size: 16px;
+    }
+  }
+
   // current playlist drawer
   .el-overlay {
     // 设置遮罩层高度
