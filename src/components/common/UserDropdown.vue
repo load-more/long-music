@@ -2,7 +2,7 @@
   <el-dropdown
     trigger="click"
     @command="handleCommand"
-    popper-class="profile-dropdown"
+    popper-class="dropdown"
     class="name-wrap"
   >
     <span class="el-dropdown-link">
@@ -68,17 +68,11 @@ const handleCommand = async (command: string) => {
 
 <style scoped lang="scss">
 .el-dropdown-link {
+  @include hover-font;
   cursor: pointer;
-  &:hover {
-    color: #fff;
-    i {
-      color: #fff;
-    }
+  i {
+    font-size: 12px;
   }
-}
-i {
-  color: gray;
-  font-size: 12px;
 }
 .name-wrap {
   margin: 0 15px;

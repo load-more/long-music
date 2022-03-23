@@ -116,8 +116,8 @@ const isActive = computed(() => props.songInfo.id === currentSong.value.id)
 .music-list-item-wrap {
   .pc {
     display: flex;
-    background-color: rgb(206, 206, 206);
-    color: rgb(43, 43, 43);
+    background-color: $item-bg-color;
+    color: $font-color;
     font-size: 14px;
     padding: 10px 0;
     border-radius: 5px;
@@ -125,11 +125,10 @@ const isActive = computed(() => props.songInfo.id === currentSong.value.id)
     line-height: 20px;
     cursor: default;
     &:hover {
-      background-color: rgb(184, 184, 184);
+      background-color: $item-hover-bg-color;
     }
     .operation {
       width: 100px;
-      color: gray;
       span, i {
         display: inline-block;
         box-sizing: border-box;
@@ -137,30 +136,30 @@ const isActive = computed(() => props.songInfo.id === currentSong.value.id)
         text-align: center;
       }
       .icon-volume, .icon-close-volume {
-        color: red;
+        color: $current-play-icon-color;
       }
       .icon-like, .icon-download {
         cursor: pointer;
         &:hover {
-          color: white;
+          color: $font-active-color;
         }
       }
     }
     .title {
       .alias {
-        color: gray;
+        color: $font-inactive-color;
       }
     }
     .singer {
       .name:hover {
         cursor: pointer;
-        color: white;
+        color: $font-active-color;
       }
     }
     .album {
       span:hover {
         cursor: pointer;
-        color: white;
+        color: $font-active-color;
       }
     }
     .title, .singer, .album {
@@ -170,7 +169,6 @@ const isActive = computed(() => props.songInfo.id === currentSong.value.id)
     }
     .duration {
       width: 70px;
-      color: gray;
       text-align: center;
     }
     .title, .singer, .album {
@@ -183,8 +181,8 @@ const isActive = computed(() => props.songInfo.id === currentSong.value.id)
     .mobile {
       display: flex;
       align-items: center;
-      background-color: rgb(206, 206, 206);
-      color: rgb(43, 43, 43);
+      background-color: $item-bg-color;
+      color: $font-color;
       font-size: 14px;
       padding: 10px 0;
       border-radius: 5px;
@@ -192,12 +190,11 @@ const isActive = computed(() => props.songInfo.id === currentSong.value.id)
       line-height: 20px;
       cursor: default;
       &:hover {
-        background-color: rgb(184, 184, 184);
+        background-color: $item-hover-bg-color;
       }
       .operation {
         width: 40px;
         text-align: center;
-        color: gray;
         span, i {
           display: inline-block;
           box-sizing: border-box;
@@ -205,12 +202,12 @@ const isActive = computed(() => props.songInfo.id === currentSong.value.id)
           text-align: center;
         }
         .icon-volume, .icon-close-volume {
-          color: red;
+          color: $current-play-icon-color;
         }
         .icon-like, .icon-download {
           cursor: pointer;
           &:hover {
-            color: white;
+            color: $font-active-color;
           }
         }
       }
@@ -223,18 +220,18 @@ const isActive = computed(() => props.songInfo.id === currentSong.value.id)
         }
         .singer {
           font-size: 13px;
-          color: gray;
         }
       }
       .right {
         flex: 1;
         text-align: center;
-        color: gray;
       }
     }
   }
 }
 .active {
-  background-color: rgb(255, 166, 166);
+  > div {
+    background-color: $item-active-bg-color !important;
+  }
 }
 </style>

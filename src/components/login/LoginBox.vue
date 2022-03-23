@@ -26,9 +26,9 @@
       </el-tab-pane>
     </el-tabs>
     <span class="register" v-if="isLogin">
-      没有账号？<strong @click="isLogin=false">去注册</strong>
+      没有账号？<strong @click="handleClickRegister">去注册</strong>
     </span>
-    <span class="back" v-else @click="isLogin=true">
+    <span class="back" v-else @click="handleClickBack">
       <i class="iconfont icon-return"></i>
       返回
     </span>
@@ -44,7 +44,19 @@ import emitter from '@/utils/emitter'
 
 const isLoading = ref(false)
 const isLogin = ref(true)
-const currentTab = 'phone'
+const currentTab = ref('phone')
+const tabCache = ref('phone')
+
+const handleClickRegister = () => {
+  isLogin.value = false
+  tabCache.value = currentTab.value
+  currentTab.value = 'register'
+}
+const handleClickBack = () => {
+  isLogin.value = true
+  currentTab.value = tabCache.value
+}
+
 emitter.on('onToggleLoginLoading', (status) => {
   isLoading.value = status
 })
@@ -63,6 +75,17 @@ onUnmounted(() => {
   position: absolute;
   right: 200px;
   bottom: 100px;
+  z-index: 999;
+  :deep .el-button--primary {
+    --el-button-bg-color: #e9b50d !important;
+    --el-button-border-color: #e9b50d !important;
+    --el-button-hover-bg-color: #fabe00 !important;
+    --el-button-hover-border-color: #fabe00 !important;
+    --el-button-active-bg-color: #f1bc0d !important;
+    --el-button-active-border-color: #f1bc0d !important;
+    --el-button-disabled-bg-color: #ffe385 !important;
+    --el-button-disabled-border-color: #ffe385 !important;
+  }
   img {
     width: 100%;
     pointer-events: none;
@@ -84,30 +107,48 @@ onUnmounted(() => {
     cursor: pointer;
     text-decoration: underline;
     &:hover {
-      color: white;
+      color: #fff;
     }
   }
   .back {
     cursor: pointer;
     &:hover {
-      color: white;
+      color: #fff;
     }
   }
 }
 :deep .el-tabs {
   border-radius: 20px;
+  background-color: #fff;
   .el-tabs__header {
     border-radius: 20px;
+    background-color: transparent;
+    border: none;
   }
   .el-tabs__content {
     border-radius: 20px;
     height: 220px;
     padding: 32px;
-    background-color: #f4f5f7;
+    background-color: transparent;
   }
   .is-active {
     border-radius: 20px;
+    background-color: transparent !important;
+    color: #000 !important;
   }
+  .el-tabs__item {
+    transition: none;
+    border: none;
+    &:hover {
+      color: gray !important;
+    }
+  }
+}
+:deep .el-checkbox__inner {
+  border-color: #fabe00 !important;
+}
+:deep .el-checkbox__input.is-checked .el-checkbox__inner {
+  background-color: #fabe00 !important;
 }
 :deep .el-loading-mask {
   border-radius: 20px;

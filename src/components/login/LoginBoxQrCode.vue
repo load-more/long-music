@@ -124,6 +124,7 @@ displayQrCode()
 <style scoped lang="scss">
 .login-box-qr-code-wrap {
   text-align: center;
+  color: $font-color;
   .qrcode {
     width: 150px;
     height: 150px;
@@ -137,11 +138,15 @@ displayQrCode()
         font-size: 15px;
       }
     }
+    :deep .el-loading-mask {
+      border-radius: 0 !important;
+    }
   }
   .prompt {
     font-size: 20px;
     font-weight: bold;
-    padding-bottom: 15px;
+    padding-top: 15px;
+    color: #000;
   }
 }
 </style>

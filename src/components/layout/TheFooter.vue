@@ -101,13 +101,19 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import MusicProgressBar from '@/components/common/MusicProgressBar.vue'
 import useMainStore from '@/store/index'
 import { storeToRefs } from 'pinia'
 import MusicVolumeBar from '@/components/common/MusicVolumeBar.vue'
 import CurrentPlaylist from '@/components/common/CurrentPlaylist.vue'
 import emitter from '@/utils/emitter'
+import { initTheme } from '@/utils/theme'
+
+// 初始化主题颜色
+onMounted(() => {
+  initTheme()
+})
 
 const { currentSong, currentSongList, listenedSongSet } = storeToRefs(useMainStore())
 
@@ -279,7 +285,7 @@ emitter.on('onRemoveCurrentSong', () => {
   justify-content: space-between;
   align-items: center;
   height: 80px;
-  background-color: #000;
+  background-color: $footer-bg-color;
   position: relative;
   .overlay {
     display: none;
@@ -297,9 +303,14 @@ emitter.on('onRemoveCurrentSong', () => {
       margin: 0 10px;
       cursor: pointer;
       .image-holder {
-        transition: all 1s ease-in-out;
-        &:hover {
-          transform: rotateZ(360deg);
+        animation: rotate ease-in-out 5s infinite;
+        @keyframes rotate {
+          0% {
+            transform: rotateZ(0);
+          }
+          100% {
+            transform: rotateZ(360deg);
+          }
         }
       }
     }
@@ -309,7 +320,7 @@ emitter.on('onRemoveCurrentSong', () => {
       display: flex;
       flex-direction: column;
       justify-content: space-evenly;
-      color: #ddd;
+      color: $font-color;
       @media screen and (max-width: 768px) {
         // 由于 flex 元素会脱离文档流，使用 inherit 可以继承原来的宽度
         width: inherit;
@@ -334,35 +345,8 @@ emitter.on('onRemoveCurrentSong', () => {
         // 实现文字扫光效果
         width: 64px;
         position: relative;
-        color: #fff;
+        color: $font-color;
         overflow: hidden;
-        &:after {
-          width: 300%;
-          height: 100%;
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          background: -webkit-gradient(
-            linear,
-            left top,
-            right top,
-            color-stop(0, rgba(0, 0, 0, 0.7)),
-            color-stop(0.4, rgba(0, 0, 0, 0.7)),
-            color-stop(0.5, rgba(0, 0, 0, 0)),
-            color-stop(0.6, rgba(0, 0, 0, 0.7)),
-            color-stop(1, rgba(0, 0, 0, 0.7))
-          );
-          animation: slide ease-in-out 3s infinite;
-        }
-        @keyframes slide {
-          0% {
-            -webkit-transform: translateX(-66.666%);
-          }
-          100% {
-            -webkit-transform: translateX(0);
-          }
-        }
       }
       .singer {
         font-size: 14px;
@@ -375,9 +359,7 @@ emitter.on('onRemoveCurrentSong', () => {
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;
-        &:hover {
-          color: #fff;
-        }
+        @include hover-font;
       }
     }
   }
@@ -397,11 +379,8 @@ emitter.on('onRemoveCurrentSong', () => {
       align-items: center;
       i {
         font-size: 16px;
-        color: #ddd;
         cursor: pointer;
-        &:hover {
-          color: #fff;
-        }
+        @include hover-font;
       }
     }
     .progress-bar {
@@ -423,24 +402,22 @@ emitter.on('onRemoveCurrentSong', () => {
     justify-content: flex-end;
     i {
       font-size: 16px;
-      color: #ddd;
       margin-right: 20px;
       cursor: pointer;
-      &:hover {
-        color: #fff;
-      }
+      @include hover-font;
     }
   }
 }
 .disabled {
-  pointer-events: none;
   .overlay {
     display: block;
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: $footer-overlay-bg-color;
+    opacity: 0.4;
     position: absolute;
     width: 100%;
     height: 100%;
     z-index: 9999;
+    cursor: not-allowed;
   }
 }
 </style>

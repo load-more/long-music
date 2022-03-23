@@ -16,6 +16,7 @@ import UserProfileEditForm from '@/components/profile/UserProfileEditForm.vue'
 <style scoped lang="scss">
 .profile-edit-container {
   height: 100%;
+  color: $font-color;
   .scroll-bar {
     height: 100%;
   }

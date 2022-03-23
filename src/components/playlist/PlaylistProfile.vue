@@ -21,7 +21,7 @@
         <span class="create-time" v-if="state.createTime">创建时间：{{ createTime }}</span>
       </div>
       <div class="controls single-line-ellipsis">
-        <el-button type="primary" round>播放<i class="iconfont icon-play-circle"></i></el-button>
+        <el-button class="primary-btn" round>播放<i class="iconfont icon-play-circle"></i></el-button>
         <el-button round>收藏<i class="iconfont icon-collection"></i></el-button>
         <el-button round>分享<i class="iconfont icon-share"></i></el-button>
         <el-button round>下载<i class="iconfont icon-download"></i></el-button>
@@ -146,13 +146,14 @@ const toggleReadMore = () => {
   display: flex;
   margin-bottom: 20px;
   width: 100%;
+  color: $font-color;
   .image-wrap {
     .cover-image {
       width: 200px;
       height: 200px;
       border-radius: 10px;
       margin-right: 20px;
-      box-shadow: 2px 2px 10px black;
+      box-shadow: $image-box-shadow;
     }
   }
   .info {
@@ -171,8 +172,8 @@ const toggleReadMore = () => {
       font-weight: bold;
       .label {
         font-size: 13px;
-        color: red;
-        border: 1px solid red;
+        color: $title-label-color;
+        border: 1px solid $title-label-color;
         padding: 1px 2px;
         border-radius: 5px;
         margin-right: 10px;
@@ -180,45 +181,41 @@ const toggleReadMore = () => {
       .icon-edit {
         font-size: 28px;
         font-weight: normal;
-        color: gray;
         margin-left: 10px;
         cursor: pointer;
-        &:hover {
-          color: rgb(189, 189, 189);
-        }
+        @include hover-font;
       }
     }
     .creator {
       .name {
+        color: $creator-label-color;
         font-size: 15px;
-        color: blue;
         cursor: pointer;
         margin-right: 10px;
       }
       .create-time {
         font-size: 13px;
-        color: gray;
       }
     }
     .song-detail {
       font-size: 15px;
       .label {
+        color: $font-inactive-color;
         font-weight: 800;
       }
       .content {
-        color: gray;
+        color: $font-color;
       }
       .tags {
         padding-bottom: 10px;
         .content {
-          background-color: rgb(41, 192, 79);
+          background-color: $playlist-tag-color;
           padding: 1px 5px;
           margin-right: 5px;
           border-radius: 10px;
-          color: white;
           cursor: pointer;
           &:hover {
-            background-color: rgb(98, 226, 130);
+            background-color: $playlist-tag-hover-color;
           }
         }
       }

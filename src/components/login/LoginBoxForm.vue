@@ -89,7 +89,8 @@
     <el-form-item class="btn-button">
       <el-button
         :disabled="!isChecked"
-        type="primary" style="width: 100%" @click="onClickLogin"
+        type="primary"
+        style="width: 100%" @click="onClickLogin"
         >登录</el-button
       >
     </el-form-item>
@@ -362,8 +363,8 @@ const onClickCaptcha = () => {
 
 <style scoped lang="scss">
 .form {
-  ::v-deep .circular {
-      width: 20px;
+  :deep .circular {
+    width: 20px;
   }
   .password-eye {
     pointer-events: auto;
@@ -377,7 +378,7 @@ const onClickCaptcha = () => {
     height: 60px;
   }
   .agree-label {
-    color: rgb(170, 170, 170);
+    color: gray;
     a {
       color: red;
     }
@@ -398,6 +399,12 @@ const onClickCaptcha = () => {
       border-radius: 50%;
       margin-top: 2px;
     }
+  }
+  :deep .el-input__inner {
+    background-color: transparent;
+    border: 1px solid #ddd;
+    --el-input-placeholder-color: #ddd;
+    --el-input-text-color: gray;
   }
 }
 </style>

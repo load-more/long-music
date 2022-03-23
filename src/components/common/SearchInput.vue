@@ -33,7 +33,7 @@
             >
               <span>确定删除所有历史记录吗？</span>
               <template #footer>
-                <el-button type="primary" @click="handleClearHistory"
+                <el-button class="primary-btn" @click="handleClearHistory"
                 >确定</el-button>
                 <el-button @click="dialogVisible = false">取消</el-button>
               </template>
@@ -154,21 +154,15 @@ window.addEventListener('click', (event: MouseEvent) => {
     margin-left: 10px;
   }
   .icon-microphone {
-    color: #ddd;
+    @include hover-font;
     padding-left: 10px;
-    &:hover {
-      color: #fff;
-    }
   }
   .icon-microphone {
     font-size: 24px;
   }
   .icon-search {
     cursor: pointer;
-    color: rgb(75, 75, 75);
-    &:hover {
-      color: #000;
-    }
+    @include hover-font;
   }
   span {
     cursor: pointer;

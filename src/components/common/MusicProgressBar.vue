@@ -119,19 +119,19 @@ const handleDotMouseDown = (event: MouseEvent) => {
   width: 100%;
   .left-label, .right-label {
     font-size: 12px;
-    color: gray;
+    color: $font-inactive-color;
   }
   .bar-wrap {
     width: 400px;
     height: 3px;
     border-radius: 100px;
-    background-color: gray;
+    background-color: $bar-bg-color;
     display: flex;
     align-items: center;
     position: relative;
     margin: 0 10px;
     .bar {
-      background-color: red;
+      background-color: $bar-color;
       border-radius: 100px;
       border-top-right-radius: 0px;
       border-bottom-right-radius: 0px;
@@ -141,15 +141,14 @@ const handleDotMouseDown = (event: MouseEvent) => {
       width: 10px;
       height: 10px;
       border-radius: 50%;
-      background-color: red;
+      background-color: $bar-color;
       margin-left: -5px;
       display: none;
-      box-shadow: 0 0 15px white;
+      box-shadow: $bar-box-shadow;
     }
   }
   .bar-wrap:hover, .active {
     height: 5px;
-    box-shadow: 0 0 23px white;
     .dot {
       display: block;
     }

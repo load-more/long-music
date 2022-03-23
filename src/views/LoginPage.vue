@@ -14,9 +14,9 @@ import LoginBox from '@/components/login/LoginBox.vue'
 .login-container {
   width: 100%;
   height: 100%;
-  background-image: url('/loginBg.jpg');
-  background-size: cover;
   position: relative;
   overflow: hidden;
+  background-image: url('/loginBg.jpg');
+  background-size: cover;
 }
 </style>

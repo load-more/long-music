@@ -35,7 +35,7 @@
         <template #footer>
           <div class="footer-wrap">
             <span>选择合适的标签，最多可选 <strong>3</strong> 个</span>
-            <el-button type="primary" @click="handleSaveTags">完成</el-button>
+            <el-button class="primary-btn" @click="handleSaveTags">完成</el-button>
           </div>
         </template>
       </el-dialog>

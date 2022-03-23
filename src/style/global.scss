@@ -21,8 +21,9 @@ body {
     width: 30px !important;
     min-width: 0;
     padding: 10px 0;
-    background-color: #222225;
-    border-color: gray;
+    background-color: $popper-bg-color;
+    border: none;
+    box-shadow: $popper-box-shadow;
   }
   .el-popper__arrow {
     transform: translate(10px, 0) !important;
@@ -33,7 +34,8 @@ body {
     width: 400px !important;
     height: 450px;
     padding: 0;
-    background-color: #222225;
+    background-color: $search-bg-color;
+    color: $font-inactive-color;
     border: none;
     .search-board-wrap {
       padding: 20px;
@@ -47,25 +49,23 @@ body {
       i {
         font-size: 14px;
         cursor: pointer;
-        &:hover {
-          color: #ddd;
-        }
+        @include hover-font;
       }
       .search-history {
         .el-tag {
-          background-color: gray;
+          background-color: $search-tag-color;
+          color: $font-color;
           border: none;
-          color: #ddd;
           margin-right: 10px;
           margin-bottom: 10px;
           cursor: pointer;
           &:hover {
-            background-color: rgb(161, 161, 161);
+            background-color: $search-tag-hover-color;
           }
           i {
-            color: gray;
+            color: $font-inactive-color;
             &:hover {
-              color: red;
+              color: $font-active-color;
               background-color: unset;
             }
           }
@@ -85,7 +85,7 @@ body {
           border-radius: 10px;
           cursor: pointer;
           &:hover {
-            background-color: rgba(105, 105, 105, 0.3);
+            background-color: $item-hover-bg-color;
           }
           .right {
             display: flex;
@@ -94,7 +94,7 @@ body {
               display: flex;
               align-items: center;
               .word {
-                color: #ddd;
+                color: $font-color;
               }
               .score {
                 font-size: 12px;
@@ -108,7 +108,6 @@ body {
             }
             .content {
               font-size: 12px;
-              color: rgb(58, 58, 58);
             }
           }
         }
@@ -116,17 +115,23 @@ body {
     }
   }
 
-  .el-popper.profile-dropdown {
-    background-color: #222225 !important;
-    border: none;
+  .el-popper.dropdown {
+    background-color: $dropdown-bg-color !important;
+    border: none !important;
+    box-shadow: $dropdown-box-shadow !important;
     .el-dropdown-menu {
       background-color: unset;
     }
-    > span {
-      display: none;
-    }
     i {
       font-size: 16px;
+    }
+  }
+
+  .el-popper {
+    background-color: $bg-color-3 !important;
+    border: none !important;
+    .el-popper__arrow {
+      display: none !important;
     }
   }
 
@@ -136,11 +141,11 @@ body {
     bottom: 80px;
     height: auto;
     .list-drawer {
-      background-color: #222225;
-      color: #ddd;
+      background-color: $popper-bg-color;
       .title-wrap {
         display: flex;
         flex-direction: column;
+        color: $font-inactive-color;
         .top {
           font-size: 18px;
           font-weight: bold;
@@ -152,11 +157,9 @@ body {
           margin: 20px 0;
           .song-count {
             font-size: 13px;
-            color: #616161;
           }
           .clear-all {
             font-size: 14px;
-            color: rgb(95, 77, 77);
             cursor: pointer;
           }
         }
@@ -179,28 +182,28 @@ body {
           padding: 10px 0;
           margin-right: 20px;
           border-radius: 5px;
-          background-color: #2e2e30;
+          background-color: $item-bg-color;
           margin-bottom: 10px;
           display: flex;
           font-size: 12px;
           line-height: 20px;
+          color: $font-inactive-color;
           .title {
+            color: $font-color;
             padding: 0 5px;
             flex: 3;
           }
           .singer {
             flex: 2;
-            color: gray;
           }
           .duration {
             width: 40px;
-            color: gray;
           }
         }
         .active {
-          background-color: #644a4a;
+          background-color: $item-active-bg-color;
           .title, .singer {
-            color: rgb(219, 109, 109);
+            color: $font-active-color;
           }
         }
       }
@@ -210,6 +213,59 @@ body {
   // clear search history dialog
   .clear-search-history-dialog {
     border-radius: 10px;
-    background-color: #222225;
+    background-color: $popper-bg-color;
   }
+
+  .el-tabs__nav-wrap::after {
+    height: 0;
+  }
+
+  .el-dropdown__popper {
+    --el-dropdown-menuItem-hover-fill: var(--bg-color-4);
+    --el-dropdown-menuItem-hover-color: #fff;
+  }
+
+  .el-select-dropdown__item.hover, .el-select-dropdown__item:hover {
+    background-color: var(--bg-color-4);
+  }
+}
+
+$themeDict: (
+  green: #15201a,
+  yellow: #563200,
+  red: #6f0f07,
+  blue: #01151c,
+  black: #000000,
+  pink: #a63c78,
+);
+@each $key, $value in $themeDict {
+  .#{$key}-gradient::after {
+    width: 300%;
+    height: 100%;
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: linear-gradient(
+      to right,
+      rgba($value, 0.6) 0%,
+      rgba($value, 0.6) 40%,
+      rgba($value, 0) 50%,
+      rgba($value, 0.6) 60%,
+      rgba($value, 0.6) 100%
+    );
+    animation: slide ease-in-out 3s infinite;
+    @keyframes slide {
+      0% {
+        -webkit-transform: translateX(-66.666%);
+      }
+      100% {
+        -webkit-transform: translateX(0);
+      }
+    }
+  }
+}
+
+.primary-btn {
+  background-color: $fg-color-2 !important;
 }

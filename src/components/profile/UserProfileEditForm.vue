@@ -49,7 +49,7 @@
       </div>
       <div class="buttons">
         <el-button
-          type="primary"
+          class="primary-btn"
           :disabled="isFormChange"
           @click="onSave"
           v-loading.fullscreen.lock="isLoading"
@@ -107,7 +107,7 @@
       </div>
       <div class="buttons">
         <el-button
-          type="primary"
+          class="primary-btn"
           :disabled="isFormChange"
           @click="onSave"
           v-loading.fullscreen.lock="isLoading"

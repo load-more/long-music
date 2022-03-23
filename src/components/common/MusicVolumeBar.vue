@@ -85,25 +85,26 @@ const handleDotMousedown = (event: MouseEvent) => {
   flex-direction: column;
   .percent {
     font-size: 12px;
+    color: $font-inactive-color;
   }
 
   .bar-wrap {
     width: 5px;
     height: 100px;
     border-radius: 3px;
-    background-color: #ddd;
+    background-color: $bar-bg-color;
     display: flex;
     flex-direction: column-reverse;
     &:hover {
-      box-shadow: 0 0 5px gray;
+      box-shadow: $bar-box-shadow;
       .dot {
-        box-shadow: 0 0 5px red;
+        box-shadow: $bar-box-shadow;
       }
     }
     .bar {
       width: 5px;
       border-radius: 3px;
-      background-color: gray;
+      background-color: $bar-color;
       min-height: 0;
       max-height: 100px;
     }
@@ -112,7 +113,7 @@ const handleDotMousedown = (event: MouseEvent) => {
       width: 10px;
       height: 10px;
       border-radius: 50%;
-      background-color: red;
+      background-color: $bar-color;
       margin-left: -2.5px;
       margin-bottom: -5px;
     }

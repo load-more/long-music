@@ -28,7 +28,7 @@
       </div>
     </div>
     <el-button
-      type="primary"
+      class="primary-btn"
       :disabled="isFormChange"
       @click="handleUpdatePlaylist"
       v-loading.fullscreen.lock="isLoading"
@@ -113,17 +113,10 @@ const updatePlaylistCoverApi = (file: File, imgSize: number) => {
 .playlist-edit-form-wrap {
   .content {
     display: flex;
-    .form {
-      width: 500px;
-      margin-right: 200px;
-    }
-    .cover-wrap {
-      display: flex;
-      flex-direction: column;
-      .cover {
-        width: 200px;
-        height: 200px;
-      }
+    justify-content: space-between;
+    .updater-wrap {
+      width: 200px;
+      padding: 0 20px;
     }
   }
   @media screen and (max-width: 768px) {

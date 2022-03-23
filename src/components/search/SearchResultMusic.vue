@@ -103,17 +103,17 @@ const handleCurrentChange = () => {
 .search-result-music-wrap {
   .music-count {
     font-size: 12px;
-    color: gray;
+    color: $font-inactive-color;
     display: inline-block;
     margin-bottom: 10px;
   }
   .topbar {
     display: flex;
     font-size: 14px;
-    background-color: #adadad;
+    background-color: $item-bg-color;
     border-radius: 5px;
     > *:hover {
-      background-color: gray;
+      background-color: $item-hover-bg-color;
       border-radius: 5px;
     }
     > * span {

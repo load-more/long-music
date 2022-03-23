@@ -106,6 +106,7 @@ onUnmounted(() => {
 
 <style scoped lang="scss">
 .playlist-music-list-wrap {
+  color: $font-color;
   :deep .el-tabs__header {
     margin: 0;
   }
@@ -115,10 +116,10 @@ onUnmounted(() => {
   .topbar {
     display: flex;
     font-size: 14px;
-    background-color: #adadad;
+    background-color: $item-bg-color;
     border-radius: 5px;
     > *:hover {
-      background-color: gray;
+      background-color: $item-hover-bg-color;
       border-radius: 5px;
     }
     > * span {
@@ -137,27 +138,6 @@ onUnmounted(() => {
     .duration {
       width: 70px;
       text-align: center;
-    }
-  }
-  .list {
-    width: 100%;
-    position: relative;
-    overflow: hidden;
-    .infinite-list {
-      position: absolute;
-      left: 0;
-      top: 0;
-      right: -17px;
-      bottom: 0;
-      overflow-y: scroll;
-      height: 400px;
-      display: block;
-      list-style-type: none;
-      margin-block-start: 0;
-      margin-block-end: 0;
-      margin-inline-start: 0;
-      margin-inline-end: 0;
-      padding-inline-start: 0;
     }
   }
 }

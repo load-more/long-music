@@ -1,0 +1,124 @@
+// 自定义全局样式变量
+$bg-color-1: var(--bg-color-1);
+$bg-color-2: var(--bg-color-2);
+$bg-color-3: var(--bg-color-3);
+$bg-color-4: var(--bg-color-4);
+$fg-color-1: var(--fg-color-1);
+$fg-color-2: var(--fg-color-2);
+$fg-color-3: var(--fg-color-3);
+
+/* 
+  注意：由于 css 变量具有某些限制，暂时无法在如下的属性中使用：
+    - rgba()
+*/
+
+// font
+$font-color: #ddd;
+$font-inactive-color: $fg-color-3;
+$font-active-color: #fff;
+
+// header
+$header-bg-color: $bg-color-1;
+
+// sidebar
+$sidebar-bg-color: $bg-color-2;
+
+// main
+$main-bg-color: $bg-color-2;
+
+// footer
+$footer-bg-color: $bg-color-1;
+$footer-overlay-bg-color: $bg-color-4;
+
+// bar
+$bar-color: $fg-color-1;
+$bar-bg-color: $bg-color-4;
+$bar-box-shadow: 0px 0px 3px 0px $bar-color;
+
+// popper
+$popper-bg-color: $bg-color-2;
+$popper-box-shadow: 0px 0px 10px 0px $bg-color-1;
+
+// item
+$item-bg-color: $bg-color-3;
+$item-hover-bg-color: $bg-color-1;
+$item-active-bg-color: $bg-color-1;
+
+// home
+$carousel-button-color: $fg-color-1;
+$play-icon-color: $bg-color-2;
+$play-icon-bg-color: $fg-color-3;
+
+// playlist
+$image-box-shadow: 3px 3px 15px 0px $bg-color-1;
+$title-label-color: $fg-color-1;
+$creator-label-color: $fg-color-2;
+$playlist-tag-color: $fg-color-2;
+$playlist-tag-hover-color: $fg-color-3;
+$current-play-icon-color: $fg-color-3;
+
+// search
+$search-bg-color: $bg-color-3;
+$search-tag-color: $fg-color-2;
+$search-tag-hover-color: $fg-color-3;
+$search-keyword-color: $fg-color-3;
+
+// dropdown
+$dropdown-bg-color: $bg-color-3;
+$dropdown-box-shadow: 0px 0px 10px 0px $bg-color-1;
+
+// profile
+$level-label-color: $fg-color-1;
+$gender-icon-color: $fg-color-3;
+
+// login box
+$login-box-bg-color: $bg-color-2;
+$login-page-bg-color: $fg-color-1;
+
+// 覆盖 element-plus 样式变量
+@forward 'element-plus/theme-chalk/src/common/var.scss' with (
+  // bug: 无法解析 var()
+  // $colors: (
+  //   'primary': (
+  //     'base': unquote($fg-color-1),
+  //   ),
+  // ),
+  $text-color: (
+    'primary': $font-color,
+    'regular': $font-color,
+  ),
+  $input: (
+    'bg-color': $bg-color-3,
+    'border': none,
+    'placeholder-color': $font-inactive-color,
+    'text-color': $font-color,
+  ),
+  $menu: (
+    'active-color': $font-active-color,
+    'text-color': $font-color,
+    'hover-bg-color': $item-active-bg-color,
+  ),
+  $dialog: (
+    'bg-color': $bg-color-3,
+  ),
+  $button: (
+    'border-color': $bg-color-4,
+    'bg-color': $bg-color-2,
+    'text-color': $font-color,
+    'disabled-text-color': $font-inactive-color,
+    'disabled-bg-color': $bg-color-1,
+    'disabled-border-color': $bg-color-1,
+    'hover-text-color': '#{$font-active-color} !important',
+    'hover-bg-color': $bg-color-3,
+    'hover-border-color': $bg-color-4,
+    'active-text-color': $font-active-color,
+    'active-border-color': $bg-color-1,
+    'active-bg-color': $bg-color-3,
+  ),
+);
+@mixin hover-font {
+  color: $font-color;
+  &:hover {
+    color: $font-active-color;
+  }
+}

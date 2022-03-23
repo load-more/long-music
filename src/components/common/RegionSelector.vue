@@ -1,5 +1,10 @@
 <template>
-  <el-select class="select" v-model="provinceRef" @change="onProvinceChange">
+  <el-select
+    class="select"
+    v-model="provinceRef"
+    @change="onProvinceChange"
+    popper-class="select-popper"
+  >
     <el-option
       v-for="item in region"
       :key="item"
@@ -10,6 +15,7 @@
   <el-select
     class="select"
     v-model="cityRef"
+    popper-class="select-popper"
     :disabled="
       region.find((item) => item.code === province)?.children.length === 0
     "

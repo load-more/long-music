@@ -13,7 +13,7 @@
       </div>
     </div>
     <div id="footer-container">
-      <TheFooter />
+      <TheFooter v-if="isShowFooter" />
     </div>
   </div>
 </template>
@@ -22,6 +22,17 @@
 import TheHeader from '@/components/layout/TheHeader.vue'
 import TheSidebar from '@/components/layout/TheSidebar.vue'
 import TheFooter from '@/components/layout/TheFooter.vue'
+import emitter from '@/utils/emitter'
+import { ref, nextTick } from 'vue'
+
+const isShowFooter = ref(true)
+emitter.on('onRemoveCurrentSong', () => {
+  // 重新加载 footer 组件
+  isShowFooter.value = false
+  nextTick(() => {
+    isShowFooter.value = true
+  })
+})
 </script>
 
 <style scoped lang="scss">
@@ -60,6 +71,7 @@ $sideWidth: 200px;
     #main-container {
       width: 100%;
       height: 100%;
+      background-color: $main-bg-color;
     }
     #sidebar-container {
       width: $sideWidth;

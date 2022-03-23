@@ -51,12 +51,12 @@ defineProps<{
   display: flex;
   height: 90px;
   border-radius: 10px;
-  border: 1px solid rgb(185, 185, 185);
   margin-bottom: 10px;
+  background-color: $item-bg-color;
+  color: $font-color;
   cursor: pointer;
   &:hover {
-    background-color: rgb(199, 199, 199);
-    box-shadow: 0 2px 1px rgb(145, 145, 145);
+    background-color: $item-hover-bg-color;
   }
   .left {
     box-sizing: border-box;
@@ -80,16 +80,13 @@ defineProps<{
       text-overflow: ellipsis;
       white-space: nowrap;
       cursor: pointer;
-      &:hover {
-        color: rgb(68, 68, 68);
-      }
+      @include hover-font;
     }
   }
   .right {
     width: 50%;
     display: flex;
     align-items: center;
-    color: rgb(68, 68, 68);
     > div {
       flex: 1;
       margin-right: 10px;
@@ -101,9 +98,7 @@ defineProps<{
     }
     .creator .content {
       cursor: pointer;
-      &:hover {
-        color: gray;
-      }
+      @include hover-font;
     }
   }
   @media screen and (max-width: 768px)  {

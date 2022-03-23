@@ -59,9 +59,11 @@
       </el-input>
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" style="width: 100%" @click="onClickRegister"
-        >注册</el-button
-      >
+      <el-button
+        style="width: 100%"
+        @click="onClickRegister"
+        type="primary"
+      >注册</el-button>
     </el-form-item>
   </el-form>
 </template>

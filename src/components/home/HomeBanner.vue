@@ -141,7 +141,7 @@ const handleBannerClick = async (id: number) => {
       .label {
         padding: 5px 10px;
         position: absolute;
-        color: white;
+        color: #fff;
         font-size: 14px;
         border-top-left-radius: 10px;
         border-bottom-right-radius: 10px;
@@ -167,7 +167,7 @@ const handleBannerClick = async (id: number) => {
       .label {
         padding: 5px 10px;
         position: absolute;
-        color: white;
+        color: #fff;
         font-size: 14px;
         border-top-left-radius: 10px;
         border-bottom-right-radius: 10px;
@@ -184,7 +184,7 @@ const handleBannerClick = async (id: number) => {
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background-color: gray;
+    background-color: $carousel-button-color;
   }
 }
 </style>

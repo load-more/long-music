@@ -37,7 +37,7 @@ onBeforeMount(() => {
 .search-recommend-wrap {
   .label {
     font-size: 12px;
-    color: gray;
+    color: $font-inactive-color;
   }
   .content {
     margin-top: 10px;

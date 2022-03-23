@@ -27,7 +27,7 @@
       </div>
       <div class="tools hidden-xs-only">
         <i class="iconfont icon-Message"></i>
-        <i class="iconfont icon-theme"></i>
+        <ThemeDropdown />
         <i class="iconfont icon-setting"></i>
       </div>
     </el-col>
@@ -43,6 +43,7 @@ import { ref, reactive } from 'vue'
 import { Decrypt } from '@/utils/secret'
 import SearchInput from '@/components/common/SearchInput.vue'
 import UserDropdown from '@/components/common/UserDropdown.vue'
+import ThemeDropdown from '@/components/common/ThemeDropdown.vue'
 
 /* 路由管理 */
 const router = useRouter()
@@ -70,7 +71,7 @@ getData()
 <style scoped lang="scss">
 .container {
   height: 70px;
-  background-color: #000;
+  background-color: $header-bg-color;
   display: flex;
   justify-content: space-between;
   .left {
@@ -95,11 +96,8 @@ getData()
     display: flex;
     align-items: center;
     .icon-left-arrow, .icon-right-arrow {
-      color: #ddd;
+      @include hover-font;
       padding-left: 10px;
-      &:hover {
-        color: #fff;
-      }
     }
     span {
       cursor: pointer;
@@ -110,25 +108,19 @@ getData()
     align-items: center;
     justify-content: flex-end;
     .user-info {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
+      @extend .right;
       .avatar {
         cursor: pointer;
       }
     }
     .user-info i {
-      color: gray;
       font-size: 12px;
     }
     .tools i {
       font-size: 18px;
       margin-right: 15px;
       cursor: pointer;
-      color: #ddd;
-      &:hover {
-        color: #fff;
-      }
+      @include hover-font;
     }
   }
 }

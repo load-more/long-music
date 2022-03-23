@@ -7,7 +7,7 @@
       <div class="top-profile">
         <div class="info">
           <span class="name">{{ state.nickname }}</span>
-          <el-tooltip placement="top">
+          <el-tooltip placement="top" :show-arrow="false" popper-class="level-popper">
             <template #content>
               当前等级：Lv.{{ state.level }}<br />
               距离下一等级还需：<br />
@@ -153,13 +153,14 @@ const region = computed(() => {
 <style scoped lang="scss">
 .profile-wrap {
   display: flex;
+  color: $font-color;
   .left {
     width: 220px;
     .avatar {
       width: 200px;
       height: 200px;
       border-radius: 10px;
-      box-shadow: 2px 2px 10px black;
+      box-shadow: $image-box-shadow;
     }
   }
   .right {
@@ -181,8 +182,7 @@ const region = computed(() => {
         }
         .level {
           font-size: 12px;
-          border: 1px solid black;
-          background-color: #fff;
+          background-color: $level-label-color;
           padding: 1px 5px;
           border-radius: 20px;
           cursor: pointer;
@@ -191,11 +191,8 @@ const region = computed(() => {
         .gender {
           font-weight: bold;
           font-size: 12px;
-          .icon-male {
-            color: blue;
-          }
-          .icon-female {
-            color: red;
+          .icon-male, .icon-female {
+            color: $gender-icon-color;
           }
         }
       }
@@ -214,22 +211,22 @@ const region = computed(() => {
         }
         .label {
           font-size: 14px;
-          color: gray;
+          color: $font-inactive-color;
         }
       }
       .mid-item {
-        border-left: 1px solid gray;
-        border-right: 1px solid gray;
+        border-left: 1px solid $font-inactive-color;
+        border-right: 1px solid $font-inactive-color;
       }
     }
     .bottom-profile {
       margin-top: 30px;
       .label {
+        color: $font-inactive-color;
         font-size: 15px;
       }
       .content {
         font-size: 14px;
-        color: gray;
       }
       .region {
         margin: 10px 0;

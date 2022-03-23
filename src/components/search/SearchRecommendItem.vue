@@ -76,7 +76,7 @@ const desc = computed(() => {
   padding: 10px;
   border-radius: 5px;
   margin-right: 10px;
-  background-color: #ddd;
+  background-color: $item-bg-color;
   display: flex;
   align-items: center;
   .image {
@@ -90,14 +90,13 @@ const desc = computed(() => {
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    color: $font-color;
     .title {
       font-size: 14px;
-      color: gray;
       margin-bottom: 5px;
     }
     .desc {
       font-size: 12px;
-      color: gray;
     }
   }
 }

@@ -21,6 +21,7 @@ import RcmdPlaylist from '@/components/home/RcmdPlaylist.vue'
 <style scoped lang="scss">
 .home-container {
   height: 100%;
+  color: $font-color;
   .scroll-bar {
     height: 100%;
   }

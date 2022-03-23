@@ -44,6 +44,7 @@ watch(() => route.query, () => {
 <style scoped lang="scss">
 .search-container {
   height: 100%;
+  color: $font-color;
   .label {
     display: inline-block;
     margin-top: 20px;
@@ -54,7 +55,7 @@ watch(() => route.query, () => {
     .keyword {
       font-size: 20px;
       font-weight: bold;
-      color: rgb(185, 17, 17);
+      color: $search-keyword-color;
     }
   }
   .scroll-bar {

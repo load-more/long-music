@@ -16,6 +16,7 @@ import PlaylistEditForm from '@/components/playlist/PlaylistEditForm.vue'
 <style scoped lang="scss">
 .playlist-edit-container {
   height: 100%;
+  color: $font-color;
   .scroll-bar {
     height: 100%;
   }

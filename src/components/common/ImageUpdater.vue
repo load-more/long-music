@@ -30,7 +30,7 @@
           <el-button
             v-loading.fullscreen.lock="isLoading"
             @click="handleUpload"
-            type="primary"
+            class="primary-btn"
           >上传</el-button>
         </template>
       </el-dialog>
@@ -196,11 +196,12 @@ const handleUpload = () => {
       }
     }
     .dialog-title {
-      font-family: 'yahei';
+      color: $font-color;
     }
     .img-wrap {
       display: flex;
       justify-content: space-evenly;
+      color: $font-color;
       .img-src {
         width: 220px;
         height: 220px;
@@ -213,7 +214,6 @@ const handleUpload = () => {
           max-width: 100%;
         }
         span {
-          font-family: 'yahei';
           display: inline-block;
           margin-bottom: 10px;
         }
@@ -227,7 +227,6 @@ const handleUpload = () => {
           overflow: hidden;
         }
         span {
-          font-family: 'yahei';
           display: inline-block;
           margin-bottom: 10px;
         }

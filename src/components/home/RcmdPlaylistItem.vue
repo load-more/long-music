@@ -1,16 +1,18 @@
 <template>
   <div class="rcmd-playlist-item-wrap">
     <div class="image-wrap">
-      <el-image
+      <div
         class="image"
-        :src="info.picUrl"
+        :style="{'background-image': `url(${info.picUrl})`}"
         @click="enterPlaylist"
-      ></el-image>
+      ></div>
       <div class="play-icon">
         <i class="iconfont icon-play-circle"></i>
       </div>
     </div>
-    <div class="title" @click="enterPlaylist">{{ info.name }}</div>
+    <div class="title">
+      <span @click="enterPlaylist">{{ info.name }}</span>
+    </div>
     <div class="play-count">
       <i class="iconfont icon-play"></i>
       <span>{{ formatPlayCount(info.playCount) }}</span>
@@ -51,9 +53,16 @@ const enterPlaylist = () => {
     width: 33.3%;
   }
   .image-wrap {
+    margin-right: 20px;
     position: relative;
     .image {
-      margin-right: 20px;
+      height: 0;
+      padding-top: 100%;
+      background-position: center center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      -webkit-background-size: cover;
+      -moz-background-size: cover;
       border-radius: 10px;
       cursor: pointer;
       // + 同级控制，~ 子对父控制，不加符号 父对子控制
@@ -62,12 +71,12 @@ const enterPlaylist = () => {
       }
     }
     .play-icon {
-      background-color: rgba(255, 255, 255, 0.6);
+      background-color: rgba($play-icon-bg-color, 0.6);
       width: 26px;
       height: 26px;
       border-radius: 50%;
       position: absolute;
-      right: 30px;
+      right: 10px;
       bottom: 10px;
       display: flex;
       justify-content: center;
@@ -76,11 +85,11 @@ const enterPlaylist = () => {
       transition: all 0.2s ease-in-out;
       i {
         font-size: 30px;
-        color: rgb(255, 47, 47);
+        color: $play-icon-color;
         vertical-align: middle;
       }
       &:hover {
-        background-color: rgba(255, 255, 255, 0.9);
+        background-color: rgba($play-icon-bg-color, 0.9);
         opacity: 1;
         cursor: pointer;
       }
@@ -92,9 +101,7 @@ const enterPlaylist = () => {
     margin-top: 10px;
     margin-bottom: 15px;
     width: 100%;
-    color: gray;
     font-size: 14px;
-    cursor: pointer;
     line-height: 20px; // 一行文字高度
     height: 40px; // 固定为两行文字高度
     // 两行内容省略
@@ -103,8 +110,9 @@ const enterPlaylist = () => {
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
-    &:hover {
-      color: rgb(173, 173, 173);
+    span {
+      @include hover-font;
+      cursor: pointer;
     }
   }
   .play-count {
