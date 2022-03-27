@@ -7,7 +7,6 @@ export default {
     '--fg-color-1': '#6c9a3d',
     '--fg-color-2': '#78ac44',
     '--fg-color-3': '#85ba50',
-    '--el-color-primary': '#6c9a3d',
   },
   yellow: {
     '--bg-color-1': '#563200',
@@ -17,7 +16,6 @@ export default {
     '--fg-color-1': '#ff9a08',
     '--fg-color-2': '#ffa422',
     '--fg-color-3': '#ffaf3c',
-    '--el-color-primary': '#ff9a08',
   },
   red: {
     '--bg-color-1': '#6f0f07',
@@ -27,7 +25,6 @@ export default {
     '--fg-color-1': '#cf1b0c',
     '--fg-color-2': '#e71e0e',
     '--fg-color-3': '#f12d1d',
-    '--el-color-primary': '#cf1b0c',
   },
   blue: {
     '--bg-color-1': '#01151c',
@@ -37,7 +34,6 @@ export default {
     '--fg-color-1': '#06607d',
     '--fg-color-2': '#077296',
     '--fg-color-3': '#0985ae',
-    '--el-color-primary': '#06607d',
   },
   black: {
     '--bg-color-1': '#000000',
@@ -47,7 +43,6 @@ export default {
     '--fg-color-1': '#292b38',
     '--fg-color-2': '#343746',
     '--fg-color-3': '#3e4255',
-    '--el-color-primary': '#292b38',
   },
   pink: {
     '--bg-color-1': '#a63c78',
@@ -57,6 +52,5 @@ export default {
     '--fg-color-1': '#cf7aaa',
     '--fg-color-2': '#d68cb6',
     '--fg-color-3': '#dc9fc2',
-    '--el-color-primary': '#cf7aaa',
   },
 }

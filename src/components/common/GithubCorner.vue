@@ -4,7 +4,8 @@
     class="github-corner" aria-label="View source on GitHub"
   >
     <svg
-      width="80" height="80" viewBox="0 0 250 250" style="fill:#9b791c; color:#ffd1d3;
+      width="80" height="80"
+      viewBox="0 0 250 250" style="fill:rgba(0, 0, 0, 0.5); color:#fff;
       position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"
     >
       <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
@@ -38,13 +39,30 @@
 }
 @keyframes octocat-wave {
   0%, 100% {
-    transform:rotate(0);
+    transform: rotate(0);
   }
   20%, 60% {
     transform: rotate(-25deg);
   }
   40%, 80% {
     transform: rotate(10deg);
+  }
+}
+.github-corner:hover .octo-body {
+  animation: none;
+}
+.octo-body, .octo-arm {
+  animation: octocat-move 2s ease-in-out infinite;
+}
+@keyframes octocat-move {
+  0%, 20% {
+    transform: translate(0, 0);
+  }
+  4%, 12% {
+    transform: translate(6px, -6px);
+  }
+  8%, 16% {
+    transform: translate(-6px, 6px);
   }
 }
 @media (max-width:500px) {

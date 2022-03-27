@@ -2,7 +2,7 @@
   <el-row class="container" v-loading.fullscreen.lock="isFullLoading">
     <el-col :sm="7" :xs="0" class="left">
       <div>
-        <img src="@/assets/logo.png" alt="logo" @click="router.push({ name: 'home' })" />
+        <img src="@/assets/img/logo.png" alt="logo" @click="router.push({ name: 'home' })" />
       </div>
     </el-col>
     <el-col :sm="9" :xs="12" class="mid">

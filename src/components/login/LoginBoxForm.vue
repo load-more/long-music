@@ -378,7 +378,7 @@ const onClickCaptcha = () => {
     height: 60px;
   }
   .agree-label {
-    color: gray;
+    color: rgba(255, 255, 255, 0.6);
     a {
       color: red;
     }
@@ -402,9 +402,9 @@ const onClickCaptcha = () => {
   }
   :deep .el-input__inner {
     background-color: transparent;
-    border: 1px solid #ddd;
-    --el-input-placeholder-color: #ddd;
-    --el-input-text-color: gray;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    --el-input-placeholder-color: rgba(255, 255, 255, 0.3);
+    --el-input-text-color: #ddd;
   }
 }
 </style>

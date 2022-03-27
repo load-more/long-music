@@ -78,11 +78,11 @@ $login-page-bg-color: $fg-color-1;
 // 覆盖 element-plus 样式变量
 @forward 'element-plus/theme-chalk/src/common/var.scss' with (
   // bug: 无法解析 var()
-  // $colors: (
-  //   'primary': (
-  //     'base': unquote($fg-color-1),
-  //   ),
-  // ),
+  $colors: (
+    'primary': (
+      'base': #fff,
+    ),
+  ),
   $text-color: (
     'primary': $font-color,
     'regular': $font-color,

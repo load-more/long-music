@@ -1,6 +1,5 @@
 <template>
   <div class="login-box-wrap">
-    <img src="@/assets/logo.png">
     <el-tabs
       v-model="currentTab"
       type="border-card"
@@ -24,14 +23,14 @@
       <el-tab-pane label="注册" v-else name="register">
         <RegisterForm />
       </el-tab-pane>
+      <span class="register" v-if="isLogin">
+        没有账号？<strong @click="handleClickRegister">去注册</strong>
+      </span>
+      <span class="back" v-else @click="handleClickBack">
+        <i class="iconfont icon-return"></i>
+        返回
+      </span>
     </el-tabs>
-    <span class="register" v-if="isLogin">
-      没有账号？<strong @click="handleClickRegister">去注册</strong>
-    </span>
-    <span class="back" v-else @click="handleClickBack">
-      <i class="iconfont icon-return"></i>
-      返回
-    </span>
   </div>
 </template>
 
@@ -71,37 +70,28 @@ onUnmounted(() => {
 
 <style scoped lang="scss">
 .login-box-wrap {
-  width: 420px;
-  position: absolute;
-  right: 200px;
-  bottom: 100px;
-  z-index: 999;
+  height: 100%;
+  --el-text-color-secondary: rgb(170, 170, 170);
   :deep .el-button--primary {
-    --el-button-bg-color: #e9b50d !important;
-    --el-button-border-color: #e9b50d !important;
-    --el-button-hover-bg-color: #fabe00 !important;
-    --el-button-hover-border-color: #fabe00 !important;
-    --el-button-active-bg-color: #f1bc0d !important;
-    --el-button-active-border-color: #f1bc0d !important;
-    --el-button-disabled-bg-color: #ffe385 !important;
-    --el-button-disabled-border-color: #ffe385 !important;
-  }
-  img {
-    width: 100%;
-    pointer-events: none;
+    --el-button-bg-color: rgba(255, 255, 255, 0.1) !important;
+    --el-button-border-color: rgba(255, 255, 255, 0.1) !important;
+    --el-button-hover-bg-color: rgba(255, 255, 255, 0.2) !important;
+    --el-button-hover-border-color: rgba(255, 255, 255, 0.2) !important;
+    --el-button-active-bg-color: rgba(255, 255, 255, 0.3) !important;
+    --el-button-active-border-color: rgba(255, 255, 255, 0.3) !important;
+    --el-button-disabled-bg-color: rgba(255, 255, 255, 0.3) !important;
+    --el-button-disabled-border-color: rgba(255, 255, 255, 0.3) !important;
   }
   @media screen and (max-width: 768px) {
     width: 320px;
-    right: 50%;
-    bottom: 50%;
-    transform: translate(50%, 50%);
   }
   .register, .back {
     display: inline-block;
-    color: gray;
+    color: $font-color;
     font-size: 14px;
-    margin-top: 10px;
-    margin-left: 20px;
+    position: absolute;
+    right: 32px;
+    bottom: 32px;
   }
   .register > strong {
     cursor: pointer;
@@ -118,37 +108,67 @@ onUnmounted(() => {
   }
 }
 :deep .el-tabs {
+  width: 100%;
   border-radius: 20px;
-  background-color: #fff;
+  background-color: transparent;
+  border: none;
+  overflow: hidden;
+  position: absolute;
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: -1;
+    background-image: url(./rainBg.png);
+    background-position: center top;
+    background-size: cover;
+    background-attachment: fixed;
+    -webkit-filter: blur(20px);
+    -moz-filter: blur(20px);
+    -ms-filter: blur(20px);
+    -o-filter: blur(20px);
+    filter: blur(4px);
+    margin: -20px;
+  }
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(#000, 0.25);
+  }
   .el-tabs__header {
     border-radius: 20px;
     background-color: transparent;
     border: none;
   }
   .el-tabs__content {
+    position: relative;
+    box-sizing: border-box;
     border-radius: 20px;
-    height: 220px;
+    height: 335px;
     padding: 32px;
     background-color: transparent;
   }
   .is-active {
     border-radius: 20px;
     background-color: transparent !important;
-    color: #000 !important;
   }
   .el-tabs__item {
     transition: none;
     border: none;
-    &:hover {
-      color: gray !important;
-    }
   }
 }
 :deep .el-checkbox__inner {
-  border-color: #fabe00 !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
 }
 :deep .el-checkbox__input.is-checked .el-checkbox__inner {
-  background-color: #fabe00 !important;
+  background-color: rgb(16, 180, 16) !important;
 }
 :deep .el-loading-mask {
   border-radius: 20px;

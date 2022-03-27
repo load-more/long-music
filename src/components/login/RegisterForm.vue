@@ -225,5 +225,11 @@ const onClickRegister = () => {
     display: flex;
     align-items: center;
   }
+  :deep .el-input__inner {
+    background-color: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    --el-input-placeholder-color: rgba(255, 255, 255, 0.3);
+    --el-input-text-color: #ddd;
+  }
 }
 </style>
