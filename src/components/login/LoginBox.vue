@@ -6,21 +6,46 @@
       :stretch="true"
       v-loading="isLoading"
       element-loading-text="登录中..."
-      element-loading-background="rgba(255, 255, 255, 0.5)"
+      element-loading-background="transparent"
     >
-      <el-tab-pane label="账号登录" v-if="isLogin" name="phone">
+      <el-tab-pane
+        label="账号登录"
+        v-if="isLogin"
+        name="phone"
+        :style="{visibility: isLoading ? 'hidden' : 'unset'}"
+      >
         <LoginBoxForm type="phone" />
       </el-tab-pane>
-      <el-tab-pane label="短信登录" v-if="isLogin" name="sms">
+      <el-tab-pane
+        label="短信登录"
+        v-if="isLogin"
+        name="sms"
+        :style="{visibility: isLoading ? 'hidden' : 'unset'}"
+      >
         <LoginBoxForm type="sms" />
       </el-tab-pane>
-      <el-tab-pane label="邮箱登录" v-if="isLogin" name="email">
+      <el-tab-pane
+        label="邮箱登录"
+        v-if="isLogin"
+        name="email"
+        :style="{visibility: isLoading ? 'hidden' : 'unset'}"
+      >
         <LoginBoxForm type="email" />
       </el-tab-pane>
-      <el-tab-pane label="扫码登录" v-if="isLogin" name="qrcode">
+      <el-tab-pane
+        label="扫码登录"
+        v-if="isLogin"
+        name="qrcode"
+        :style="{visibility: isLoading ? 'hidden' : 'unset'}"
+      >
         <LoginBoxQrCode v-if="currentTab === 'qrcode'" />
       </el-tab-pane>
-      <el-tab-pane label="注册" v-else name="register">
+      <el-tab-pane
+        label="注册"
+        v-else
+        name="register"
+        :style="{visibility: isLoading ? 'hidden' : 'unset'}"
+      >
         <RegisterForm />
       </el-tab-pane>
       <span class="register" v-if="isLogin">
@@ -162,6 +187,10 @@ onUnmounted(() => {
   .el-tabs__item {
     transition: none;
     border: none;
+  }
+  .el-tab-pane {
+    width: 100%;
+    height: 100%;
   }
 }
 :deep .el-checkbox__inner {

@@ -1,11 +1,14 @@
 <template>
-  <div class="login-box-qr-code-wrap">
+  <div
+    class="login-box-qr-code-wrap"
+    v-loading="isLoading"
+    element-loading-text="加载中..."
+    element-loading-background="transparent"
+  >
     <el-image
       class="qrcode"
       :src="imgUrl"
-      v-loading="isLoading"
-      element-loading-text="加载中..."
-      element-loading-background="rgba(255,255,255,0.8)"
+      v-if="!isLoading"
     >
       <template #error>
         <div class="error-slot">
@@ -13,7 +16,7 @@
         </div>
       </template>
     </el-image>
-    <div class="prompt">{{ prompt }}</div>
+    <div class="prompt" v-if="!isLoading">{{ prompt }}</div>
   </div>
 </template>
 
@@ -123,11 +126,21 @@ displayQrCode()
 
 <style scoped lang="scss">
 .login-box-qr-code-wrap {
+  width: 100%;
+  height: 100%;
   text-align: center;
   color: $font-color;
+  position: relative;
   .qrcode {
     width: 150px;
     height: 150px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    padding-bottom: 32px;
     .error-slot {
       width: 100%;
       height: 100%;
@@ -138,15 +151,17 @@ displayQrCode()
         font-size: 15px;
       }
     }
-    :deep .el-loading-mask {
-      border-radius: 0 !important;
+  }
+  :deep .el-loading-mask {
+    border-radius: 0 !important;
+    .el-loading-spinner {
+      transform: translateY(-32px);
     }
   }
   .prompt {
     font-size: 20px;
     font-weight: bold;
-    padding-top: 15px;
-    color: #000;
+    color: rgba(255, 255, 255, 0.9);
   }
 }
 </style>

@@ -75,13 +75,15 @@
           </template>
           <template #append>
             <el-button
+              class="captcha-btn"
               @click="onClickCaptcha"
               :disabled="counter !== countdownTime"
               v-loading="isCaptchaLoading"
-              >{{
-                counter === countdownTime ? '获取验证码' : `重新获取${counter}s`
-              }}</el-button
             >
+              <span v-if="!isCaptchaLoading">
+                {{ counter === countdownTime ? '获取验证码' : `重新获取${counter}s` }}
+              </span>
+            </el-button>
           </template>
         </el-input>
       </el-form-item>
@@ -120,9 +122,7 @@ import {
   phoneLogin,
   emailLogin,
   sendCaptcha,
-  verifyCaptcha,
 } from '@/api/login'
-import { getUserAccount } from '@/api/user'
 import { ElMessage } from 'element-plus'
 import md5 from 'js-md5'
 import emitter from '@/utils/emitter'
@@ -283,36 +283,30 @@ const onClickLogin = () => {
               })
             }
           } else {
-            const { data } = await verifyCaptcha({
+            const { data } = await phoneLogin({
               phone: loginForm.phone,
               captcha: loginForm.captcha,
             })
-            if (data.data === true) {
-              const { data: userData } = await getUserAccount()
-              // 登录成功
-              router.push({ name: 'home' }) // 跳转路由
-              // 登录成功后，存储用户 id 和 cookie
-              const uid = Encrypt(userData.account.id)
-              window.localStorage.setItem('uid', uid)
-              // 切换登录状态
-              mainStore.$patch((state) => {
-                // eslint-disable-next-line no-param-reassign
-                state.isLogin = true
-              })
-              ElMessage({
-                type: 'success',
-                message: '登录成功！',
-                appendTo: document.body,
-              })
-            }
+            // 登录成功
+            router.push({ name: 'home' }) // 跳转路由
+            // 登录成功后，存储用户 id 和 cookie
+            const uid = Encrypt(data.account.id)
+            window.localStorage.setItem('uid', uid)
+            // 切换登录状态
+            mainStore.$patch((state) => {
+              // eslint-disable-next-line no-param-reassign
+              state.isLogin = true
+            })
+            ElMessage({
+              type: 'success',
+              message: '登录成功！',
+              appendTo: document.body,
+            })
           }
         } catch (error: any) {
-          const errorMsg = error.response.data.message
-            ? error.response.data.message
-            : '账号不存在'
           ElMessage({
             type: 'error',
-            message: errorMsg,
+            message: error,
             appendTo: document.body,
           })
         }
@@ -381,6 +375,22 @@ const onClickCaptcha = () => {
     color: rgba(255, 255, 255, 0.6);
     a {
       color: red;
+    }
+  }
+  :deep .el-input-group__append {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: none;
+    .captcha-btn {
+      width: 102px;
+      background-color: transparent;
+      display: flex;
+    }
+    .el-loading-mask {
+      background-color: transparent;
+      border-radius: 0;
+    }
+    span {
+      color: rgba(255, 255, 255, 0.6);
     }
   }
   :deep .check-item {

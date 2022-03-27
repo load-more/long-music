@@ -48,13 +48,15 @@
         </template>
         <template #append>
           <el-button
+            class="captcha-btn"
             @click="onClickCaptcha"
             :disabled="counter !== countdownTime"
             v-loading="isCaptchaLoading"
-            >{{
-              counter === countdownTime ? '获取验证码' : `重新获取${counter}s`
-            }}</el-button
           >
+            <span v-if="!isCaptchaLoading">
+              {{ counter === countdownTime ? '获取验证码' : `重新获取${counter}s` }}
+            </span>
+          </el-button>
         </template>
       </el-input>
     </el-form-item>
@@ -230,6 +232,25 @@ const onClickRegister = () => {
     border: 1px solid rgba(255, 255, 255, 0.2);
     --el-input-placeholder-color: rgba(255, 255, 255, 0.3);
     --el-input-text-color: #ddd;
+  }
+  :deep .circular {
+    width: 20px;
+  }
+  :deep .el-input-group__append {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: none;
+    .captcha-btn {
+      width: 102px;
+      background-color: transparent;
+      display: flex;
+    }
+    .el-loading-mask {
+      background-color: transparent;
+      border-radius: 0;
+    }
+    span {
+      color: rgba(255, 255, 255, 0.6);
+    }
   }
 }
 </style>
