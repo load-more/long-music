@@ -1,7 +1,11 @@
 <template>
   <div class="profile-wrap">
     <div class="left">
-      <el-image class="avatar" :src="state.avatarUrl"></el-image>
+      <el-avatar
+        class="avatar"
+        :src="state.avatarUrl"
+        shape="circle"
+      ></el-avatar>
     </div>
     <div class="right">
       <div class="top-profile">
@@ -28,17 +32,18 @@
           编辑资料
         </el-button>
       </div>
-      <el-divider />
       <div class="mid-profile">
-        <div class="item">
+        <div class="item left-item" @click="handleClickFollow">
           <span class="num">{{ state.follows }}</span>
           <span class="label">关注</span>
         </div>
         <div class="item mid-item">
-          <span class="num">{{ state.followeds }}</span>
-          <span class="label">粉丝</span>
+          <div class="mid-wrap">
+            <span class="num">{{ state.followeds }}</span>
+            <span class="label">粉丝</span>
+          </div>
         </div>
-        <div class="item">
+        <div class="item right-item">
           <span class="num">{{ state.listenSongs }}</span>
           <span class="label">已听</span>
         </div>
@@ -64,13 +69,14 @@
 <script setup lang="ts">
 import { onBeforeMount, reactive, computed } from 'vue'
 import { getUserDetail, getUserLevel } from '@/api/user'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { Decrypt } from '@/utils/secret'
 import { getLocalTime } from '@/utils/time'
 import regionData from '@/utils/region'
 
 /* 路由管理 */
 const router = useRouter()
+const route = useRoute()
 
 /* 渲染数据 */
 const state = reactive({
@@ -91,9 +97,9 @@ const state = reactive({
   city: 0,
 })
 const genderArr = ['unknown', 'male', 'female']
+const uid = route.params.id || Decrypt(String(window.localStorage.getItem('uid')))
 
 const getData = async () => {
-  const uid = Decrypt(String(window.localStorage.getItem('uid')))
   // 获取用户个人信息
   const { data: detailData } = await getUserDetail({ uid })
   state.level = detailData.level
@@ -148,6 +154,11 @@ const region = computed(() => {
   }
   return `${province}-${city}`
 })
+
+/* 点击关注 */
+const handleClickFollow = () => {
+  router.push({ name: 'follows' })
+}
 </script>
 
 <style scoped lang="scss">
@@ -159,8 +170,6 @@ const region = computed(() => {
     .avatar {
       width: 200px;
       height: 200px;
-      border-radius: 10px;
-      box-shadow: $image-box-shadow;
     }
   }
   .right {
@@ -199,13 +208,13 @@ const region = computed(() => {
     }
     .mid-profile {
       display: flex;
+      margin: 20px 0;
       .item {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         align-items: center;
         height: 40px;
-        padding: 0 30px;
         .num {
           font-size: 18px;
         }
@@ -213,14 +222,40 @@ const region = computed(() => {
           font-size: 14px;
           color: $font-inactive-color;
         }
+        .mid-wrap {
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          align-items: center;
+          height: 100%;
+          &:hover {
+            cursor: pointer;
+            span {
+              color: $font-active-color;
+            }
+          }
+        }
       }
       .mid-item {
         border-left: 1px solid $font-inactive-color;
         border-right: 1px solid $font-inactive-color;
+        padding: 0 30px;
+        box-sizing: content-box;
+      }
+      .left-item {
+        margin-right: 30px;
+      }
+      .right-item {
+        margin-left: 30px;
+      }
+      .left-item:hover, .right-item:hover {
+        cursor: pointer;
+        span {
+          color: $font-active-color;
+        }
       }
     }
     .bottom-profile {
-      margin-top: 30px;
       .label {
         color: $font-inactive-color;
         font-size: 15px;

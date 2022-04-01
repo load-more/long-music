@@ -18,7 +18,7 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/views/HomePage.vue'),
       },
       {
-        path: 'profile', // 注意，子路由不能带上 / ，否则无法显示路由
+        path: 'profile/:id?', // 注意，子路由不能带上 / ，否则无法显示路由
         name: 'profile',
         component: () => import('@/views/ProfilePage.vue'),
       },
@@ -41,6 +41,11 @@ const routes: RouteRecordRaw[] = [
         path: 'search',
         name: 'search',
         component: () => import('@/views/SearchPage.vue'),
+      },
+      {
+        path: 'follows/:id?',
+        name: 'follows',
+        component: () => import('@/views/FollowsPage.vue'),
       },
     ],
   },

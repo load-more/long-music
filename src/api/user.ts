@@ -60,13 +60,19 @@ export const updateUserAvatar = (
   params,
 })
 
-interface getUserPlaylistParams {
+interface ParamsType {
   uid: number
   limit?: number
   offset?: number
 }
-export const getUserPlaylist = (params: getUserPlaylistParams) => request({
+export const getUserPlaylist = (params: ParamsType) => request({
   method: 'GET',
   url: '/user/playlist',
+  params,
+})
+
+export const getUserFollows = (params: ParamsType) => request({
+  method: 'GET',
+  url: '/user/follows',
   params,
 })
