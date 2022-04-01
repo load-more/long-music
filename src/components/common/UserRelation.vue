@@ -2,7 +2,7 @@
   <div class="user-relation-wrap">
     <div
       class="item"
-      v-for="(item) in follows"
+      v-for="(item) in relation"
       :key="item.userId"
     >
       <div class="left">
@@ -43,14 +43,15 @@
 
 <script setup lang="ts">
 import { onBeforeMount, ref } from 'vue'
-import { getUserFollows } from '@/api/user'
+import { getUserFollows, getUserFans } from '@/api/user'
 import { useRouter } from 'vue-router'
 
 const props = defineProps<{
   uid: number
+  type: 'follows' | 'fans'
 }>()
 
-interface followsType {
+interface userType {
   userId: number
   nickname: string
   signature: string
@@ -59,24 +60,39 @@ interface followsType {
   follows: number
   avatarUrl: string
 }
-const follows = ref<followsType[]>([])
+const relation = ref<userType[]>([])
 
 /* 路由管理 */
 const router = useRouter()
 
 const getData = async () => {
-  const { data } = await getUserFollows({ uid: props.uid })
-  data.follow.forEach((item: followsType) => {
-    follows.value.push({
-      userId: item.userId,
-      nickname: item.nickname,
-      signature: item.signature,
-      playlistCount: item.playlistCount,
-      followeds: item.followeds,
-      follows: item.follows,
-      avatarUrl: item.avatarUrl,
+  if (props.type === 'follows') {
+    const { data } = await getUserFollows({ uid: props.uid })
+    data.follow.forEach((item: userType) => {
+      relation.value.push({
+        userId: item.userId,
+        nickname: item.nickname,
+        signature: item.signature,
+        playlistCount: item.playlistCount,
+        followeds: item.followeds,
+        follows: item.follows,
+        avatarUrl: item.avatarUrl,
+      })
     })
-  })
+  } else {
+    const { data } = await getUserFans({ uid: props.uid })
+    data.followeds.forEach((item: userType) => {
+      relation.value.push({
+        userId: item.userId,
+        nickname: item.nickname,
+        signature: item.signature,
+        playlistCount: item.playlistCount,
+        followeds: item.followeds,
+        follows: item.follows,
+        avatarUrl: item.avatarUrl,
+      })
+    })
+  }
 }
 
 const handleClickRelation = (uid: number) => {

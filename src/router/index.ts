@@ -47,6 +47,11 @@ const routes: RouteRecordRaw[] = [
         name: 'follows',
         component: () => import('@/views/FollowsPage.vue'),
       },
+      {
+        path: 'fans/:id?',
+        name: 'fans',
+        component: () => import('@/views/FansPage.vue'),
+      },
     ],
   },
   {

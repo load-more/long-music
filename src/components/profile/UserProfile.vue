@@ -38,7 +38,7 @@
           <span class="label">关注</span>
         </div>
         <div class="item mid-item">
-          <div class="mid-wrap">
+          <div class="mid-wrap" @click="handleClickFans">
             <span class="num">{{ state.followeds }}</span>
             <span class="label">粉丝</span>
           </div>
@@ -159,6 +159,11 @@ const region = computed(() => {
 /* 点击关注 */
 const handleClickFollow = () => {
   router.push({ name: 'follows', params: { id: props.uid } })
+}
+
+/* 点击粉丝 */
+const handleClickFans = () => {
+  router.push({ name: 'fans', params: { id: props.uid } })
 }
 </script>
 

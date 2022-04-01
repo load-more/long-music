@@ -76,3 +76,9 @@ export const getUserFollows = (params: ParamsType) => request({
   url: '/user/follows',
   params,
 })
+
+export const getUserFans = (params: ParamsType) => request({
+  method: 'GET',
+  url: 'user/followeds',
+  params,
+})

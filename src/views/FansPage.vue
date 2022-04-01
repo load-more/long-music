@@ -1,9 +1,9 @@
 <template>
-  <div class="follows-container">
+  <div class="fans-container">
     <el-scrollbar class="scroll-bar">
       <div class="user-relation-container">
-        <span class="follows-label">“{{ nickname }}”的关注</span>
-        <UserRelation :uid="uid" type="follows" />
+        <span class="fans-label">“{{ nickname }}”的粉丝</span>
+        <UserRelation :uid="uid" type="fans" />
       </div>
     </el-scrollbar>
   </div>
@@ -30,12 +30,12 @@ onBeforeMount(() => {
 </script>
 
 <style scoped lang="scss">
-.follows-container {
+.fans-container {
   height: 100%;
   .scroll-bar {
     height: 100%;
   }
-  .follows-label {
+  .fans-label {
     font-size: 20px;
     font-family: 'yahei';
     display: inline-block;
