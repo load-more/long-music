@@ -2,7 +2,7 @@
   <div class="follows-container">
     <el-scrollbar class="scroll-bar">
       <div class="user-relation-container">
-        <span class="follows-label">{{ nickname }}的关注</span>
+        <span class="follows-label">“{{ nickname }}”的关注</span>
         <UserRelation :uid="uid" />
       </div>
     </el-scrollbar>

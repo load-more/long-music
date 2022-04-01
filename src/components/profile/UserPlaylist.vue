@@ -25,8 +25,11 @@
 import { onBeforeMount, ref, reactive } from 'vue'
 import UserPlaylistItem, { infoType } from '@/components/profile/UserPlaylistItem.vue'
 import { getUserPlaylist } from '@/api/user'
-import { Decrypt } from '@/utils/secret'
 import { useRouter } from 'vue-router'
+
+const props = defineProps<{
+  uid: number
+}>()
 
 const router = useRouter()
 
@@ -35,9 +38,8 @@ const starredPlaylist = reactive<infoType[]>([])
 const activeTab = ref('created')
 
 const getData = async () => {
-  const uid = Decrypt(String(window.localStorage.getItem('uid')))
   // 获取用户歌单信息
-  const { data: playlistData } = await getUserPlaylist({ uid })
+  const { data: playlistData } = await getUserPlaylist({ uid: props.uid })
   playlistData.playlist.forEach((item: any) => {
     const obj: infoType = {
       id: item.id,
@@ -48,7 +50,7 @@ const getData = async () => {
       starCount: item.subscribedCount,
       playCount: item.playCount,
     }
-    if (String(item.creator.userId) === uid) {
+    if (item.creator.userId === props.uid) {
       // 如果是用户创建的歌单
       createdPlaylist.push(obj)
     } else {

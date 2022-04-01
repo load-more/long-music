@@ -69,14 +69,16 @@
 <script setup lang="ts">
 import { onBeforeMount, reactive, computed } from 'vue'
 import { getUserDetail, getUserLevel } from '@/api/user'
-import { useRouter, useRoute } from 'vue-router'
-import { Decrypt } from '@/utils/secret'
+import { useRouter } from 'vue-router'
 import { getLocalTime } from '@/utils/time'
 import regionData from '@/utils/region'
 
+const props = defineProps<{
+  uid: number
+}>()
+
 /* 路由管理 */
 const router = useRouter()
-const route = useRoute()
 
 /* 渲染数据 */
 const state = reactive({
@@ -97,11 +99,10 @@ const state = reactive({
   city: 0,
 })
 const genderArr = ['unknown', 'male', 'female']
-const uid = route.params.id || Decrypt(String(window.localStorage.getItem('uid')))
 
 const getData = async () => {
   // 获取用户个人信息
-  const { data: detailData } = await getUserDetail({ uid })
+  const { data: detailData } = await getUserDetail({ uid: props.uid })
   state.level = detailData.level
   state.listenSongs = detailData.listenSongs
   state.nickname = detailData.profile.nickname
@@ -157,7 +158,7 @@ const region = computed(() => {
 
 /* 点击关注 */
 const handleClickFollow = () => {
-  router.push({ name: 'follows' })
+  router.push({ name: 'follows', params: { id: props.uid } })
 }
 </script>
 
