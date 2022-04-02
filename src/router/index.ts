@@ -66,8 +66,12 @@ const router = createRouter({
   routes,
 })
 
-router.beforeEach((to, from) => {
-  const { isLogin } = storeToRefs(useMainStore())
+router.beforeEach(async (to, from) => {
+  const mainStore = useMainStore()
+  const { isLogin, userDetail } = storeToRefs(mainStore)
+  if (!userDetail.value.uid) {
+    await mainStore.init()
+  }
   // 如果用户未登录且目标页面不是登录页，则跳转到登录页
   if (!isLogin.value && to.name !== 'login') { // 注意，一定要写后面的判断逻辑，否则会死循环
     return { name: 'login' }

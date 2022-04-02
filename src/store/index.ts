@@ -9,7 +9,7 @@ import { Decrypt } from '@/utils/secret'
 // }
 // const cName = 'MUSIC_U'
 
-let isLogin = false
+const isLogin = false
 
 interface songType {
   id: number
@@ -45,24 +45,6 @@ const userDetail: userDetailType = {
   avatarUrl: '',
 }
 
-const getData = async () => {
-  try {
-    const { data } = await getUserDetail({ uid })
-    if (data.code === 200) {
-      userDetail.uid = Number(uid)
-      userDetail.nickname = data.profile.nickname
-      userDetail.avatarUrl = data.profile.avatarUrl
-      isLogin = true
-    } else {
-      window.localStorage.removeItem('uid')
-    }
-  } catch {
-    window.localStorage.removeItem('uid')
-  }
-}
-
-await getData()
-
 export default defineStore('main', {
   state: () => ({
     isLogin,
@@ -71,4 +53,21 @@ export default defineStore('main', {
     listenedSongSet,
     userDetail,
   }),
+  actions: {
+    async init() {
+      try {
+        const { data } = await getUserDetail({ uid })
+        if (data.code === 200) {
+          this.userDetail.uid = Number(uid)
+          this.userDetail.nickname = data.profile.nickname
+          this.userDetail.avatarUrl = data.profile.avatarUrl
+          this.isLogin = true
+        } else {
+          window.localStorage.removeItem('uid')
+        }
+      } catch {
+        window.localStorage.removeItem('uid')
+      }
+    },
+  },
 })
