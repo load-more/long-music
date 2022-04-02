@@ -20,10 +20,10 @@
           class="avatar"
           fit="cover"
           :size="40"
-          :src="state.avatarUrl"
+          :src="avatarUrl"
           @click="router.push({ name: 'profile' })"
         ></el-avatar>
-        <UserDropdown :nickname="state.nickname" @logout="isFullLoading = true" />
+        <UserDropdown :nickname="nickname" @logout="isFullLoading = true" />
       </div>
       <div class="tools hidden-xs-only">
         <i class="iconfont icon-Message"></i>
@@ -38,9 +38,7 @@
 import { storeToRefs } from 'pinia'
 import useMainStore from '@/store/index'
 import { useRouter } from 'vue-router'
-import { getUserDetail } from '@/api/user'
-import { ref, reactive } from 'vue'
-import { Decrypt } from '@/utils/secret'
+import { ref } from 'vue'
 import SearchInput from '@/components/common/SearchInput.vue'
 import UserDropdown from '@/components/common/UserDropdown.vue'
 import ThemeDropdown from '@/components/common/ThemeDropdown.vue'
@@ -49,23 +47,11 @@ import ThemeDropdown from '@/components/common/ThemeDropdown.vue'
 const router = useRouter()
 
 /* 渲染顶部栏用户数据 */
-const { isLogin } = storeToRefs(useMainStore())
-const state = reactive({
-  nickname: '',
-  avatarUrl: '',
-})
-
-const getData = async () => {
-  const uid = Decrypt(String(window.localStorage.getItem('uid')))
-  const { data } = await getUserDetail({ uid })
-  state.nickname = data.profile.nickname
-  state.avatarUrl = data.profile.avatarUrl
-}
+const { isLogin, userDetail } = storeToRefs(useMainStore())
+const { nickname, avatarUrl } = userDetail.value
 
 /* 退出登录 */
 const isFullLoading = ref(false)
-
-getData()
 </script>
 
 <style scoped lang="scss">
