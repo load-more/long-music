@@ -3,7 +3,7 @@
     <el-scrollbar class="scroll-bar">
       <div class="user-relation-container">
         <span class="fans-label">“{{ nickname }}”的粉丝</span>
-        <UserRelation :uid="uid" type="fans" />
+        <UserRelation :uid="Number(uid)" type="fans" />
       </div>
     </el-scrollbar>
   </div>

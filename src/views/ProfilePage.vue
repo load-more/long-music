@@ -2,10 +2,10 @@
   <div class="profile-container">
     <el-scrollbar class="scroll-bar">
       <div class="user-profile-container">
-        <UserProfile :uid="uid" />
+        <UserProfile :uid="Number(uid)" />
       </div>
       <div class="user-playlist-container">
-        <UserPlaylist :uid="uid" />
+        <UserPlaylist :uid="Number(uid)" />
       </div>
     </el-scrollbar>
   </div>

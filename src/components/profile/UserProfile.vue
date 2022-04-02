@@ -9,9 +9,16 @@
     </div>
     <div class="right">
       <div class="top-profile">
-        <div class="info">
-          <span class="name">{{ state.nickname }}</span>
-          <el-tooltip placement="top" :show-arrow="false" popper-class="level-popper">
+        <div class="info-wrap">
+          <div class="info">
+            <span class="name">{{ state.nickname }}</span>
+          </div>
+          <el-tooltip
+            v-if="userId === uid"
+            placement="top"
+            :show-arrow="false"
+            popper-class="level-popper"
+          >
             <template #content>
               当前等级：Lv.{{ state.level }}<br />
               距离下一等级还需：<br />
@@ -21,13 +28,17 @@
               首<br />
               2. 登录：{{ state.nextLoginCount - state.nowLoginCount }} 天
             </template>
-            <span class="level">Lv.{{ state.level }}</span>
+            <span class="level my-level">Lv.{{ state.level }}</span>
           </el-tooltip>
+          <span class="level" v-else>Lv.{{ state.level }}</span>
           <span class="gender" v-if="state.gender">
             <i :class="`iconfont icon-${genderArr[state.gender]}`"></i>
           </span>
         </div>
-        <el-button round @click="router.push({ name: 'editProfile' })">
+        <el-button
+          v-if="userId === uid"
+          round @click="router.push({ name: 'editProfile' })"
+        >
           <i class="iconfont icon-edit"></i>
           编辑资料
         </el-button>
@@ -57,9 +68,12 @@
           <span class="label">所在地区：</span>
           <span class="content">{{ region }}</span>
         </div>
-        <div class="signature">
+        <div class="signature single-line-ellipsis" ref="signatureRef">
           <span class="label">个人介绍：</span>
-          <span class="content">{{ state.signature }}</span>
+          <span
+            class="content"
+            @click="toggleReadMore"
+          >{{ state.signature }}</span>
         </div>
       </div>
     </div>
@@ -67,15 +81,22 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, reactive, computed } from 'vue'
+import {
+  onBeforeMount, reactive, computed, ref,
+} from 'vue'
 import { getUserDetail, getUserLevel } from '@/api/user'
 import { useRouter } from 'vue-router'
 import { getLocalTime } from '@/utils/time'
 import regionData from '@/utils/region'
+import useMainStore from '@/store/index'
+import { storeToRefs } from 'pinia'
 
 const props = defineProps<{
   uid: number
 }>()
+
+const { userDetail } = storeToRefs(useMainStore())
+const { uid: userId } = userDetail.value
 
 /* 路由管理 */
 const router = useRouter()
@@ -115,11 +136,13 @@ const getData = async () => {
   state.province = detailData.profile.province
   state.city = detailData.profile.city
   // 获取用户等级信息
-  const { data: levelData } = await getUserLevel()
-  state.nextPlayCount = levelData.data.nextPlayCount
-  state.nowPlayCount = levelData.data.nowPlayCount
-  state.nextLoginCount = levelData.data.nextLoginCount
-  state.nowLoginCount = levelData.data.nowLoginCount
+  if (userId === props.uid) {
+    const { data: levelData } = await getUserLevel()
+    state.nextPlayCount = levelData.data.nextPlayCount
+    state.nowPlayCount = levelData.data.nowPlayCount
+    state.nextLoginCount = levelData.data.nextLoginCount
+    state.nowLoginCount = levelData.data.nowLoginCount
+  }
 }
 onBeforeMount(() => {
   getData()
@@ -165,6 +188,18 @@ const handleClickFollow = () => {
 const handleClickFans = () => {
   router.push({ name: 'fans', params: { id: props.uid } })
 }
+
+/* 点击介绍查看更多 */
+const signatureRef = ref<HTMLElement | null>(null)
+const isDescDetail = ref(false)
+const toggleReadMore = () => {
+  isDescDetail.value = !isDescDetail.value
+  if (isDescDetail.value) {
+    signatureRef.value!.style.whiteSpace = 'normal'
+  } else {
+    signatureRef.value!.style.whiteSpace = 'nowrap'
+  }
+}
 </script>
 
 <style scoped lang="scss">
@@ -172,16 +207,19 @@ const handleClickFans = () => {
   display: flex;
   color: $font-color;
   .left {
-    width: 220px;
+    width: 200px;
+    height: 200px;
+    margin-right: 10px;
     .avatar {
-      width: 200px;
-      height: 200px;
+      width: 100%;
+      height: 100%;
     }
   }
   .right {
     display: flex;
     flex-direction: column;
     flex-grow: 1;
+    overflow: hidden;
     .top-profile {
       display: flex;
       justify-content: space-between;
@@ -194,21 +232,24 @@ const handleClickFans = () => {
         .name {
           font-size: 22px;
           font-weight: bold;
+          padding-bottom: 5px;
         }
-        .level {
-          font-size: 12px;
-          background-color: $level-label-color;
-          padding: 1px 5px;
-          border-radius: 20px;
-          cursor: pointer;
-          margin: 0 10px;
-        }
-        .gender {
-          font-weight: bold;
-          font-size: 12px;
-          .icon-male, .icon-female {
-            color: $gender-icon-color;
-          }
+      }
+      .level {
+        font-size: 12px;
+        background-color: $level-label-color;
+        padding: 1px 5px;
+        border-radius: 20px;
+        margin-right: 10px;
+      }
+      .my-level {
+        cursor: pointer;
+      }
+      .gender {
+        font-weight: bold;
+        font-size: 12px;
+        .icon-male, .icon-female {
+          color: $gender-icon-color;
         }
       }
     }
@@ -271,6 +312,15 @@ const handleClickFans = () => {
       }
       .region {
         margin: 10px 0;
+      }
+      .signature {
+        width: 100%;
+        .content {
+          cursor: pointer;
+          &:hover {
+            text-decoration: underline;
+          }
+        }
       }
     }
   }

@@ -49,7 +49,7 @@ const getData = async () => {
   try {
     const { data } = await getUserDetail({ uid })
     if (data.code === 200) {
-      userDetail.uid = uid
+      userDetail.uid = Number(uid)
       userDetail.nickname = data.profile.nickname
       userDetail.avatarUrl = data.profile.avatarUrl
       isLogin = true

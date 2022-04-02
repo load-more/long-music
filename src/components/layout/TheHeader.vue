@@ -26,7 +26,7 @@
         <UserDropdown :nickname="nickname" @logout="isFullLoading = true" />
       </div>
       <div class="tools hidden-xs-only">
-        <i class="iconfont icon-Message"></i>
+        <i class="iconfont icon-message"></i>
         <ThemeDropdown />
         <i class="iconfont icon-setting"></i>
       </div>

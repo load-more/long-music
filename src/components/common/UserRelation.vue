@@ -23,7 +23,7 @@
             size="small"
             round
           >
-          <i class="iconfont icon-Message"></i>
+          <i class="iconfont icon-message"></i>
           &nbsp;私信</el-button>
         </div>
         <div class="bottom">
