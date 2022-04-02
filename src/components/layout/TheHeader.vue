@@ -15,20 +15,14 @@
       <SearchInput />
     </el-col>
     <el-col :sm="8" :xs="12" class="right">
-      <div class="user-info" v-if="isLogin">
-        <el-avatar
-          class="avatar"
-          fit="cover"
-          :size="40"
-          :src="avatarUrl"
-          @click="router.push({ name: 'profile' })"
-        ></el-avatar>
-        <UserDropdown :nickname="nickname" @logout="isFullLoading = true" />
-      </div>
       <div class="tools hidden-xs-only">
-        <i class="iconfont icon-message"></i>
+        <i class="iconfont icon-notice"></i>
         <ThemeDropdown />
-        <i class="iconfont icon-setting"></i>
+        <UserDropdown
+          :nickname="nickname"
+          :avatar-url="avatarUrl"
+          @logout="isFullLoading = true"
+        />
       </div>
     </el-col>
   </el-row>
@@ -47,7 +41,7 @@ import ThemeDropdown from '@/components/common/ThemeDropdown.vue'
 const router = useRouter()
 
 /* 渲染顶部栏用户数据 */
-const { isLogin, userDetail } = storeToRefs(useMainStore())
+const { userDetail } = storeToRefs(useMainStore())
 const { nickname, avatarUrl } = userDetail.value
 
 /* 退出登录 */
@@ -93,20 +87,15 @@ const isFullLoading = ref(false)
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    .user-info {
-      @extend .right;
-      .avatar {
+    .tools {
+      display: flex;
+      align-items: center;
+      i {
+        font-size: 18px;
+        margin-right: 15px;
         cursor: pointer;
+        @include hover-font;
       }
-    }
-    .user-info i {
-      font-size: 12px;
-    }
-    .tools i {
-      font-size: 18px;
-      margin-right: 15px;
-      cursor: pointer;
-      @include hover-font;
     }
   }
 }

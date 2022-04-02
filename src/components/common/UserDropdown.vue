@@ -5,23 +5,32 @@
     popper-class="dropdown"
     class="name-wrap"
   >
-    <span class="el-dropdown-link">
-      {{ nickname }}
-      <i class="iconfont icon-drop-down-arrow"></i>
-    </span>
+    <el-avatar
+      class="avatar"
+      fit="cover"
+      :size="30"
+      :src="avatarUrl"
+    ></el-avatar>
     <template #dropdown>
       <el-dropdown-menu>
         <el-dropdown-item
           command="edit-profile"
         >
-        <i class="iconfont icon-profile"></i>
-        修改信息</el-dropdown-item>
+          <i class="iconfont icon-profile"></i>
+          个人信息
+        </el-dropdown-item>
         <el-dropdown-item
           command="logout"
         >
-        <i class="iconfont icon-logout"></i>
-        退出登录</el-dropdown-item
+          <i class="iconfont icon-setting"></i>
+          用户设置
+        </el-dropdown-item>
+        <el-dropdown-item
+          command="logout"
         >
+          <i class="iconfont icon-logout"></i>
+          退出登录
+        </el-dropdown-item>
       </el-dropdown-menu>
     </template>
   </el-dropdown>
@@ -39,6 +48,7 @@ const router = useRouter()
 
 defineProps<{
   nickname: string
+  avatarUrl: string
 }>()
 const emit = defineEmits(['logout'])
 
@@ -75,6 +85,9 @@ const handleCommand = async (command: string) => {
   }
 }
 .name-wrap {
-  margin: 0 15px;
+  margin-right: 15px;
+}
+.avatar {
+  cursor: pointer;
 }
 </style>
