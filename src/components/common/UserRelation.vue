@@ -1,76 +1,55 @@
 <template>
   <div class="user-relation-wrap">
-    <div
-      class="item"
-      v-for="(item) in relation"
-      :key="item.userId"
-    >
-      <div class="left">
-        <el-avatar
-          class="avatar"
-          :src="item.avatarUrl"
-          shape="circle"
-          @click="handleClickRelation(item.userId)"
-        ></el-avatar>
-      </div>
-      <div class="right">
-        <div class="top">
-          <span
-            class="nickname"
-            @click="handleClickRelation(item.userId)"
-          >{{ item.nickname }}</span>
-          <el-button
-            size="small"
-            round
-          >
-          <i class="iconfont icon-message"></i>
-          &nbsp;私信</el-button>
-        </div>
-        <div class="bottom">
-          <div class="signature single-line-ellipsis">
-            <span>{{ item.signature }}</span>
-          </div>
-          <div class="info">
-            <span class="single-line-ellipsis">歌单：{{ item.playlistCount }}</span>
-            <span class="single-line-ellipsis">粉丝：{{ item.followeds }}</span>
-            <span class="single-line-ellipsis">关注：{{ item.follows }}</span>
-          </div>
-        </div>
-      </div>
+    <div class="user-relation-item-wrap" v-show="!isLoading">
+      <keep-alive>
+        <UserRelationItem
+          :relation="pageMap.get(currentPage - 1)"
+        />
+      </keep-alive>
+      <el-pagination
+        class="pagination"
+        layout="prev, pager, next"
+        :page-size="pageSize"
+        :total="count"
+        v-model:current-page="currentPage"
+        @current-change="handleCurrentChange"
+      >
+      </el-pagination>
     </div>
+    <LoadingAnimation class="loading-animation" v-if="isLoading" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { onBeforeMount, ref } from 'vue'
 import { getUserFollows, getUserFans } from '@/api/user'
-import { useRouter } from 'vue-router'
+import UserRelationItem, { userType } from '@/components/common/UserRelationItem.vue'
+import LoadingAnimation from '@/components/common/LoadingAnimation.vue'
 
 const props = defineProps<{
   uid: number
   type: 'follows' | 'fans'
+  count: number
 }>()
 const emit = defineEmits(['finish-loading'])
 
-interface userType {
-  userId: number
-  nickname: string
-  signature: string
-  playlistCount: number
-  followeds: number
-  follows: number
-  avatarUrl: string
-}
-const relation = ref<userType[]>([])
+const pageSize = ref(30)
+const currentPage = ref(1)
+const pageMap = ref(new Map())
+const isLoading = ref(false)
 
-/* 路由管理 */
-const router = useRouter()
-
-const getData = async () => {
+const getData = async (offset: number) => {
   if (props.type === 'follows') {
-    const { data } = await getUserFollows({ uid: props.uid })
+    if (pageMap.value.has(offset)) return
+    isLoading.value = true
+    const { data } = await getUserFollows({
+      uid: props.uid,
+      limit: pageSize.value,
+      offset: pageSize.value * offset,
+    })
+    const arr: userType[] = []
     data.follow.forEach((item: userType) => {
-      relation.value.push({
+      arr.push({
         userId: item.userId,
         nickname: item.nickname,
         signature: item.signature,
@@ -80,10 +59,19 @@ const getData = async () => {
         avatarUrl: item.avatarUrl,
       })
     })
+    pageMap.value.set(offset, arr)
+    isLoading.value = false
   } else {
-    const { data } = await getUserFans({ uid: props.uid })
+    if (pageMap.value.has(offset)) return
+    isLoading.value = true
+    const { data } = await getUserFans({
+      uid: props.uid,
+      limit: pageSize.value,
+      offset: pageSize.value * offset,
+    })
+    const arr: userType[] = []
     data.followeds.forEach((item: userType) => {
-      relation.value.push({
+      arr.push({
         userId: item.userId,
         nickname: item.nickname,
         signature: item.signature,
@@ -93,75 +81,32 @@ const getData = async () => {
         avatarUrl: item.avatarUrl,
       })
     })
+    pageMap.value.set(offset, arr)
+    isLoading.value = false
   }
   emit('finish-loading')
 }
 
-const handleClickRelation = (uid: number) => {
-  router.push({ name: 'profile', params: { id: uid } })
+const handleCurrentChange = () => {
+  getData(currentPage.value - 1)
 }
 
 onBeforeMount(() => {
-  getData()
+  getData(currentPage.value - 1)
 })
 </script>
 
 <style scoped lang="scss">
 .user-relation-wrap {
   width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  .item {
-    width: 50%;
+  height: 100%;
+  .pagination {
     display: flex;
-    padding: 10px;
-    box-sizing: border-box;
-    .left {
-      width: 80px;
-      height: 80px;
-      margin-right: 10px;
-      .avatar {
-        width: 100%;
-        height: 100%;
-        cursor: pointer;
-      }
-    }
-    .right {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-evenly;
-      width: 100%;
-      overflow: hidden;
-      .top {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        color: $font-color;
-        .nickname {
-          cursor: pointer;
-        }
-        .nickname:hover {
-          color: $font-active-color;
-        }
-      }
-      .bottom {
-        font-size: 13px;
-        color: $font-inactive-color;
-        .info {
-          margin-top: 5px;
-          display: flex;
-          justify-content: space-between;
-          :nth-child(2) {
-            padding: 0 10px;
-          }
-        }
-      }
-    }
+    justify-content: center;
   }
-  @media screen and (max-width: 768px) {
-    .item {
-      width: 100%;
-    }
+  .loading-animation {
+    margin-top: 40px;
+    font-size: 3px;
   }
 }
 </style>

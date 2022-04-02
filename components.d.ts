@@ -73,6 +73,7 @@ declare module 'vue' {
     UserProfile: typeof import('./src/components/profile/UserProfile.vue')['default']
     UserProfileEditForm: typeof import('./src/components/profile/UserProfileEditForm.vue')['default']
     UserRelation: typeof import('./src/components/common/UserRelation.vue')['default']
+    UserRelationItem: typeof import('./src/components/common/UserRelationItem.vue')['default']
   }
 }
 

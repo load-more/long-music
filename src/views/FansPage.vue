@@ -3,7 +3,12 @@
     <el-scrollbar class="scroll-bar" v-show="!isLoading">
       <div class="user-relation-container">
         <span class="fans-label">“{{ nickname }}”的粉丝</span>
-        <UserRelation :uid="Number(uid)" type="fans" @finish-loading="handleFinishLoading" />
+        <UserRelation
+          :uid="Number(uid)"
+          type="fans"
+          :count="fansCount"
+          @finish-loading="handleFinishLoading"
+        />
       </div>
     </el-scrollbar>
     <LoadingAnimation v-if="isLoading" />
@@ -20,10 +25,12 @@ import LoadingAnimation from '@/components/common/LoadingAnimation.vue'
 
 const route = useRoute()
 const nickname = ref('')
+const fansCount = ref(0)
 const uid = route.params.id || Decrypt(String(window.localStorage.getItem('uid')))
 const getData = async () => {
   const { data } = await getUserDetail({ uid })
   nickname.value = data.profile.nickname
+  fansCount.value = data.profile.followeds
 }
 
 const isLoading = ref(true)
