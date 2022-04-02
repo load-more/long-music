@@ -24,7 +24,7 @@
       </div>
       <keep-alive>
         <SearchResultMusicList
-          :song-arr="songArr.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
+          :song-arr="pageMap.get(currentPage - 1)"
         />
       </keep-alive>
       <el-pagination
@@ -43,7 +43,7 @@
 
 <script setup lang="ts">
 import {
-  ref, computed, reactive, onBeforeMount,
+  ref, computed, onBeforeMount,
 } from 'vue'
 import { getSearchResult } from '@/api/search'
 import SearchResultMusicList from '@/components/search/SearchResultMusicList.vue'
@@ -61,24 +61,24 @@ const keyword = computed(() => {
   return route.query.kw
 })
 const isLoading = ref(false)
-const songArr = reactive<songType[]>([])
 const count = ref(0)
 const currentPage = ref(1)
 const pageSize = ref(100)
-const offsetSet = new Set()
+const pageMap = ref(new Map())
 
 const getData = async (offset: number) => {
-  if (offsetSet.has(offset)) return
+  if (pageMap.value.has(offset)) return
   isLoading.value = true
   const { data } = await getSearchResult({
     keywords: keyword.value as string,
     limit: pageSize.value,
-    offset,
+    offset: pageSize.value * offset,
   })
   count.value = data.result.songCount
+  const arr: songType[] = []
   data.result.songs.forEach((item: any, index: number) => {
     const i = offset * pageSize.value + index
-    const obj: songType = {
+    arr.push({
       id: item.id,
       name: item.name,
       alias: item.alia[0],
@@ -86,11 +86,10 @@ const getData = async (offset: number) => {
       album: item.al,
       duration: item.dt,
       index: i,
-    }
-    songArr.splice(i, 0, obj)
+    })
   })
+  pageMap.value.set(offset, arr)
   isLoading.value = false
-  offsetSet.add(offset)
 }
 
 onBeforeMount(async () => {
