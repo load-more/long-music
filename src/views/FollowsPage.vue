@@ -1,11 +1,12 @@
 <template>
   <div class="follows-container">
-    <el-scrollbar class="scroll-bar">
+    <el-scrollbar class="scroll-bar" v-show="!isLoading">
       <div class="user-relation-container">
         <span class="follows-label">“{{ nickname }}”的关注</span>
-        <UserRelation :uid="Number(uid)" type="follows" />
+        <UserRelation :uid="Number(uid)" type="follows" @finish-loading="handleFinishLoading" />
       </div>
     </el-scrollbar>
+    <LoadingAnimation v-if="isLoading" />
   </div>
 </template>
 
@@ -15,6 +16,7 @@ import UserRelation from '@/components/common/UserRelation.vue'
 import { getUserDetail } from '@/api/user'
 import { useRoute } from 'vue-router'
 import { Decrypt } from '@/utils/secret'
+import LoadingAnimation from '@/components/common/LoadingAnimation.vue'
 
 const route = useRoute()
 const nickname = ref('')
@@ -22,6 +24,15 @@ const uid = route.params.id || Decrypt(String(window.localStorage.getItem('uid')
 const getData = async () => {
   const { data } = await getUserDetail({ uid })
   nickname.value = data.profile.nickname
+}
+
+const isLoading = ref(true)
+const loadedCount = ref(0)
+const handleFinishLoading = () => {
+  loadedCount.value += 1
+  if (loadedCount.value === 1) {
+    isLoading.value = false
+  }
 }
 
 onBeforeMount(() => {

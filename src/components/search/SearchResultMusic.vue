@@ -19,7 +19,9 @@
       </div>
     </div>
     <div class="list">
-      <LoadingSvg v-if="isLoading" />
+      <div class="loader-wrap" v-if="isLoading">
+        <LoadingAnimation class="loading-animation" />
+      </div>
       <keep-alive>
         <SearchResultMusicList
           :song-arr="songArr.slice((currentPage - 1) * pageSize, currentPage * pageSize)"
@@ -28,7 +30,6 @@
       <el-pagination
         v-if="!isLoading"
         class="pagination"
-        background
         layout="prev, pager, next"
         :page-size="pageSize"
         :total="count"
@@ -44,11 +45,13 @@
 import {
   ref, computed, reactive, onBeforeMount,
 } from 'vue'
-import LoadingSvg from '@/components/common/LoadingSvg.vue'
 import { getSearchResult } from '@/api/search'
 import SearchResultMusicList from '@/components/search/SearchResultMusicList.vue'
 import { songType } from '@/components/common/MusicListItem.vue'
 import { useRoute } from 'vue-router'
+import LoadingAnimation from '@/components/common/LoadingAnimation.vue'
+
+const emit = defineEmits(['finish-loading'])
 
 const route = useRoute()
 const keyword = computed(() => {
@@ -90,8 +93,9 @@ const getData = async (offset: number) => {
   offsetSet.add(offset)
 }
 
-onBeforeMount(() => {
-  getData(currentPage.value - 1)
+onBeforeMount(async () => {
+  await getData(currentPage.value - 1)
+  emit('finish-loading')
 })
 
 const handleCurrentChange = () => {
@@ -140,21 +144,12 @@ const handleCurrentChange = () => {
     width: 100%;
     position: relative;
     overflow: hidden;
-    .infinite-list {
-      position: absolute;
-      left: 0;
-      top: 0;
-      right: -17px;
-      bottom: 0;
-      overflow-y: scroll;
-      height: 400px;
-      display: block;
-      list-style-type: none;
-      margin-block-start: 0;
-      margin-block-end: 0;
-      margin-inline-start: 0;
-      margin-inline-end: 0;
-      padding-inline-start: 0;
+    .loader-wrap {
+      width: 100%;
+      height: 40px;
+      .loading-animation {
+        font-size: 3px;
+      }
     }
   }
   .pagination {

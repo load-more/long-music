@@ -94,6 +94,7 @@ import { storeToRefs } from 'pinia'
 const props = defineProps<{
   uid: number
 }>()
+const emit = defineEmits(['finish-loading'])
 
 const { userDetail } = storeToRefs(useMainStore())
 const { uid: userId } = userDetail.value
@@ -143,6 +144,8 @@ const getData = async () => {
     state.nextLoginCount = levelData.data.nextLoginCount
     state.nowLoginCount = levelData.data.nowLoginCount
   }
+  // 数据加载完成
+  emit('finish-loading')
 }
 onBeforeMount(() => {
   getData()

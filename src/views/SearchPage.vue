@@ -1,18 +1,27 @@
 <template>
   <div class="search-container">
-    <el-scrollbar class="scroll-bar">
+    <el-scrollbar class="scroll-bar" v-show="!isLoading">
       <span class="label">
         <span class="left">搜索 </span>
         <span class="keyword">&nbsp;{{ keyword }}&nbsp;</span>
         <span class="left">的结果：</span>
       </span>
       <div class="search-recommend-container">
-        <SearchRecommend :keyword="(keyword as string)" v-if="isShowCpn" />
+        <SearchRecommend
+          :keyword="(keyword as string)"
+          v-if="isShowCpn"
+          @finish-loading="handleFinishLoading"
+        />
       </div>
       <div class="search-result-container">
-        <SearchResult :keyword="(keyword as string)" v-if="isShowCpn" />
+        <SearchResult
+          :keyword="(keyword as string)"
+          v-if="isShowCpn"
+          @finish-loading="handleFinishLoading"
+        />
       </div>
     </el-scrollbar>
+    <LoadingAnimation v-if="isLoading" />
   </div>
 </template>
 
@@ -23,6 +32,7 @@ import {
 import { useRoute } from 'vue-router'
 import SearchRecommend from '@/components/search/SearchRecommend.vue'
 import SearchResult from '@/components/search/SearchResult.vue'
+import LoadingAnimation from '@/components/common/LoadingAnimation.vue'
 
 const route = useRoute()
 const isShowCpn = ref(true)
@@ -39,6 +49,15 @@ watch(() => route.query, () => {
     isShowCpn.value = true
   })
 })
+
+const isLoading = ref(true)
+const loadedCount = ref(0)
+const handleFinishLoading = () => {
+  loadedCount.value += 1
+  if (loadedCount.value === 2) {
+    isLoading.value = false
+  }
+}
 </script>
 
 <style scoped lang="scss">

@@ -30,6 +30,7 @@ import { useRouter } from 'vue-router'
 const props = defineProps<{
   uid: number
 }>()
+const emit = defineEmits(['finish-loading'])
 
 const router = useRouter()
 
@@ -58,6 +59,8 @@ const getData = async () => {
       starredPlaylist.push(obj)
     }
   })
+  // 数据加载完成
+  emit('finish-loading')
 }
 onBeforeMount(() => {
   getData()

@@ -2,7 +2,7 @@
   <div class="search-result-wrap">
     <el-tabs v-model="activeTab">
       <el-tab-pane label="单曲" name="music">
-        <SearchResultMusic />
+        <SearchResultMusic @finish-loading="handleFinishLoading" />
       </el-tab-pane>
       <el-tab-pane label="专辑" name="album"> Album </el-tab-pane>
       <el-tab-pane label="歌手" name="singer"> Singer </el-tab-pane>
@@ -19,7 +19,13 @@
 import { ref } from 'vue'
 import SearchResultMusic from '@/components/search/SearchResultMusic.vue'
 
+const emit = defineEmits(['finish-loading'])
+
 const activeTab = ref('music')
+
+const handleFinishLoading = () => {
+  emit('finish-loading')
+}
 </script>
 
 <style scoped lang="scss">

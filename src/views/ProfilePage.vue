@@ -1,24 +1,36 @@
 <template>
   <div class="profile-container">
-    <el-scrollbar class="scroll-bar">
+    <el-scrollbar class="scroll-bar" v-show="!isLoading">
       <div class="user-profile-container">
-        <UserProfile :uid="Number(uid)" />
+        <UserProfile :uid="Number(uid)" @finish-loading="handleFinishLoading" />
       </div>
       <div class="user-playlist-container">
-        <UserPlaylist :uid="Number(uid)" />
+        <UserPlaylist :uid="Number(uid)" @finish-loading="handleFinishLoading" />
       </div>
     </el-scrollbar>
+    <LoadingAnimation v-if="isLoading" />
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { Decrypt } from '@/utils/secret'
 import UserProfile from '@/components/profile/UserProfile.vue'
 import UserPlaylist from '@/components/profile/UserPlaylist.vue'
+import LoadingAnimation from '@/components/common/LoadingAnimation.vue'
 
 const route = useRoute()
 const uid = route.params.id || Decrypt(String(window.localStorage.getItem('uid')))
+const isLoading = ref(true)
+
+const loadedCount = ref(0)
+const handleFinishLoading = () => {
+  loadedCount.value += 1
+  if (loadedCount.value === 2) {
+    isLoading.value = false
+  }
+}
 </script>
 
 <style scoped lang="scss">

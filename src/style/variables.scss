@@ -115,10 +115,25 @@ $login-page-bg-color: $fg-color-1;
     'active-border-color': $bg-color-1,
     'active-bg-color': $bg-color-3,
   ),
+  $pagination: (
+    'bg-color': $bg-color-2,
+    'button-disabled-bg-color': $bg-color-2,
+    'text-color': $font-inactive-color,
+    'hover-color': $font-active-color,
+    'button-color': $font-inactive-color,
+    'button-disabled-color': $font-inactive-color,
+  ),
 );
+
 @mixin hover-font {
   color: $font-color;
   &:hover {
     color: $font-active-color;
   }
+}
+
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

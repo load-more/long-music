@@ -1,74 +1,65 @@
 <template>
   <div class="banner-wrap">
-    <el-skeleton
-      :loading="isLoadingBanner"
-      animated
-    >
-      <template #template>
-        <el-skeleton-item
-          class="banner-skeleton"
-          variant="image"
-        ></el-skeleton-item>
-      </template>
-      <template #default>
-        <el-carousel
-          class="card-banner-carousel"
-          v-if="bannerArr.length"
-          type="card"
-          :autoplay="false"
+    <div>
+      <el-carousel
+        class="card-banner-carousel"
+        v-if="bannerArr.length"
+        type="card"
+        :autoplay="false"
+      >
+        <el-carousel-item
+          v-for="(item) in bannerArr"
+          :key="item.targetId"
         >
-          <el-carousel-item
-            v-for="(item) in bannerArr"
-            :key="item.targetId"
-          >
-            <div class="image-wrap">
-              <el-image
-                ref="cardImage"
-                class="image"
-                :src="item.imgUrl"
-                @click="handleBannerClick(item.targetId)"
-              ></el-image>
-              <div
-                class="label"
-                :style="{ backgroundColor: item.titleColor }"
-              >{{ item.typeTitle }}</div>
-            </div>
-          </el-carousel-item>
-        </el-carousel>
-        <el-carousel
-          class="normal-banner-carousel"
-          v-if="bannerArr.length"
-          :autoplay="false"
-          height="278px"
+          <div class="image-wrap">
+            <el-image
+              ref="cardImage"
+              class="image"
+              :src="item.imgUrl"
+              @click="handleBannerClick(item.targetId)"
+            ></el-image>
+            <div
+              class="label"
+              :style="{ backgroundColor: item.titleColor }"
+            >{{ item.typeTitle }}</div>
+          </div>
+        </el-carousel-item>
+      </el-carousel>
+      <el-carousel
+        class="normal-banner-carousel"
+        v-if="bannerArr.length"
+        :autoplay="false"
+        height="278px"
+      >
+        <el-carousel-item
+          v-for="(item) in bannerArr"
+          :key="item.targetId"
         >
-          <el-carousel-item
-            v-for="(item) in bannerArr"
-            :key="item.targetId"
-          >
-            <div class="image-wrap">
-              <el-image
-                class="image"
-                :src="item.imgUrl"
-                @click="handleBannerClick(item.targetId)"
-              ></el-image>
-              <div
-                class="label"
-                :style="{ backgroundColor: item.titleColor }"
-              >{{ item.typeTitle }}</div>
-            </div>
-          </el-carousel-item>
-        </el-carousel>
-      </template>
-    </el-skeleton>
+          <div class="image-wrap">
+            <el-image
+              class="image"
+              :src="item.imgUrl"
+              @click="handleBannerClick(item.targetId)"
+            ></el-image>
+            <div
+              class="label"
+              :style="{ backgroundColor: item.titleColor }"
+            >{{ item.typeTitle }}</div>
+          </div>
+        </el-carousel-item>
+      </el-carousel>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, reactive, ref } from 'vue'
+import { onBeforeMount, reactive } from 'vue'
 import { getHomeBanner } from '@/api/home'
 import { getMusicDetail } from '@/api/music'
 import useMainStore from '@/store/index'
 import { storeToRefs } from 'pinia'
+
+const emit = defineEmits(['finish-loading'])
 
 /* 渲染数据 */
 interface bannerType {
@@ -78,7 +69,6 @@ interface bannerType {
   typeTitle: string
 }
 const bannerArr = reactive<bannerType[]>([])
-const isLoadingBanner = ref(true)
 const getData = async () => {
   // 获取 banner
   const { data: bannerData } = await getHomeBanner()
@@ -91,7 +81,7 @@ const getData = async () => {
     }
     bannerArr.push(obj)
   })
-  isLoadingBanner.value = false
+  emit('finish-loading')
 }
 onBeforeMount(() => {
   getData()
@@ -124,9 +114,6 @@ const handleBannerClick = async (id: number) => {
 .banner-wrap {
   :deep .el-carousel__container {
     height: 208px;
-  }
-  .banner-skeleton {
-    height: 242px;
   }
   .card-banner-carousel {
     .image-wrap {

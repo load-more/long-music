@@ -14,7 +14,7 @@
     <template #dropdown>
       <el-dropdown-menu>
         <el-dropdown-item
-          command="edit-profile"
+          command="profile"
         >
           <i class="iconfont icon-profile"></i>
           个人信息
@@ -70,8 +70,8 @@ const handleCommand = async (command: string) => {
         appendTo: document.body,
       })
     }
-  } else if (command === 'edit-profile') {
-    router.push({ name: 'editProfile' })
+  } else if (command === 'profile') {
+    router.push({ name: 'profile' })
   }
 }
 </script>

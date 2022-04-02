@@ -26,7 +26,6 @@
             :song-info="item"
             :song-index="index + 1"
           />
-          <LoadingSvg v-if="isLoading" />
         </div>
       </el-tab-pane>
       <el-tab-pane label="评论" name="comment"> Comments </el-tab-pane>
@@ -43,9 +42,10 @@ import MusicListItem, { songType } from '@/components/common/MusicListItem.vue'
 import { getPlaylistAllSongs } from '@/api/playlist'
 import { useRoute } from 'vue-router'
 import emitter from '@/utils/emitter'
-import LoadingSvg from '@/components/common/LoadingSvg.vue'
 import useMainStore from '@/store/index'
 import { storeToRefs } from 'pinia'
+
+const emit = defineEmits(['finish-loading'])
 
 /* 路由管理 */
 const route = useRoute()
@@ -56,7 +56,6 @@ const { currentSongList } = storeToRefs(useMainStore())
 /* 渲染数据 */
 const songCount = ref<null | number>(null)
 const { id } = route.params
-const isLoading = ref(false)
 const songArr = reactive<songType[]>([])
 
 const getData = async () => {
@@ -72,6 +71,7 @@ const getData = async () => {
     }
     songArr.push(obj)
   })
+  emit('finish-loading')
 }
 
 // 等待 PlaylistProfile 传入 songCount
@@ -84,10 +84,8 @@ const waitSongCount = () => new Promise((resolve) => {
 })
 
 onBeforeMount(async () => {
-  isLoading.value = true
   await waitSongCount()
   await getData()
-  isLoading.value = false
 })
 const activeTab = ref('list')
 

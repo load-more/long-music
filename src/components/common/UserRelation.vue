@@ -50,6 +50,7 @@ const props = defineProps<{
   uid: number
   type: 'follows' | 'fans'
 }>()
+const emit = defineEmits(['finish-loading'])
 
 interface userType {
   userId: number
@@ -93,6 +94,7 @@ const getData = async () => {
       })
     })
   }
+  emit('finish-loading')
 }
 
 const handleClickRelation = (uid: number) => {

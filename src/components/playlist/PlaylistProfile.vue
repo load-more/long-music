@@ -79,6 +79,8 @@ import { Decrypt } from '@/utils/secret'
 import emitter from '@/utils/emitter'
 import { formatPlayCount } from '@/utils/format'
 
+const emit = defineEmits(['finish-loading'])
+
 /* 路由管理 */
 const route = useRoute()
 const router = useRouter()
@@ -125,6 +127,7 @@ onBeforeMount(async () => {
   state.description = detailData.playlist.description
   state.commentCount = detailData.playlist.commentCount
 
+  emit('finish-loading')
   emitter.emit('onSendPlaylistMusicCount', state.songCount)
 })
 

@@ -20,12 +20,14 @@ import SearchRecommendItem from '@/components/search/SearchRecommendItem.vue'
 const props = defineProps<{
   keyword: string
 }>()
+const emit = defineEmits(['finish-loading'])
 
 const matchResult = ref({ orders: [] })
 
 const getData = async () => {
   const { data: matchData } = await getSearchMatch({ keywords: props.keyword })
   matchResult.value = matchData.result
+  emit('finish-loading')
 }
 
 onBeforeMount(() => {
