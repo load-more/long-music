@@ -2,7 +2,8 @@
   <div class="music-list-item-wrap" @dblclick="handleDbClick" :class="{ 'active': isActive }">
     <div class="pc hidden-xs-only">
       <div class="operation">
-        <span v-if="!isActive">{{ songIndex }}</span>
+        <span>{{ songIndex }}</span>
+        <i v-if="!isActive" @click="handleDbClick" class="iconfont icon-play-hollow"></i>
         <i v-else-if="currentSong.isPlay" class="iconfont icon-volume"></i>
         <i v-else class="iconfont icon-close-volume"></i>
         <i class="iconfont icon-like"></i>
@@ -129,16 +130,18 @@ const isActive = computed(() => props.songInfo.id === currentSong.value.id)
     }
     .operation {
       width: 100px;
+      display: flex;
+      align-items: center;
       span, i {
         display: inline-block;
         box-sizing: border-box;
-        width: 30px;
+        width: 25px;
         text-align: center;
       }
       .icon-volume, .icon-close-volume {
         color: $current-play-icon-color;
       }
-      .icon-like, .icon-download {
+      .icon-like, .icon-download, .icon-play-hollow {
         cursor: pointer;
         &:hover {
           color: $font-active-color;
@@ -163,9 +166,17 @@ const isActive = computed(() => props.songInfo.id === currentSong.value.id)
       }
     }
     .title, .singer, .album {
-      flex: 1;
       box-sizing: border-box;
       padding-left: 4px;
+    }
+    .title {
+      flex: 3;
+    }
+    .album {
+      flex: 2;
+    }
+    .singer {
+      flex: 1;
     }
     .duration {
       width: 70px;

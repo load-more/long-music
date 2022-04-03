@@ -112,9 +112,17 @@ onUnmounted(() => {
       text-align: center;
     }
     .title, .singer, .album {
-      flex: 1;
       box-sizing: border-box;
       padding-left: 4px;
+    }
+    .title {
+      flex: 3;
+    }
+    .album {
+      flex: 2;
+    }
+    .singer {
+      flex: 1;
     }
     .duration {
       width: 70px;
