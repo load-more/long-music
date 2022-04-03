@@ -36,30 +36,27 @@
 
 <script setup lang="ts">
 import {
-  ref, reactive, onBeforeMount, onUnmounted, watch,
+  ref, reactive, onBeforeMount, onUnmounted,
 } from 'vue'
 import MusicListItem, { songType } from '@/components/common/MusicListItem.vue'
 import { getPlaylistAllSongs } from '@/api/playlist'
-import { useRoute } from 'vue-router'
 import emitter from '@/utils/emitter'
 import useMainStore from '@/store/index'
 import { storeToRefs } from 'pinia'
 
+const props = defineProps<{
+  uid: number
+}>()
 const emit = defineEmits(['finish-loading'])
-
-/* 路由管理 */
-const route = useRoute()
 
 /* 状态管理 */
 const { currentSongList } = storeToRefs(useMainStore())
 
 /* 渲染数据 */
-const songCount = ref<null | number>(null)
-const { id } = route.params
 const songArr = reactive<songType[]>([])
 
 const getData = async () => {
-  const { data } = await getPlaylistAllSongs({ id: Number(id) })
+  const { data } = await getPlaylistAllSongs({ id: props.uid })
   data.songs.forEach((item: any) => {
     const obj: songType = {
       id: item.id,
@@ -74,30 +71,16 @@ const getData = async () => {
   emit('finish-loading')
 }
 
-// 等待 PlaylistProfile 传入 songCount
-const waitSongCount = () => new Promise((resolve) => {
-  watch(songCount, () => {
-    if (songCount.value !== null) {
-      resolve(true)
-    }
-  })
-})
-
 onBeforeMount(async () => {
-  await waitSongCount()
   await getData()
 })
 const activeTab = ref('list')
 
-emitter.on('onSendPlaylistMusicCount', (count: number) => {
-  songCount.value = count
-})
 emitter.on('onChangeCurrentPlaylist', () => {
   currentSongList.value = songArr
 })
 
 onUnmounted(() => {
-  emitter.off('onSendPlaylistMusicCount')
   emitter.off('onChangeCurrentPlaylist')
 })
 </script>

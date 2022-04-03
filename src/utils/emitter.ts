@@ -9,7 +9,6 @@ type Events = {
   'onToggleLoginLoading': boolean
   'onToggleRegisterLoading': boolean
   'onRefreshGlobalHeader': boolean
-  'onSendPlaylistMusicCount': number
   'onLoadMusicListItem': boolean
   'onChangeCurrentPlaylist': boolean
   'onRemoveCurrentSong': boolean

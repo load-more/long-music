@@ -12,7 +12,7 @@
         <span>{{ state.title }}</span>
         <i
           class="iconfont icon-edit"
-          v-if="uid === String(state.creatorId)"
+          v-if="uid === state.creatorId"
           @click="router.push({ name: 'editPlaylist', params: { id: state.playlistId } })"
         ></i>
       </div>
@@ -66,7 +66,7 @@
 </template>
 
 <script setup lang="ts">
-import { useRoute, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 import {
   onBeforeMount,
   reactive,
@@ -75,14 +75,14 @@ import {
 } from 'vue'
 import { getPlaylistDetail } from '@/api/playlist'
 import { getLocalTime } from '@/utils/time'
-import { Decrypt } from '@/utils/secret'
-import emitter from '@/utils/emitter'
 import { formatPlayCount } from '@/utils/format'
 
+const props = defineProps<{
+  uid: number
+}>()
 const emit = defineEmits(['finish-loading'])
 
 /* 路由管理 */
-const route = useRoute()
 const router = useRouter()
 
 /* 渲染数据 */
@@ -106,12 +106,10 @@ const createTime = computed(() => {
   const obj = getLocalTime(state.createTime)
   return `${obj.year}-${obj.month}-${obj.date}`
 })
-const uid = Decrypt(String(window.localStorage.getItem('uid')))
 
 onBeforeMount(async () => {
-  const { id } = route.params
   const { data: detailData } = await getPlaylistDetail({
-    id: Number(id),
+    id: props.uid,
   })
   state.playlistId = detailData.playlist.id
   state.coverImgUrl = detailData.playlist.coverImgUrl
@@ -128,7 +126,6 @@ onBeforeMount(async () => {
   state.commentCount = detailData.playlist.commentCount
 
   emit('finish-loading')
-  emitter.emit('onSendPlaylistMusicCount', state.songCount)
 })
 
 /* 点击介绍查看更多 */
