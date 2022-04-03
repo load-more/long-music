@@ -79,6 +79,16 @@ export const getUserFollows = (params: ParamsType) => request({
 
 export const getUserFans = (params: ParamsType) => request({
   method: 'GET',
-  url: 'user/followeds',
+  url: '/user/followeds',
+  params,
+})
+
+interface followOrUnfollowType {
+  id: number
+  t: number // 1 为关注，其他为取消关注
+}
+export const followOrUnfollow = (params: followOrUnfollowType) => request({
+  method: 'GET',
+  url: '/follow',
   params,
 })

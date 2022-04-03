@@ -20,11 +20,35 @@
             @click="handleClickRelation(item.userId)"
           >{{ item.nickname }}</span>
           <el-button
+            v-if="mainStore.userDetail.uid === uid"
             size="small"
             round
           >
-          <i class="iconfont icon-message"></i>
-          &nbsp;私信</el-button>
+            <i class="iconfont icon-message"></i>
+            &nbsp;私信
+          </el-button>
+          <el-button
+            v-if="mainStore.userDetail.uid !== uid &&
+                  mainStore.userDetail.uid !== item.userId &&
+                  !item.followed"
+            size="small"
+            round
+            @click="handleClickFollow(item.userId)"
+          >
+            <i class="iconfont icon-follow"></i>
+            &nbsp;关注
+          </el-button>
+          <el-button
+            v-if="mainStore.userDetail.uid !== uid &&
+                  mainStore.userDetail.uid !== item.userId &&
+                  item.followed"
+            size="small"
+            disabled
+            round
+          >
+            <i class="iconfont icon-follower"></i>
+            &nbsp;已关
+          </el-button>
         </div>
         <div class="bottom">
           <div class="signature single-line-ellipsis">
@@ -43,6 +67,9 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
+import useMainStore from '@/store/index'
+import { followOrUnfollow } from '@/api/user'
+import { ElMessage } from 'element-plus'
 
 export interface userType {
   userId: number
@@ -52,15 +79,54 @@ export interface userType {
   followeds: number
   follows: number
   avatarUrl: string
+  followed: boolean
 }
 defineProps<{
+  uid: number
   relation: userType[]
 }>()
+const emit = defineEmits(['updateArray'])
 
 const router = useRouter()
+const mainStore = useMainStore()
 
 const handleClickRelation = (uid: number) => {
   router.push({ name: 'profile', params: { id: uid } })
+}
+
+const handleClickFollow = async (uid: number) => {
+  try {
+    const { data } = await followOrUnfollow({
+      id: uid,
+      t: 1,
+    })
+    if (data.code === 200) {
+      emit('updateArray', uid) // 更新关注按钮
+      ElMessage({
+        type: 'success',
+        message: '关注成功！',
+        appendTo: document.body,
+      })
+    } else if (data.code === -462) {
+      ElMessage({
+        type: 'error',
+        message: data.data.blockText,
+        appendTo: document.body,
+      })
+    } else {
+      ElMessage({
+        type: 'error',
+        message: '未知错误',
+        appendTo: document.body,
+      })
+    }
+  } catch {
+    ElMessage({
+      type: 'error',
+      message: '未知错误',
+      appendTo: document.body,
+    })
+  }
 }
 </script>
 

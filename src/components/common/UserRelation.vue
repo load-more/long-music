@@ -3,7 +3,9 @@
     <div class="user-relation-item-wrap" v-show="!isLoading">
       <keep-alive>
         <UserRelationItem
+          :uid="uid"
           :relation="pageMap.get(currentPage - 1)"
+          @update-array="handleUpdateArray(currentPage, $event)"
         />
       </keep-alive>
       <el-pagination
@@ -57,6 +59,7 @@ const getData = async (offset: number) => {
         followeds: item.followeds,
         follows: item.follows,
         avatarUrl: item.avatarUrl,
+        followed: item.followed,
       })
     })
     pageMap.value.set(offset, arr)
@@ -79,6 +82,7 @@ const getData = async (offset: number) => {
         followeds: item.followeds,
         follows: item.follows,
         avatarUrl: item.avatarUrl,
+        followed: item.followed,
       })
     })
     pageMap.value.set(offset, arr)
@@ -89,6 +93,11 @@ const getData = async (offset: number) => {
 
 const handleCurrentChange = () => {
   getData(currentPage.value - 1)
+}
+
+const handleUpdateArray = (page: number, uid: number) => {
+  const index = pageMap.value.get(page - 1).findIndex((item: userType) => item.userId === uid)
+  pageMap.value.get(page - 1)[index].followed = true
 }
 
 onBeforeMount(() => {
