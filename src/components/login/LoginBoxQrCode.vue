@@ -43,29 +43,21 @@ onUnmounted(() => {
 
 const displayQrCode = async () => {
   let key = ''
-  try {
-    isLoading.value = true
-    // 生成二维码 key
-    const { data: keyData } = await generateQrKey()
+  isLoading.value = true
+  // 生成二维码 key
+  const { data: keyData } = await generateQrKey()
 
-    if (keyData.code === 200) {
-      key = keyData.data.unikey
-      // 如果成功，则生成二维码图片
-      const { data: qrData } = await generateQrCode({
-        key,
-        qrimg: true,
-      })
-      // 如果成功，将图片替换
-      if (qrData.code === 200) {
-        imgUrl.value = qrData.data.qrimg
-      }
-    }
-  } catch (error) {
-    ElMessage({
-      type: 'error',
-      message: '加载失败',
-      appendTo: document.body,
+  if (keyData.code === 200) {
+    key = keyData.data.unikey
+    // 如果成功，则生成二维码图片
+    const { data: qrData } = await generateQrCode({
+      key,
+      qrimg: true,
     })
+    // 如果成功，将图片替换
+    if (qrData.code === 200) {
+      imgUrl.value = qrData.data.qrimg
+    }
   }
   isLoading.value = false
 

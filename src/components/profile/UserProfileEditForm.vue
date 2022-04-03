@@ -189,25 +189,17 @@ const onDateChange = (val: Date) => {
 }
 const onSave = async () => {
   isLoading.value = true
-  try {
-    const rst = await updateUserProfile(profileForm)
-    if (rst.data.code === 200) {
-      ElMessage({
-        type: 'success',
-        message: '修改成功',
-        appendTo: document.body,
-      })
-    } else {
-      ElMessage({
-        type: 'error',
-        message: rst.data.message,
-        appendTo: document.body,
-      })
-    }
-  } catch (error: any) {
+  const rst = await updateUserProfile(profileForm)
+  if (rst.data.code === 200) {
+    ElMessage({
+      type: 'success',
+      message: '修改成功',
+      appendTo: document.body,
+    })
+  } else {
     ElMessage({
       type: 'error',
-      message: error.response.data.message,
+      message: rst.data.message,
       appendTo: document.body,
     })
   }

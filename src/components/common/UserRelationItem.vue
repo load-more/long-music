@@ -95,35 +95,15 @@ const handleClickRelation = (uid: number) => {
 }
 
 const handleClickFollow = async (uid: number) => {
-  try {
-    const { data } = await followOrUnfollow({
-      id: uid,
-      t: 1,
-    })
-    if (data.code === 200) {
-      emit('updateArray', uid) // 更新关注按钮
-      ElMessage({
-        type: 'success',
-        message: '关注成功！',
-        appendTo: document.body,
-      })
-    } else if (data.code === -462) {
-      ElMessage({
-        type: 'error',
-        message: data.data.blockText,
-        appendTo: document.body,
-      })
-    } else {
-      ElMessage({
-        type: 'error',
-        message: '未知错误',
-        appendTo: document.body,
-      })
-    }
-  } catch {
+  const { data } = await followOrUnfollow({
+    id: uid,
+    t: 1,
+  })
+  if (data.code === 200) {
+    emit('updateArray', uid) // 更新关注按钮
     ElMessage({
-      type: 'error',
-      message: '未知错误',
+      type: 'success',
+      message: '关注成功！',
       appendTo: document.body,
     })
   }

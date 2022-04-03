@@ -151,26 +151,18 @@ const handleUpload = () => {
   cropper?.getCroppedCanvas().toBlob(async (file: any) => {
     isLoading.value = true
     const cropperData = cropper?.getData(true)
-    try {
-      const rst = await props.updateImgApi(file, cropperData!.width)
-      if (rst.data.code === 200) {
-        isShowDialog.value = false
-        ElMessage({
-          type: 'success',
-          message: '修改成功',
-          appendTo: document.body,
-        })
-      } else {
-        ElMessage({
-          type: 'error',
-          message: rst.data.message,
-          appendTo: document.body,
-        })
-      }
-    } catch (error) {
+    const rst = await props.updateImgApi(file, cropperData!.width)
+    if (rst.data.code === 200) {
+      isShowDialog.value = false
+      ElMessage({
+        type: 'success',
+        message: '修改成功',
+        appendTo: document.body,
+      })
+    } else {
       ElMessage({
         type: 'error',
-        message: '未知错误',
+        message: rst.data.message,
         appendTo: document.body,
       })
     }

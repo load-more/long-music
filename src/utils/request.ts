@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { ElMessage } from 'element-plus'
 
 let baseURL = ''
 if (process.env.NODE_ENV === 'development') {
@@ -21,5 +22,27 @@ const request = axios.create({
     timestamp: new Date().valueOf(),
   },
 })
+
+// 添加响应拦截器
+request.interceptors.response.use(
+  // 所有状态码为 2xx 的响应会进入这里
+  (response) => response, // 成功状态码，直接返回响应
+  (error) => { // 任何状态码超出 2xx 的响应会进入这里
+    // 1. 获取状态码和数据
+    const { status, data } = error.response
+    // 2. 处理异常状态码
+    if (status === 400) {
+      if (data.code === -462) {
+        ElMessage({
+          type: 'error',
+          message: data.data.blockText,
+          appendTo: document.body,
+        })
+      }
+    }
+    // 3. 异常返回
+    return Promise.reject(error)
+  },
+)
 
 export default request

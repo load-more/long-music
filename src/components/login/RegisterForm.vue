@@ -150,29 +150,20 @@ const onClickCaptcha = () => {
   formRef.value?.validateField('phone', async (notPass) => {
     if (!notPass) {
       isCaptchaLoading.value = true
-      try {
-        const rst = await sendCaptcha({
-          phone: registerForm.phone,
-        })
-        isCaptchaLoading.value = false
-        if (rst.data.code === 200) {
+      const rst = await sendCaptcha({
+        phone: registerForm.phone,
+      })
+      isCaptchaLoading.value = false
+      if (rst.data.code === 200) {
+        counter.value -= 1
+        timer = setInterval(() => {
           counter.value -= 1
-          timer = setInterval(() => {
-            counter.value -= 1
-            if (counter.value === 0) {
-              clearInterval(timer!)
-              timer = null
-              counter.value = countdownTime
-            }
-          }, 1000)
-        }
-      } catch (error) {
-        isCaptchaLoading.value = false
-        ElMessage({
-          type: 'error',
-          message: '发送失败',
-          appendTo: document.body,
-        })
+          if (counter.value === 0) {
+            clearInterval(timer!)
+            timer = null
+            counter.value = countdownTime
+          }
+        }, 1000)
       }
     }
   })
@@ -183,30 +174,19 @@ const onClickRegister = () => {
       if (result) {
         // 表单校验成功，发送请求
         emitter.emit('onToggleRegisterLoading', true) // 开启 loading
-        try {
-          const { data } = await register(registerForm)
-          if (data.code === 200) {
-            // 登录成功
-            router.push({ name: 'home' })
-            ElMessage({
-              type: 'success',
-              message: '注册成功！',
-              appendTo: document.body,
-            })
-          } else {
-            ElMessage({
-              type: 'error',
-              message: data.message,
-              appendTo: document.body,
-            })
-          }
-        } catch (error: any) {
-          const errorMsg = error.response.data.message
-            ? error.response.data.message
-            : '未知错误'
+        const { data } = await register(registerForm)
+        if (data.code === 200) {
+          // 登录成功
+          router.push({ name: 'home' })
+          ElMessage({
+            type: 'success',
+            message: '注册成功！',
+            appendTo: document.body,
+          })
+        } else {
           ElMessage({
             type: 'error',
-            message: errorMsg,
+            message: data.message,
             appendTo: document.body,
           })
         }
