@@ -35,13 +35,39 @@
             <i :class="`iconfont icon-${genderArr[state.gender]}`"></i>
           </span>
         </div>
-        <el-button
-          v-if="userId === uid"
-          round @click="router.push({ name: 'editProfile' })"
-        >
-          <i class="iconfont icon-edit"></i>
-          编辑资料
-        </el-button>
+        <div>
+          <el-button
+            v-if="userId === uid"
+            @click="router.push({ name: 'editProfile' })"
+            round
+          >
+            <i class="iconfont icon-edit"></i>
+            &nbsp;编辑资料
+          </el-button>
+          <el-button
+            v-else
+            round
+          >
+            <i class="iconfont icon-message"></i>
+            &nbsp;私信
+          </el-button>
+          <el-button
+            v-if="userId !== uid && state.followed"
+            @click="handleFollowOrUnfollow"
+            round
+          >
+            <i class="iconfont icon-follower"></i>
+            &nbsp;已关注
+          </el-button>
+          <el-button
+            v-if="userId !== uid && !state.followed"
+            @click="handleFollowOrUnfollow"
+            round
+          >
+            <i class="iconfont icon-follow"></i>
+            &nbsp;关注
+          </el-button>
+        </div>
       </div>
       <div class="mid-profile">
         <div class="item left-item" @click="handleClickFollow">
@@ -84,12 +110,13 @@
 import {
   onBeforeMount, reactive, computed, ref,
 } from 'vue'
-import { getUserDetail, getUserLevel } from '@/api/user'
+import { getUserDetail, getUserLevel, followOrUnfollow } from '@/api/user'
 import { useRouter } from 'vue-router'
 import { getLocalTime } from '@/utils/time'
 import regionData from '@/utils/region'
 import useMainStore from '@/store/index'
 import { storeToRefs } from 'pinia'
+import { ElMessage } from 'element-plus'
 
 const props = defineProps<{
   uid: number
@@ -119,6 +146,8 @@ const state = reactive({
   createTime: 0,
   province: 0,
   city: 0,
+  followed: false,
+  userId: 0,
 })
 const genderArr = ['unknown', 'male', 'female']
 
@@ -136,6 +165,8 @@ const getData = async () => {
   state.createTime = detailData.profile.createTime
   state.province = detailData.profile.province
   state.city = detailData.profile.city
+  state.followed = detailData.profile.followed
+  state.userId = detailData.profile.userId
   // 获取用户等级信息
   if (userId === props.uid) {
     const { data: levelData } = await getUserLevel()
@@ -201,6 +232,21 @@ const toggleReadMore = () => {
     signatureRef.value!.style.whiteSpace = 'normal'
   } else {
     signatureRef.value!.style.whiteSpace = 'nowrap'
+  }
+}
+
+/* 关注或取消关注 */
+const handleFollowOrUnfollow = async () => {
+  const { data } = await followOrUnfollow({
+    id: state.userId,
+    t: state.followed ? 0 : 1,
+  })
+  if (data.code === 200) {
+    ElMessage({
+      type: 'success',
+      message: state.followed ? '已取消关注！' : '关注成功！',
+      appendTo: document.body,
+    })
   }
 }
 </script>
