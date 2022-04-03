@@ -1,20 +1,23 @@
 <template>
   <el-row class="container" v-loading.fullscreen.lock="isFullLoading">
-    <el-col :sm="7" :xs="0" class="left">
+    <div class="left">
       <div>
         <img src="@/assets/img/logo.png" alt="logo" @click="router.push({ name: 'home' })" />
       </div>
-    </el-col>
-    <el-col :sm="9" :xs="12" class="mid">
+    </div>
+    <div class="mid">
+      <SearchInput />
       <span @click="router.back()" class="hidden-xs-only">
         <i class="iconfont icon-left-arrow"></i>
       </span>
       <span @click="router.forward()" class="hidden-xs-only">
         <i class="iconfont icon-right-arrow"></i>
       </span>
-      <SearchInput />
-    </el-col>
-    <el-col :sm="8" :xs="12" class="right">
+      <span @click="router.go(0)" class="hidden-xs-only">
+        <i class="iconfont icon-refresh"></i>
+      </span>
+    </div>
+    <div class="right">
       <div class="tools hidden-xs-only">
         <i class="iconfont icon-notice"></i>
         <ThemeDropdown />
@@ -24,7 +27,7 @@
           @logout="isFullLoading = true"
         />
       </div>
-    </el-col>
+    </div>
   </el-row>
 </template>
 
@@ -75,9 +78,9 @@ const isFullLoading = ref(false)
   .mid {
     display: flex;
     align-items: center;
-    .icon-left-arrow, .icon-right-arrow {
+    .icon-left-arrow, .icon-right-arrow, .icon-refresh {
       @include hover-font;
-      padding-left: 10px;
+      padding-left: 20px;
     }
     span {
       cursor: pointer;

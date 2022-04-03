@@ -8,7 +8,9 @@
       popper-class="search-popper"
     >
       <template #reference>
-        <el-input :placeholder="defaultKeyword" v-model="keyword"
+        <el-input
+          :placeholder="defaultKeyword"
+          v-model="keyword"
           @click.stop="popperVisible = true"
         >
           <template #prefix v-if="defaultKeyword">
@@ -72,9 +74,6 @@
         </div>
       </el-scrollbar>
     </el-popover>
-    <span>
-      <i class="iconfont icon-microphone"></i>
-    </span>
   </div>
 </template>
 
@@ -150,7 +149,7 @@ window.addEventListener('click', (event: MouseEvent) => {
   display: flex;
   align-items: center;
   .el-input {
-    width: 100%;
+    width: 250px;
     margin-left: 10px;
   }
   .icon-microphone {
