@@ -65,7 +65,7 @@
                 :src="item.coverImg"
               ></el-image>
             </div>
-            <span class="single-line-ellipsis">
+            <span class="single-line-ellipsis" :title="item.title">
               {{ item.title }}
             </span>
           </el-menu-item>
@@ -86,7 +86,7 @@
                 :src="item.coverImg"
               ></el-image>
             </div>
-            <span class="single-line-ellipsis">
+            <span class="single-line-ellipsis" :title="item.title">
               {{ item.title }}
             </span>
           </el-menu-item>
