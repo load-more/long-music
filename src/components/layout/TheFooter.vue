@@ -8,6 +8,7 @@
           :size="60"
           :class="currentSong.album['picUrl'] ? 'song-image' : 'image-holder'"
           :src="currentSong.album['picUrl'] || '/album.png'"
+          @click="router.push({ name: 'song', params: { id: currentSong.id } })"
         ></el-avatar>
       </div>
       <div class="song-info">
@@ -18,6 +19,7 @@
           <span
             :title="`${currentSong.name} ${ currentSong.alias ?
             '(' + currentSong.alias + ')' : '' }`"
+            @click="router.push({ name: 'song', params: { id: currentSong.id } })"
           >
             <span>{{ currentSong.name }}</span>
             <span v-if="currentSong.alias">&nbsp;({{ currentSong.alias }})</span>
@@ -109,6 +111,9 @@ import MusicVolumeBar from '@/components/common/MusicVolumeBar.vue'
 import CurrentPlaylist from '@/components/common/CurrentPlaylist.vue'
 import emitter from '@/utils/emitter'
 import { initTheme } from '@/utils/theme'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 // 初始化主题颜色
 onMounted(() => {
@@ -328,6 +333,7 @@ emitter.on('onRemoveCurrentSong', () => {
       .title {
         font-size: 16px;
         margin-bottom: 10px;
+        line-height: 20px;
         .icon-like {
           margin-left: 5px;
         }

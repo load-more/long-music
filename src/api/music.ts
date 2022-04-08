@@ -18,5 +18,3 @@ export const getMusicDetail = (params: getMusicDetailParams) => request({
   url: '/song/detail',
   params,
 })
-
-export const others = ''

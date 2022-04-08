@@ -4,13 +4,6 @@ a {
   text-decoration: none;
 }
 
-/* 避免拖动鼠标选择到文字 */
-html, body {
-  -moz-user-select: none;
-  -khtml-user-select: none;
-  user-select: none;
-}
-
 /* Document
    ========================================================================== */
 

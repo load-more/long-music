@@ -52,6 +52,11 @@ const routes: RouteRecordRaw[] = [
         name: 'fans',
         component: () => import('@/views/FansPage.vue'),
       },
+      {
+        path: 'song/:id',
+        name: 'song',
+        component: () => import('@/views/SongPage.vue'),
+      },
     ],
   },
   {
