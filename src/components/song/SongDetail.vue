@@ -1,9 +1,12 @@
 <template>
   <div class="song-detail-wrap">
-    <el-image
-      class="cover-img"
-      :src="album?.picUrl"
-    ></el-image>
+    <div class="top">
+      <el-image
+        class="cover-img"
+        :src="album?.picUrl"
+      ></el-image>
+      <SongLyric :id="id" />
+    </div>
     <div class="info">
       <div class="title single-line-ellipsis">
         <span>
@@ -64,6 +67,7 @@
 <script setup lang="ts">
 import { ref, onBeforeMount } from 'vue'
 import { getMusicDetail } from '@/api/music'
+import SongLyric from '@/components/song/SongLyric.vue'
 
 const props = defineProps<{
   id: number
@@ -113,9 +117,15 @@ onBeforeMount(() => {
   width: 100%;
   color: $font-inactive-color;
   font-size: 14px;
-  .cover-img {
-    width: 250px;
-    height: 250px;
+  .top {
+    display: flex;
+    .cover-img {
+      width: 250px;
+      height: 250px;
+      margin-right: 20px;
+      margin-bottom: 20px;
+      flex-shrink: 0;
+    }
   }
   .info {
     .title {

@@ -18,3 +18,9 @@ export const getMusicDetail = (params: getMusicDetailParams) => request({
   url: '/song/detail',
   params,
 })
+
+export const getMusicLyric = (params: { id: number }) => request({
+  method: 'GET',
+  url: '/lyric',
+  params,
+})

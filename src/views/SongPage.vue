@@ -1,9 +1,11 @@
 <template>
   <div class="song-container">
-    <div class="top">
-      <SongDetail :id="songId" />
-    </div>
-    <div class="bottom"></div>
+    <el-scrollbar>
+      <div class="top">
+        <SongDetail :id="songId" />
+      </div>
+      <div class="bottom"></div>
+    </el-scrollbar>
   </div>
 </template>
 
