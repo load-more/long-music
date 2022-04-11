@@ -1,12 +1,5 @@
 <template>
   <div class="song-detail-wrap">
-    <div class="top">
-      <el-image
-        class="cover-img"
-        :src="album?.picUrl"
-      ></el-image>
-      <SongLyric :id="id" />
-    </div>
     <div class="info">
       <div class="title single-line-ellipsis">
         <span>
@@ -37,7 +30,7 @@
           v-for="(item, index) in artists"
           :key="index"
         >
-          <span class="name">
+          <span class="name" :title="item.name">
             {{ item.name }}
           </span>
           <span class="separator" v-if="index !== artists!.length - 1">|</span>
@@ -46,7 +39,7 @@
       <div class="album single-line-ellipsis">
         <span>
           <i class="iconfont icon-album"></i>
-          <span class="name">{{ album?.name }}</span>
+          <span class="name" :title="album?.name">{{ album?.name }}</span>
         </span>
         <span v-if="album?.tns.length">
           <span>（</span>
@@ -60,6 +53,13 @@
           <span>）</span>
         </span>
       </div>
+    </div>
+    <div class="main">
+      <el-image
+        class="cover-img"
+        :src="album?.picUrl"
+      ></el-image>
+      <SongLyric :id="id" class="lyric" />
     </div>
   </div>
 </template>
@@ -119,21 +119,44 @@ onBeforeMount(() => {
   width: 100%;
   color: $font-inactive-color;
   font-size: 14px;
-  .top {
+  .main {
     display: flex;
+    padding-top: 20px;
+    position: relative;
     .cover-img {
       width: 250px;
       height: 250px;
-      margin-right: 20px;
-      margin-bottom: 20px;
       flex-shrink: 0;
+      border-radius: 10px;
+    }
+    .lyric {
+      position: absolute;
+      left: 0;
+      right: 0;
+      margin: auto;
+      width: 300px;
     }
   }
   .info {
+    text-align: center;
     .title {
       color: $font-active-color;
       font-size: 20px;
       font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .artist, .album {
+      margin-top: 10px;
+      display: inline-block;
+      width: 40%;
+    }
+    .artist {
+      text-align: end;
+      padding-right: 15px;
+      box-sizing: border-box;
+    }
+    .album {
+      text-align: start;
     }
     i {
       margin-right: 5px;
