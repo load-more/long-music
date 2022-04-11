@@ -72,6 +72,7 @@ import SongLyric from '@/components/song/SongLyric.vue'
 const props = defineProps<{
   id: number
 }>()
+const emit = defineEmits(['finishLoading'])
 
 interface songType {
   name: string
@@ -105,6 +106,7 @@ const getData = async () => {
   }
   artists.value = data.songs[0].ar
   album.value = data.songs[0].al
+  emit('finishLoading')
 }
 
 onBeforeMount(() => {

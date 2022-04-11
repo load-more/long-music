@@ -4,11 +4,10 @@
 
 declare module 'vue' {
   export interface GlobalComponents {
+    CommentItem: typeof import('./src/components/common/CommentItem.vue')['default']
     CurrentPlaylist: typeof import('./src/components/common/CurrentPlaylist.vue')['default']
     ElAvatar: typeof import('element-plus/es')['ElAvatar']
     ElButton: typeof import('element-plus/es')['ElButton']
-    ElCarousel: typeof import('element-plus/es')['ElCarousel']
-    ElCarouselItem: typeof import('element-plus/es')['ElCarouselItem']
     ElDialog: typeof import('element-plus/es')['ElDialog']
     ElDrawer: typeof import('element-plus/es')['ElDrawer']
     ElDropdown: typeof import('element-plus/es')['ElDropdown']
@@ -19,6 +18,7 @@ declare module 'vue' {
     ElMenu: typeof import('element-plus/es')['ElMenu']
     ElMenuItem: typeof import('element-plus/es')['ElMenuItem']
     ElMenuItemGroup: typeof import('element-plus/es')['ElMenuItemGroup']
+    ElPagination: typeof import('element-plus/es')['ElPagination']
     ElPopover: typeof import('element-plus/es')['ElPopover']
     ElRow: typeof import('element-plus/es')['ElRow']
     ElScrollbar: typeof import('element-plus/es')['ElScrollbar']
@@ -53,6 +53,7 @@ declare module 'vue' {
     SearchResult: typeof import('./src/components/search/SearchResult.vue')['default']
     SearchResultMusic: typeof import('./src/components/search/SearchResultMusic.vue')['default']
     SearchResultMusicList: typeof import('./src/components/search/SearchResultMusicList.vue')['default']
+    SongComment: typeof import('./src/components/song/SongComment.vue')['default']
     SongDetail: typeof import('./src/components/song/SongDetail.vue')['default']
     SongLyric: typeof import('./src/components/song/SongLyric.vue')['default']
     TagSelector: typeof import('./src/components/common/TagSelector.vue')['default']

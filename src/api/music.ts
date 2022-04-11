@@ -24,3 +24,14 @@ export const getMusicLyric = (params: { id: number }) => request({
   url: '/lyric',
   params,
 })
+
+export const getMusicComment = (params: {
+  id: number
+  limit?: number
+  offset?: number
+  before?: number
+}) => request({
+  method: 'GET',
+  url: '/comment/music',
+  params,
+})
