@@ -187,10 +187,12 @@ watch(
   () => {
     music.src = `https://music.163.com/song/media/outer/url?id=${currentSong.value.id}.mp3`
   },
+  { immediate: true },
 )
 const isPlay = ref(false)
 const duration = ref(0)
 const volume = ref(100)
+const isFirstPlay = ref(true)
 
 // 暂停或播放音乐
 const playMusic = () => {
@@ -212,7 +214,9 @@ music.addEventListener('canplaythrough', () => {
   duration.value = music.duration
   currentPlayTime.value = music.currentTime
   volume.value = music.volume * 100
-  playMusic()
+  if (!isFirstPlay.value) {
+    playMusic()
+  }
 })
 // 每当音乐文件的时间更新，则更新 currentTime
 music.addEventListener('timeupdate', () => {
@@ -223,6 +227,7 @@ music.addEventListener('timeupdate', () => {
 music.addEventListener('play', () => {
   music.currentTime = ctCache.value
   isPlay.value = true
+  isFirstPlay.value = false
 })
 // 当音乐暂停
 music.addEventListener('pause', () => {
