@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import useMainStore from '@/store/index'
 import { storeToRefs } from 'pinia'
+import { getMusicDetail } from '@/api/music'
+import { getPlaylistAllSongs } from '@/api/playlist'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -73,9 +75,55 @@ const router = createRouter({
 
 router.beforeEach(async (to, from) => {
   const mainStore = useMainStore()
-  const { isLogin, userDetail } = storeToRefs(mainStore)
+  const {
+    isLogin, userDetail, currentSong, currentPlaylistId, currentSongList,
+  } = storeToRefs(mainStore)
   if (!userDetail.value.uid) {
     await mainStore.init()
+  }
+  // 获取一首歌曲的信息
+  const getSong = async (id: number) => {
+    const { data } = await getMusicDetail({ ids: id })
+    return {
+      id: data.songs[0].id,
+      name: data.songs[0].name,
+      alias: data.songs[0].alia[0],
+      author: data.songs[0].ar,
+      album: data.songs[0].al,
+      duration: data.songs[0].dt,
+    }
+  }
+  // 获取一个歌单全部歌曲的信息
+  const getAllSong = async (id: number) => {
+    const { data } = await getPlaylistAllSongs({ id })
+    const arr: any = []
+    data.songs.forEach((item: any) => {
+      const obj = {
+        id: item.id,
+        name: item.name,
+        alias: item.alia[0],
+        author: item.ar,
+        album: item.al,
+        duration: item.dt,
+      }
+      arr.push(obj)
+    })
+    return arr
+  }
+  // 用户刷新之后，自动读取 localStorage 中的播放歌曲数据
+  if (!currentSong.value.id) {
+    const id = Number(window.localStorage.getItem('current_song'))
+    if (id) {
+      currentSong.value = await getSong(id)
+    }
+  }
+  // 用户刷新之后，自动读取 localStorage 中的播放列表数据
+  if (!currentPlaylistId.value) {
+    const id = Number(window.localStorage.getItem('current_playlist'))
+    if (id) {
+      currentPlaylistId.value = id
+      currentSongList.value = await getAllSong(id)
+    }
   }
   // 如果用户未登录且目标页面不是登录页，则跳转到登录页
   if (!isLogin.value && to.name !== 'login') { // 注意，一定要写后面的判断逻辑，否则会死循环

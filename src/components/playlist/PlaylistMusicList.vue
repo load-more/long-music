@@ -36,7 +36,7 @@
 
 <script setup lang="ts">
 import {
-  ref, reactive, onBeforeMount, onUnmounted,
+  ref, reactive, onBeforeMount,
 } from 'vue'
 import MusicListItem, { songType } from '@/components/common/MusicListItem.vue'
 import { getPlaylistAllSongs } from '@/api/playlist'
@@ -50,7 +50,7 @@ const props = defineProps<{
 const emit = defineEmits(['finish-loading'])
 
 /* 状态管理 */
-const { currentSongList } = storeToRefs(useMainStore())
+const { currentSongList, currentPlaylistId } = storeToRefs(useMainStore())
 
 /* 渲染数据 */
 const songArr = reactive<songType[]>([])
@@ -78,10 +78,7 @@ const activeTab = ref('list')
 
 emitter.on('onChangeCurrentPlaylist', () => {
   currentSongList.value = songArr
-})
-
-onUnmounted(() => {
-  emitter.off('onChangeCurrentPlaylist')
+  currentPlaylistId.value = props.uid
 })
 </script>
 

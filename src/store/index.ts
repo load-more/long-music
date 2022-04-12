@@ -35,6 +35,8 @@ const listenedSongSet = new Set()
 
 const currentPlayTime = 0
 
+const currentPlaylistId = 0
+
 const uid = Decrypt(String(window.localStorage.getItem('uid')))
 interface userDetailType {
   uid: number
@@ -55,6 +57,7 @@ export default defineStore('main', {
     listenedSongSet,
     userDetail,
     currentPlayTime,
+    currentPlaylistId,
   }),
   actions: {
     async init() {
