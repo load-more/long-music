@@ -8,4 +8,6 @@ export const formatPlayCount = (count: number) => {
   return `${Math.round(count / 100000000)}亿`
 }
 
-export const others = null
+// 01:01:33.34 => 3693.34
+export const formatLyricTime = (time: string) => time.split(':')
+  .reduceRight((p, c, i, a) => p + (+c * 60 ** (a.length - 1 - i)), 0)

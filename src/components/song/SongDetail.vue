@@ -134,7 +134,7 @@ onBeforeMount(() => {
       left: 0;
       right: 0;
       margin: auto;
-      width: 300px;
+      width: 400px;
     }
   }
   .info {

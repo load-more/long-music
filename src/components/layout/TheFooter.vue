@@ -71,14 +71,14 @@
       <div class="progress-bar hidden-xs-only">
         <MusicProgressBar
           :duration="duration"
-          :current-time="currentTime"
+          :current-time="currentPlayTime"
           @update-current-time="handleUpdateCurrentTime"
         />
       </div>
       <div class="mobile-progress-bar hidden-sm-and-up">
         <MusicProgressBar
           :duration="duration"
-          :current-time="currentTime"
+          :current-time="currentPlayTime"
           :show-label="false"
           @update-current-time="handleUpdateCurrentTime"
         />
@@ -120,7 +120,9 @@ onMounted(() => {
   initTheme()
 })
 
-const { currentSong, currentSongList, listenedSongSet } = storeToRefs(useMainStore())
+const {
+  currentSong, currentSongList, listenedSongSet, currentPlayTime,
+} = storeToRefs(useMainStore())
 
 /* 是否显示当前播放列表 */
 const isOpenList = ref(false)
@@ -188,7 +190,6 @@ watch(
 )
 const isPlay = ref(false)
 const duration = ref(0)
-const currentTime = ref(0)
 const volume = ref(100)
 
 // 暂停或播放音乐
@@ -209,13 +210,13 @@ const pauseMusic = () => {
 // 当音乐文件加载完成，初始化数据
 music.addEventListener('canplaythrough', () => {
   duration.value = music.duration
-  currentTime.value = music.currentTime
+  currentPlayTime.value = music.currentTime
   volume.value = music.volume * 100
   playMusic()
 })
 // 每当音乐文件的时间更新，则更新 currentTime
 music.addEventListener('timeupdate', () => {
-  currentTime.value = music.currentTime
+  currentPlayTime.value = music.currentTime
   ctCache.value = music.currentTime
 })
 // 当音乐开始播放
@@ -278,7 +279,7 @@ emitter.on('onRemoveCurrentSong', () => {
   }
   isPlay.value = false
   duration.value = 0
-  currentTime.value = 0
+  currentPlayTime.value = 0
 })
 </script>
 
