@@ -193,6 +193,7 @@ const isPlay = ref(false)
 const duration = ref(0)
 const volume = ref(100)
 const isFirstPlay = ref(true)
+const isExistCurrentSong = ref(!!currentSong.value.id)
 
 // 暂停或播放音乐
 const playMusic = () => {
@@ -214,7 +215,8 @@ music.addEventListener('canplaythrough', () => {
   duration.value = music.duration
   currentPlayTime.value = music.currentTime
   volume.value = music.volume * 100
-  if (!isFirstPlay.value) {
+  // 如果无当前播放歌曲，则直接播放；如果有，则判断是不是首次播放
+  if (!isExistCurrentSong.value || !isFirstPlay.value) {
     playMusic()
   }
 })
