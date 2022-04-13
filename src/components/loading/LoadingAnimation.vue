@@ -12,6 +12,7 @@
 .loader-wrap {
   width: 100%;
   height: 100%;
+  padding: 20px;
   font-size: 5px;
   @include flex-center;
 }

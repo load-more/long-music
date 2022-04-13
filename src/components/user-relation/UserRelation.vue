@@ -3,8 +3,9 @@
     <div class="user-relation-item-wrap" v-show="!isLoading">
       <keep-alive>
         <UserRelationItem
-          :uid="uid"
+          :uid="id"
           :relation="pageMap.get(currentPage - 1)"
+          :type="type"
           @update-array="handleUpdateArray(currentPage, $event)"
         />
       </keep-alive>
@@ -19,19 +20,22 @@
       >
       </el-pagination>
     </div>
+    <EmptyPlaceholder v-if="!count" :text="placeholderText" />
     <LoadingAnimation class="loading-animation" v-if="isLoading" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, ref } from 'vue'
+import { onBeforeMount, ref, computed } from 'vue'
 import { getUserFollows, getUserFans } from '@/api/user'
+import { getPlaylistSubsribers } from '@/api/playlist'
 import LoadingAnimation from '@/components/loading/LoadingAnimation.vue'
+import EmptyPlaceholder from '@/components/empty-placeholder/EmptyPlaceholder.vue'
 import UserRelationItem, { userType } from './UserRelationItem.vue'
 
 const props = defineProps<{
-  uid: number
-  type: 'follows' | 'fans'
+  id: number
+  type: 'follows' | 'fans' | 'subscribers'
   count: number
 }>()
 const emit = defineEmits(['finish-loading'])
@@ -41,54 +45,57 @@ const currentPage = ref(1)
 const pageMap = ref(new Map())
 const isLoading = ref(false)
 
-const getData = async (offset: number) => {
+const placeholderText = computed(() => {
   if (props.type === 'follows') {
-    if (pageMap.value.has(offset)) return
-    isLoading.value = true
-    const { data } = await getUserFollows({
-      uid: props.uid,
-      limit: pageSize.value,
-      offset: pageSize.value * offset,
-    })
-    const arr: userType[] = []
-    data.follow.forEach((item: userType) => {
-      arr.push({
-        userId: item.userId,
-        nickname: item.nickname,
-        signature: item.signature,
-        playlistCount: item.playlistCount,
-        followeds: item.followeds,
-        follows: item.follows,
-        avatarUrl: item.avatarUrl,
-        followed: item.followed,
-      })
-    })
-    pageMap.value.set(offset, arr)
-    isLoading.value = false
-  } else {
-    if (pageMap.value.has(offset)) return
-    isLoading.value = true
-    const { data } = await getUserFans({
-      uid: props.uid,
-      limit: pageSize.value,
-      offset: pageSize.value * offset,
-    })
-    const arr: userType[] = []
-    data.followeds.forEach((item: userType) => {
-      arr.push({
-        userId: item.userId,
-        nickname: item.nickname,
-        signature: item.signature,
-        playlistCount: item.playlistCount,
-        followeds: item.followeds,
-        follows: item.follows,
-        avatarUrl: item.avatarUrl,
-        followed: item.followed,
-      })
-    })
-    pageMap.value.set(offset, arr)
-    isLoading.value = false
+    return '暂无关注者'
   }
+  if (props.type === 'fans') {
+    return '暂无粉丝'
+  }
+  return '暂无收藏者'
+})
+
+const getData = async (offset: number) => {
+  if (pageMap.value.has(offset)) return
+  isLoading.value = true
+  let data
+
+  if (props.type === 'follows') {
+    data = (await getUserFollows({
+      uid: props.id,
+      limit: pageSize.value,
+      offset: pageSize.value * offset,
+    })).data.follow
+  } else if (props.type === 'fans') {
+    data = (await getUserFans({
+      uid: props.id,
+      limit: pageSize.value,
+      offset: pageSize.value * offset,
+    })).data.followeds
+  } else if (props.type === 'subscribers') {
+    data = (await getPlaylistSubsribers({
+      id: props.id,
+      limit: pageSize.value,
+      offset: pageSize.value * offset,
+    })).data.subscribers
+  }
+
+  const arr: userType[] = []
+  data.forEach((item: userType) => {
+    arr.push({
+      userId: item.userId,
+      nickname: item.nickname,
+      signature: item.signature,
+      playlistCount: item.playlistCount,
+      followeds: item.followeds,
+      follows: item.follows,
+      avatarUrl: item.avatarUrl,
+      followed: item.followed,
+    })
+  })
+
+  pageMap.value.set(offset, arr)
+  isLoading.value = false
   emit('finish-loading')
 }
 

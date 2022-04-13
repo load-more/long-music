@@ -76,6 +76,7 @@ import {
 import { getPlaylistDetail } from '@/api/playlist'
 import { getLocalTime } from '@/utils/time'
 import { formatPlayCount } from '@/utils/format'
+import emitter from '@/utils/emitter'
 
 const props = defineProps<{
   uid: number
@@ -126,6 +127,7 @@ onBeforeMount(async () => {
   state.commentCount = detailData.playlist.commentCount
 
   emit('finish-loading')
+  emitter.emit('onSendPlaylistSubscribers', state.subscribedCount)
 })
 
 /* 点击介绍查看更多 */

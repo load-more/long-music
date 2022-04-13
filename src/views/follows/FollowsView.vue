@@ -4,7 +4,7 @@
       <div class="user-relation-container">
         <span class="follows-label">“{{ nickname }}”的关注</span>
         <UserRelation
-          :uid="Number(uid)"
+          :id="Number(uid)"
           type="follows"
           :count="followsCount"
           @finish-loading="handleFinishLoading"

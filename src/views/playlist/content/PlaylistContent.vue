@@ -28,10 +28,12 @@
           />
         </div>
       </el-tab-pane>
-      <el-tab-pane :label="commentsCount" name="comment">
+      <el-tab-pane :label="commentsCountLabel" name="comment">
         <CommentsCpn type="playlist" :id="uid" @finish-loading="handleFinishLoading" />
       </el-tab-pane>
-      <el-tab-pane label="收藏者" name="subscriber"> Subscribers </el-tab-pane>
+      <el-tab-pane :label="subscribersCountLabel" name="subscriber">
+        <UserRelation type="subscribers" :id="uid" :count="subscribersCount" />
+      </el-tab-pane>
     </el-tabs>
   </div>
 </template>
@@ -46,6 +48,7 @@ import useMainStore from '@/store/index'
 import { storeToRefs } from 'pinia'
 import CommentsCpn from '@/components/comments/CommentsCpn.vue'
 import MusicListItem, { songType } from '@/components/music/MusicListItem.vue'
+import UserRelation from '@/components/user-relation/UserRelation.vue'
 
 const props = defineProps<{
   uid: number
@@ -74,15 +77,24 @@ const getData = async () => {
   emit('finish-loading')
 }
 
-const count = ref(0)
-const commentsCount = computed(() => {
-  if (!count.value) {
+const commentsCount = ref(0)
+const subscribersCount = ref(0)
+
+const commentsCountLabel = computed(() => {
+  if (!commentsCount.value) {
     return '评论(0)'
   }
-  return `评论(${count.value})`
+  return `评论(${commentsCount.value})`
 })
-const handleFinishLoading = (n: number) => {
-  count.value = n
+const subscribersCountLabel = computed(() => {
+  if (!subscribersCount.value) {
+    return '收藏者(0)'
+  }
+  return `收藏者(${subscribersCount.value})`
+})
+
+const handleFinishLoading = (count: number) => {
+  commentsCount.value = count
 }
 
 onBeforeMount(async () => {
@@ -93,6 +105,9 @@ const activeTab = ref('list')
 emitter.on('onChangeCurrentPlaylist', () => {
   currentSongList.value = songArr
   currentPlaylistId.value = props.uid
+})
+emitter.on('onSendPlaylistSubscribers', (count) => {
+  subscribersCount.value = count
 })
 </script>
 

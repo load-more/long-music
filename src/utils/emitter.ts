@@ -12,6 +12,7 @@ type Events = {
   'onLoadMusicListItem': boolean
   'onChangeCurrentPlaylist': boolean
   'onRemoveCurrentSong': boolean
+  'onSendPlaylistSubscribers': number
 }
 
 const emitter: Emitter<Events> = mitt<Events>()

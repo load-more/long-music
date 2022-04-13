@@ -76,3 +76,13 @@ export const getPlaylistComment = (params: {
   url: '/comment/playlist',
   params,
 })
+
+export const getPlaylistSubsribers = (params: {
+  id: number
+  limit?: number
+  offset?: number
+}) => request({
+  method: 'GET',
+  url: '/playlist/subscribers',
+  params,
+})

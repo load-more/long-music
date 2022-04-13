@@ -1,63 +1,124 @@
 <template>
-  <div class="item-wrap">
-    <div
-      class="item"
-      v-for="(item) in relation"
-      :key="item.userId"
-    >
-      <div class="left">
-        <el-avatar
-          class="avatar"
-          :src="item.avatarUrl"
-          shape="circle"
-          @click="handleClickRelation(item.userId)"
-        ></el-avatar>
-      </div>
-      <div class="right">
-        <div class="top">
-          <span
-            class="nickname single-line-ellipsis"
+  <div>
+    <div v-if="type === 'follows' || type === 'fans'" class="item-wrap">
+      <div
+        class="item"
+        v-for="(item) in relation"
+        :key="item.userId"
+      >
+        <div class="left">
+          <el-avatar
+            class="avatar"
+            :src="item.avatarUrl"
+            shape="circle"
             @click="handleClickRelation(item.userId)"
-          >{{ item.nickname }}</span>
-          <el-button
-            v-if="mainStore.userDetail.uid === uid"
-            size="small"
-            round
-          >
-            <i class="iconfont icon-message"></i>
-            &nbsp;私信
-          </el-button>
-          <el-button
-            v-if="mainStore.userDetail.uid !== uid &&
-                  mainStore.userDetail.uid !== item.userId &&
-                  !item.followed"
-            size="small"
-            round
-            @click="handleClickFollow(item.userId)"
-          >
-            <i class="iconfont icon-follow"></i>
-            &nbsp;关注
-          </el-button>
-          <el-button
-            v-if="mainStore.userDetail.uid !== uid &&
-                  mainStore.userDetail.uid !== item.userId &&
-                  item.followed"
-            size="small"
-            disabled
-            round
-          >
-            <i class="iconfont icon-follower"></i>
-            &nbsp;已关
-          </el-button>
+          ></el-avatar>
         </div>
-        <div class="bottom">
-          <div class="signature single-line-ellipsis">
-            <span>{{ item.signature }}</span>
+        <div class="right">
+          <div class="top">
+            <span
+              class="nickname single-line-ellipsis"
+              @click="handleClickRelation(item.userId)"
+            >{{ item.nickname }}</span>
+            <el-button
+              v-if="mainStore.userDetail.uid === uid"
+              size="small"
+              round
+            >
+              <i class="iconfont icon-message"></i>
+              &nbsp;私信
+            </el-button>
+            <el-button
+              v-if="mainStore.userDetail.uid !== uid &&
+                    mainStore.userDetail.uid !== item.userId &&
+                    !item.followed"
+              size="small"
+              round
+              @click="handleClickFollow(item.userId)"
+            >
+              <i class="iconfont icon-follow"></i>
+              &nbsp;关注
+            </el-button>
+            <el-button
+              v-if="mainStore.userDetail.uid !== uid &&
+                    mainStore.userDetail.uid !== item.userId &&
+                    item.followed"
+              size="small"
+              disabled
+              round
+            >
+              <i class="iconfont icon-follower"></i>
+              &nbsp;已关
+            </el-button>
           </div>
-          <div class="info">
-            <span class="single-line-ellipsis">歌单：{{ item.playlistCount }}</span>
-            <span class="single-line-ellipsis">粉丝：{{ item.followeds }}</span>
-            <span class="single-line-ellipsis">关注：{{ item.follows }}</span>
+          <div class="bottom">
+            <div class="signature single-line-ellipsis">
+              <span>{{ item.signature }}</span>
+            </div>
+            <div class="info">
+              <span class="single-line-ellipsis">歌单：{{ item.playlistCount }}</span>
+              <span class="single-line-ellipsis">粉丝：{{ item.followeds }}</span>
+              <span class="single-line-ellipsis">关注：{{ item.follows }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div v-else class="item-wrap">
+      <div
+        class="item"
+        v-for="(item) in relation"
+        :key="item.userId"
+      >
+        <div class="left">
+          <el-avatar
+            class="avatar"
+            :src="item.avatarUrl"
+            shape="circle"
+            @click="handleClickRelation(item.userId)"
+          ></el-avatar>
+        </div>
+        <div class="right">
+          <div class="top">
+            <span
+              class="nickname single-line-ellipsis"
+              @click="handleClickRelation(item.userId)"
+            >{{ item.nickname }}</span>
+            <el-button
+              v-if="mainStore.userDetail.uid === uid"
+              size="small"
+              round
+            >
+              <i class="iconfont icon-message"></i>
+              &nbsp;私信
+            </el-button>
+            <el-button
+              v-if="mainStore.userDetail.uid !== uid &&
+                    mainStore.userDetail.uid !== item.userId &&
+                    !item.followed"
+              size="small"
+              round
+              @click="handleClickFollow(item.userId)"
+            >
+              <i class="iconfont icon-follow"></i>
+              &nbsp;关注
+            </el-button>
+            <el-button
+              v-if="mainStore.userDetail.uid !== uid &&
+                    mainStore.userDetail.uid !== item.userId &&
+                    item.followed"
+              size="small"
+              disabled
+              round
+            >
+              <i class="iconfont icon-follower"></i>
+              &nbsp;已关
+            </el-button>
+          </div>
+          <div class="bottom">
+            <div class="signature single-line-ellipsis">
+              <span>{{ item.signature }}</span>
+            </div>
           </div>
         </div>
       </div>
@@ -84,6 +145,7 @@ export interface userType {
 defineProps<{
   uid: number
   relation: userType[]
+  type: 'follows' | 'fans' | 'subscribers'
 }>()
 const emit = defineEmits(['updateArray'])
 

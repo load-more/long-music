@@ -4,7 +4,7 @@
       <div class="user-relation-container">
         <span class="fans-label">“{{ nickname }}”的粉丝</span>
         <UserRelation
-          :uid="Number(uid)"
+          :id="Number(uid)"
           type="fans"
           :count="fansCount"
           @finish-loading="handleFinishLoading"
