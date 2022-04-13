@@ -8,63 +8,63 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/login',
     name: 'login',
-    component: () => import('@/views/LoginPage.vue'),
+    component: () => import('@/views/login/LoginView.vue'),
   },
   {
     path: '/',
-    component: () => import('@/views/LayoutPage.vue'),
+    component: () => import('@/views/layout/LayoutView.vue'),
     children: [
       {
         path: '', // 默认子路由
         name: 'home',
-        component: () => import('@/views/HomePage.vue'),
+        component: () => import('@/views/home/HomeView.vue'),
       },
       {
-        path: 'profile/:id?', // 注意，子路由不能带上 / ，否则无法显示路由
-        name: 'profile',
-        component: () => import('@/views/ProfilePage.vue'),
+        path: 'user/:id?', // 注意，子路由不能带上 / ，否则无法显示路由
+        name: 'user',
+        component: () => import('@/views/user/UserView.vue'),
       },
       {
         path: 'edit-profile',
         name: 'editProfile',
-        component: () => import('@/views/ProfileEditPage.vue'),
+        component: () => import('@/views/user-profile-edit/UserProfileEditView.vue'),
       },
       {
         path: 'playlist/:id',
         name: 'playlist',
-        component: () => import('@/views/PlaylistPage.vue'),
+        component: () => import('@/views/playlist/PlaylistView.vue'),
       },
       {
         path: 'edit-playlist/:id',
         name: 'editPlaylist',
-        component: () => import('@/views/PlaylistEditPage.vue'),
+        component: () => import('@/views/playlist-edit/PlaylistEditView.vue'),
       },
       {
         path: 'search',
         name: 'search',
-        component: () => import('@/views/SearchPage.vue'),
+        component: () => import('@/views/search/SearchView.vue'),
       },
       {
         path: 'follows/:id?',
         name: 'follows',
-        component: () => import('@/views/FollowsPage.vue'),
+        component: () => import('@/views/follows/FollowsView.vue'),
       },
       {
         path: 'fans/:id?',
         name: 'fans',
-        component: () => import('@/views/FansPage.vue'),
+        component: () => import('@/views/fans/FansView.vue'),
       },
       {
         path: 'song/:id',
         name: 'song',
-        component: () => import('@/views/SongPage.vue'),
+        component: () => import('@/views/song/SongView.vue'),
       },
     ],
   },
   {
     path: '/:pathMatch(.*)*',
     name: 'notFound',
-    component: () => import('@/views/NotFoundPage.vue'),
+    component: () => import('@/views/not-found/NotFoundView.vue'),
   },
 ]
 
