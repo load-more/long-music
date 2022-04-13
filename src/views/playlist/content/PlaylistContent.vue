@@ -28,8 +28,8 @@
           />
         </div>
       </el-tab-pane>
-      <el-tab-pane label="评论" name="comment">
-        <CommentsCpn type="playlist" :id="uid" />
+      <el-tab-pane :label="commentsCount" name="comment">
+        <CommentsCpn type="playlist" :id="uid" @finish-loading="handleFinishLoading" />
       </el-tab-pane>
       <el-tab-pane label="收藏者" name="subscriber"> Subscribers </el-tab-pane>
     </el-tabs>
@@ -38,7 +38,7 @@
 
 <script setup lang="ts">
 import {
-  ref, reactive, onBeforeMount,
+  ref, reactive, onBeforeMount, computed,
 } from 'vue'
 import { getPlaylistAllSongs } from '@/api/playlist'
 import emitter from '@/utils/emitter'
@@ -72,6 +72,17 @@ const getData = async () => {
     songArr.push(obj)
   })
   emit('finish-loading')
+}
+
+const count = ref(0)
+const commentsCount = computed(() => {
+  if (!count.value) {
+    return '评论(0)'
+  }
+  return `评论(${count.value})`
+})
+const handleFinishLoading = (n: number) => {
+  count.value = n
 }
 
 onBeforeMount(async () => {

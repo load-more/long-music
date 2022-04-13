@@ -1,12 +1,12 @@
 <template>
   <div class="song-comment-wrap">
-    <div class="hot-comments">
+    <div class="hot-comments" v-if="hotComments.length">
       <h2 class="label">热门评论({{ hotComments.length }})</h2>
       <CommentsItem
         :comments="hotComments"
       />
     </div>
-    <div class="new-comments">
+    <div class="new-comments" v-if="commentCount">
       <h2 class="label">最新评论({{ commentCount }})</h2>
       <div class="content" v-show="!isLoading">
         <keep-alive>
@@ -21,10 +21,12 @@
           :total="commentCount"
           v-model:current-page="currentPage"
           @current-change="handleNewCommentsChange"
+          hide-on-single-page
         >
         </el-pagination>
       </div>
     </div>
+    <EmptyPlaceholder v-if="!hotComments.length && !commentCount" text="暂无评论" />
     <LoadingAnimation class="loading-animation" v-if="isLoading" />
   </div>
 </template>
@@ -34,6 +36,7 @@ import { ref, onBeforeMount } from 'vue'
 import { getMusicComment } from '@/api/music'
 import { getPlaylistComment } from '@/api/playlist'
 import LoadingAnimation from '@/components/loading/LoadingAnimation.vue'
+import EmptyPlaceholder from '@/components/empty-placeholder/EmptyPlaceholder.vue'
 import CommentsItem, { commentType } from './CommentsItem.vue'
 
 const props = defineProps<{
@@ -101,8 +104,8 @@ const getComments = async (type: 'hot' | 'new' | 'all', offset: number) => {
 }
 
 const getData = async () => {
-  getComments('all', 0)
-  emit('finishLoading')
+  await getComments('all', 0)
+  emit('finishLoading', commentCount.value)
 }
 
 const handleNewCommentsChange = () => {

@@ -35,6 +35,7 @@
         :total="count"
         v-model:current-page="currentPage"
         @current-change="handleCurrentChange"
+        hide-on-single-page
       >
       </el-pagination>
     </div>
