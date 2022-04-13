@@ -28,7 +28,9 @@
           />
         </div>
       </el-tab-pane>
-      <el-tab-pane label="评论" name="comment"> Comments </el-tab-pane>
+      <el-tab-pane label="评论" name="comment">
+        <SongComment type="playlist" :id="uid" />
+      </el-tab-pane>
       <el-tab-pane label="收藏者" name="subscriber"> Subscribers </el-tab-pane>
     </el-tabs>
   </div>
@@ -43,6 +45,7 @@ import { getPlaylistAllSongs } from '@/api/playlist'
 import emitter from '@/utils/emitter'
 import useMainStore from '@/store/index'
 import { storeToRefs } from 'pinia'
+import SongComment from '@/components/song/SongComment.vue'
 
 const props = defineProps<{
   uid: number

@@ -5,7 +5,7 @@
         <SongDetail :id="songId" @finish-loading="handleFinishLoading" />
       </div>
       <div class="bottom">
-        <SongComment :id="songId" @finish-loading="handleFinishLoading" />
+        <SongComment :id="songId" type="song" @finish-loading="handleFinishLoading" />
       </div>
     </el-scrollbar>
     <LoadingAnimation v-if="isLoading" />

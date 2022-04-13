@@ -65,3 +65,14 @@ export const getRecommendPlaylist = () => request({
   method: 'GET',
   url: '/recommend/resource',
 })
+
+export const getPlaylistComment = (params: {
+  id: number
+  limit?: number
+  offset?: number
+  before?: number
+}) => request({
+  method: 'GET',
+  url: '/comment/playlist',
+  params,
+})

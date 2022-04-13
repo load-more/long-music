@@ -32,10 +32,12 @@
 <script setup lang="ts">
 import { ref, onBeforeMount } from 'vue'
 import { getMusicComment } from '@/api/music'
+import { getPlaylistComment } from '@/api/playlist'
 import CommentItem, { commentType } from '@/components/common/CommentItem.vue'
 import LoadingAnimation from '@/components/common/LoadingAnimation.vue'
 
 const props = defineProps<{
+  type: 'song' | 'playlist'
   id: number
 }>()
 const emit = defineEmits(['finishLoading'])
@@ -50,10 +52,16 @@ const isLoading = ref(false)
 const getComments = async (type: 'hot' | 'new' | 'all', offset: number) => {
   if (type === 'new' && newCommentsMap.value.has(offset)) return
   isLoading.value = true
-  const { data } = await getMusicComment({
+  let data: any = null
+  const params = {
     id: props.id,
     offset: pageSize.value * offset,
-  })
+  }
+  if (props.type === 'song') {
+    data = (await getMusicComment(params)).data
+  } else if (props.type === 'playlist') {
+    data = (await getPlaylistComment(params)).data
+  }
 
   const pushComments = (t: 'hot' | 'new') => {
     const raw = t === 'hot' ? data.hotComments : data.comments
