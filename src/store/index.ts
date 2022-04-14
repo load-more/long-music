@@ -19,6 +19,11 @@ interface songType {
   album: { name: string }
   duration: number
   isPlay?: boolean
+  mv: number // 0: 无 MV; !0: 有 MV
+  fee: number // 0: 免费/无版权; 1: VIP; 4: 歌曲所在专辑需单独付费; 8: 低品免费，高品下载收费; 16: 无音源
+  maxbr: number // 999000: SQ
+  st: number // 0: 可以播放; !0: 不可播放
+  noCopyrightRcmd: any // 无版权信息
 }
 const currentSong: songType = {
   id: 0,
@@ -27,6 +32,11 @@ const currentSong: songType = {
   author: [],
   album: { name: '' },
   duration: 0,
+  mv: 0,
+  fee: 0,
+  maxbr: 0,
+  st: 0,
+  noCopyrightRcmd: null,
 }
 
 const currentSongList: songType[] = []

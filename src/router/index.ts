@@ -91,13 +91,18 @@ router.beforeEach(async (to, from) => {
       author: data.songs[0].ar,
       album: data.songs[0].al,
       duration: data.songs[0].dt,
+      mv: data.songs[0].mv,
+      fee: data.privileges[0].fee,
+      maxbr: data.privileges[0].maxbr,
+      st: data.privileges[0].st,
+      noCopyrightRcmd: data.songs[0].noCopyrightRcmd,
     }
   }
   // 获取一个歌单全部歌曲的信息
   const getAllSong = async (id: number) => {
     const { data } = await getPlaylistAllSongs({ id })
     const arr: any = []
-    data.songs.forEach((item: any) => {
+    data.songs.forEach((item: any, index: number) => {
       const obj = {
         id: item.id,
         name: item.name,
@@ -105,6 +110,11 @@ router.beforeEach(async (to, from) => {
         author: item.ar,
         album: item.al,
         duration: item.dt,
+        mv: item.mv,
+        fee: data.privileges[index].fee,
+        maxbr: data.privileges[index].maxbr,
+        st: data.privileges[index].st,
+        noCopyrightRcmd: item.noCopyrightRcmd,
       }
       arr.push(obj)
     })

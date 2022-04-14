@@ -6,7 +6,7 @@ interface getMusicUrlParams {
 }
 export const getMusicUrl = (params: getMusicUrlParams) => request({
   method: 'GET',
-  url: '/music/url',
+  url: '/song/url',
   params,
 })
 
@@ -33,5 +33,14 @@ export const getMusicComment = (params: {
 }) => request({
   method: 'GET',
   url: '/comment/music',
+  params,
+})
+
+export const checkMusic = (params: {
+  id: number
+  br?: number
+}) => request({
+  method: 'GET',
+  url: '/check/music',
   params,
 })

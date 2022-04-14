@@ -63,7 +63,7 @@ const songArr = reactive<songType[]>([])
 
 const getData = async () => {
   const { data } = await getPlaylistAllSongs({ id: props.uid })
-  data.songs.forEach((item: any) => {
+  data.songs.forEach((item: any, index: number) => {
     const obj: songType = {
       id: item.id,
       name: item.name,
@@ -71,6 +71,11 @@ const getData = async () => {
       author: item.ar,
       album: item.al,
       duration: item.dt,
+      mv: item.mv,
+      fee: data.privileges[index].fee,
+      maxbr: data.privileges[index].maxbr,
+      st: data.privileges[index].st,
+      noCopyrightRcmd: item.noCopyrightRcmd,
     }
     songArr.push(obj)
   })

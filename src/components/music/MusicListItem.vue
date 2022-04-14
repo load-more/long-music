@@ -9,23 +9,46 @@
         <i class="iconfont icon-like"></i>
         <i class="iconfont icon-download"></i>
       </div>
-      <div
-        class="title"
-        :title="`${songInfo.name} ${songInfo.alias ? '(' + songInfo.alias + ')' : ''}`"
-      >
-        <span>{{ songInfo.name }}</span>
-        <span v-if="songInfo.alias" class="alias">&nbsp;({{ songInfo.alias }})</span>
+      <div class="title">
+        <span
+          class="single-line-ellipsis"
+          :title="`${songInfo.name} ${songInfo.alias ? '(' + songInfo.alias + ')' : ''}`"
+        >
+          <span
+            :style="{ color: songInfo.st !== 0 ? 'gray' : 'unset' }"
+          >{{ songInfo.name }}</span>
+          <span
+            class="alias"
+            v-if="songInfo.alias"
+            :style="{ color: songInfo.st !== 0 ? 'gray' : 'unset' }"
+          >&nbsp;({{ songInfo.alias }})</span>
+        </span>
+        <span class="tag-info">
+          <span v-if="!songInfo.noCopyrightRcmd">
+            <span class="tag" v-if="songInfo.fee === 1 || songInfo.fee === 4">VIP</span>
+            <span class="tag" v-if="songInfo.maxbr === 999000">SQ</span>
+            <span class="tag mv" v-if="songInfo.mv" @click.stop="handleClickMv">MV</span>
+          </span>
+          <span v-else>
+            <span class="no-copyright-tag">无音源</span>
+            <span class="no-copyright-text">{{ songInfo.noCopyrightRcmd.typeDesc }}</span>
+          </span>
+        </span>
       </div>
-      <div class="singer" :title="songInfo.author.map(item => item.name).join(' / ')">
-        <span v-for="(item, index) in songInfo.author" :key="item.id">
+      <div class="singer single-line-ellipsis">
+        <span
+          v-for="(item, index) in songInfo.author"
+          :key="item.id"
+          :title="songInfo.author.map(item => item.name).join(' / ')"
+        >
           <span class="name">
             {{ item.name }}
           </span>
           <span class="seperator" v-if="index !== songInfo.author.length - 1">&nbsp;/&nbsp;</span>
         </span>
       </div>
-      <div class="album" :title="songInfo.album.name">
-        <span>{{ songInfo.album.name }}</span>
+      <div class="album single-line-ellipsis">
+        <span :title="songInfo.album.name">{{ songInfo.album.name }}</span>
       </div>
       <div class="duration">
         <span>{{ formatDuration(songInfo.duration) }}</span>
@@ -74,6 +97,7 @@ import { formatDuration } from '@/utils/time'
 import useMainStore from '@/store/index'
 import { storeToRefs } from 'pinia'
 import emitter from '@/utils/emitter'
+import { ElMessage } from 'element-plus'
 
 export interface songType {
   id: number
@@ -83,6 +107,11 @@ export interface songType {
   album: { name: string }
   duration: number
   index?: number
+  mv: number // 0: 无 MV; !0: 有 MV
+  fee: number // 0: 免费/无版权; 1: VIP; 4: 歌曲所在专辑需单独付费; 8: 低品免费，高品下载收费; 16: 无音源
+  maxbr: number // 999000: SQ
+  st: number // 0: 可以播放; !0: 不可播放
+  noCopyrightRcmd: any // 无版权信息
 }
 interface Props {
   songInfo: songType
@@ -96,6 +125,14 @@ const props = withDefaults(defineProps<Props>(), {
 /* 双击播放音乐 */
 const { currentSong, listenedSongSet, currentSongList } = storeToRefs(useMainStore())
 const handleDbClick = () => {
+  if (props.songInfo.st !== 0) {
+    ElMessage({
+      type: 'error',
+      message: '该歌曲无版权，暂时无法播放',
+      appendTo: document.body,
+    })
+    return
+  }
   const index = currentSongList.value.findIndex((item) => item.id === currentSong.value.id)
   currentSong.value = props.songInfo
   if (props.isPlaylistItem) { // 如果是歌单里的歌曲，直接切换整个播放列表
@@ -111,6 +148,10 @@ const handleDbClick = () => {
 
 /* 判断当前音乐是否播放 */
 const isActive = computed(() => props.songInfo.id === currentSong.value.id)
+
+const handleClickMv = () => {
+  //
+}
 </script>
 
 <style scoped lang="scss">
@@ -149,8 +190,40 @@ const isActive = computed(() => props.songInfo.id === currentSong.value.id)
       }
     }
     .title {
+      display: flex;
       .alias {
         color: $font-inactive-color;
+      }
+      .tag-info {
+        flex-shrink: 0;
+        .tag {
+          font-size: 12px;
+          color: red;
+          border: 1px solid red;
+          padding: 0 3px;
+          border-radius: 5px;
+          margin-left: 5px;
+        }
+        .no-copyright-tag {
+          font-size: 12px;
+          color: gray;
+          border: 1px solid gray;
+          padding: 0 3px;
+          border-radius: 5px;
+          margin-left: 5px;
+        }
+        .no-copyright-text {
+          font-size: 12px;
+          color: gray;
+          margin-left: 5px;
+        }
+        .mv {
+          cursor: pointer;
+          &:hover {
+            color: $font-active-color;
+            border-color: $font-active-color;
+          }
+        }
       }
     }
     .singer {
@@ -171,6 +244,7 @@ const isActive = computed(() => props.songInfo.id === currentSong.value.id)
     }
     .title {
       flex: 3;
+      overflow: hidden;
     }
     .album {
       flex: 2;
@@ -181,11 +255,6 @@ const isActive = computed(() => props.songInfo.id === currentSong.value.id)
     .duration {
       width: 70px;
       text-align: center;
-    }
-    .title, .singer, .album {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
     }
   }
   @media screen and (max-width: 768px) {

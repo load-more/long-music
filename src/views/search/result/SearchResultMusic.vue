@@ -87,6 +87,11 @@ const getData = async (offset: number) => {
       album: item.al,
       duration: item.dt,
       index: i,
+      mv: item.mv,
+      fee: item.privilege.fee,
+      maxbr: item.privilege.maxbr,
+      st: item.privilege.st,
+      noCopyrightRcmd: item.noCopyrightRcmd,
     })
   })
   pageMap.value.set(offset, arr)

@@ -95,6 +95,11 @@ interface songType {
   author: { id: number, name: string }[]
   album: { name: string }
   duration: number
+  mv: number
+  fee: number
+  maxbr: number
+  st: number
+  noCopyrightRcmd: any
 }
 const handleBannerClick = async (id: number) => {
   const { data } = await getMusicDetail({ ids: id })
@@ -105,6 +110,11 @@ const handleBannerClick = async (id: number) => {
     author: data.songs[0].ar,
     album: data.songs[0].al,
     duration: data.songs[0].dt,
+    mv: data.songs[0].mv,
+    fee: data.privileges[0].fee,
+    maxbr: data.privileges[0].maxbr,
+    st: data.privileges[0].st,
+    noCopyrightRcmd: data.songs[0].noCopyrightRcmd,
   }
   currentSong.value = obj
 }

@@ -109,6 +109,8 @@ import { storeToRefs } from 'pinia'
 import emitter from '@/utils/emitter'
 import { initTheme } from '@/utils/theme'
 import { useRouter } from 'vue-router'
+import { getMusicUrl } from '@/api/music'
+import { ElMessage } from 'element-plus'
 import MusicProgressBar from './MusicProgressBar.vue'
 import MusicVolumeBar from './MusicVolumeBar.vue'
 import CurrentPlaylist from './CurrentPlaylist.vue'
@@ -184,7 +186,17 @@ const toggleCurrentMusic = (order: number) => {
 const music = new Audio()
 watch(
   () => currentSong.value.id,
-  () => {
+  async () => {
+    if (currentSong.value.fee === 1) {
+      const { data } = await getMusicUrl({ id: currentSong.value.id })
+      music.src = data.data[0].url
+      ElMessage({
+        type: 'warning',
+        message: 'VIP歌曲试听30秒',
+        appendTo: document.body,
+      })
+      return
+    }
     music.src = `https://music.163.com/song/media/outer/url?id=${currentSong.value.id}.mp3`
   },
   { immediate: true },
@@ -283,6 +295,11 @@ emitter.on('onRemoveCurrentSong', () => {
     author: [],
     album: { name: '' },
     duration: 0,
+    mv: 0,
+    fee: 0,
+    maxbr: 0,
+    st: 0,
+    noCopyrightRcmd: null,
   }
   isPlay.value = false
   duration.value = 0
