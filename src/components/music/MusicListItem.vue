@@ -2,7 +2,7 @@
   <div class="music-list-item-wrap" @dblclick="handleDbClick" :class="{ 'active': isActive }">
     <div class="pc hidden-xs-only">
       <div class="operation">
-        <span>{{ songIndex }}</span>
+        <span v-if="!isActive" class="index">{{ songIndex }}</span>
         <i v-if="!isActive" @click="handleDbClick" class="iconfont icon-play-hollow"></i>
         <i v-else-if="currentSong.isPlay" class="iconfont icon-volume"></i>
         <i v-else class="iconfont icon-close-volume"></i>
@@ -158,19 +158,13 @@ const handleClickMv = () => {
 .music-list-item-wrap {
   .pc {
     display: flex;
-    background-color: $item-bg-color;
     color: $font-color;
     font-size: 14px;
     padding: 10px 0;
-    border-radius: 5px;
-    margin-bottom: 5px;
     line-height: 20px;
     cursor: default;
-    &:hover {
-      background-color: $item-hover-bg-color;
-    }
     .operation {
-      width: 100px;
+      width: 75px;
       display: flex;
       align-items: center;
       span, i {
@@ -187,6 +181,17 @@ const handleClickMv = () => {
         &:hover {
           color: $font-active-color;
         }
+      }
+      .icon-play-hollow {
+        display: none;
+      }
+    }
+    &:hover .operation {
+      .index {
+        display: none;
+      }
+      .icon-play-hollow {
+        display: block;
       }
     }
     .title {

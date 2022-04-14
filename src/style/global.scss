@@ -192,9 +192,23 @@ body {
           font-size: 12px;
           line-height: 20px;
           color: $font-inactive-color;
+          .operation {
+            text-align: center;
+            width: 25px;
+            .icon-play-hollow {
+              display: none;
+              cursor: pointer;
+              &:hover {
+                color: $font-active-color;
+              }
+            }
+            i {
+              font-size: 12px;
+            }
+          }
           .title {
             color: $font-color;
-            padding: 0 5px;
+            padding-right: 5px;
             flex: 3;
           }
           .singer {
@@ -202,6 +216,17 @@ body {
           }
           .duration {
             width: 40px;
+          }
+          &:hover {
+            background-color: $bg-color-1;
+            .operation {
+              .icon-play-hollow {
+                display: block;
+              }
+              .index {
+                display: none;
+              }
+            }
           }
         }
         .active {

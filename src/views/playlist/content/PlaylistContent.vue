@@ -21,6 +21,7 @@
         </div>
         <div class="list">
           <MusicListItem
+            class="item"
             v-for="(item, index) in songArr"
             :key="item.id"
             :song-info="item"
@@ -129,17 +130,23 @@ emitter.on('onSendPlaylistSubscribers', (count) => {
     display: flex;
     font-size: 14px;
     background-color: $item-bg-color;
-    border-radius: 5px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
     > *:hover {
       background-color: $item-hover-bg-color;
-      border-radius: 5px;
+    }
+    > *:first-child:hover {
+      background-color: unset;
+    }
+    > *:last-child:hover {
+      background-color: unset;
     }
     > * span {
       display: inline-block;
       padding: 10px 0;
     }
     .operation {
-      width: 100px;
+      width: 75px;
       text-align: center;
     }
     .title, .singer, .album {
@@ -158,6 +165,25 @@ emitter.on('onSendPlaylistSubscribers', (count) => {
     .duration {
       width: 70px;
       text-align: center;
+    }
+  }
+  .list {
+    .item:nth-child(2n) {
+      background-color: $item-bg-color;
+    }
+    .item:nth-child(2n - 1) {
+      background-color: $bg-color-4;
+    }
+    .item:last-child {
+      border-bottom-left-radius: 5px;
+      border-bottom-right-radius: 5px;
+    }
+    .item:hover {
+      background-color: $item-hover-bg-color;
+    }
+    .item:last-child:hover {
+      border-bottom-left-radius: 5px;
+      border-bottom-right-radius: 5px;
     }
   }
 }

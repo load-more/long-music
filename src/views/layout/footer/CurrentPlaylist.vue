@@ -21,21 +21,32 @@
         <div
           class="item"
           :class="{'active': currentSong.id === item.id}"
-          v-for="(item) in currentSongList"
+          v-for="(item, index) in currentSongList"
           :key="item.id"
+          @dblclick="onClickPlay(item)"
         >
-          <div
-            class="title single-line-ellipsis"
-            :title="`${item.name} ${item.alias ? '(' + item.alias + ')' : ''}`"
-          >
-            <span>{{ item.name }}</span>
-            <span v-if="item.alias">&nbsp;({{ item.alias }})</span>
+          <div class="operation">
+            <span v-if="currentSong.id !== item.id" class="index">{{ index + 1 }}</span>
+            <i
+              v-if="currentSong.id !== item.id"
+              class="iconfont icon-play-hollow"
+              @click.stop="onClickPlay(item)"
+            ></i>
+            <i v-else-if="currentSong.isPlay" class="iconfont icon-volume"></i>
+            <i v-else class="iconfont icon-close-volume"></i>
           </div>
-          <div
-            class="singer single-line-ellipsis"
-            :title="item.author.map(i => i.name).join(' / ')"
-          >
-            <span v-for="(i, index) in item.author" :key="i.id">
+          <div class="title single-line-ellipsis">
+            <span :title="`${item.name} ${item.alias ? '(' + item.alias + ')' : ''}`">
+              <span>{{ item.name }}</span>
+              <span v-if="item.alias">&nbsp;({{ item.alias }})</span>
+            </span>
+          </div>
+          <div class="singer single-line-ellipsis">
+            <span
+              v-for="(i, index) in item.author"
+              :key="i.id"
+              :title="item.author.map(i => i.name).join(' / ')"
+            >
               <span class="name">
                 {{ i.name }}
               </span>
@@ -60,6 +71,7 @@ import useMainStore from '@/store/index'
 import { storeToRefs } from 'pinia'
 import { formatDuration } from '@/utils/time'
 import emitter from '@/utils/emitter'
+import { ElMessage } from 'element-plus'
 
 const props = defineProps({
   modelValue: {
@@ -79,12 +91,38 @@ watch(isOpenList, () => {
   emit('update:modelValue', isOpenList.value)
 })
 
-const { currentSongList, currentSong } = storeToRefs(useMainStore())
+const { currentSongList, currentSong, listenedSongSet } = storeToRefs(useMainStore())
 
 const clearList = () => {
   currentSongList.value = []
   // 清除当前播放歌曲
   emitter.emit('onRemoveCurrentSong', true)
+}
+
+const onClickPlay = (song: {
+  id: number
+  name: string
+  alias: string
+  author: { id: number, name: string }[]
+  album: { name: string }
+  duration: number
+  isPlay?: boolean
+  mv: number
+  fee: number
+  maxbr: number
+  st: number
+  noCopyrightRcmd: any
+}) => {
+  if (song.st !== 0) {
+    ElMessage({
+      type: 'error',
+      message: '该歌曲无版权，暂时无法播放',
+      appendTo: document.body,
+    })
+    return
+  }
+  currentSong.value = song
+  listenedSongSet.value.add(song.id)
 }
 </script>
 
