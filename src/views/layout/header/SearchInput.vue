@@ -12,20 +12,28 @@
           :placeholder="defaultKeyword"
           v-model="keyword"
           @click.stop="popperVisible = true"
+          @keydown.esc.prevent="popperVisible = false"
+          @keyup.prevent="handleInput"
+          @keydown.down.prevent="handlePressDown"
+          @keydown.up.prevent="handlePressUp"
+          @keydown.enter.prevent="handlePressEnter"
         >
           <template #prefix v-if="defaultKeyword">
             <i class="iconfont icon-search" @click="handleSearch()"></i>
           </template>
         </el-input>
       </template>
-      <el-scrollbar class="scroll-bar">
-        <div class="search-board-wrap">
+      <el-scrollbar class="scroll-bar" ref="scrollbarRef">
+        <div class="search-board-wrap" v-if="!keyword">
           <div class="search-history" v-if="historyList.length">
-            <span class="label">搜索历史</span>
-            <i
-              class="iconfont icon-remove"
-              @click.stop="dialogVisible = true"
-            ></i>
+            <span class="label">
+              <i class="iconfont icon-history"></i>
+              <span>搜索历史</span>
+              <i
+                class="iconfont icon-remove"
+                @click.stop="dialogVisible = true"
+              ></i>
+            </span>
             <el-dialog
               v-model="dialogVisible"
               :show-close="false"
@@ -54,9 +62,16 @@
            </div>
           </div>
           <div class="hot-search">
-            <span class="label">热门搜索</span>
-            <div v-for="(item, index) in hotSearchList" :key="index"
-              class="item" @click.stop="handleSearch(item.searchWord)"
+            <span class="label">
+              <i class="iconfont icon-hot"></i>
+              <span>热门搜索</span>
+            </span>
+            <div
+              v-for="(item, index) in hotSearchList"
+              :key="index"
+              class="item search-item"
+              :class="{ active: activeHotIndex === index }"
+              @click.stop="handleSearch(item.searchWord)"
             >
               <span class="index">{{ index + 1 }}</span>
               <div class="right">
@@ -72,19 +87,83 @@
             </div>
           </div>
         </div>
+        <div v-else class="search-suggest-wrap">
+          <div
+            v-for="(type, index) in suggestType"
+            :key="index"
+          >
+            <span
+              class="label search-item"
+              :class="type"
+            >
+              <i :class="`iconfont icon-${typeIcon[type]}`"></i>
+              <span class="label-content">{{ typeLabel[type] }}</span>
+            </span>
+            <div v-if="type === 'songs'">
+              <div
+                v-for="(item) in typeContent.songs"
+                class="item songs search-item single-line-ellipsis"
+                :key="item.id"
+                :title="`${item.name} - ${item.artists}`"
+              >
+                <span>{{ item.name }}</span>
+                <span v-if="item.alias" class="alias">（{{ item.alias }}）</span>
+                <span>&nbsp;-&nbsp;</span>
+                <span>{{ item.artists }}</span>
+              </div>
+            </div>
+            <div v-if="type === 'artists'">
+              <div
+                v-for="(item) in typeContent.artists"
+                class="item artists search-item single-line-ellipsis"
+                :key="item.id"
+                :title="`${item.name}`"
+              >
+                <span>{{ item.name }}</span>
+                <span v-if="item.alias">({{ item.alias }})</span>
+              </div>
+            </div>
+            <div v-if="type === 'albums'">
+              <div
+                v-for="(item) in typeContent.albums"
+                class="item albums search-item single-line-ellipsis"
+                :key="item.id"
+                :title="`${item.name} - ${item.artists}`"
+              >
+                <span>{{ item.name }}</span>
+                <span>&nbsp;-&nbsp;</span>
+                <span>{{ item.artists }}</span>
+              </div>
+            </div>
+            <div v-if="type === 'playlists'">
+              <div
+                v-for="(item) in typeContent.playlists"
+                class="item playlists search-item single-line-ellipsis"
+                :key="item.id"
+                :title="`${item.name}`"
+              >
+                <span>{{ item.name }}</span>
+                <span v-if="item.trackCount" class="alias">（{{ item.trackCount }}首）</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </el-scrollbar>
     </el-popover>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onBeforeMount } from 'vue'
-import { getSearchKeyword, getHotSearch } from '@/api/search'
+import {
+  ref, onBeforeMount, computed, watch,
+} from 'vue'
+import { getSearchKeyword, getHotSearch, getSearchSuggest } from '@/api/search'
 import {
   setSearchHistory, getSearchHistory, clearSearchHistory,
   removeHistory,
 } from '@/utils/storage'
 import { useRouter } from 'vue-router'
+import type { ElScrollbar } from 'element-plus'
 
 const keyword = ref('')
 const defaultKeyword = ref('')
@@ -94,6 +173,7 @@ const historyList = ref(getSearchHistory())
 const dialogVisible = ref(false)
 const popperVisible = ref(false)
 const router = useRouter()
+const scrollbarRef = ref<InstanceType<typeof ElScrollbar>>()
 
 const getData = async () => {
   // 获取默认搜索关键词
@@ -142,6 +222,240 @@ window.addEventListener('click', (event: MouseEvent) => {
     popperVisible.value = false
   }
 })
+
+const suggestType = ref()
+const typeLabel = {
+  songs: '单曲',
+  artists: '歌手',
+  albums: '专辑',
+  playlists: '歌单',
+}
+const typeIcon = {
+  songs: 'single-song',
+  artists: 'artist',
+  albums: 'album',
+  playlists: 'playlist',
+}
+const typeContent = ref<{
+  songs: {
+    id: number
+    name: string
+    alias: string
+    artists: string
+  }[]
+  artists: {
+    id: number
+    name: string
+    alias: string
+  }[]
+  albums: {
+    id: number
+    name: string
+    artists: string
+  }[]
+  playlists: {
+    id: number
+    name: string
+    trackCount: number
+  }[]
+}>({
+  songs: [],
+  artists: [],
+  albums: [],
+  playlists: [],
+})
+
+const debounce = (fn: () => void, wait: number) => {
+  let timer: NodeJS.Timeout | null = null
+  return () => {
+    if (timer) {
+      clearTimeout(timer)
+      timer = null
+    }
+    timer = setTimeout(() => {
+      fn()
+    }, wait)
+  }
+}
+
+const handleInput = debounce(async () => {
+  if (!keyword.value) return
+  const { data } = await getSearchSuggest({ keywords: keyword.value })
+  if (!data.result.order) return
+  typeContent.value = {
+    songs: [],
+    artists: [],
+    albums: [],
+    playlists: [],
+  }
+  suggestType.value = data.result.order
+  data.result.order.forEach((type: string) => {
+    if (type === 'songs') {
+      const arr: any = []
+      data.result[type].forEach((item: any) => {
+        arr.push({
+          id: item.id,
+          name: item.name,
+          alias: item.alias[0],
+          artists: item.artists.map((artist: any) => artist.name).join(' / '),
+        })
+      })
+      typeContent.value.songs = arr
+    } else if (type === 'artists') {
+      const arr: any = []
+      data.result[type].forEach((item: any) => {
+        arr.push({
+          id: item.id,
+          name: item.name,
+          alias: item.alias[0],
+        })
+      })
+      typeContent.value.artists = arr
+    } else if (type === 'albums') {
+      const arr: any = []
+      data.result[type].forEach((item: any) => {
+        arr.push({
+          id: item.id,
+          name: item.name,
+          artists: item.artist.name,
+        })
+      })
+      typeContent.value.albums = arr
+    } else if (type === 'playlists') {
+      const arr: any = []
+      data.result[type].forEach((item: any) => {
+        arr.push({
+          id: item.id,
+          name: item.name,
+          trackCount: item.trackCount,
+        })
+      })
+      typeContent.value.playlists = arr
+    }
+  })
+}, 100)
+
+const activeHotIndex = ref(-1)
+const activeSuggestIndex = ref(-1)
+const suggestItemLen = computed(() => Object.values(typeContent.value)
+  .reduce((p: number, c: any) => p + c.length, suggestType.value.length))
+
+watch(keyword, () => {
+  popperVisible.value = true
+  activeHotIndex.value = -1
+  activeSuggestIndex.value = -1
+})
+
+const scrollItem = (index: number) => {
+  const searchItemEl = scrollbarRef.value?.scrollbar$
+    ?.getElementsByClassName('search-item')[index] as HTMLElement
+  /*
+    显示尾行需要滚动的距离 scrollLen = itemEl.offsetTop + itemEl.height - boxEl.height
+    其中，itemEl.height = 40px, boxEl.height = 450px
+  */
+  const scrollLen = searchItemEl.offsetTop - 410
+  // 滚动
+  scrollbarRef.value?.setScrollTop(scrollLen)
+}
+
+const updateSearchItem = () => {
+  // 获取元素组
+  const searchItemEls = (scrollbarRef.value?.scrollbar$ as HTMLElement)?.getElementsByClassName('search-item')
+  // 转换成数组
+  const elsArr = Array.from(searchItemEls)
+  if (elsArr.length) {
+    // 清除所有 active 的项
+    elsArr.forEach((el) => {
+      el.classList.remove('active')
+    })
+    // 找到要激活的项并激活
+    const searchItemEl = searchItemEls[activeSuggestIndex.value] as HTMLElement
+    searchItemEl.classList.add('active')
+  }
+}
+
+const handlePressDown = () => {
+  if (!keyword.value) {
+    if (hotSearchList.value.length) {
+      activeHotIndex.value = (activeHotIndex.value + 1) % hotSearchList.value.length
+      scrollItem(activeHotIndex.value)
+    }
+  } else if (suggestItemLen.value) {
+    // 移动索引
+    activeSuggestIndex.value = (activeSuggestIndex.value + 1) % suggestItemLen.value
+    // 更新激活项的样式
+    updateSearchItem()
+    // 滚动页面
+    scrollItem(activeSuggestIndex.value)
+  }
+}
+
+const handlePressUp = () => {
+  if (!keyword.value) {
+    if (hotSearchList.value.length) {
+      if (activeHotIndex.value === -1) {
+        activeHotIndex.value = hotSearchList.value.length - 1
+      } else {
+        activeHotIndex.value = (activeHotIndex.value - 1 + hotSearchList.value.length)
+        % hotSearchList.value.length
+      }
+      scrollItem(activeHotIndex.value)
+    }
+  } else if (suggestItemLen.value) {
+    // 移动索引
+    if (activeSuggestIndex.value === -1) {
+      activeSuggestIndex.value = suggestItemLen.value - 1
+    } else {
+      activeSuggestIndex.value = (activeSuggestIndex.value - 1 + suggestItemLen.value)
+      % suggestItemLen.value
+    }
+    updateSearchItem()
+    scrollItem(activeSuggestIndex.value)
+  }
+}
+
+const handlePressEnter = () => {
+  if (!keyword.value) {
+    if (activeHotIndex.value === -1) {
+      handleSearch()
+    } else {
+      handleSearch(hotSearchList.value[activeHotIndex.value].searchWord)
+    }
+  } else if (activeSuggestIndex.value === -1) {
+    handleSearch(keyword.value)
+  } else {
+    // 获取元素组
+    const searchItemEls = (scrollbarRef.value?.scrollbar$ as HTMLElement)?.getElementsByClassName('search-item')
+    // 转换成数组
+    const elsArr = Array.from(searchItemEls)
+    if (elsArr.length) {
+      const searchItemEl = searchItemEls[activeSuggestIndex.value] as HTMLElement
+      const checkClass = (class1: string, class2?: string) => {
+        if (class2) {
+          return searchItemEl.classList.contains(class1) && searchItemEl.classList.contains(class2)
+        }
+        return searchItemEl.classList.contains(class1)
+      }
+      if (checkClass('songs', 'item')) {
+        // 播放单曲
+      } else if (checkClass('artists', 'item')) {
+        // 跳转到歌手页
+      } else if (checkClass('albums', 'item')) {
+        // 跳转到专辑页
+      } else if (checkClass('playlists', 'item')) {
+        // 跳转到歌单页
+      } else if (checkClass('songs')) {
+        // 搜索单曲
+      } else if (checkClass('artists')) {
+        // 搜索歌手
+      } else if (checkClass('albums')) {
+        // 搜索专辑
+      } else if (checkClass('playlists')) {
+        // 搜索歌单
+      }
+    }
+  }
+}
 </script>
 
 <style scoped lang="scss">
