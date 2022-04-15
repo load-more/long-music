@@ -79,11 +79,11 @@ const displayQrCode = async () => {
     } else if (rst === 803) {
       const { data } = await getUserAccount()
       if (data.code === 200) {
-        // 登录成功
-        router.push({ name: 'home' }) // 跳转路由
         // 登录成功后，存储用户 id 和 cookie
         const uid = Encrypt(data.account.id)
         window.localStorage.setItem('uid', uid)
+        // 跳转路由
+        router.push({ name: 'home' })
         // 切换登录状态
         mainStore.$patch((state) => {
           // eslint-disable-next-line no-param-reassign

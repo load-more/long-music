@@ -11,39 +11,39 @@
       >
         <span>首页</span>
       </el-menu-item>
-      <el-menu-item index="2">
+      <el-menu-item index="2" disabled>
         <span>播客</span>
       </el-menu-item>
-      <el-menu-item index="3">
+      <el-menu-item index="3" disabled>
         <span>视频</span>
       </el-menu-item>
-      <el-menu-item index="4">
+      <el-menu-item index="4" disabled>
         <span>关注</span>
       </el-menu-item>
-      <el-menu-item index="5">
+      <el-menu-item index="5" disabled>
         <span>直播</span>
       </el-menu-item>
-      <el-menu-item index="6">
+      <el-menu-item index="6" disabled>
         <span>私人FM</span>
       </el-menu-item>
       <el-menu-item-group title="我的音乐">
-        <el-menu-item index="7">
+        <el-menu-item index="7" disabled>
           <i class="iconfont icon-download"></i>&nbsp;
           <span>本地下载</span>
         </el-menu-item>
-        <el-menu-item index="8">
+        <el-menu-item index="8" disabled>
           <i class="iconfont icon-latest"></i>&nbsp;
           <span>最近播放</span>
         </el-menu-item>
-        <el-menu-item index="9">
+        <el-menu-item index="9" disabled>
           <i class="iconfont icon-cloud"></i>&nbsp;
           <span>音乐云盘</span>
         </el-menu-item>
-        <el-menu-item index="10">
+        <el-menu-item index="10" disabled>
           <i class="iconfont icon-Channel"></i>&nbsp;
           <span>我的播客</span>
         </el-menu-item>
-        <el-menu-item index="11">
+        <el-menu-item index="11" disabled>
           <i class="iconfont icon-collection"></i>&nbsp;
           <span>我的收藏</span>
         </el-menu-item>

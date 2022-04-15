@@ -19,9 +19,7 @@
           <i class="iconfont icon-profile"></i>
           个人信息
         </el-dropdown-item>
-        <el-dropdown-item
-          command="logout"
-        >
+        <el-dropdown-item>
           <i class="iconfont icon-setting"></i>
           用户设置
         </el-dropdown-item>
