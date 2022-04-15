@@ -5,7 +5,8 @@
         class="card-banner-carousel"
         v-if="bannerArr.length"
         type="card"
-        :autoplay="false"
+        :autoplay="true"
+        :interval="5000"
       >
         <el-carousel-item
           v-for="(item) in bannerArr"
@@ -28,7 +29,8 @@
       <el-carousel
         class="normal-banner-carousel"
         v-if="bannerArr.length"
-        :autoplay="false"
+        :autoplay="true"
+        :interval="5000"
         height="278px"
       >
         <el-carousel-item
@@ -182,6 +184,10 @@ const handleBannerClick = async (id: number) => {
     height: 10px;
     border-radius: 50%;
     background-color: $carousel-button-color;
+  }
+  .el-carousel__item {
+    display: flex;
+    align-items: center;
   }
 }
 </style>
