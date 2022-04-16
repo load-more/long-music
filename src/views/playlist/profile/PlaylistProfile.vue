@@ -13,7 +13,7 @@
         <i
           class="iconfont icon-edit"
           v-if="uid === playlist?.creator.userId"
-          @click="router.push({ name: 'editPlaylist', params: { id: playlist.id } })"
+          @click="router.push({ name: 'editPlaylist', params: { id: playlist!.id } })"
         ></i>
       </div>
       <div class="creator single-line-ellipsis">
@@ -42,15 +42,15 @@
           </span>
           <span class="item">
             <span class="label">播放量：</span>
-            <span class="content">{{ formatCount(playlist?.playCount) }}</span>
+            <span class="content">{{ formatCount(playlist!.playCount) }}</span>
           </span>
           <span class="item">
             <span class="label">收藏量：</span>
-            <span class="content">{{ formatCount(playlist?.subscribedCount) }}</span>
+            <span class="content">{{ formatCount(playlist!.subscribedCount) }}</span>
           </span>
           <span class="item">
             <span class="label">分享量：</span>
-            <span class="content">{{ formatCount(playlist?.shareCount) }}</span>
+            <span class="content">{{ formatCount(playlist!.shareCount) }}</span>
           </span>
         </div>
         <div class="desc single-line-ellipsis" ref="descRef">

@@ -23,10 +23,10 @@
               当前等级：Lv.{{ user?.level }}<br />
               距离下一等级还需：<br />
               1. 听歌：{{
-                user?.nextPlayCount - user?.nowPlayCount
+                user!.nextPlayCount - user!.nowPlayCount
               }}
               首<br />
-              2. 登录：{{ user?.nextLoginCount - user?.nowLoginCount }} 天
+              2. 登录：{{ user!.nextLoginCount - user!.nowLoginCount }} 天
             </template>
             <span class="level my-level">Lv.{{ user?.level }}</span>
           </el-tooltip>

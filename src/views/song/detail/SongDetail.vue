@@ -33,7 +33,7 @@
           <span class="name" :title="item.name">
             {{ item.name }}
           </span>
-          <span class="separator" v-if="index !== song?.artists.length - 1">|</span>
+          <span class="separator" v-if="index !== song!.artists.length - 1">|</span>
         </span>
       </div>
       <div class="album single-line-ellipsis">
