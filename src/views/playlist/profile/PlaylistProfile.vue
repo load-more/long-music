@@ -50,7 +50,7 @@
           </span>
           <span class="item">
             <span class="label">分享量：</span>
-            <span class="content">{{ formatCount(playlist!.shareCount) }}</span>
+            <span class="content">{{ formatCount(playlist!.shareCount || 0) }}</span>
           </span>
         </div>
         <div class="desc single-line-ellipsis" ref="descRef">
