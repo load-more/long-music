@@ -15,14 +15,14 @@
     </div>
     <div class="play-count">
       <i class="iconfont icon-play"></i>
-      <span>{{ formatPlayCount(info.playCount) }}</span>
+      <span>{{ formatCount(info.playCount) }}</span>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import { formatPlayCount } from '@/utils/format'
+import { formatCount } from '@/utils/format'
 import { rcmdPlaylistType } from '@/assets/ts/type'
 
 const props = defineProps<{

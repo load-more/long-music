@@ -22,7 +22,7 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import { formatDuration } from '@/utils/time'
+import { formatDuration } from '@/utils/format'
 
 const props = defineProps({
   duration: {

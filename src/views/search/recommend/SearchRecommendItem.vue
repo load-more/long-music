@@ -14,8 +14,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { formatPlayCount } from '@/utils/format'
-import { getLocalTime } from '@/utils/time'
+import { formatCount, formatTimestamp } from '@/utils/format'
 
 const props = defineProps({
   category: {
@@ -51,17 +50,17 @@ const title = computed(() => {
 })
 const desc = computed(() => {
   if (props.category === 'artist') {
-    return `粉丝：${formatPlayCount(info.fansSize)} 歌曲：${info.musicSize}`
+    return `粉丝：${formatCount(info.fansSize)} 歌曲：${info.musicSize}`
   }
   if (props.category === 'playlist') {
-    return `歌曲：${info.trackCount} 播放：${formatPlayCount(info.playCount)}`
+    return `歌曲：${info.trackCount} 播放：${formatCount(info.playCount)}`
   }
   if (props.category === 'album') {
     return `${info.artist.name}`
   }
   if (props.category === 'concert') {
-    const start = getLocalTime(info.time[0])
-    const end = getLocalTime(info.time[1])
+    const start = formatTimestamp(info.time[0])
+    const end = formatTimestamp(info.time[1])
     return `${start.month}月${start.date}日-${end.month}月${end.date}日
      ${info.simpleAddress.address}`
   }

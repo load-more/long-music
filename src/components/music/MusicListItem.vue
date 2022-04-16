@@ -96,7 +96,7 @@
 
 <script setup lang="ts">
 import { computed, withDefaults } from 'vue'
-import { formatDuration } from '@/utils/time'
+import { formatDuration } from '@/utils/format'
 import useMusicStore from '@/store/music'
 import { storeToRefs } from 'pinia'
 import emitter from '@/utils/emitter'

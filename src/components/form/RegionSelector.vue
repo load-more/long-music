@@ -30,7 +30,7 @@
 </template>
 
 <script setup lang="ts">
-import region from '@/utils/region'
+import region from '@/assets/ts/region'
 import { watch, ref } from 'vue'
 
 const props = defineProps({

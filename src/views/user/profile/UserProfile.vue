@@ -112,8 +112,8 @@ import {
 } from 'vue'
 import { getUserDetail, getUserLevel, followOrUnfollow } from '@/api/user'
 import { useRouter } from 'vue-router'
-import { getLocalTime } from '@/utils/time'
-import regionData from '@/utils/region'
+import { formatTimestamp } from '@/utils/format'
+import regionData from '@/assets/ts/region'
 import useUserStore from '@/store/user'
 import { storeToRefs } from 'pinia'
 import { ElMessage } from 'element-plus'
@@ -162,7 +162,7 @@ onBeforeMount(() => {
 /* 格式化日期 */
 const createTime = computed(() => {
   if (user.value?.createTime) {
-    const obj = getLocalTime(user.value?.createTime)
+    const obj = formatTimestamp(user.value?.createTime)
     return `${obj.year}-${obj.month}-${obj.date}`
   }
   return ''

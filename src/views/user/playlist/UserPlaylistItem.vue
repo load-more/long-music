@@ -19,18 +19,18 @@
       </div>
       <div class="star-count hidden-xs-only">
         <span class="label">收藏量：</span>
-        <span class="content">{{ formatPlayCount(info.subscribedCount) }}</span>
+        <span class="content">{{ formatCount(info.subscribedCount) }}</span>
       </div>
       <div class="play-count">
         <span class="label">播放量：</span>
-        <span class="content">{{ formatPlayCount(info.playCount) }}</span>
+        <span class="content">{{ formatCount(info.playCount) }}</span>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { formatPlayCount } from '@/utils/format'
+import { formatCount } from '@/utils/format'
 import { playlistDetailType } from '@/assets/ts/type'
 
 defineProps<{

@@ -42,15 +42,15 @@
           </span>
           <span class="item">
             <span class="label">播放量：</span>
-            <span class="content">{{ formatPlayCount(playlist?.playCount) }}</span>
+            <span class="content">{{ formatCount(playlist?.playCount) }}</span>
           </span>
           <span class="item">
             <span class="label">收藏量：</span>
-            <span class="content">{{ formatPlayCount(playlist?.subscribedCount) }}</span>
+            <span class="content">{{ formatCount(playlist?.subscribedCount) }}</span>
           </span>
           <span class="item">
             <span class="label">分享量：</span>
-            <span class="content">{{ formatPlayCount(playlist?.shareCount) }}</span>
+            <span class="content">{{ formatCount(playlist?.shareCount) }}</span>
           </span>
         </div>
         <div class="desc single-line-ellipsis" ref="descRef">
@@ -73,8 +73,7 @@ import {
   ref,
 } from 'vue'
 import { getPlaylistDetail } from '@/api/playlist'
-import { getLocalTime } from '@/utils/time'
-import { formatPlayCount } from '@/utils/format'
+import { formatCount, formatTimestamp } from '@/utils/format'
 import emitter from '@/utils/emitter'
 import { playlistDetailType } from '@/assets/ts/type'
 import { resolvePlaylistDetail } from '@/utils/resolve'
@@ -93,7 +92,7 @@ const playlist = ref<playlistDetailType>()
 const createTime = computed(() => {
   // 将时间戳格式化
   if (playlist.value?.createTime) {
-    const obj = getLocalTime(playlist.value?.createTime)
+    const obj = formatTimestamp(playlist.value?.createTime)
     return `${obj.year}-${obj.month}-${obj.date}`
   }
   return ''

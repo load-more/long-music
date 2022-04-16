@@ -69,7 +69,7 @@
 import { ref, watch } from 'vue'
 import useMusicStore from '@/store/music'
 import { storeToRefs } from 'pinia'
-import { formatDuration } from '@/utils/time'
+import { formatDuration } from '@/utils/format'
 import emitter from '@/utils/emitter'
 import { ElMessage } from 'element-plus'
 import { songType } from '@/assets/ts/type'
