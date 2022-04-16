@@ -20,7 +20,7 @@
 import { ref, onBeforeMount, watch } from 'vue'
 import { getMusicLyric } from '@/api/music'
 import type { ElScrollbar } from 'element-plus'
-import useMainStore from '@/store/index'
+import useMusicStore from '@/store/music'
 import { storeToRefs } from 'pinia'
 import { formatLyricTime } from '@/utils/format'
 
@@ -28,7 +28,7 @@ const props = defineProps<{
   id: number
 }>()
 
-const { currentPlayTime } = storeToRefs(useMainStore())
+const { currentPlayTime } = storeToRefs(useMusicStore())
 
 const lyricMap = ref(new Map())
 const lyricOffsetTopMap = ref(new Map())

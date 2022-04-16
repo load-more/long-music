@@ -33,7 +33,7 @@
 
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import useMainStore from '@/store/index'
+import useUserStore from '@/store/user'
 import { useRouter } from 'vue-router'
 import { ref } from 'vue'
 import SearchInput from './SearchInput.vue'
@@ -44,7 +44,7 @@ import ThemeDropdown from './ThemeDropdown.vue'
 const router = useRouter()
 
 /* 渲染顶部栏用户数据 */
-const { userDetail } = storeToRefs(useMainStore())
+const { userDetail } = storeToRefs(useUserStore())
 const { nickname, avatarUrl } = userDetail.value
 
 /* 退出登录 */

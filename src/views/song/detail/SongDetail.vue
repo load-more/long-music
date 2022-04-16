@@ -6,7 +6,7 @@
           {{ song?.name }}
         </span>
       </div>
-      <div class="alias single-line-ellipsis" v-if="song?.alias.length || song?.tns?.length">
+      <div class="alias single-line-ellipsis" v-if="song?.alias.length || song?.tns.length">
         <span v-if="song?.alias.length">
           <span
             v-for="(item, index) in song.alias"
@@ -15,7 +15,7 @@
             {{ item }}<span class="separator" v-if="index !== song.alias.length - 1">|</span>
           </span>
         </span>
-        <span v-if="song?.tns?.length">
+        <span v-if="song.tns.length">
           <span
             v-for="(item, index) in song.tns"
             :key="index"
@@ -27,28 +27,28 @@
       <div class="artist single-line-ellipsis">
         <i class="iconfont icon-artist"></i>
         <span
-          v-for="(item, index) in artists"
+          v-for="(item, index) in song?.artists"
           :key="index"
         >
           <span class="name" :title="item.name">
             {{ item.name }}
           </span>
-          <span class="separator" v-if="index !== artists!.length - 1">|</span>
+          <span class="separator" v-if="index !== song?.artists.length - 1">|</span>
         </span>
       </div>
       <div class="album single-line-ellipsis">
         <span>
           <i class="iconfont icon-album"></i>
-          <span class="name" :title="album?.name">{{ album?.name }}</span>
+          <span class="name" :title="song?.album.name">{{ song?.album.name }}</span>
         </span>
-        <span v-if="album?.tns.length">
+        <span v-if="song?.album.tns.length">
           <span>（</span>
           <span
-            v-for="(item, index) in album.tns"
+            v-for="(item, index) in song.album.tns"
             :key="index"
           >
             <span>{{ item }}</span>
-            <span class="separator" v-if="index !== album.tns.length - 1">|</span>
+            <span class="separator" v-if="index !== song.album.tns.length - 1">|</span>
           </span>
           <span>）</span>
         </span>
@@ -57,7 +57,7 @@
     <div class="main">
       <el-image
         class="cover-img"
-        :src="album?.picUrl"
+        :src="song?.album.picUrl"
       ></el-image>
       <SongLyric :id="id" class="lyric" />
     </div>
@@ -67,6 +67,8 @@
 <script setup lang="ts">
 import { ref, onBeforeMount } from 'vue'
 import { getMusicDetail } from '@/api/music'
+import { songType } from '@/assets/ts/type'
+import { resolveSongsDetail } from '@/utils/resolve'
 import SongLyric from './SongLyric.vue'
 
 const props = defineProps<{
@@ -74,38 +76,12 @@ const props = defineProps<{
 }>()
 const emit = defineEmits(['finishLoading'])
 
-interface songType {
-  name: string
-  id: number
-  tns: string[]
-  alias: string[]
-}
-interface artistType{
-  id: number
-  name: string
-  tns: string[]
-  alias: string[]
-}
-interface albumType {
-  id: number
-  name: string
-  picUrl: string
-  tns: string[]
-}
 const song = ref<songType>()
-const artists = ref<artistType[]>()
-const album = ref<albumType>()
 
 const getData = async () => {
   const { data } = await getMusicDetail({ ids: props.id })
-  song.value = {
-    id: data.songs[0].id,
-    name: data.songs[0].name,
-    tns: data.songs[0].tns,
-    alias: data.songs[0].alia,
-  }
-  artists.value = data.songs[0].ar
-  album.value = data.songs[0].al
+  const rst = resolveSongsDetail(data)[0]
+  song.value = rst
   emit('finishLoading')
 }
 

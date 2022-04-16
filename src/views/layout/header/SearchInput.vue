@@ -164,6 +164,7 @@ import {
 } from '@/utils/storage'
 import { useRouter } from 'vue-router'
 import type { ElScrollbar } from 'element-plus'
+import { searchSuggestType } from '@/assets/ts/type'
 
 const keyword = ref('')
 const defaultKeyword = ref('')
@@ -236,29 +237,7 @@ const typeIcon = {
   albums: 'album',
   playlists: 'playlist',
 }
-const typeContent = ref<{
-  songs: {
-    id: number
-    name: string
-    alias: string
-    artists: string
-  }[]
-  artists: {
-    id: number
-    name: string
-    alias: string
-  }[]
-  albums: {
-    id: number
-    name: string
-    artists: string
-  }[]
-  playlists: {
-    id: number
-    name: string
-    trackCount: number
-  }[]
-}>({
+const typeContent = ref<searchSuggestType>({
   songs: [],
   artists: [],
   albums: [],
@@ -290,8 +269,8 @@ const handleInput = debounce(async () => {
   }
   suggestType.value = data.result.order
   data.result.order.forEach((type: string) => {
+    const arr: any = []
     if (type === 'songs') {
-      const arr: any = []
       data.result[type].forEach((item: any) => {
         arr.push({
           id: item.id,
@@ -302,7 +281,6 @@ const handleInput = debounce(async () => {
       })
       typeContent.value.songs = arr
     } else if (type === 'artists') {
-      const arr: any = []
       data.result[type].forEach((item: any) => {
         arr.push({
           id: item.id,
@@ -312,7 +290,6 @@ const handleInput = debounce(async () => {
       })
       typeContent.value.artists = arr
     } else if (type === 'albums') {
-      const arr: any = []
       data.result[type].forEach((item: any) => {
         arr.push({
           id: item.id,
@@ -322,7 +299,6 @@ const handleInput = debounce(async () => {
       })
       typeContent.value.albums = arr
     } else if (type === 'playlists') {
-      const arr: any = []
       data.result[type].forEach((item: any) => {
         arr.push({
           id: item.id,

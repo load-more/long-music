@@ -1,9 +1,8 @@
 import request from '../utils/request'
 
-interface getUserDetailParams {
+export const getUserDetail = (params: {
   uid: number
-}
-export const getUserDetail = (params: getUserDetailParams) => request({
+}) => request({
   method: 'GET',
   url: '/user/detail',
   params,
@@ -26,30 +25,28 @@ export const getUserBindings = () => request({
   url: '/user/binding',
 })
 
-interface updateUserProfileParams {
+// 更新用户信息
+export const updateUserProfile = (params: {
   nickname: string
   gender: string
   birthday: string
   province: string
   city: string
   signature: string
-}
-// 更新用户信息
-export const updateUserProfile = (params: updateUserProfileParams) => request({
+}) => request({
   method: 'GET',
   url: '/user/update',
   params,
 })
 
-interface updateUserAvatarParams {
-  imgSize?: number
-  imgX?: number
-  imgY?: number
-}
 // 更新用户头像
 export const updateUserAvatar = (
   formData: FormData,
-  params: updateUserAvatarParams,
+  params: {
+    imgSize?: number
+    imgX?: number
+    imgY?: number
+  },
 ) => request({
   method: 'POST',
   url: '/avatar/upload',
@@ -60,34 +57,40 @@ export const updateUserAvatar = (
   params,
 })
 
-interface ParamsType {
+export const getUserPlaylist = (params: {
   uid: number
   limit?: number
   offset?: number
-}
-export const getUserPlaylist = (params: ParamsType) => request({
+}) => request({
   method: 'GET',
   url: '/user/playlist',
   params,
 })
 
-export const getUserFollows = (params: ParamsType) => request({
+export const getUserFollows = (params: {
+  uid: number
+  limit?: number
+  offset?: number
+}) => request({
   method: 'GET',
   url: '/user/follows',
   params,
 })
 
-export const getUserFans = (params: ParamsType) => request({
+export const getUserFans = (params: {
+  uid: number
+  limit?: number
+  offset?: number
+}) => request({
   method: 'GET',
   url: '/user/followeds',
   params,
 })
 
-interface followOrUnfollowType {
+export const followOrUnfollow = (params: {
   id: number
   t: number // 1 为关注，其他为取消关注
-}
-export const followOrUnfollow = (params: followOrUnfollowType) => request({
+}) => request({
   method: 'GET',
   url: '/follow',
   params,

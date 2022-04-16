@@ -48,8 +48,9 @@ import {
 } from 'vue'
 import { getSearchResult } from '@/api/search'
 import { useRoute } from 'vue-router'
-import { songType } from '@/components/music/MusicListItem.vue'
+import { songType } from '@/assets/ts/type'
 import LoadingAnimation from '@/components/loading/LoadingAnimation.vue'
+import { resolveSearchSongsDetail } from '@/utils/resolve'
 import SearchResultMusicList from './SearchResultMusicList.vue'
 
 const emit = defineEmits(['finish-loading'])
@@ -76,24 +77,7 @@ const getData = async (offset: number) => {
     offset: pageSize.value * offset,
   })
   count.value = data.result.songCount
-  const arr: songType[] = []
-  data.result.songs.forEach((item: any, index: number) => {
-    const i = offset * pageSize.value + index
-    arr.push({
-      id: item.id,
-      name: item.name,
-      alias: item.alia[0],
-      author: item.ar,
-      album: item.al,
-      duration: item.dt,
-      index: i,
-      mv: item.mv,
-      fee: item.privilege.fee,
-      maxbr: item.privilege.maxbr,
-      st: item.privilege.st,
-      noCopyrightRcmd: item.noCopyrightRcmd,
-    })
-  })
+  const arr: songType[] = resolveSearchSongsDetail(data.result.songs)
   pageMap.value.set(offset, arr)
   isLoading.value = false
 }

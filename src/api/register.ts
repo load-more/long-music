@@ -1,13 +1,12 @@
 import request from '@/utils/request'
 
-interface registerParams {
+export const register = (params: {
   phone: string
   password: string
   captcha: string
   nickname: string
   countrycode?: string
-}
-export const register = (params: registerParams) => request({
+}) => request({
   method: 'GET',
   url: '/register/cellphone',
   params,
@@ -17,11 +16,10 @@ export const changePassword = () => {
 
 }
 
-interface checkIsRegisteredParams {
+export const checkIsRegistered = (params: {
   phone: string
   countrycode?: string
-}
-export const checkIsRegistered = (params: checkIsRegisteredParams) => request({
+}) => request({
   method: 'GET',
   url: '/cellphone/existence/check',
   params,

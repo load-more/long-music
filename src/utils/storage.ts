@@ -1,4 +1,4 @@
-import themeData from '@/assets/js/themeData'
+import themeData from '@/assets/ts/themeData'
 
 const historyKey = 'search_history'
 const themeKey = 'theme_color'

@@ -1,8 +1,11 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import useMainStore from '@/store/index'
+import useUserStore from '@/store/user'
+import useMusicStore from '@/store/music'
 import { storeToRefs } from 'pinia'
 import { getMusicDetail } from '@/api/music'
 import { getPlaylistAllSongs } from '@/api/playlist'
+import { resolveSongsDetail } from '@/utils/resolve'
+import { songType } from '@/assets/ts/type'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -74,57 +77,22 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to, from) => {
-  const mainStore = useMainStore()
-  const {
-    isLogin, userDetail, currentSong, currentPlaylistId, currentSongList,
-  } = storeToRefs(mainStore)
-  if (!userDetail.value.uid) {
-    await mainStore.init()
+  const { userDetail } = storeToRefs(useUserStore())
+  const { currentSong, currentPlaylistId, currentSongList } = storeToRefs(useMusicStore())
+
+  // 如果用户
+  if (!userDetail.value.userId) {
+    await useUserStore().init()
   }
-  // 获取一首歌曲的信息
-  const getSong = async (id: number) => {
-    const { data } = await getMusicDetail({ ids: id })
-    return {
-      id: data.songs[0].id,
-      name: data.songs[0].name,
-      alias: data.songs[0].alia[0],
-      author: data.songs[0].ar,
-      album: data.songs[0].al,
-      duration: data.songs[0].dt,
-      mv: data.songs[0].mv,
-      fee: data.privileges[0].fee,
-      maxbr: data.privileges[0].maxbr,
-      st: data.privileges[0].st,
-      noCopyrightRcmd: data.songs[0].noCopyrightRcmd,
-    }
-  }
-  // 获取一个歌单全部歌曲的信息
-  const getAllSong = async (id: number) => {
-    const { data } = await getPlaylistAllSongs({ id })
-    const arr: any = []
-    data.songs.forEach((item: any, index: number) => {
-      const obj = {
-        id: item.id,
-        name: item.name,
-        alias: item.alia[0],
-        author: item.ar,
-        album: item.al,
-        duration: item.dt,
-        mv: item.mv,
-        fee: data.privileges[index].fee,
-        maxbr: data.privileges[index].maxbr,
-        st: data.privileges[index].st,
-        noCopyrightRcmd: item.noCopyrightRcmd,
-      }
-      arr.push(obj)
-    })
-    return arr
-  }
+
   // 用户刷新之后，自动读取 localStorage 中的播放歌曲数据
   if (!currentSong.value.id) {
     const id = Number(window.localStorage.getItem('current_song'))
     if (id) {
-      currentSong.value = await getSong(id)
+      // 获取一首歌曲的信息
+      const { data } = await getMusicDetail({ ids: id })
+      const song: songType = resolveSongsDetail(data)[0]
+      currentSong.value = song
     }
   }
   // 用户刷新之后，自动读取 localStorage 中的播放列表数据
@@ -132,15 +100,18 @@ router.beforeEach(async (to, from) => {
     const id = Number(window.localStorage.getItem('current_playlist'))
     if (id) {
       currentPlaylistId.value = id
-      currentSongList.value = await getAllSong(id)
+      // 获取一个歌单全部歌曲的信息
+      const { data } = await getPlaylistAllSongs({ id })
+      const arr: songType[] = resolveSongsDetail(data)
+      currentSongList.value = arr
     }
   }
   // 如果用户未登录且目标页面不是登录页，则跳转到登录页
-  if (!isLogin.value && to.name !== 'login') { // 注意，一定要写后面的判断逻辑，否则会死循环
+  if (!userDetail.value.userId && to.name !== 'login') { // 注意，一定要写后面的判断逻辑，否则会死循环
     return { name: 'login' }
   }
   // 如果用户已登录且目标页面是登录页，则停止跳转
-  if (isLogin.value && to.name === 'login') {
+  if (userDetail.value.userId && to.name === 'login') {
     return from.fullPath
   }
   return true

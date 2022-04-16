@@ -26,7 +26,6 @@ import { generateQrKey, generateQrCode, checkQrCode } from '@/api/login'
 import { getUserAccount } from '@/api/user'
 import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
-import useMainStore from '@/store/index'
 import { Encrypt } from '@/utils/secret'
 
 const imgUrl = ref('')
@@ -34,7 +33,6 @@ const isLoading = ref(false)
 let timer: NodeJS.Timer | null = null
 const prompt = ref('')
 const router = useRouter()
-const mainStore = useMainStore()
 
 onUnmounted(() => {
   clearInterval(timer!)
@@ -84,11 +82,6 @@ const displayQrCode = async () => {
         window.localStorage.setItem('uid', uid)
         // 跳转路由
         router.push({ name: 'home' })
-        // 切换登录状态
-        mainStore.$patch((state) => {
-          // eslint-disable-next-line no-param-reassign
-          state.isLogin = true
-        })
         ElMessage({
           type: 'success',
           message: '登录成功！',

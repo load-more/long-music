@@ -12,7 +12,8 @@
 </template>
 
 <script setup lang="ts">
-import MusicListItem, { songType } from '@/components/music/MusicListItem.vue'
+import MusicListItem from '@/components/music/MusicListItem.vue'
+import { songType } from '@/assets/ts/type'
 
 defineProps<{
   songArr: songType[]

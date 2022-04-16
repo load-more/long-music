@@ -1,25 +1,25 @@
 import request from '@/utils/request'
 
-interface getMusicUrlParams {
+export const getMusicUrl = (params: {
   id: number
   br?: number
-}
-export const getMusicUrl = (params: getMusicUrlParams) => request({
+}) => request({
   method: 'GET',
   url: '/song/url',
   params,
 })
 
-interface getMusicDetailParams {
+export const getMusicDetail = (params: {
   ids: number
-}
-export const getMusicDetail = (params: getMusicDetailParams) => request({
+}) => request({
   method: 'GET',
   url: '/song/detail',
   params,
 })
 
-export const getMusicLyric = (params: { id: number }) => request({
+export const getMusicLyric = (params: {
+  id: number
+}) => request({
   method: 'GET',
   url: '/lyric',
   params,

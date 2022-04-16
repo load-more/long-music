@@ -97,34 +97,30 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, ref } from 'vue'
-import useMainStore from '@/store/index'
+import { onBeforeMount, reactive } from 'vue'
+import useUserStore from '@/store/user'
 import { storeToRefs } from 'pinia'
 import { getUserPlaylist } from '@/api/user'
+import { sidebarPlaylistType } from '@/assets/ts/type'
 
-const { userDetail } = storeToRefs(useMainStore())
+const { userDetail } = storeToRefs(useUserStore())
 
-interface playlistType {
-  id: number
-  coverImg: string
-  title: string
-}
-const createdPlaylist = ref<playlistType[]>([])
-const starredPlaylist = ref<playlistType[]>([])
+const createdPlaylist = reactive<sidebarPlaylistType[]>([])
+const starredPlaylist = reactive<sidebarPlaylistType[]>([])
 const getData = async () => {
-  const { data } = await getUserPlaylist({ uid: userDetail.value.uid })
+  const { data } = await getUserPlaylist({ uid: userDetail.value.userId })
   data.playlist.forEach((item: any) => {
-    const obj: playlistType = {
+    const obj: sidebarPlaylistType = {
       id: item.id,
       coverImg: item.coverImgUrl,
       title: item.name,
     }
-    if (item.creator.userId === userDetail.value.uid) {
+    if (item.creator.userId === userDetail.value.userId) {
       // 如果是用户创建的歌单
-      createdPlaylist.value.push(obj)
+      createdPlaylist.push(obj)
     } else {
       // 如果是用户收藏的歌单
-      starredPlaylist.value.push(obj)
+      starredPlaylist.push(obj)
     }
   })
 }
@@ -137,28 +133,30 @@ onBeforeMount(() => {
 <style scoped lang="scss">
 $sideWidth: 200px;
 $menuItemHeight: 44px;
-$menuItemPaddingLeft: 20px;
 .el-menu {
   width: $sideWidth;
   height: 100%;
   border: none;
   background-color: $sidebar-bg-color;
-  .scroll-bar {
-    padding-left: 10px;
-    padding-right: 20px;
-    height: 100%;
-  }
   .el-menu-item {
     height: $menuItemHeight;
     border-radius: 5px;
-    padding-left: $menuItemPaddingLeft !important;
+    padding-left: 10px!important;
+    padding-right: 0!important;
+    margin: 0 20px;
     line-height: unset;
+    min-width: unset;
   }
   .el-menu-item.is-disabled {
     cursor: default;
   }
   .el-menu-item.is-active {
     background-color: rgba(#000, 0.1);
+  }
+  :deep .el-sub-menu__title {
+    height: 44px;
+    background-color: unset;
+    line-height: 44px;
   }
   :deep .el-menu--inline {
     background-color: transparent;

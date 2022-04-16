@@ -3,22 +3,22 @@
     <div class="image-wrap">
       <el-image
         class="cover-image"
-        :src="state.coverImgUrl"
+        :src="playlist?.coverImgUrl"
       />
     </div>
     <div class="info">
       <div class="title single-line-ellipsis">
         <span class="label">歌单</span>
-        <span>{{ state.title }}</span>
+        <span>{{ playlist?.name }}</span>
         <i
           class="iconfont icon-edit"
-          v-if="uid === state.creatorId"
-          @click="router.push({ name: 'editPlaylist', params: { id: state.playlistId } })"
+          v-if="uid === playlist?.creator.userId"
+          @click="router.push({ name: 'editPlaylist', params: { id: playlist.id } })"
         ></i>
       </div>
       <div class="creator single-line-ellipsis">
-        <span class="name">{{ state.creatorName }}</span>
-        <span class="create-time" v-if="state.createTime">创建时间：{{ createTime }}</span>
+        <span class="name">{{ playlist?.creator.nickname }}</span>
+        <span class="create-time" v-if="playlist?.createTime">创建时间：{{ createTime }}</span>
       </div>
       <div class="controls single-line-ellipsis">
         <el-button class="primary-btn" round>播放<i class="iconfont icon-play-circle"></i></el-button>
@@ -31,26 +31,26 @@
           <span class="label">标签：</span>
           <span
             class="content"
-            v-for="(item, index) in state.tags"
+            v-for="(item, index) in playlist?.tags"
             :key="index"
           >{{ item }}</span>
         </div>
         <div class="song-data single-line-ellipsis">
           <span class="item">
             <span class="label">歌曲：</span>
-            <span class="content">{{ state.songCount }}</span>
+            <span class="content">{{ playlist?.trackCount }}</span>
           </span>
           <span class="item">
             <span class="label">播放量：</span>
-            <span class="content">{{ formatPlayCount(state.playCount) }}</span>
+            <span class="content">{{ formatPlayCount(playlist?.playCount) }}</span>
           </span>
           <span class="item">
             <span class="label">收藏量：</span>
-            <span class="content">{{ formatPlayCount(state.subscribedCount) }}</span>
+            <span class="content">{{ formatPlayCount(playlist?.subscribedCount) }}</span>
           </span>
           <span class="item">
             <span class="label">分享量：</span>
-            <span class="content">{{ formatPlayCount(state.shareCount) }}</span>
+            <span class="content">{{ formatPlayCount(playlist?.shareCount) }}</span>
           </span>
         </div>
         <div class="desc single-line-ellipsis" ref="descRef">
@@ -58,7 +58,7 @@
           <span
             class="content"
             @click="toggleReadMore"
-          >{{ state.description }}</span>
+          >{{ playlist?.description }}</span>
         </div>
       </div>
     </div>
@@ -69,7 +69,6 @@
 import { useRouter } from 'vue-router'
 import {
   onBeforeMount,
-  reactive,
   computed,
   ref,
 } from 'vue'
@@ -77,6 +76,8 @@ import { getPlaylistDetail } from '@/api/playlist'
 import { getLocalTime } from '@/utils/time'
 import { formatPlayCount } from '@/utils/format'
 import emitter from '@/utils/emitter'
+import { playlistDetailType } from '@/assets/ts/type'
+import { resolvePlaylistDetail } from '@/utils/resolve'
 
 const props = defineProps<{
   uid: number
@@ -87,47 +88,26 @@ const emit = defineEmits(['finish-loading'])
 const router = useRouter()
 
 /* 渲染数据 */
-const state = reactive({
-  playlistId: 0,
-  coverImgUrl: '',
-  title: '',
-  creatorName: '',
-  creatorId: 0,
-  createTime: 0,
-  tags: [],
-  songCount: 0,
-  playCount: 0,
-  subscribedCount: 0,
-  shareCount: 0,
-  description: '',
-  commentCount: 0,
-})
+const playlist = ref<playlistDetailType>()
+
 const createTime = computed(() => {
   // 将时间戳格式化
-  const obj = getLocalTime(state.createTime)
-  return `${obj.year}-${obj.month}-${obj.date}`
+  if (playlist.value?.createTime) {
+    const obj = getLocalTime(playlist.value?.createTime)
+    return `${obj.year}-${obj.month}-${obj.date}`
+  }
+  return ''
 })
 
 onBeforeMount(async () => {
-  const { data: detailData } = await getPlaylistDetail({
+  const { data } = await getPlaylistDetail({
     id: props.uid,
   })
-  state.playlistId = detailData.playlist.id
-  state.coverImgUrl = detailData.playlist.coverImgUrl
-  state.title = detailData.playlist.name
-  state.creatorName = detailData.playlist.creator.nickname
-  state.creatorId = detailData.playlist.creator.userId
-  state.createTime = detailData.playlist.createTime
-  state.tags = detailData.playlist.tags
-  state.songCount = detailData.playlist.trackCount
-  state.playCount = detailData.playlist.playCount
-  state.subscribedCount = detailData.playlist.subscribedCount
-  state.shareCount = detailData.playlist.shareCount
-  state.description = detailData.playlist.description
-  state.commentCount = detailData.playlist.commentCount
+  playlist.value = resolvePlaylistDetail(data.playlist)
+  playlist.value.shareCount = data.playlist.shareCount
 
   emit('finish-loading')
-  emitter.emit('onSendPlaylistSubscribers', state.subscribedCount)
+  emitter.emit('onSendPlaylistSubscribers', playlist.value.subscribedCount)
 })
 
 /* 点击介绍查看更多 */

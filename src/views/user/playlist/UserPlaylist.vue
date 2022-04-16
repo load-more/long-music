@@ -25,7 +25,9 @@
 import { onBeforeMount, ref, reactive } from 'vue'
 import { getUserPlaylist } from '@/api/user'
 import { useRouter } from 'vue-router'
-import UserPlaylistItem, { infoType } from './UserPlaylistItem.vue'
+import { playlistDetailType } from '@/assets/ts/type'
+import { resolvePlaylistDetail } from '@/utils/resolve'
+import UserPlaylistItem from './UserPlaylistItem.vue'
 
 const props = defineProps<{
   uid: number
@@ -34,23 +36,15 @@ const emit = defineEmits(['finish-loading'])
 
 const router = useRouter()
 
-const createdPlaylist = reactive<infoType[]>([])
-const starredPlaylist = reactive<infoType[]>([])
+const createdPlaylist = reactive<playlistDetailType[]>([])
+const starredPlaylist = reactive<playlistDetailType[]>([])
 const activeTab = ref('created')
 
 const getData = async () => {
   // 获取用户歌单信息
   const { data: playlistData } = await getUserPlaylist({ uid: props.uid })
   playlistData.playlist.forEach((item: any) => {
-    const obj: infoType = {
-      id: item.id,
-      coverImg: item.coverImgUrl,
-      title: item.name,
-      songCount: item.trackCount,
-      creator: item.creator.nickname,
-      starCount: item.subscribedCount,
-      playCount: item.playCount,
-    }
+    const obj = resolvePlaylistDetail(item)
     if (item.creator.userId === props.uid) {
       // 如果是用户创建的歌单
       createdPlaylist.push(obj)

@@ -37,8 +37,7 @@
 <script setup lang="ts">
 import { logout } from '@/api/login'
 import { ElMessage } from 'element-plus'
-import { storeToRefs } from 'pinia'
-import useMainStore from '@/store/index'
+import useUserStore from '@/store/user'
 import { useRouter } from 'vue-router'
 
 /* 路由管理 */
@@ -50,14 +49,13 @@ defineProps<{
 }>()
 const emit = defineEmits(['logout'])
 
-const { isLogin } = storeToRefs(useMainStore())
 const handleCommand = async (command: string) => {
   if (command === 'logout') {
     emit('logout')
     const rst = await logout()
     if (rst.data.code === 200) {
-      // 切换登录状态
-      isLogin.value = false
+      // 重置用户信息，即退出登录
+      useUserStore().$reset()
       // 跳转到首页
       router.push({ name: 'login' })
       // 清除 localStorage

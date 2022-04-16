@@ -1,5 +1,5 @@
 import { getThemeColor } from '@/utils/storage'
-import themeData from '@/assets/js/themeData'
+import themeData from '@/assets/ts/themeData'
 
 export const switchTheme = (key: string) => {
   // 遍历每个样式，加到 body 上

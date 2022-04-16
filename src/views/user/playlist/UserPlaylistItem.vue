@@ -3,23 +3,23 @@
     <div class="left">
       <el-image
         class="image"
-        :src="info.coverImg"
+        :src="info.coverImgUrl"
       />
-      <div class="title hidden-xs-only" :title="info.title">{{ info.title }}</div>
+      <div class="title hidden-xs-only" :title="info.name">{{ info.name }}</div>
     </div>
     <div class="right">
-      <div class="title hidden-sm-and-up" :title="info.title">{{ info.title }}</div>
+      <div class="title hidden-sm-and-up" :title="info.name">{{ info.name }}</div>
       <div class="song-count">
         <span class="label">歌曲：</span>
-        <span class="content">{{ info.songCount }}</span>
+        <span class="content">{{ info.trackCount }}</span>
       </div>
       <div class="creator">
         <span class="label">创建者：</span>
-        <span class="content" :title="info.creator">{{ info.creator }}</span>
+        <span class="content" :title="info.creator.nickname">{{ info.creator.nickname }}</span>
       </div>
       <div class="star-count hidden-xs-only">
         <span class="label">收藏量：</span>
-        <span class="content">{{ formatPlayCount(info.starCount) }}</span>
+        <span class="content">{{ formatPlayCount(info.subscribedCount) }}</span>
       </div>
       <div class="play-count">
         <span class="label">播放量：</span>
@@ -31,18 +31,10 @@
 
 <script setup lang="ts">
 import { formatPlayCount } from '@/utils/format'
+import { playlistDetailType } from '@/assets/ts/type'
 
-export interface infoType {
-  id: number,
-  coverImg: string
-  title: string
-  songCount: number
-  creator: string
-  starCount: number
-  playCount: number
-}
 defineProps<{
-  info: infoType
+  info: playlistDetailType
 }>()
 </script>
 

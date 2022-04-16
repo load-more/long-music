@@ -21,7 +21,7 @@
               @click="handleClickRelation(item.userId)"
             >{{ item.nickname }}</span>
             <el-button
-              v-if="mainStore.userDetail.uid === uid"
+              v-if="userDetail.userId === uid"
               size="small"
               round
             >
@@ -29,8 +29,8 @@
               &nbsp;私信
             </el-button>
             <el-button
-              v-if="mainStore.userDetail.uid !== uid &&
-                    mainStore.userDetail.uid !== item.userId &&
+              v-if="userDetail.userId !== uid &&
+                    userDetail.userId !== item.userId &&
                     !item.followed"
               size="small"
               round
@@ -40,8 +40,8 @@
               &nbsp;关注
             </el-button>
             <el-button
-              v-if="mainStore.userDetail.uid !== uid &&
-                    mainStore.userDetail.uid !== item.userId &&
+              v-if="userDetail.userId !== uid &&
+                    userDetail.userId !== item.userId &&
                     item.followed"
               size="small"
               disabled
@@ -85,7 +85,7 @@
               @click="handleClickRelation(item.userId)"
             >{{ item.nickname }}</span>
             <el-button
-              v-if="mainStore.userDetail.uid === uid"
+              v-if="userDetail.userId === uid"
               size="small"
               round
             >
@@ -93,8 +93,8 @@
               &nbsp;私信
             </el-button>
             <el-button
-              v-if="mainStore.userDetail.uid !== uid &&
-                    mainStore.userDetail.uid !== item.userId &&
+              v-if="userDetail.userId !== uid &&
+                    userDetail.userId !== item.userId &&
                     !item.followed"
               size="small"
               round
@@ -104,8 +104,8 @@
               &nbsp;关注
             </el-button>
             <el-button
-              v-if="mainStore.userDetail.uid !== uid &&
-                    mainStore.userDetail.uid !== item.userId &&
+              v-if="userDetail.userId !== uid &&
+                    userDetail.userId !== item.userId &&
                     item.followed"
               size="small"
               disabled
@@ -128,29 +128,21 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import useMainStore from '@/store/index'
+import useUserStore from '@/store/user'
+import { storeToRefs } from 'pinia'
 import { followOrUnfollow } from '@/api/user'
 import { ElMessage } from 'element-plus'
+import { userBriefType } from '@/assets/ts/type'
 
-export interface userType {
-  userId: number
-  nickname: string
-  signature: string
-  playlistCount: number
-  followeds: number
-  follows: number
-  avatarUrl: string
-  followed: boolean
-}
 defineProps<{
   uid: number
-  relation: userType[]
+  relation: userBriefType[]
   type: 'follows' | 'fans' | 'subscribers'
 }>()
 const emit = defineEmits(['updateArray'])
 
 const router = useRouter()
-const mainStore = useMainStore()
+const { userDetail } = storeToRefs(useUserStore())
 
 const handleClickRelation = (uid: number) => {
   router.push({ name: 'user', params: { id: uid } })

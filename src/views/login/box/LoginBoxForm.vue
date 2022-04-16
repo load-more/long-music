@@ -127,7 +127,6 @@ import { ElMessage } from 'element-plus'
 import md5 from 'js-md5'
 import emitter from '@/utils/emitter'
 import { useRouter } from 'vue-router'
-import useMainStore from '@/store/index'
 import { Encrypt } from '@/utils/secret'
 
 const props = defineProps<{
@@ -141,7 +140,6 @@ const counter = ref(countdownTime)
 let timer: NodeJS.Timer | null = null
 const isCaptchaLoading = ref(false)
 const router = useRouter()
-const mainStore = useMainStore()
 
 const loginForm = reactive({
   phone: '',
@@ -238,11 +236,6 @@ const onClickLogin = () => {
             window.localStorage.setItem('uid', uid)
             // 跳转路由
             router.push({ name: 'home' })
-            // 切换登录状态
-            mainStore.$patch((state) => {
-              // eslint-disable-next-line no-param-reassign
-              state.isLogin = true
-            })
             ElMessage({
               type: 'success',
               message: '登录成功！',
@@ -264,11 +257,6 @@ const onClickLogin = () => {
             window.localStorage.setItem('uid', uid)
             // 跳转路由
             router.push({ name: 'home' })
-            // 切换登录状态
-            mainStore.$patch((state) => {
-              // eslint-disable-next-line no-param-reassign
-              state.isLogin = true
-            })
             ElMessage({
               type: 'success',
               message: '登录成功！',
@@ -291,11 +279,6 @@ const onClickLogin = () => {
           window.localStorage.setItem('uid', uid)
           // 跳转路由
           router.push({ name: 'home' })
-          // 切换登录状态
-          mainStore.$patch((state) => {
-            // eslint-disable-next-line no-param-reassign
-            state.isLogin = true
-          })
           ElMessage({
             type: 'success',
             message: '登录成功！',

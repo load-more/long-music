@@ -4,11 +4,11 @@
 
 <script setup lang="ts">
 import { initTheme } from '@/utils/theme'
-import useMainStore from '@/store/index'
+import useMusicStore from '@/store/music'
 import { storeToRefs } from 'pinia'
 import { watch } from 'vue'
 
-const { currentSong, currentPlaylistId } = storeToRefs(useMainStore())
+const { currentSong, currentPlaylistId } = storeToRefs(useMusicStore())
 
 /* 当播放歌曲或播放列表改变时，修改 localStorage 的数据 */
 watch(() => currentSong.value.id, (newValue) => {

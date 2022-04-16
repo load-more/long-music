@@ -18,23 +18,18 @@
 <script setup lang="ts">
 import { reactive, onBeforeMount } from 'vue'
 import { getRecommendPlaylist } from '@/api/playlist'
+import { rcmdPlaylistType } from '@/assets/ts/type'
 import RcmdListItem from './RcmdPlaylistItem.vue'
 
 const emit = defineEmits(['finish-loading'])
 
 /* 渲染数据 */
-interface rcmdType {
-  id: number
-  name: string
-  picUrl: string
-  playCount: number
-}
-const rcmdArr = reactive<rcmdType[]>([])
-onBeforeMount(async () => {
+const rcmdArr = reactive<rcmdPlaylistType[]>([])
+const getData = async () => {
   // 获取推荐歌单
   const { data: rcmdData } = await getRecommendPlaylist()
   rcmdData.recommend.forEach((item: any) => {
-    const obj: rcmdType = {
+    const obj: rcmdPlaylistType = {
       id: item.id,
       name: item.name,
       picUrl: item.picUrl,
@@ -42,6 +37,9 @@ onBeforeMount(async () => {
     }
     rcmdArr.push(obj)
   })
+}
+onBeforeMount(async () => {
+  await getData()
   emit('finish-loading')
 })
 </script>

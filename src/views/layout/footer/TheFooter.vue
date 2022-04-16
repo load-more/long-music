@@ -17,12 +17,12 @@
           v-if="currentSong.name"
         >
           <span
-            :title="`${currentSong.name} ${ currentSong.alias ?
-            '(' + currentSong.alias + ')' : '' }`"
+            :title="`${currentSong.name} ${ currentSong.alias.length ?
+            '(' + currentSong.alias[0] + ')' : '' }`"
             @click="router.push({ name: 'song', params: { id: currentSong.id } })"
           >
             <span>{{ currentSong.name }}</span>
-            <span v-if="currentSong.alias">&nbsp;({{ currentSong.alias }})</span>
+            <span v-if="currentSong.alias.length">&nbsp;({{ currentSong.alias[0] }})</span>
           </span>
           <i class="iconfont icon-like"></i>
         </div>
@@ -32,15 +32,15 @@
         </div>
         <div class="singer">
           <span
-            v-for="(item, index) in currentSong.author" :key="item.id"
-            :title="currentSong.author.map((item) => item.name).join(' / ')"
+            v-for="(item, index) in currentSong.artists" :key="item.id"
+            :title="currentSong.artists.map((item) => item.name).join(' / ')"
           >
             <span class="name">
               {{ item.name }}
             </span>
             <span
               class="seperator"
-              v-if="index !== currentSong.author.length - 1"
+              v-if="index !== currentSong.artists.length - 1"
               >&nbsp;/&nbsp;</span
             >
           </span>
@@ -104,7 +104,7 @@
 
 <script setup lang="ts">
 import { ref, watch, onMounted } from 'vue'
-import useMainStore from '@/store/index'
+import useMusicStore from '@/store/music'
 import { storeToRefs } from 'pinia'
 import emitter from '@/utils/emitter'
 import { initTheme } from '@/utils/theme'
@@ -117,14 +117,9 @@ import CurrentPlaylist from './CurrentPlaylist.vue'
 
 const router = useRouter()
 
-// 初始化主题颜色
-onMounted(() => {
-  initTheme()
-})
-
 const {
   currentSong, currentSongList, listenedSongSet, currentPlayTime,
-} = storeToRefs(useMainStore())
+} = storeToRefs(useMusicStore())
 
 /* 是否显示当前播放列表 */
 const isOpenList = ref(false)
@@ -187,7 +182,7 @@ const music = new Audio()
 watch(
   () => currentSong.value.id,
   async () => {
-    if (currentSong.value.fee === 1) {
+    if (currentSong.value.isVip) {
       const { data } = await getMusicUrl({ id: currentSong.value.id })
       music.src = data.data[0].url
       ElMessage({
@@ -210,17 +205,11 @@ const isExistCurrentSong = ref(!!currentSong.value.id)
 // 暂停或播放音乐
 const playMusic = () => {
   music.play()
-  useMainStore().$patch((state) => {
-    // eslint-disable-next-line no-param-reassign
-    state.currentSong.isPlay = true
-  })
+  currentSong.value.isPlay = true
 }
 const pauseMusic = () => {
   music.pause()
-  useMainStore().$patch((state) => {
-    // eslint-disable-next-line no-param-reassign
-    state.currentSong.isPlay = false
-  })
+  currentSong.value.isPlay = false
 }
 // 当音乐文件加载完成，初始化数据
 music.addEventListener('canplaythrough', () => {
@@ -288,22 +277,15 @@ watch(volume, () => {
 })
 
 emitter.on('onRemoveCurrentSong', () => {
-  currentSong.value = {
-    id: 0,
-    name: '',
-    alias: '',
-    author: [],
-    album: { name: '' },
-    duration: 0,
-    mv: 0,
-    fee: 0,
-    maxbr: 0,
-    st: 0,
-    noCopyrightRcmd: null,
-  }
+  useMusicStore().resetCurrentSong()
   isPlay.value = false
   duration.value = 0
   currentPlayTime.value = 0
+})
+
+// 初始化主题颜色
+onMounted(() => {
+  initTheme()
 })
 </script>
 

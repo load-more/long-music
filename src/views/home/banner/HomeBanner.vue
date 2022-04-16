@@ -58,19 +58,17 @@
 import { onBeforeMount, reactive } from 'vue'
 import { getHomeBanner } from '@/api/home'
 import { getMusicDetail } from '@/api/music'
-import useMainStore from '@/store/index'
+import useMusicStore from '@/store/music'
 import { storeToRefs } from 'pinia'
+import { homeBannerType } from '@/assets/ts/type'
+import { resolveSongsDetail } from '@/utils/resolve'
 
 const emit = defineEmits(['finish-loading'])
 
+const { currentSong } = storeToRefs(useMusicStore())
+
 /* 渲染数据 */
-interface bannerType {
-  imgUrl: string
-  targetId: number
-  titleColor: string
-  typeTitle: string
-}
-const bannerArr = reactive<bannerType[]>([])
+const bannerArr = reactive<homeBannerType[]>([])
 const getData = async () => {
   // 获取 banner
   const { data: bannerData } = await getHomeBanner()
@@ -83,43 +81,18 @@ const getData = async () => {
     }
     bannerArr.push(obj)
   })
-  emit('finish-loading')
 }
-onBeforeMount(() => {
-  getData()
-})
 
-const { currentSong } = storeToRefs(useMainStore())
-interface songType {
-  id: number
-  name: string
-  alias: string
-  author: { id: number, name: string }[]
-  album: { name: string }
-  duration: number
-  mv: number
-  fee: number
-  maxbr: number
-  st: number
-  noCopyrightRcmd: any
-}
 const handleBannerClick = async (id: number) => {
   const { data } = await getMusicDetail({ ids: id })
-  const obj: songType = {
-    id: data.songs[0].id,
-    name: data.songs[0].name,
-    alias: data.songs[0].alia[0],
-    author: data.songs[0].ar,
-    album: data.songs[0].al,
-    duration: data.songs[0].dt,
-    mv: data.songs[0].mv,
-    fee: data.privileges[0].fee,
-    maxbr: data.privileges[0].maxbr,
-    st: data.privileges[0].st,
-    noCopyrightRcmd: data.songs[0].noCopyrightRcmd,
-  }
-  currentSong.value = obj
+  const rst = resolveSongsDetail(data)[0]
+  currentSong.value = rst
 }
+
+onBeforeMount(async () => {
+  await getData()
+  emit('finish-loading')
+})
 </script>
 
 <style scoped lang="scss">
@@ -188,6 +161,9 @@ const handleBannerClick = async (id: number) => {
   .el-carousel__item {
     display: flex;
     align-items: center;
+  }
+  :deep .el-carousel__mask {
+    background-color: unset;
   }
 }
 </style>

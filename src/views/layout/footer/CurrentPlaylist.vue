@@ -43,16 +43,16 @@
           </div>
           <div class="singer single-line-ellipsis">
             <span
-              v-for="(i, index) in item.author"
+              v-for="(i, index) in item.artists"
               :key="i.id"
-              :title="item.author.map(i => i.name).join(' / ')"
+              :title="item.artists.map(i => i.name).join(' / ')"
             >
               <span class="name">
                 {{ i.name }}
               </span>
               <span
                 class="seperator"
-                v-if="index !== item.author.length - 1"
+                v-if="index !== item.artists.length - 1"
               >&nbsp;/&nbsp;</span>
             </span>
           </div>
@@ -67,11 +67,12 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import useMainStore from '@/store/index'
+import useMusicStore from '@/store/music'
 import { storeToRefs } from 'pinia'
 import { formatDuration } from '@/utils/time'
 import emitter from '@/utils/emitter'
 import { ElMessage } from 'element-plus'
+import { songType } from '@/assets/ts/type'
 
 const props = defineProps({
   modelValue: {
@@ -91,7 +92,7 @@ watch(isOpenList, () => {
   emit('update:modelValue', isOpenList.value)
 })
 
-const { currentSongList, currentSong, listenedSongSet } = storeToRefs(useMainStore())
+const { currentSongList, currentSong, listenedSongSet } = storeToRefs(useMusicStore())
 
 const clearList = () => {
   currentSongList.value = []
@@ -99,21 +100,8 @@ const clearList = () => {
   emitter.emit('onRemoveCurrentSong', true)
 }
 
-const onClickPlay = (song: {
-  id: number
-  name: string
-  alias: string
-  author: { id: number, name: string }[]
-  album: { name: string }
-  duration: number
-  isPlay?: boolean
-  mv: number
-  fee: number
-  maxbr: number
-  st: number
-  noCopyrightRcmd: any
-}) => {
-  if (song.st !== 0) {
+const onClickPlay = (song: songType) => {
+  if (!song.canPlay) {
     ElMessage({
       type: 'error',
       message: '该歌曲无版权，暂时无法播放',

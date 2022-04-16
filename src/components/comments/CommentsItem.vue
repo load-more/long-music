@@ -6,9 +6,9 @@
   >
     <div class="left">
       <el-avatar
-        :src="comment.userAvatar"
+        :src="comment.user.avatarUrl"
         class="avatar"
-        @click="router.push({ name: 'user', params: { id: comment.userId } })"
+        @click="router.push({ name: 'user', params: { id: comment.user.userId } })"
       ></el-avatar>
     </div>
     <div class="right">
@@ -16,29 +16,29 @@
         <div class="comment">
           <span
             class="user-name"
-            @click="router.push({ name: 'user', params: { id: comment.userId } })"
+            @click="router.push({ name: 'user', params: { id: comment.user.userId } })"
           >
-            {{ comment.userName }}:
+            {{ comment.user.nickname }}:
           </span>
           <span class="content">
-            {{ comment.comment }}
+            {{ comment.content }}
           </span>
         </div>
-        <div class="replied-comment" v-if="comment.repliedUserId">
+        <div class="replied-comment" v-if="comment.beReplied.user.userId">
           <span
             class="user-name"
-            @click="router.push({ name: 'user', params: { id: comment.repliedUserId } })"
+            @click="router.push({ name: 'user', params: { id: comment.beReplied.user.userId } })"
           >
-            @{{ comment.repliedUserName }}:
+            @{{ comment.beReplied.user.nickname }}:
           </span>
           <span class="content">
-            {{ comment.repliedComment }}
+            {{ comment.beReplied.content }}
           </span>
         </div>
       </div>
       <div class="bottom">
         <span class="time">
-          {{ comment.commentTime }}
+          {{ comment.timeStr }}
         </span>
         <span>
           <i class="iconfont icon-thumb-up-line">
@@ -55,19 +55,8 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
+import { commentType } from '@/assets/ts/type'
 
-export interface commentType {
-  userId: number
-  userAvatar: string
-  userName: string
-  comment: string
-  repliedUserId: number
-  repliedUserName: string
-  repliedComment: string
-  commentTime: string
-  likedCount: number
-  commentId: number
-}
 defineProps<{
   comments: commentType[]
 }>()

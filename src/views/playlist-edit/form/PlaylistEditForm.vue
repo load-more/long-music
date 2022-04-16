@@ -49,6 +49,7 @@ import {
 import { ElMessage } from 'element-plus'
 import ImageUpdater from '@/components/form/ImageUpdater.vue'
 import TagSelector from '@/components/form/TagSelector.vue'
+import { playlistEditFormType } from '@/assets/ts/type'
 
 /* 路由管理 */
 const route = useRoute()
@@ -56,12 +57,8 @@ const router = useRouter()
 
 /* 渲染数据 */
 const playlistId = route.params.id
-interface formType {
-  name: string
-  desc: string
-  tags: string[]
-}
-const playlistForm = reactive<formType>({
+
+const playlistForm = reactive<playlistEditFormType>({
   name: '',
   desc: '',
   tags: [],

@@ -41,15 +41,17 @@
 
 <script setup lang="ts">
 import {
-  ref, reactive, onBeforeMount, computed,
+  ref, onBeforeMount, computed,
 } from 'vue'
 import { getPlaylistAllSongs } from '@/api/playlist'
 import emitter from '@/utils/emitter'
-import useMainStore from '@/store/index'
+import useMusicStore from '@/store/music'
 import { storeToRefs } from 'pinia'
 import CommentsCpn from '@/components/comments/CommentsCpn.vue'
-import MusicListItem, { songType } from '@/components/music/MusicListItem.vue'
+import MusicListItem from '@/components/music/MusicListItem.vue'
 import UserRelation from '@/components/user-relation/UserRelation.vue'
+import { songType } from '@/assets/ts/type'
+import { resolveSongsDetail } from '@/utils/resolve'
 
 const props = defineProps<{
   uid: number
@@ -57,29 +59,14 @@ const props = defineProps<{
 const emit = defineEmits(['finish-loading'])
 
 /* 状态管理 */
-const { currentSongList, currentPlaylistId } = storeToRefs(useMainStore())
+const { currentSongList, currentPlaylistId } = storeToRefs(useMusicStore())
 
 /* 渲染数据 */
-const songArr = reactive<songType[]>([])
+const songArr = ref<songType[]>([])
 
 const getData = async () => {
   const { data } = await getPlaylistAllSongs({ id: props.uid })
-  data.songs.forEach((item: any, index: number) => {
-    const obj: songType = {
-      id: item.id,
-      name: item.name,
-      alias: item.alia[0],
-      author: item.ar,
-      album: item.al,
-      duration: item.dt,
-      mv: item.mv,
-      fee: data.privileges[index].fee,
-      maxbr: data.privileges[index].maxbr,
-      st: data.privileges[index].st,
-      noCopyrightRcmd: item.noCopyrightRcmd,
-    }
-    songArr.push(obj)
-  })
+  songArr.value = resolveSongsDetail(data)
   emit('finish-loading')
 }
 
@@ -109,7 +96,7 @@ onBeforeMount(async () => {
 const activeTab = ref('list')
 
 emitter.on('onChangeCurrentPlaylist', () => {
-  currentSongList.value = songArr
+  currentSongList.value = songArr.value
   currentPlaylistId.value = props.uid
 })
 emitter.on('onSendPlaylistSubscribers', (count) => {

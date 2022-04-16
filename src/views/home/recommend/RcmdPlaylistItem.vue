@@ -4,14 +4,14 @@
       <div
         class="image"
         :style="{'background-image': `url(${info.picUrl})`}"
-        @click="enterPlaylist"
+        @click="handleClickPlaylist"
       ></div>
       <div class="play-icon">
         <i class="iconfont icon-play-circle"></i>
       </div>
     </div>
     <div class="title">
-      <span @click="enterPlaylist">{{ info.name }}</span>
+      <span @click="handleClickPlaylist">{{ info.name }}</span>
     </div>
     <div class="play-count">
       <i class="iconfont icon-play"></i>
@@ -23,19 +23,15 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import { formatPlayCount } from '@/utils/format'
+import { rcmdPlaylistType } from '@/assets/ts/type'
 
-interface rcmdType {
-  id: number
-  name: string
-  picUrl: string
-  playCount: number
-}
 const props = defineProps<{
-  info: rcmdType
+  info: rcmdPlaylistType
 }>()
 
 const router = useRouter()
-const enterPlaylist = () => {
+
+const handleClickPlaylist = () => {
   router.push({ name: 'playlist', params: { id: props.info.id } })
 }
 </script>

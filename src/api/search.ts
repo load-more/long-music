@@ -10,32 +10,29 @@ export const getHotSearch = () => request({
   url: '/search/hot/detail',
 })
 
-interface getSearchSuggestParams {
+export const getSearchSuggest = (params: {
   keywords: string
   type?: string
-}
-export const getSearchSuggest = (params: getSearchSuggestParams) => request({
+}) => request({
   method: 'GET',
   url: '/search/suggest',
   params,
 })
 
-interface getSearchMatchParams {
+export const getSearchMatch = (params: {
   keywords: string
-}
-export const getSearchMatch = (params: getSearchMatchParams) => request({
+}) => request({
   method: 'GET',
   url: '/search/multimatch',
   params,
 })
 
-interface getSearchResultParams {
+export const getSearchResult = (params: {
   keywords: string
   limit?: number
   offset?: number
   type?: number
-}
-export const getSearchResult = (params: getSearchResultParams) => request({
+}) => request({
   method: 'GET',
   url: '/cloudsearch',
   params,

@@ -15,36 +15,36 @@
           :title="`${songInfo.name} ${songInfo.alias ? '(' + songInfo.alias + ')' : ''}`"
         >
           <span
-            :style="{ color: songInfo.st !== 0 ? 'gray' : 'unset' }"
+            :style="{ color: songInfo.canPlay ? 'unset' : 'gray' }"
           >{{ songInfo.name }}</span>
           <span
             class="alias"
-            v-if="songInfo.alias"
-            :style="{ color: songInfo.st !== 0 ? 'gray' : 'unset' }"
-          >&nbsp;({{ songInfo.alias }})</span>
+            v-if="songInfo.alias.length"
+            :style="{ color: songInfo.canPlay ? 'unset' : 'gray' }"
+          >&nbsp;({{ songInfo.alias[0] }})</span>
         </span>
         <span class="tag-info">
-          <span v-if="!songInfo.noCopyrightRcmd">
-            <span class="tag" v-if="songInfo.fee === 1 || songInfo.fee === 4">VIP</span>
-            <span class="tag" v-if="songInfo.maxbr === 999000">SQ</span>
+          <span v-if="!songInfo.noCopyrightInfo.typeDesc">
+            <span class="tag" v-if="songInfo.isVip">VIP</span>
+            <span class="tag" v-if="songInfo.hasSq">SQ</span>
             <span class="tag mv" v-if="songInfo.mv" @click.stop="handleClickMv">MV</span>
           </span>
           <span v-else>
             <span class="no-copyright-tag">无音源</span>
-            <span class="no-copyright-text">{{ songInfo.noCopyrightRcmd.typeDesc }}</span>
+            <span class="no-copyright-text">{{ songInfo.noCopyrightInfo.typeDesc }}</span>
           </span>
         </span>
       </div>
       <div class="singer single-line-ellipsis">
         <span
-          v-for="(item, index) in songInfo.author"
+          v-for="(item, index) in songInfo.artists"
           :key="item.id"
-          :title="songInfo.author.map(item => item.name).join(' / ')"
+          :title="songInfo.artists.map(item => item.name).join(' / ')"
         >
           <span class="name">
             {{ item.name }}
           </span>
-          <span class="seperator" v-if="index !== songInfo.author.length - 1">&nbsp;/&nbsp;</span>
+          <span class="seperator" v-if="index !== songInfo.artists.length - 1">&nbsp;/&nbsp;</span>
         </span>
       </div>
       <div class="album single-line-ellipsis">
@@ -65,20 +65,23 @@
       <div class="mid">
         <div
           class="title single-line-ellipsis"
-          :title="`${songInfo.name} ${songInfo.alias ? '(' + songInfo.alias + ')' : ''}`"
+          :title="`${songInfo.name} ${songInfo.alias.length ? '(' + songInfo.alias[0] + ')' : ''}`"
         >
           <span>{{ songInfo.name }}</span>
-          <span v-if="songInfo.alias" class="alias">&nbsp;({{ songInfo.alias }})</span>
+          <span v-if="songInfo.alias.length" class="alias">&nbsp;({{ songInfo.alias[0] }})</span>
         </div>
         <div
           class="singer single-line-ellipsis"
-          :title="songInfo.author.map(item => item.name).join(' / ')"
+          :title="songInfo.artists.map(item => item.name).join(' / ')"
         >
-          <span v-for="(item, index) in songInfo.author" :key="item.id">
+          <span v-for="(item, index) in songInfo.artists" :key="item.id">
             <span class="name">
               {{ item.name }}
             </span>
-            <span class="seperator" v-if="index !== songInfo.author.length - 1">&nbsp;/&nbsp;</span>
+            <span
+              class="seperator"
+              v-if="index !== songInfo.artists.length - 1"
+            >&nbsp;/&nbsp;</span>
           </span>
           <span> - </span>
           <span>{{ songInfo.album.name }}</span>
@@ -94,38 +97,24 @@
 <script setup lang="ts">
 import { computed, withDefaults } from 'vue'
 import { formatDuration } from '@/utils/time'
-import useMainStore from '@/store/index'
+import useMusicStore from '@/store/music'
 import { storeToRefs } from 'pinia'
 import emitter from '@/utils/emitter'
 import { ElMessage } from 'element-plus'
+import { songType } from '@/assets/ts/type'
 
-export interface songType {
-  id: number
-  name: string
-  alias: string
-  author: { id: number, name: string }[]
-  album: { name: string }
-  duration: number
-  index?: number
-  mv: number // 0: 无 MV; !0: 有 MV
-  fee: number // 0: 免费/无版权; 1: VIP; 4: 歌曲所在专辑需单独付费; 8: 低品免费，高品下载收费; 16: 无音源
-  maxbr: number // 999000: SQ
-  st: number // 0: 可以播放; !0: 不可播放
-  noCopyrightRcmd: any // 无版权信息
-}
-interface Props {
+const props = withDefaults(defineProps<{
   songInfo: songType
   songIndex: number
   isPlaylistItem: boolean
-}
-const props = withDefaults(defineProps<Props>(), {
+}>(), {
   isPlaylistItem: true,
 })
 
 /* 双击播放音乐 */
-const { currentSong, listenedSongSet, currentSongList } = storeToRefs(useMainStore())
+const { currentSong, listenedSongSet, currentSongList } = storeToRefs(useMusicStore())
 const handleDbClick = () => {
-  if (props.songInfo.st !== 0) {
+  if (!props.songInfo.canPlay) {
     ElMessage({
       type: 'error',
       message: '该歌曲无版权，暂时无法播放',

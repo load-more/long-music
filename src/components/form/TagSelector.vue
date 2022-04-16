@@ -52,11 +52,10 @@ const props = defineProps<{
 }>()
 const emit = defineEmits(['update:tags'])
 
-interface cateType {
+const tagArr = reactive<{
   name: string
   arr: any[]
-}
-const tagArr = reactive<cateType[]>([])
+}[]>([])
 
 const getData = async () => {
   /* 获取标签信息 */

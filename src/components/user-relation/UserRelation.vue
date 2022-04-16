@@ -31,7 +31,9 @@ import { getUserFollows, getUserFans } from '@/api/user'
 import { getPlaylistSubsribers } from '@/api/playlist'
 import LoadingAnimation from '@/components/loading/LoadingAnimation.vue'
 import EmptyPlaceholder from '@/components/empty-placeholder/EmptyPlaceholder.vue'
-import UserRelationItem, { userType } from './UserRelationItem.vue'
+import { userBriefType } from '@/assets/ts/type'
+import { resolveUserBrief } from '@/utils/resolve'
+import UserRelationItem from './UserRelationItem.vue'
 
 const props = defineProps<{
   id: number
@@ -80,18 +82,10 @@ const getData = async (offset: number) => {
     })).data.subscribers
   }
 
-  const arr: userType[] = []
-  data.forEach((item: userType) => {
-    arr.push({
-      userId: item.userId,
-      nickname: item.nickname,
-      signature: item.signature,
-      playlistCount: item.playlistCount,
-      followeds: item.followeds,
-      follows: item.follows,
-      avatarUrl: item.avatarUrl,
-      followed: item.followed,
-    })
+  const arr: userBriefType[] = []
+  data.forEach((item: any) => {
+    const obj = resolveUserBrief(item)
+    arr.push(obj)
   })
 
   pageMap.value.set(offset, arr)
@@ -104,7 +98,7 @@ const handleCurrentChange = () => {
 }
 
 const handleUpdateArray = (page: number, uid: number) => {
-  const index = pageMap.value.get(page - 1).findIndex((item: userType) => item.userId === uid)
+  const index = pageMap.value.get(page - 1).findIndex((item: userBriefType) => item.userId === uid)
   pageMap.value.get(page - 1)[index].followed = true
 }
 
@@ -122,7 +116,7 @@ onBeforeMount(() => {
     justify-content: center;
   }
   .loading-animation {
-    margin-top: 40px;
+    padding: 40px 0;
     font-size: 3px;
   }
 }

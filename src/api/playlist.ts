@@ -1,10 +1,9 @@
 import request from '@/utils/request'
 
-interface getPlaylistDetailParams {
+export const getPlaylistDetail = (params: {
   id: number // 歌单 id
   s?: number // 歌单最近的 s 个收藏者，默认为 8
-}
-export const getPlaylistDetail = (params: getPlaylistDetailParams) => request({
+}) => request({
   method: 'GET',
   url: '/playlist/detail',
   params,
@@ -16,29 +15,27 @@ export const getTagList = () => request({
   url: '/playlist/highquality/tags',
 })
 
-interface updatePlaylistParams {
+// 更新歌单信息
+export const updatePlaylist = (params: {
   id: number
   name: string
   desc: string
   tags: string
-}
-// 更新歌单信息
-export const updatePlaylist = (params: updatePlaylistParams) => request({
+}) => request({
   method: 'GET',
   url: '/playlist/update',
   params,
 })
 
-interface updatePlaylistCoverParams {
-  id: number
-  imgSize?: number
-  imgX?: number
-  imgY?: number
-}
 // 更新歌单封面
 export const updatePlaylistCover = (
   formData: FormData,
-  params: updatePlaylistCoverParams,
+  params: {
+    id: number
+    imgSize?: number
+    imgX?: number
+    imgY?: number
+  },
 ) => request({
   method: 'POST',
   url: '/playlist/cover/update',
@@ -49,13 +46,12 @@ export const updatePlaylistCover = (
   data: formData,
 })
 
-interface getPlaylistAllSongsParams {
+// 获取歌单所有歌曲
+export const getPlaylistAllSongs = (params: {
   id: number
   limit?: number
   offset?: number
-}
-// 获取歌单所有歌曲
-export const getPlaylistAllSongs = (params: getPlaylistAllSongsParams) => request({
+}) => request({
   method: 'GET',
   url: '/playlist/track/all',
   params,

@@ -37,7 +37,9 @@ import { getMusicComment } from '@/api/music'
 import { getPlaylistComment } from '@/api/playlist'
 import LoadingAnimation from '@/components/loading/LoadingAnimation.vue'
 import EmptyPlaceholder from '@/components/empty-placeholder/EmptyPlaceholder.vue'
-import CommentsItem, { commentType } from './CommentsItem.vue'
+import { commentType } from '@/assets/ts/type'
+import { resolveComment } from '@/utils/resolve'
+import CommentsItem from './CommentsItem.vue'
 
 const props = defineProps<{
   type: 'song' | 'playlist'
@@ -70,18 +72,7 @@ const getComments = async (type: 'hot' | 'new' | 'all', offset: number) => {
     const raw = t === 'hot' ? data.hotComments : data.comments
     const arr: commentType[] = []
     raw.forEach((item: any) => {
-      const obj = {
-        userId: item.user.userId,
-        userAvatar: item.user.avatarUrl,
-        userName: item.user.nickname,
-        comment: item.content,
-        repliedUserId: item.beReplied[0] ? item.beReplied[0].user.userId : null,
-        repliedUserName: item.beReplied[0] ? item.beReplied[0].user.nickname : null,
-        repliedComment: item.beReplied[0] ? item.beReplied[0].content : null,
-        commentTime: item.timeStr,
-        likedCount: item.likedCount,
-        commentId: item.commentId,
-      }
+      const obj: commentType = resolveComment(item)
       if (t === 'hot') {
         hotComments.value.push(obj)
       } else {

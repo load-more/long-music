@@ -1,24 +1,22 @@
 import request from '../utils/request'
 
-interface phoneLoginParams {
+export const phoneLogin = (params: {
   phone: string
   password?: string
   countrycode?: string
   md5_password?: string
   captcha?: string
-}
-export const phoneLogin = (params: phoneLoginParams) => request({
+}) => request({
   method: 'GET',
   url: '/login/cellphone',
   params,
 })
 
-interface emailLoginParams {
+export const emailLogin = (params: {
   email: string
   password?: string
   md5_password?: string
-}
-export const emailLogin = (params: emailLoginParams) => request({
+}) => request({
   method: 'GET',
   url: '/login',
   params,
@@ -29,41 +27,37 @@ export const generateQrKey = () => request({
   url: '/login/qr/key',
 })
 
-interface generateQrCodeParams {
+export const generateQrCode = (params: {
   key: string
   qrimg?: boolean
-}
-export const generateQrCode = (params: generateQrCodeParams) => request({
+}) => request({
   method: 'GET',
   url: '/login/qr/create',
   params,
 })
 
-interface checkQrCodeParams {
+export const checkQrCode = (params: {
   key: string
-}
-export const checkQrCode = (params: checkQrCodeParams) => request({
+}) => request({
   method: 'GET',
   url: '/login/qr/check',
   params,
 })
 
-interface sendCaptchaParams {
+export const sendCaptcha = (params: {
   phone: string
   ctcode?: number
-}
-export const sendCaptcha = (params: sendCaptchaParams) => request({
+}) => request({
   method: 'GET',
   url: '/captcha/sent',
   params,
 })
 
-interface verifyCaptchaParams {
+export const verifyCaptcha = (params: {
   phone: string
   captcha: string
   ctcode?: number
-}
-export const verifyCaptcha = (params: verifyCaptchaParams) => request({
+}) => request({
   method: 'GET',
   url: '/captcha/verify',
   params,
