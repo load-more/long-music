@@ -59,13 +59,12 @@ import { onBeforeMount, reactive } from 'vue'
 import { getHomeBanner } from '@/api/home'
 import { getMusicDetail } from '@/api/music'
 import useMusicStore from '@/store/music'
-import { storeToRefs } from 'pinia'
 import { homeBannerType } from '@/assets/ts/type'
 import { resolveSongsDetail } from '@/utils/resolve'
 
 const emit = defineEmits(['finish-loading'])
 
-const { currentSong } = storeToRefs(useMusicStore())
+const { updateCurrentSong, playMusic } = useMusicStore()
 
 /* 渲染数据 */
 const bannerArr = reactive<homeBannerType[]>([])
@@ -86,7 +85,8 @@ const getData = async () => {
 const handleBannerClick = async (id: number) => {
   const { data } = await getMusicDetail({ ids: id })
   const rst = resolveSongsDetail(data)[0]
-  currentSong.value = rst
+  await updateCurrentSong(rst)
+  playMusic()
 }
 
 onBeforeMount(async () => {

@@ -2,10 +2,10 @@
   <div class="music-list-wrap">
     <MusicListItem
       class="item"
-      v-for="(item) in songArr"
+      v-for="(item, index) in songArr"
       :key="item.id"
       :song-info="item"
-      :song-index="(item.index as number) + 1"
+      :song-index="pageIndex * pageSize + index + 1"
       :is-playlist-item="false"
     />
   </div>
@@ -17,6 +17,8 @@ import { songType } from '@/assets/ts/type'
 
 defineProps<{
   songArr: songType[]
+  pageIndex: number
+  pageSize: number
 }>()
 </script>
 

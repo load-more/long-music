@@ -12,7 +12,7 @@
         <span>{{ playlist?.name }}</span>
         <i
           class="iconfont icon-edit"
-          v-if="uid === playlist?.creator.userId"
+          v-if="userDetail.userId === playlist?.creator.userId"
           @click="router.push({ name: 'editPlaylist', params: { id: playlist!.id } })"
         ></i>
       </div>
@@ -42,15 +42,15 @@
           </span>
           <span class="item">
             <span class="label">播放量：</span>
-            <span class="content">{{ formatCount(playlist!.playCount) }}</span>
+            <span class="content">{{ formatCount(playlist?.playCount || 0) }}</span>
           </span>
           <span class="item">
             <span class="label">收藏量：</span>
-            <span class="content">{{ formatCount(playlist!.subscribedCount) }}</span>
+            <span class="content">{{ formatCount(playlist?.subscribedCount || 0) }}</span>
           </span>
           <span class="item">
             <span class="label">分享量：</span>
-            <span class="content">{{ formatCount(playlist!.shareCount || 0) }}</span>
+            <span class="content">{{ formatCount(playlist?.shareCount || 0) }}</span>
           </span>
         </div>
         <div class="desc single-line-ellipsis" ref="descRef">
@@ -77,6 +77,8 @@ import { formatCount, formatTimestamp } from '@/utils/format'
 import emitter from '@/utils/emitter'
 import { playlistDetailType } from '@/assets/ts/type'
 import { resolvePlaylistDetail } from '@/utils/resolve'
+import useUserStore from '@/store/user'
+import { storeToRefs } from 'pinia'
 
 const props = defineProps<{
   uid: number
@@ -88,6 +90,7 @@ const router = useRouter()
 
 /* 渲染数据 */
 const playlist = ref<playlistDetailType>()
+const { userDetail } = storeToRefs(useUserStore())
 
 const createTime = computed(() => {
   // 将时间戳格式化

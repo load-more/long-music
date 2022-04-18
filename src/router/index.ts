@@ -78,7 +78,10 @@ const router = createRouter({
 
 router.beforeEach(async (to, from) => {
   const { userDetail } = storeToRefs(useUserStore())
-  const { currentSong, currentPlaylistId, currentSongList } = storeToRefs(useMusicStore())
+
+  const musicStore = useMusicStore()
+  const { currentSong, currentPlaylistId } = storeToRefs(musicStore)
+  const { updateCurrentSong, updateCurrentSongList } = musicStore
 
   // 如果用户
   if (!userDetail.value.userId) {
@@ -92,18 +95,17 @@ router.beforeEach(async (to, from) => {
       // 获取一首歌曲的信息
       const { data } = await getMusicDetail({ ids: id })
       const song: songType = resolveSongsDetail(data)[0]
-      currentSong.value = song
+      await updateCurrentSong(song)
     }
   }
   // 用户刷新之后，自动读取 localStorage 中的播放列表数据
   if (!currentPlaylistId.value) {
     const id = Number(window.localStorage.getItem('current_playlist'))
     if (id) {
-      currentPlaylistId.value = id
       // 获取一个歌单全部歌曲的信息
       const { data } = await getPlaylistAllSongs({ id })
       const arr: songType[] = resolveSongsDetail(data)
-      currentSongList.value = arr
+      updateCurrentSongList(id, arr)
     }
   }
   // 如果用户未登录且目标页面不是登录页，则跳转到登录页

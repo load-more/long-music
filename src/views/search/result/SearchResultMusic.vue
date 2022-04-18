@@ -25,6 +25,8 @@
       <keep-alive>
         <SearchResultMusicList
           :song-arr="pageMap.get(currentPage - 1)"
+          :page-index="currentPage - 1"
+          :page-size="pageSize"
         />
       </keep-alive>
       <el-pagination

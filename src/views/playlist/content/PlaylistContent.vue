@@ -46,7 +46,6 @@ import {
 import { getPlaylistAllSongs } from '@/api/playlist'
 import emitter from '@/utils/emitter'
 import useMusicStore from '@/store/music'
-import { storeToRefs } from 'pinia'
 import CommentsCpn from '@/components/comments/CommentsCpn.vue'
 import MusicListItem from '@/components/music/MusicListItem.vue'
 import UserRelation from '@/components/user-relation/UserRelation.vue'
@@ -59,7 +58,8 @@ const props = defineProps<{
 const emit = defineEmits(['finish-loading'])
 
 /* 状态管理 */
-const { currentSongList, currentPlaylistId } = storeToRefs(useMusicStore())
+const musicStore = useMusicStore()
+const { updateCurrentSongList } = musicStore
 
 /* 渲染数据 */
 const songArr = ref<songType[]>([])
@@ -96,8 +96,8 @@ onBeforeMount(async () => {
 const activeTab = ref('list')
 
 emitter.on('onChangeCurrentPlaylist', () => {
-  currentSongList.value = songArr.value
-  currentPlaylistId.value = props.uid
+  // 更新播放列表
+  updateCurrentSongList(props.uid, songArr.value)
 })
 emitter.on('onSendPlaylistSubscribers', (count) => {
   subscribersCount.value = count

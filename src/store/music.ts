@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia'
 import { songType } from '@/assets/ts/type'
+import { getMusicUrl } from '@/api/music'
+import { ElMessage } from 'element-plus'
 
 const currentSong: songType = {
   id: 0,
@@ -23,24 +25,36 @@ const currentSong: songType = {
     type: 0,
     typeDesc: '',
   },
-  isPlay: false,
 }
 
 const currentSongList: songType[] = []
-
-const listenedSongSet = new Set()
-
-const currentPlayTime = 0
-
-const currentPlaylistId = 0
 
 export default defineStore('music', {
   state: () => ({
     currentSong,
     currentSongList,
-    listenedSongSet,
-    currentPlayTime,
-    currentPlaylistId,
+    listenedSongSet: new Set(), // 用于随机播放去重
+    currentPlaylistId: 0,
+    audio: new Audio(),
+    isPlayed: false,
+    duration: 0,
+    currentTime: 0,
+    volume: 100,
+    playMode: [
+      'order-play',
+      'loop',
+      'single-loop',
+      'random-play',
+      'heartbeat',
+    ],
+    playModeLabel: [
+      '顺序播放',
+      '列表循环',
+      '单曲循环',
+      '随机播放',
+      '心动模式',
+    ],
+    playModeIndex: 0,
   }),
   actions: {
     resetCurrentSong() {
@@ -66,8 +80,128 @@ export default defineStore('music', {
           type: 0,
           typeDesc: '',
         },
-        isPlay: false,
       }
+      this.audio = new Audio()
+      this.isPlayed = false
+      this.duration = 0
+      this.currentTime = 0
+    },
+    async updateCurrentSong(song: songType) {
+      this.pauseMusic()
+      this.audio = new Audio()
+      this.currentSong = song
+      window.localStorage.setItem('current_song', String(song.id))
+
+      if (this.currentSong.isVip) {
+        const { data } = await getMusicUrl({ id: song.id })
+        this.audio.src = data.data[0].url
+      } else {
+        this.audio.src = `https://music.163.com/song/media/outer/url?id=${song.id}.mp3`
+      }
+
+      // 将歌曲存入已播放集合中
+      this.listenedSongSet.add(song.id)
+      // 如果集合满了，则清空集合并重新记录
+      if (this.listenedSongSet.size === this.currentSongList.length) {
+        this.listenedSongSet = new Set()
+        this.listenedSongSet.add(song.id)
+      }
+
+      // 注意，要在 canplaythrough 阶段设置参数，否则会获取不到相应参数
+      this.audio.addEventListener('canplaythrough', () => {
+        // 初始化数据
+        this.duration = this.audio.duration
+        this.currentTime = this.audio.currentTime
+        this.volume = this.audio.volume * 100
+      })
+      this.audio.addEventListener('timeupdate', () => {
+        this.currentTime = this.audio.currentTime
+      })
+      // 当音乐结束
+      this.audio.addEventListener('ended', async () => {
+        this.pauseMusic()
+        const currentPlayMode = this.playMode[this.playModeIndex]
+        if (currentPlayMode === 'order-play' || currentPlayMode === 'heartbeat') {
+          // 如果不是最后一首歌，则直接下一首
+          if (this.currentSong.id !== this.currentSongList[this.currentSongList.length - 1].id) {
+            await this.changeSong(1)
+          }
+        } else if (currentPlayMode === 'single-loop') {
+          // 单曲循环播放
+          this.playMusic()
+        } else { // 如果是“随机播放”或“列表循环”
+          await this.changeSong(1)
+        }
+      })
+    },
+    playMusic() {
+      if (!this.currentSong.canPlay) {
+        ElMessage({
+          type: 'error',
+          message: '该歌曲无版权，暂时无法播放',
+          appendTo: document.body,
+        })
+        return
+      }
+      if (this.currentSong.isVip) {
+        ElMessage({
+          type: 'warning',
+          message: 'VIP歌曲试听30秒',
+          appendTo: document.body,
+        })
+      }
+      this.audio.play()
+      this.isPlayed = true
+    },
+    pauseMusic() {
+      this.audio.pause()
+      this.isPlayed = false
+    },
+    changeVolume(volume: number) {
+      this.audio.volume = volume / 100
+      this.volume = volume
+    },
+    changeCurrentTime(ct: number) {
+      this.audio.currentTime = ct
+      this.currentTime = ct
+    },
+    changePlayMode() {
+      this.playModeIndex = (this.playModeIndex + 1) % this.playMode.length
+    },
+    async changeSong(interval: number) {
+      if (!this.currentSongList.length) return
+
+      // 生成新的索引
+      let newIndex = null
+      const index = this.currentSongList.findIndex(
+        (song) => song.id === this.currentSong.id,
+      )
+      const currentPlayMode = this.playMode[this.playModeIndex]
+      if (currentPlayMode === 'random-play') { // 如果是“随机播放”模式
+        // 随机生成一个不重复的索引
+        newIndex = Math.floor(Math.random() * this.currentSongList.length)
+        while (this.listenedSongSet.has(this.currentSongList[newIndex].id)) {
+          newIndex = Math.floor(Math.random() * this.currentSongList.length)
+        }
+      } else { // 如果是其他模式
+        // 考虑 index 小于 0 或大于最大长度的情况
+        newIndex = (index + interval + this.currentSongList.length) % this.currentSongList.length
+      }
+
+      // 切换当前歌曲
+      await this.updateCurrentSong(this.currentSongList[newIndex])
+      // 自动播放
+      this.playMusic()
+    },
+    updateCurrentSongList(id: number, list: songType[]) {
+      this.currentSongList = list
+      this.listenedSongSet = new Set()
+      this.currentPlaylistId = id
+      window.localStorage.setItem('current_playlist', String(id))
+    },
+    addSongToCurrentSongList(song: songType) {
+      const index = this.currentSongList.findIndex((item) => item.id === this.currentSong.id)
+      this.currentSongList.splice(index + 1, 0, song)
     },
   },
 })

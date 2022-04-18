@@ -153,6 +153,4 @@ export interface songType {
     type: number
     typeDesc: string
   } // 无版权信息
-  index?: number // 列表里歌曲的索引
-  isPlay?: boolean // 歌曲是否播放
 }

@@ -32,13 +32,13 @@
               class="iconfont icon-play-hollow"
               @click.stop="onClickPlay(item)"
             ></i>
-            <i v-else-if="currentSong.isPlay" class="iconfont icon-volume"></i>
+            <i v-else-if="isPlayed" class="iconfont icon-volume"></i>
             <i v-else class="iconfont icon-close-volume"></i>
           </div>
           <div class="title single-line-ellipsis">
-            <span :title="`${item.name} ${item.alias ? '(' + item.alias + ')' : ''}`">
+            <span :title="`${item.name} ${item.alias.length ? '(' + item.alias[0] + ')' : ''}`">
               <span>{{ item.name }}</span>
-              <span v-if="item.alias">&nbsp;({{ item.alias }})</span>
+              <span v-if="item.alias.length">&nbsp;({{ item.alias[0] }})</span>
             </span>
           </div>
           <div class="singer single-line-ellipsis">
@@ -70,8 +70,6 @@ import { ref, watch } from 'vue'
 import useMusicStore from '@/store/music'
 import { storeToRefs } from 'pinia'
 import { formatDuration } from '@/utils/format'
-import emitter from '@/utils/emitter'
-import { ElMessage } from 'element-plus'
 import { songType } from '@/assets/ts/type'
 
 const props = defineProps({
@@ -92,25 +90,23 @@ watch(isOpenList, () => {
   emit('update:modelValue', isOpenList.value)
 })
 
-const { currentSongList, currentSong, listenedSongSet } = storeToRefs(useMusicStore())
+const musicStore = useMusicStore()
+const { currentSongList, currentSong, isPlayed } = storeToRefs(musicStore)
+const {
+  updateCurrentSong,
+  updateCurrentSongList,
+  resetCurrentSong,
+  playMusic,
+} = musicStore
 
 const clearList = () => {
-  currentSongList.value = []
-  // 清除当前播放歌曲
-  emitter.emit('onRemoveCurrentSong', true)
+  updateCurrentSongList(0, [])
+  resetCurrentSong()
 }
 
-const onClickPlay = (song: songType) => {
-  if (!song.canPlay) {
-    ElMessage({
-      type: 'error',
-      message: '该歌曲无版权，暂时无法播放',
-      appendTo: document.body,
-    })
-    return
-  }
-  currentSong.value = song
-  listenedSongSet.value.add(song.id)
+const onClickPlay = async (song: songType) => {
+  await updateCurrentSong(song)
+  playMusic()
 }
 </script>
 

@@ -51,34 +51,34 @@
       <div class="play-controls">
         <span class="hidden-xs-only">
           <el-tooltip placement="top" :show-arrow="false">
-            <template #content>{{ playOrderLabel[playOrderIndex] }}</template>
+            <template #content>{{ playModeLabel[playModeIndex] }}</template>
             <i
-              :class="`iconfont icon-${playOrder[playOrderIndex]}`"
-              @click="togglePlayOrder"
+              :class="`iconfont icon-${playMode[playModeIndex]}`"
+              @click="changePlayMode"
             ></i>
           </el-tooltip>
         </span>
-        <i class="iconfont icon-previous" @click="toggleCurrentMusic(-1)"></i>
+        <i class="iconfont icon-previous" @click="changeSong(-1)"></i>
         <i
           class="iconfont icon-pause"
-          v-if="isPlay"
-          @click="toggleMusicPlayStatus"
+          v-if="isPlayed"
+          @click="pauseMusic"
         ></i>
-        <i class="iconfont icon-play" v-else @click="toggleMusicPlayStatus"></i>
-        <i class="iconfont icon-next" @click="toggleCurrentMusic(1)"></i>
+        <i class="iconfont icon-play" v-else @click="playMusic"></i>
+        <i class="iconfont icon-next" @click="changeSong(1)"></i>
         <i class="iconfont icon-lyrics hidden-xs-only"></i>
       </div>
       <div class="progress-bar hidden-xs-only">
         <MusicProgressBar
           :duration="duration"
-          :current-time="currentPlayTime"
+          :current-time="currentTime"
           @update-current-time="handleUpdateCurrentTime"
         />
       </div>
       <div class="mobile-progress-bar hidden-sm-and-up">
         <MusicProgressBar
           :duration="duration"
-          :current-time="currentPlayTime"
+          :current-time="currentTime"
           :show-label="false"
           @update-current-time="handleUpdateCurrentTime"
         />
@@ -106,181 +106,46 @@
 import { ref, watch, onMounted } from 'vue'
 import useMusicStore from '@/store/music'
 import { storeToRefs } from 'pinia'
-import emitter from '@/utils/emitter'
 import { initTheme } from '@/utils/theme'
 import { useRouter } from 'vue-router'
-import { getMusicUrl } from '@/api/music'
-import { ElMessage } from 'element-plus'
 import MusicProgressBar from './MusicProgressBar.vue'
 import MusicVolumeBar from './MusicVolumeBar.vue'
 import CurrentPlaylist from './CurrentPlaylist.vue'
 
 const router = useRouter()
 
+const musicStore = useMusicStore()
 const {
-  currentSong, currentSongList, listenedSongSet, currentPlayTime,
-} = storeToRefs(useMusicStore())
+  currentSong,
+  isPlayed,
+  duration,
+  currentTime,
+  volume,
+  playMode,
+  playModeLabel,
+  playModeIndex,
+} = storeToRefs(musicStore)
+
+const {
+  playMusic,
+  pauseMusic,
+  changePlayMode,
+  changeCurrentTime,
+  changeVolume,
+  changeSong,
+} = musicStore
 
 /* 是否显示当前播放列表 */
 const isOpenList = ref(false)
 
-/* 切换播放模式 */
-const playOrder = [
-  'order-play',
-  'loop',
-  'single-loop',
-  'random-play',
-  'heartbeat',
-]
-const playOrderLabel = [
-  '顺序播放',
-  '列表循环',
-  '单曲循环',
-  '随机播放',
-  '心动模式',
-]
-const playOrderIndex = ref(0)
-const ctCache = ref(0) // 缓存 currentTime，防止暂停状态下修改时间后自动播放
-
-const togglePlayOrder = () => {
-  playOrderIndex.value = (playOrderIndex.value + 1) % playOrder.length
-}
-
-/* 音乐切换上一首或下一首 */
-const toggleCurrentMusic = (order: number) => {
-  if (!currentSongList.value.length) return
-  ctCache.value = 0
-  const index = currentSongList.value.findIndex(
-    (item) => item.id === currentSong.value.id,
-  )
-  const currentPlayOrder = playOrder[playOrderIndex.value]
-
-  let newIndex = null
-  if (currentPlayOrder === 'random-play') { // 如果是“随机播放”模式
-    // 随机生成一个不重复的索引
-    newIndex = Math.floor(Math.random() * currentSongList.value.length)
-    while (listenedSongSet.value.has(currentSongList.value[newIndex].id)) {
-      newIndex = Math.floor(Math.random() * currentSongList.value.length)
-    }
-  } else { // 如果是其他模式
-    // 考虑 index 小于 0 或大于最大长度的情况
-    newIndex = (index + order + currentSongList.value.length) % currentSongList.value.length
-  }
-  // 切换当前歌曲
-  currentSong.value = currentSongList.value[newIndex]
-  // 将歌曲存入已播放集合中
-  listenedSongSet.value.add(currentSong.value.id)
-  // 如果集合满了，则清空集合并重新记录
-  if (listenedSongSet.value.size === currentSongList.value.length) {
-    listenedSongSet.value = new Set()
-    listenedSongSet.value.add(currentSong.value.id)
-  }
-}
-
-/* 音乐播放 */
-const music = new Audio()
-watch(
-  () => currentSong.value.id,
-  async () => {
-    if (currentSong.value.isVip) {
-      const { data } = await getMusicUrl({ id: currentSong.value.id })
-      music.src = data.data[0].url
-      ElMessage({
-        type: 'warning',
-        message: 'VIP歌曲试听30秒',
-        appendTo: document.body,
-      })
-      return
-    }
-    music.src = `https://music.163.com/song/media/outer/url?id=${currentSong.value.id}.mp3`
-  },
-  { immediate: true },
-)
-const isPlay = ref(false)
-const duration = ref(0)
-const volume = ref(100)
-const isFirstPlay = ref(true)
-const isExistCurrentSong = ref(!!currentSong.value.id)
-
-// 暂停或播放音乐
-const playMusic = () => {
-  music.play()
-  currentSong.value.isPlay = true
-}
-const pauseMusic = () => {
-  music.pause()
-  currentSong.value.isPlay = false
-}
-// 当音乐文件加载完成，初始化数据
-music.addEventListener('canplaythrough', () => {
-  duration.value = music.duration
-  currentPlayTime.value = music.currentTime
-  volume.value = music.volume * 100
-  // 如果无当前播放歌曲，则直接播放；如果有，则判断是不是首次播放
-  if (!isExistCurrentSong.value || !isFirstPlay.value) {
-    playMusic()
-  }
-})
-// 每当音乐文件的时间更新，则更新 currentTime
-music.addEventListener('timeupdate', () => {
-  currentPlayTime.value = music.currentTime
-  ctCache.value = music.currentTime
-})
-// 当音乐开始播放
-music.addEventListener('play', () => {
-  music.currentTime = ctCache.value
-  isPlay.value = true
-  isFirstPlay.value = false
-})
-// 当音乐暂停
-music.addEventListener('pause', () => {
-  isPlay.value = false
-})
-// 当音乐结束
-music.addEventListener('ended', () => {
-  isPlay.value = false
-  ctCache.value = 0
-  const currentPlayOrder = playOrder[playOrderIndex.value]
-  if (currentPlayOrder === 'order-play' || currentPlayOrder === 'heartbeat') {
-    // 如果不是最后一首歌，则直接下一首
-    if (currentSong.value.id !== currentSongList.value[currentSongList.value.length - 1].id) {
-      toggleCurrentMusic(1)
-    }
-  } else if (currentPlayOrder === 'single-loop') {
-    // 单曲循环播放
-    music.play()
-  } else { // 如果是“随机播放”或“列表循环”
-    toggleCurrentMusic(1)
-  }
-})
-// 切换音乐状态
-const toggleMusicPlayStatus = () => {
-  if (music.src) {
-    if (music.paused) {
-      playMusic()
-    } else {
-      pauseMusic()
-    }
-  }
-}
 // 当用户调整进度条后，更新音乐的 currentTime
 const handleUpdateCurrentTime = (ct: number) => {
-  if (music.paused) {
-    ctCache.value = ct
-  } else {
-    music.currentTime = ct
-  }
+  changeCurrentTime(ct)
 }
+
 // 控制音量
 watch(volume, () => {
-  music.volume = volume.value / 100
-})
-
-emitter.on('onRemoveCurrentSong', () => {
-  useMusicStore().resetCurrentSong()
-  isPlay.value = false
-  duration.value = 0
-  currentPlayTime.value = 0
+  changeVolume(volume.value)
 })
 
 // 初始化主题颜色

@@ -4,7 +4,7 @@
       <div class="operation">
         <span v-if="!isActive" class="index">{{ songIndex }}</span>
         <i v-if="!isActive" @click="handleDbClick" class="iconfont icon-play-hollow"></i>
-        <i v-else-if="currentSong.isPlay" class="iconfont icon-volume"></i>
+        <i v-else-if="isPlayed" class="iconfont icon-volume"></i>
         <i v-else class="iconfont icon-close-volume"></i>
         <i class="iconfont icon-like"></i>
         <i class="iconfont icon-download"></i>
@@ -58,7 +58,7 @@
       <div class="left">
         <div class="operation">
           <span v-if="!isActive">{{ songIndex }}</span>
-          <i v-else-if="currentSong.isPlay" class="iconfont icon-volume"></i>
+          <i v-else-if="isPlayed" class="iconfont icon-volume"></i>
           <i v-else class="iconfont icon-close-volume"></i>
         </div>
       </div>
@@ -100,7 +100,6 @@ import { formatDuration } from '@/utils/format'
 import useMusicStore from '@/store/music'
 import { storeToRefs } from 'pinia'
 import emitter from '@/utils/emitter'
-import { ElMessage } from 'element-plus'
 import { songType } from '@/assets/ts/type'
 
 const props = withDefaults(defineProps<{
@@ -112,30 +111,27 @@ const props = withDefaults(defineProps<{
 })
 
 /* 双击播放音乐 */
-const { currentSong, listenedSongSet, currentSongList } = storeToRefs(useMusicStore())
-const handleDbClick = () => {
-  if (!props.songInfo.canPlay) {
-    ElMessage({
-      type: 'error',
-      message: '该歌曲无版权，暂时无法播放',
-      appendTo: document.body,
-    })
-    return
-  }
-  const index = currentSongList.value.findIndex((item) => item.id === currentSong.value.id)
-  currentSong.value = props.songInfo
+const musicStore = useMusicStore()
+const {
+  currentSong,
+  isPlayed,
+} = storeToRefs(musicStore)
+const { updateCurrentSong, playMusic, addSongToCurrentSongList } = musicStore
+
+const handleDbClick = async () => {
   if (props.isPlaylistItem) { // 如果是歌单里的歌曲，直接切换整个播放列表
-    // 清空已听歌曲索引，并将点击的歌曲的 id 加入
-    listenedSongSet.value = new Set()
-    listenedSongSet.value.add(props.songInfo.id)
+    // 更新播放列表
     emitter.emit('onChangeCurrentPlaylist', true)
   } else { // 如果是搜索结果里的歌曲，则添加单曲到播放列表里
-    listenedSongSet.value.add(props.songInfo.id)
-    currentSongList.value.splice(index + 1, 0, currentSong.value)
+    addSongToCurrentSongList(props.songInfo)
   }
+  // 更新播放歌曲
+  await updateCurrentSong(props.songInfo)
+  // 播放歌曲
+  playMusic()
 }
 
-/* 判断当前音乐是否播放 */
+/* 判断当前音乐是否激活 */
 const isActive = computed(() => props.songInfo.id === currentSong.value.id)
 
 const handleClickMv = () => {

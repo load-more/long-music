@@ -23,7 +23,7 @@ export const resolveSongsDetail = (data: any): songType[] => {
       mv: item.mv,
       hasSq: data.privileges[index].maxbr >= 999000,
       isVip: data.privileges[index].fee === 1 || data.privileges[index].fee === 4,
-      canPlay: data.privileges[index].st === 0,
+      canPlay: data.privileges[index].st !== -200,
       hasSrc: data.privileges[index].fee !== 16,
       noCopyrightInfo: item.noCopyrightRcmd || { type: 0, typeDesc: '' },
     }
@@ -46,7 +46,7 @@ export const resolveSearchSongsDetail = (songs: any[]): songType[] => {
       mv: item.mv,
       hasSq: item.privilege.maxbr >= 999000,
       isVip: item.privilege.fee === 1 || item.privilege.fee === 4,
-      canPlay: item.privilege.st === 0,
+      canPlay: item.privilege.st !== -200,
       hasSrc: item.privilege.fee !== 16,
       noCopyrightInfo: item.noCopyrightRcmd || { type: 0, typeDesc: '' },
     }
