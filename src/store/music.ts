@@ -39,7 +39,7 @@ export default defineStore('music', {
     isPlayed: false,
     duration: 0,
     currentTime: 0,
-    volume: 100,
+    volume: 0,
     playMode: [
       'order-play',
       'loop',
@@ -87,24 +87,21 @@ export default defineStore('music', {
       this.currentTime = 0
     },
     async updateCurrentSong(song: songType) {
+      // 暂停之前音乐的播放
       this.pauseMusic()
-      this.audio = new Audio()
+      // 覆盖 currentSong
       this.currentSong = song
       window.localStorage.setItem('current_song', String(song.id))
-
-      if (this.currentSong.isVip) {
+      // 新建一个 Audio
+      this.audio = new Audio()
+      // 初始化音量
+      this.audio.volume = this.volume / 100
+      // 初始化音源
+      if (song.isVip) {
         const { data } = await getMusicUrl({ id: song.id })
         this.audio.src = data.data[0].url
       } else {
         this.audio.src = `https://music.163.com/song/media/outer/url?id=${song.id}.mp3`
-      }
-
-      // 将歌曲存入已播放集合中
-      this.listenedSongSet.add(song.id)
-      // 如果集合满了，则清空集合并重新记录
-      if (this.listenedSongSet.size === this.currentSongList.length) {
-        this.listenedSongSet = new Set()
-        this.listenedSongSet.add(song.id)
       }
 
       // 注意，要在 canplaythrough 阶段设置参数，否则会获取不到相应参数
@@ -135,6 +132,13 @@ export default defineStore('music', {
       })
     },
     playMusic() {
+      // 将歌曲存入已播放集合中（不管能不能播放，都要存入）
+      this.listenedSongSet.add(this.currentSong.id)
+      // 如果集合满了，则清空集合并重新记录
+      if (this.listenedSongSet.size === this.currentSongList.length) {
+        this.listenedSongSet = new Set()
+        this.listenedSongSet.add(this.currentSong.id)
+      }
       if (!this.currentSong.canPlay) {
         ElMessage({
           type: 'error',
@@ -160,6 +164,7 @@ export default defineStore('music', {
     changeVolume(volume: number) {
       this.audio.volume = volume / 100
       this.volume = volume
+      window.localStorage.setItem('volume', String(volume))
     },
     changeCurrentTime(ct: number) {
       this.audio.currentTime = ct
