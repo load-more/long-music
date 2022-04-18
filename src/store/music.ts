@@ -2,7 +2,12 @@ import { defineStore } from 'pinia'
 import { songType } from '@/assets/ts/type'
 import { getMusicUrl } from '@/api/music'
 import { ElMessage } from 'element-plus'
-import { setSongId, setPlaylistId, setVolume } from '@/utils/storage'
+import {
+  setSongId,
+  setListId,
+  setVolume,
+  setListType,
+} from '@/utils/storage'
 
 const currentSong: songType = {
   id: 0,
@@ -201,12 +206,13 @@ export default defineStore('music', {
       // 自动播放
       this.playMusic()
     },
-    updateCurrentSongList(id: number, list: songType[]) {
+    updateCurrentSongList(id: number, list: songType[], type: number = 1) {
       this.currentSongList = list
       this.listenedSongSet = new Set()
       this.currentPlaylistId = id
       // 存入 localStorage
-      setPlaylistId(id)
+      setListId(id)
+      setListType(type)
     },
     addSongToCurrentSongList(song: songType) {
       const index = this.currentSongList.findIndex((item) => item.id === this.currentSong.id)

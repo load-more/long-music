@@ -4,9 +4,15 @@ import useMusicStore from '@/store/music'
 import { storeToRefs } from 'pinia'
 import { getMusicDetail } from '@/api/music'
 import { getPlaylistAllSongs } from '@/api/playlist'
-import { resolveSongsDetail } from '@/utils/resolve'
+import { getAlbumDetail } from '@/api/album'
+import { resolveSongsDetail, resolveSearchSongsDetail } from '@/utils/resolve'
 import { songType } from '@/assets/ts/type'
-import { getSongId, getPlaylistId, getVolume } from '@/utils/storage'
+import {
+  getSongId,
+  getListId,
+  getVolume,
+  getListType,
+} from '@/utils/storage'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -109,13 +115,22 @@ router.beforeEach(async (to, from) => {
   }
   // 2. 读取播放列表
   if (!currentPlaylistId.value) {
-    const id = getPlaylistId()
-    if (id) {
-      // 获取一个歌单全部歌曲的信息
-      const { data } = await getPlaylistAllSongs({ id })
-      if (data.songs.length) {
-        const arr: songType[] = resolveSongsDetail(data)
-        updateCurrentSongList(id, arr)
+    const type = getListType()
+    const id = getListId()
+    if (type && id) {
+      if (type === 1) { // 如果是歌单
+        // 获取一个歌单全部歌曲的信息
+        const { data } = await getPlaylistAllSongs({ id })
+        if (data.songs.length) {
+          const arr: songType[] = resolveSongsDetail(data)
+          updateCurrentSongList(id, arr)
+        }
+      } else if (type === 2) { // 如果是专辑
+        const { data } = await getAlbumDetail({ id })
+        if (data.songs.length) {
+          const arr: songType[] = resolveSearchSongsDetail(data.songs)
+          updateCurrentSongList(id, arr, 2)
+        }
       }
     }
   }

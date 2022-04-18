@@ -76,7 +76,7 @@ const activeTab = ref('list')
 
 emitter.on('onChangeCurrentPlaylist', () => {
   // 更新播放列表
-  updateCurrentSongList(props.id, props.songs)
+  updateCurrentSongList(props.id, props.songs, 2)
 })
 </script>
 

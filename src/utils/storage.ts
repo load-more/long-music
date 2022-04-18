@@ -3,7 +3,8 @@ import { Encrypt, Decrypt } from '@/utils/secret'
 
 const userId = 'user_id'
 const songId = 'song_id'
-const playlistId = 'playlist_id'
+const listId = 'playlist_id'
+const listType = 'list_type'
 const volume = 'volume'
 const searchHistory = 'search_history'
 const themeColor = 'theme_color'
@@ -18,9 +19,14 @@ export const setSongId = (id: number) => {
   window.localStorage.setItem(songId, String(id))
 }
 
-export const getPlaylistId = () => Number(window.localStorage.getItem(playlistId))
-export const setPlaylistId = (id: number) => {
-  window.localStorage.setItem(playlistId, String(id))
+export const getListId = () => Number(window.localStorage.getItem(listId))
+export const setListId = (id: number) => {
+  window.localStorage.setItem(listId, String(id))
+}
+
+export const getListType = () => Number(window.localStorage.getItem(listType))
+export const setListType = (typeId: number) => {
+  window.localStorage.setItem(listType, String(typeId))
 }
 
 export const getVolume = () => Number(window.localStorage.getItem(volume))
