@@ -1,4 +1,5 @@
 import themeData from '@/assets/ts/themeData'
+import { Encrypt, Decrypt } from '@/utils/secret'
 
 const userId = 'user_id'
 const songId = 'song_id'
@@ -7,9 +8,9 @@ const volume = 'volume'
 const searchHistory = 'search_history'
 const themeColor = 'theme_color'
 
-export const getUserId = () => Number(window.localStorage.getItem(userId))
+export const getUserId = () => Number(Decrypt(window.localStorage.getItem(userId) || ''))
 export const setUserId = (id: number) => {
-  window.localStorage.setItem(userId, String(id))
+  window.localStorage.setItem(userId, Encrypt(String(id)))
 }
 
 export const getSongId = () => Number(window.localStorage.getItem(songId))
