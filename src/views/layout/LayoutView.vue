@@ -7,7 +7,9 @@
       <!-- 圣杯布局【将主要内容放在前面，使之相较于侧边栏更快渲染出来】 -->
       <div id="main-container">
         <!-- 加载 key，在同一个路由改变参数跳转时就不会利用之前的路由而导致页面不刷新的问题 -->
-        <router-view :key="$route.fullPath" />
+        <keep-alive>
+          <router-view :key="$route.fullPath" />
+        </keep-alive>
       </div>
       <div id="sidebar-container" class="hidden-xs-only">
         <TheSidebar />
