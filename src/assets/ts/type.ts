@@ -156,3 +156,28 @@ export interface songType {
     typeDesc: string
   } // 无版权信息
 }
+
+export interface albumDetailType {
+  alias: string[]
+  artist: {
+    followed: boolean
+    alias: string[]
+    musicSize: number
+    albumSize: number
+    picUrl: string
+    trans: string
+    name: string
+    id: number
+  }
+  briefDesc: string
+  publishTime: number
+  company: string
+  picUrl: string
+  description: string
+  tags: string
+  name: string
+  id: number
+  size: number
+  commentCount: number
+  shareCount: number
+}

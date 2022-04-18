@@ -63,6 +63,7 @@ import { getMusicDetail } from '@/api/music'
 import useMusicStore from '@/store/music'
 import { bannerType } from '@/assets/ts/type'
 import { resolveSongsDetail, resolveBanners } from '@/utils/resolve'
+import { useRouter } from 'vue-router'
 
 const emit = defineEmits(['finish-loading'])
 
@@ -71,6 +72,7 @@ const { updateCurrentSong, playMusic } = useMusicStore()
 /* 渲染数据 */
 const bannerArr = ref<bannerType[]>([])
 const activeIndex = ref(0)
+const router = useRouter()
 
 const getData = async () => {
   // 获取 banner
@@ -88,7 +90,7 @@ const handleBannerClick = async (index: number, banner: bannerType) => {
       await updateCurrentSong(song)
       playMusic()
     } else if (banner.targetType === 10) { // 专辑
-      //
+      router.push({ name: 'album', params: { id: banner.targetId } })
     }
   }
 }

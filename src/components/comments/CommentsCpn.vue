@@ -35,6 +35,7 @@
 import { ref, onBeforeMount } from 'vue'
 import { getMusicComment } from '@/api/music'
 import { getPlaylistComment } from '@/api/playlist'
+import { getAlbumComments } from '@/api/album'
 import LoadingAnimation from '@/components/loading/LoadingAnimation.vue'
 import EmptyPlaceholder from '@/components/empty-placeholder/EmptyPlaceholder.vue'
 import { commentType } from '@/assets/ts/type'
@@ -42,7 +43,7 @@ import { resolveComment } from '@/utils/resolve'
 import CommentsItem from './CommentsItem.vue'
 
 const props = defineProps<{
-  type: 'song' | 'playlist'
+  type: 'song' | 'playlist' | 'album'
   id: number
 }>()
 const emit = defineEmits(['finishLoading'])
@@ -66,6 +67,8 @@ const getComments = async (type: 'hot' | 'new' | 'all', offset: number) => {
     data = (await getMusicComment(params)).data
   } else if (props.type === 'playlist') {
     data = (await getPlaylistComment(params)).data
+  } else if (props.type === 'album') {
+    data = (await getAlbumComments(params)).data
   }
 
   const pushComments = (t: 'hot' | 'new') => {
