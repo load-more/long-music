@@ -129,10 +129,11 @@ import {
 import { useRouter } from 'vue-router'
 import { updateUserProfile, updateUserAvatar, getUserDetail } from '@/api/user'
 import { ElMessage } from 'element-plus'
-import { Decrypt } from '@/utils/secret'
 import emitter from '@/utils/emitter'
 import RegionSelector from '@/components/form/RegionSelector.vue'
 import ImageUpdater from '@/components/form/ImageUpdater.vue'
+import useUserStore from '@/store/user'
+import { storeToRefs } from 'pinia'
 
 /* 路由管理 */
 const router = useRouter()
@@ -147,8 +148,10 @@ const profileForm = reactive({
   signature: '',
   avatarUrl: '',
 })
+const { userDetail } = storeToRefs(useUserStore())
+
 const getData = async () => {
-  const uid = Decrypt(String(window.localStorage.getItem('uid')))
+  const uid = userDetail.value.userId
   const { data } = await getUserDetail({ uid })
   profileForm.nickname = data.profile.nickname
   profileForm.gender = data.profile.gender

@@ -56,7 +56,7 @@ const route = useRoute()
 const router = useRouter()
 
 /* 渲染数据 */
-const playlistId = route.params.id
+const playlistId = Number(route.params.id)
 
 const playlistForm = reactive<playlistEditFormType>({
   name: '',
@@ -67,7 +67,7 @@ const coverImgUrl = ref('')
 
 onBeforeMount(async () => {
   /* 获取歌单信息 */
-  const { data: playlistData } = await getPlaylistDetail({ id: Number(playlistId) })
+  const { data: playlistData } = await getPlaylistDetail({ id: playlistId })
   playlistForm.name = playlistData.playlist.name
   playlistForm.tags = playlistData.playlist.tags
   playlistForm.desc = playlistData.playlist.description
@@ -79,7 +79,7 @@ const isLoading = ref(false)
 const handleUpdatePlaylist = async () => {
   isLoading.value = true
   const { data } = await updatePlaylist({
-    id: Number(playlistId),
+    id: playlistId,
     name: playlistForm.name,
     desc: playlistForm.desc,
     tags: playlistForm.tags.join(';'),
@@ -100,7 +100,7 @@ const updatePlaylistCoverApi = (file: File, imgSize: number) => {
   const fd = new FormData()
   fd.append('imgFile', file)
   return updatePlaylistCover(fd, {
-    id: Number(playlistId),
+    id: playlistId,
     imgSize,
   })
 }

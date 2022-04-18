@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia'
 import { getUserDetail } from '@/api/user'
-import { Decrypt } from '@/utils/secret'
 import { userDetailType } from '@/assets/ts/type'
 import { resolveUserDetail } from '@/utils/resolve'
+import { getUserId, setUserId } from '@/utils/storage'
 
 const userDetail: userDetailType = {
   userId: 0,
@@ -32,11 +32,11 @@ export default defineStore('user', {
     async init() {
       // 初始化，获取用户详细信息
       try {
-        const uid = Decrypt(String(window.localStorage.getItem('uid')))
+        const uid = getUserId()
         const { data } = await getUserDetail({ uid })
         this.userDetail = resolveUserDetail(data)
       } catch {
-        window.localStorage.removeItem('uid')
+        setUserId(0)
       }
     },
   },

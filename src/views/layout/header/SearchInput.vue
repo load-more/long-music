@@ -159,8 +159,10 @@ import {
 } from 'vue'
 import { getSearchKeyword, getHotSearch, getSearchSuggest } from '@/api/search'
 import {
-  setSearchHistory, getSearchHistory, clearSearchHistory,
-  removeHistory,
+  getSearchHistory,
+  addSearchHistory,
+  removeSearchHistory,
+  clearSearchHistory,
 } from '@/utils/storage'
 import { useRouter } from 'vue-router'
 import type { ElScrollbar } from 'element-plus'
@@ -201,7 +203,7 @@ const handleSearch = (word?: string) => {
   // 关闭 popover
   popperVisible.value = false
   // 添加历史记录
-  setSearchHistory(keyword.value)
+  addSearchHistory(keyword.value)
   historyList.value = getSearchHistory()
 }
 
@@ -211,7 +213,7 @@ const handleClearHistory = () => {
   dialogVisible.value = false
 }
 const handleRemoveHistory = (kw: string) => {
-  removeHistory(kw)
+  removeSearchHistory(kw)
   historyList.value = getSearchHistory()
 }
 window.addEventListener('click', (event: MouseEvent) => {

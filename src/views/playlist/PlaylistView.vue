@@ -21,15 +21,18 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { Decrypt } from '@/utils/secret'
 import LoadingAnimation from '@/components/loading/LoadingAnimation.vue'
+import useUserStore from '@/store/user'
+import { storeToRefs } from 'pinia'
 import PlaylistProfile from './profile/PlaylistProfile.vue'
 import PlaylistContent from './content/PlaylistContent.vue'
+
+const { userDetail } = storeToRefs(useUserStore())
 
 const isLoading = ref(true)
 const loadedCount = ref(0)
 const route = useRoute()
-const uid = route.params.id || Decrypt(String(window.localStorage.getItem('uid')))
+const uid = Number(route.params.id) || userDetail.value.userId
 
 const handleFinishLoading = () => {
   loadedCount.value += 1

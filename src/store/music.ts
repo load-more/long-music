@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { songType } from '@/assets/ts/type'
 import { getMusicUrl } from '@/api/music'
 import { ElMessage } from 'element-plus'
+import { setSongId, setPlaylistId, setVolume } from '@/utils/storage'
 
 const currentSong: songType = {
   id: 0,
@@ -91,7 +92,8 @@ export default defineStore('music', {
       this.pauseMusic()
       // 覆盖 currentSong
       this.currentSong = song
-      window.localStorage.setItem('current_song', String(song.id))
+      // 存入 localStorage
+      setSongId(song.id)
       // 新建一个 Audio
       this.audio = new Audio()
       // 初始化音量
@@ -164,7 +166,8 @@ export default defineStore('music', {
     changeVolume(volume: number) {
       this.audio.volume = volume / 100
       this.volume = volume
-      window.localStorage.setItem('volume', String(volume))
+      // 存入 localStorage
+      setVolume(volume)
     },
     changeCurrentTime(ct: number) {
       this.audio.currentTime = ct
@@ -202,7 +205,8 @@ export default defineStore('music', {
       this.currentSongList = list
       this.listenedSongSet = new Set()
       this.currentPlaylistId = id
-      window.localStorage.setItem('current_playlist', String(id))
+      // 存入 localStorage
+      setPlaylistId(id)
     },
     addSongToCurrentSongList(song: songType) {
       const index = this.currentSongList.findIndex((item) => item.id === this.currentSong.id)

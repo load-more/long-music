@@ -4,7 +4,7 @@
       <div class="user-relation-container">
         <span class="follows-label">“{{ nickname }}”的关注</span>
         <UserRelation
-          :id="Number(uid)"
+          :id="uid"
           type="follows"
           :count="followsCount"
           @finish-loading="handleFinishLoading"
@@ -19,14 +19,17 @@
 import { onBeforeMount, ref } from 'vue'
 import { getUserDetail } from '@/api/user'
 import { useRoute } from 'vue-router'
-import { Decrypt } from '@/utils/secret'
 import UserRelation from '@/components/user-relation/UserRelation.vue'
 import LoadingAnimation from '@/components/loading/LoadingAnimation.vue'
+import useUserStore from '@/store/user'
+import { storeToRefs } from 'pinia'
+
+const { userDetail } = storeToRefs(useUserStore())
 
 const route = useRoute()
 const nickname = ref('')
 const followsCount = ref(0)
-const uid = route.params.id || Decrypt(String(window.localStorage.getItem('uid')))
+const uid = Number(route.params.id) || userDetail.value.userId
 const getData = async () => {
   const { data } = await getUserDetail({ uid })
   nickname.value = data.profile.nickname

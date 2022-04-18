@@ -26,7 +26,7 @@ import { generateQrKey, generateQrCode, checkQrCode } from '@/api/login'
 import { getUserAccount } from '@/api/user'
 import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
-import { Encrypt } from '@/utils/secret'
+import { setUserId } from '@/utils/storage'
 
 const imgUrl = ref('')
 const isLoading = ref(false)
@@ -78,8 +78,7 @@ const displayQrCode = async () => {
       const { data } = await getUserAccount()
       if (data.code === 200) {
         // 登录成功后，存储用户 id 和 cookie
-        const uid = Encrypt(data.account.id)
-        window.localStorage.setItem('uid', uid)
+        setUserId(Number(data.account.id))
         // 跳转路由
         router.push({ name: 'home' })
         ElMessage({

@@ -6,6 +6,7 @@ import { getMusicDetail } from '@/api/music'
 import { getPlaylistAllSongs } from '@/api/playlist'
 import { resolveSongsDetail } from '@/utils/resolve'
 import { songType } from '@/assets/ts/type'
+import { getSongId, getPlaylistId, getVolume } from '@/utils/storage'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -91,27 +92,31 @@ router.beforeEach(async (to, from) => {
   /* 用户刷新后，自动读取 localStorage 存储的数据 */
   // 1. 读取播放歌曲
   if (!currentSong.value.id) {
-    const id = Number(window.localStorage.getItem('current_song'))
+    const id = getSongId()
     if (id) {
       // 获取一首歌曲的信息
       const { data } = await getMusicDetail({ ids: id })
-      const song: songType = resolveSongsDetail(data)[0]
-      await updateCurrentSong(song)
+      if (data.songs.length) {
+        const song: songType = resolveSongsDetail(data)[0]
+        await updateCurrentSong(song)
+      }
     }
   }
   // 2. 读取播放列表
   if (!currentPlaylistId.value) {
-    const id = Number(window.localStorage.getItem('current_playlist'))
+    const id = getPlaylistId()
     if (id) {
       // 获取一个歌单全部歌曲的信息
       const { data } = await getPlaylistAllSongs({ id })
-      const arr: songType[] = resolveSongsDetail(data)
-      updateCurrentSongList(id, arr)
+      if (data.songs.length) {
+        const arr: songType[] = resolveSongsDetail(data)
+        updateCurrentSongList(id, arr)
+      }
     }
   }
   // 3. 读取音量
   if (!volume.value) {
-    const v = Number(window.localStorage.getItem('volume'))
+    const v = getVolume()
     if (Number.isNaN(v)) {
       changeVolume(100)
     } else {

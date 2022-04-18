@@ -127,7 +127,7 @@ import { ElMessage } from 'element-plus'
 import md5 from 'js-md5'
 import emitter from '@/utils/emitter'
 import { useRouter } from 'vue-router'
-import { Encrypt } from '@/utils/secret'
+import { setUserId } from '@/utils/storage'
 
 const props = defineProps<{
   type: 'phone' | 'email' | 'sms'
@@ -232,8 +232,7 @@ const onClickLogin = () => {
           const { data } = await phoneLogin(encryptedLoginForm.value as any)
           if (data.code === 200) {
             // 登录成功后，存储用户 id 和 cookie
-            const uid = Encrypt(data.account.id)
-            window.localStorage.setItem('uid', uid)
+            setUserId(Number(data.account.id))
             // 跳转路由
             router.push({ name: 'home' })
             ElMessage({
@@ -253,8 +252,7 @@ const onClickLogin = () => {
           const { data } = await emailLogin(encryptedLoginForm.value as any)
           if (data.code === 200) {
             // 登录成功后，存储用户 id 和 cookie
-            const uid = Encrypt(data.account.id)
-            window.localStorage.setItem('uid', uid)
+            setUserId(Number(data.account.id))
             // 跳转路由
             router.push({ name: 'home' })
             ElMessage({
@@ -275,8 +273,7 @@ const onClickLogin = () => {
             captcha: loginForm.captcha,
           })
           // 登录成功后，存储用户 id 和 cookie
-          const uid = Encrypt(data.account.id)
-          window.localStorage.setItem('uid', uid)
+          setUserId(Number(data.account.id))
           // 跳转路由
           router.push({ name: 'home' })
           ElMessage({

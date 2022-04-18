@@ -2,10 +2,10 @@
   <div class="profile-container">
     <el-scrollbar class="scroll-bar" v-show="!isLoading">
       <div class="user-profile-container">
-        <UserProfile :uid="Number(uid)" @finish-loading="handleFinishLoading" />
+        <UserProfile :uid="uid" @finish-loading="handleFinishLoading" />
       </div>
       <div class="user-playlist-container">
-        <UserPlaylist :uid="Number(uid)" @finish-loading="handleFinishLoading" />
+        <UserPlaylist :uid="uid" @finish-loading="handleFinishLoading" />
       </div>
     </el-scrollbar>
     <LoadingAnimation v-if="isLoading" />
@@ -15,13 +15,16 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { Decrypt } from '@/utils/secret'
 import LoadingAnimation from '@/components/loading/LoadingAnimation.vue'
+import useUserStore from '@/store/user'
+import { storeToRefs } from 'pinia'
 import UserProfile from './profile/UserProfile.vue'
 import UserPlaylist from './playlist/UserPlaylist.vue'
 
+const { userDetail } = storeToRefs(useUserStore())
+
 const route = useRoute()
-const uid = route.params.id || Decrypt(String(window.localStorage.getItem('uid')))
+const uid = Number(route.params.id) || userDetail.value.userId
 const isLoading = ref(true)
 
 const loadedCount = ref(0)
