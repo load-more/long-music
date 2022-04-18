@@ -7,17 +7,18 @@
         type="card"
         :autoplay="true"
         :interval="5000"
+        @change="handleBannerChange"
       >
         <el-carousel-item
-          v-for="(item) in bannerArr"
+          v-for="(item, index) in bannerArr"
           :key="item.targetId"
         >
           <div class="image-wrap">
             <el-image
               ref="cardImage"
               class="image"
-              :src="item.imgUrl"
-              @click="handleBannerClick(item.targetId)"
+              :src="item.imageUrl"
+              @click="handleBannerClick(index, item)"
             ></el-image>
             <div
               class="label"
@@ -32,16 +33,17 @@
         :autoplay="true"
         :interval="5000"
         height="278px"
+        @change="handleBannerChange"
       >
         <el-carousel-item
-          v-for="(item) in bannerArr"
+          v-for="(item, index) in bannerArr"
           :key="item.targetId"
         >
           <div class="image-wrap">
             <el-image
               class="image"
-              :src="item.imgUrl"
-              @click="handleBannerClick(item.targetId)"
+              :src="item.imageUrl"
+              @click="handleBannerClick(index, item)"
             ></el-image>
             <div
               class="label"
@@ -55,38 +57,44 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, reactive } from 'vue'
+import { onBeforeMount, ref } from 'vue'
 import { getHomeBanner } from '@/api/home'
 import { getMusicDetail } from '@/api/music'
 import useMusicStore from '@/store/music'
-import { homeBannerType } from '@/assets/ts/type'
-import { resolveSongsDetail } from '@/utils/resolve'
+import { bannerType } from '@/assets/ts/type'
+import { resolveSongsDetail, resolveBanners } from '@/utils/resolve'
 
 const emit = defineEmits(['finish-loading'])
 
 const { updateCurrentSong, playMusic } = useMusicStore()
 
 /* 渲染数据 */
-const bannerArr = reactive<homeBannerType[]>([])
+const bannerArr = ref<bannerType[]>([])
+const activeIndex = ref(0)
+
 const getData = async () => {
   // 获取 banner
-  const { data: bannerData } = await getHomeBanner()
-  bannerData.banners.forEach((item: any) => {
-    const obj = {
-      imgUrl: item.imageUrl,
-      targetId: item.targetId,
-      titleColor: item.titleColor,
-      typeTitle: item.typeTitle,
-    }
-    bannerArr.push(obj)
-  })
+  const { data } = await getHomeBanner()
+  bannerArr.value = resolveBanners(data.banners)
 }
 
-const handleBannerClick = async (id: number) => {
-  const { data } = await getMusicDetail({ ids: id })
-  const rst = resolveSongsDetail(data)[0]
-  await updateCurrentSong(rst)
-  playMusic()
+const handleBannerClick = async (index: number, banner: bannerType) => {
+  if (index === activeIndex.value) {
+    if (banner.targetType === 3000) { // 网址
+      window.open(banner.url, '_blank')
+    } else if (banner.targetType === 1) { // 歌曲
+      const { data } = await getMusicDetail({ ids: banner.targetId })
+      const song = resolveSongsDetail(data)[0]
+      await updateCurrentSong(song)
+      playMusic()
+    } else if (banner.targetType === 10) { // 专辑
+      //
+    }
+  }
+}
+
+const handleBannerChange = (index: number) => {
+  activeIndex.value = index
 }
 
 onBeforeMount(async () => {
@@ -161,6 +169,12 @@ onBeforeMount(async () => {
   .el-carousel__item {
     display: flex;
     align-items: center;
+    cursor: unset;
+    &.is-active {
+      .image {
+        cursor: pointer;
+      }
+    }
   }
   :deep .el-carousel__mask {
     background-color: unset;

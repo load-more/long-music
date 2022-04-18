@@ -1,8 +1,10 @@
-export interface homeBannerType {
-  imgUrl: string
+export interface bannerType {
+  imageUrl: string
   targetId: number
+  targetType: number // 3000: 网页; 1: 歌曲; 10: 专辑;
   titleColor: string
   typeTitle: string
+  url: string
 }
 
 export interface rcmdPlaylistType {

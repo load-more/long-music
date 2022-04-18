@@ -1,5 +1,10 @@
 import {
-  songType, playlistDetailType, userDetailType, commentType, userBriefType,
+  songType,
+  playlistDetailType,
+  userDetailType,
+  commentType,
+  userBriefType,
+  bannerType,
 } from '@/assets/ts/type'
 
 export const resolveSongsDetail = (data: any): songType[] => {
@@ -138,4 +143,20 @@ export const resolveUserBrief = (user: any): userBriefType => {
     playlistCount: user.playlistCount,
   }
   return obj
+}
+
+export const resolveBanners = (banners: any): bannerType[] => {
+  const arr: bannerType[] = []
+  banners.forEach((banner: any) => {
+    const obj: bannerType = {
+      imageUrl: banner.imageUrl,
+      targetId: banner.targetId,
+      targetType: banner.targetType,
+      titleColor: banner.titleColor,
+      typeTitle: banner.typeTitle,
+      url: banner.url,
+    }
+    arr.push(obj)
+  })
+  return arr
 }
