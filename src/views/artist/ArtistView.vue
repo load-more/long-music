@@ -1,6 +1,6 @@
 <template>
   <div class="artist-container">
-    <el-scrollbar>
+    <el-scrollbar v-show="!isLoading">
       <div class="artist-profile-container">
         <ArtistProfile :artist="(artist as artistType)" />
       </div>
@@ -8,6 +8,7 @@
         <ArtistContent :hot-songs="(hotSongs as songType[])"/>
       </div>
     </el-scrollbar>
+    <LoadingAnimation v-if="isLoading" />
   </div>
 </template>
 
@@ -17,6 +18,7 @@ import { getArtist } from '@/api/artist'
 import { useRoute } from 'vue-router'
 import type { artistType, songType } from '@/assets/ts/type'
 import { resolveArtist, resolveSearchSongsDetail } from '@/utils/resolve'
+import LoadingAnimation from '@/components/loading/LoadingAnimation.vue'
 import ArtistProfile from './profile/ArtistProfile.vue'
 import ArtistContent from './content/ArtistContent.vue'
 
@@ -24,6 +26,7 @@ const route = useRoute()
 const id = Number(route.params.id)
 const artist = ref<artistType>()
 const hotSongs = ref<songType[]>()
+const isLoading = ref(false)
 
 const getData = async () => {
   const { data } = await getArtist({ id })
@@ -31,8 +34,10 @@ const getData = async () => {
   hotSongs.value = resolveSearchSongsDetail(data.hotSongs)
 }
 
-onBeforeMount(() => {
-  getData()
+onBeforeMount(async () => {
+  isLoading.value = true
+  await getData()
+  isLoading.value = false
 })
 </script>
 
