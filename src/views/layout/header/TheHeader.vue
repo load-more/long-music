@@ -63,13 +63,14 @@ const isFullLoading = ref(false)
       display: flex;
       align-items: center;
       justify-content: flex-start;
+      width: 160px;
       height: 100%;
       img {
-        margin-left: 20px;
-        height: 70%;
+        padding-left: 20px;
+        height: 60%;
         cursor: pointer;
         &:hover {
-          height: 73%;
+          height: 65%;
         }
         transition: all 0.1s ease-in;
       }
