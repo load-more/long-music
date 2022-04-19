@@ -181,3 +181,18 @@ export interface albumDetailType {
   commentCount: number
   shareCount: number
 }
+
+export interface artistType {
+  followed: boolean
+  alias: string[]
+  musicSize: number
+  albumSize: number
+  briefDesc: string
+  picUrl: string
+  trans: string
+  name: string
+  id: number
+  publishTime: number
+  mvSize: number
+  img1v1Url: string
+}

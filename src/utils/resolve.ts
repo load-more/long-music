@@ -6,6 +6,7 @@ import {
   userBriefType,
   bannerType,
   albumDetailType,
+  artistType,
 } from '@/assets/ts/type'
 
 export const resolveSongsDetail = (data: any): songType[] => {
@@ -177,6 +178,24 @@ export const resolveAlbumDetail = (album: any): albumDetailType => {
     size: album.size,
     commentCount: album.info.commentCount,
     shareCount: album.info.shareCount,
+  }
+  return obj
+}
+
+export const resolveArtist = (artist: any): artistType => {
+  const obj: artistType = {
+    followed: artist.followed,
+    alias: artist.alias,
+    musicSize: artist.musicSize,
+    albumSize: artist.albumSize,
+    briefDesc: artist.briefDesc,
+    picUrl: artist.picUrl,
+    trans: artist.trans,
+    name: artist.name,
+    id: artist.id,
+    publishTime: artist.publishTime,
+    mvSize: artist.mvSize,
+    img1v1Url: artist.img1v1Url,
   }
   return obj
 }
