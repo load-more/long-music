@@ -95,6 +95,7 @@
             <span
               class="label search-item"
               :class="type"
+              @click.stop="handleSearch()"
             >
               <i :class="`iconfont icon-${typeIcon[type]}`"></i>
               <span class="label-content">{{ typeLabel[type] }}</span>
@@ -105,6 +106,7 @@
                 class="item songs search-item single-line-ellipsis"
                 :key="item.id"
                 :title="`${item.name} - ${item.artists}`"
+                @click.stop="handleEnterItem('song', item.id)"
               >
                 <span>{{ item.name }}</span>
                 <span v-if="item.alias" class="alias">（{{ item.alias }}）</span>
@@ -118,6 +120,7 @@
                 class="item artists search-item single-line-ellipsis"
                 :key="item.id"
                 :title="`${item.name}`"
+                @click.stop="handleEnterItem('artist', item.id)"
               >
                 <span>{{ item.name }}</span>
                 <span v-if="item.alias">({{ item.alias }})</span>
@@ -129,6 +132,7 @@
                 class="item albums search-item single-line-ellipsis"
                 :key="item.id"
                 :title="`${item.name} - ${item.artists}`"
+                @click.stop="handleEnterItem('album', item.id)"
               >
                 <span>{{ item.name }}</span>
                 <span>&nbsp;-&nbsp;</span>
@@ -141,6 +145,7 @@
                 class="item playlists search-item single-line-ellipsis"
                 :key="item.id"
                 :title="`${item.name}`"
+                @click.stop="handleEnterItem('playlist', item.id)"
               >
                 <span>{{ item.name }}</span>
                 <span v-if="item.trackCount" class="alias">（{{ item.trackCount }}首）</span>
@@ -167,6 +172,9 @@ import {
 import { useRouter } from 'vue-router'
 import type { ElScrollbar } from 'element-plus'
 import { searchSuggestType } from '@/assets/ts/type'
+import { getMusicDetail } from '@/api/music'
+import { resolveSongsDetail } from '@/utils/resolve'
+import useMusicStore from '@/store/music'
 
 const keyword = ref('')
 const defaultKeyword = ref('')
@@ -392,6 +400,18 @@ const handlePressUp = () => {
   }
 }
 
+const handleEnterItem = async (type: 'song' | 'artist' | 'album' | 'playlist', id: number) => {
+  popperVisible.value = false
+  if (type === 'song') {
+    const { data } = await getMusicDetail({ ids: id })
+    const song = resolveSongsDetail(data)[0]
+    await useMusicStore().updateCurrentSong(song)
+    useMusicStore().playMusic()
+  } else {
+    router.push({ name: type, params: { id } })
+  }
+}
+
 const handlePressEnter = () => {
   if (!keyword.value) {
     if (activeHotIndex.value === -1) {
@@ -414,22 +434,47 @@ const handlePressEnter = () => {
         }
         return searchItemEl.classList.contains(class1)
       }
+      const getItem = (index: number) => {
+        let count = 0
+        for (let i = 0, len = Object.keys(typeContent.value).length; i < len; i += 1) {
+          if (count === index) return Object.keys(typeContent.value)[i]
+          count += 1
+          for (let j = 0, len2 = typeContent.value[Object.keys(typeContent.value)[i]].length;
+            j < len2; j += 1) {
+            if (count === index) return typeContent.value[Object.keys(typeContent.value)[i]][j]
+            count += 1
+          }
+        }
+        return null
+      }
       if (checkClass('songs', 'item')) {
         // 播放单曲
+        const item = getItem(activeSuggestIndex.value)
+        handleEnterItem('song', item.id)
       } else if (checkClass('artists', 'item')) {
         // 跳转到歌手页
+        const item = getItem(activeSuggestIndex.value)
+        handleEnterItem('artist', item.id)
       } else if (checkClass('albums', 'item')) {
         // 跳转到专辑页
+        const item = getItem(activeSuggestIndex.value)
+        handleEnterItem('album', item.id)
       } else if (checkClass('playlists', 'item')) {
         // 跳转到歌单页
+        const item = getItem(activeSuggestIndex.value)
+        handleEnterItem('playlist', item.id)
       } else if (checkClass('songs')) {
         // 搜索单曲
+        handleSearch()
       } else if (checkClass('artists')) {
         // 搜索歌手
+        handleSearch()
       } else if (checkClass('albums')) {
         // 搜索专辑
+        handleSearch()
       } else if (checkClass('playlists')) {
         // 搜索歌单
+        handleSearch()
       }
     }
   }
