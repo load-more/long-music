@@ -39,7 +39,7 @@
             <span class="content">{{ album?.size }}</span>
           </span>
           <span class="item">
-            <span class="label">分享量：</span>
+            <span class="label">分享：</span>
             <span class="content">{{ album?.shareCount }}</span>
           </span>
         </div>

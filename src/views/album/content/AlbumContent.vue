@@ -33,7 +33,7 @@
         <CommentsCpn type="album" :id="id" @finish-loading="handleFinishLoading" />
       </el-tab-pane>
       <el-tab-pane label="详情" name="detail">
-        <p>{{ albumDesc }}</p>
+        <p class="desc">{{ albumDesc }}</p>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -148,6 +148,9 @@ emitter.on('onChangeCurrentPlaylist', () => {
       border-bottom-left-radius: 5px;
       border-bottom-right-radius: 5px;
     }
+  }
+  .desc {
+    white-space: pre-line;
   }
 }
 </style>
