@@ -8,6 +8,7 @@ import {
   albumDetailType,
   artistType,
   artistDescType,
+  mvType,
 } from '@/assets/ts/type'
 
 export const resolveSongsDetail = (data: any): songType[] => {
@@ -228,6 +229,21 @@ export const resolveArtistDesc = (introduction: any): artistDescType[] => {
     arr.push({
       ti: item.ti,
       txt: item.txt,
+    })
+  })
+  return arr
+}
+
+export const resolveMvs = (mvs: any): mvType[] => {
+  const arr: mvType[] = []
+  mvs.forEach((mv: any) => {
+    arr.push({
+      id: mv.id,
+      name: mv.name,
+      imgurl16v9: mv.imgurl16v9,
+      duration: mv.duration,
+      playCount: mv.playCount,
+      publishTime: mv.publishTime,
     })
   })
   return arr

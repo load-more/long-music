@@ -201,3 +201,12 @@ export interface artistDescType {
   ti: string
   txt: string
 }
+
+export interface mvType {
+  id: number
+  name: string
+  imgurl16v9: string
+  duration: number
+  playCount: number
+  publishTime: string
+}

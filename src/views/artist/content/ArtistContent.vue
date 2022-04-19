@@ -8,7 +8,7 @@
         <ArtistAlbum :id="id" />
       </el-tab-pane>
       <el-tab-pane label="MV" name="mv">
-        mv
+        <ArtistMv :id="id" />
       </el-tab-pane>
       <el-tab-pane label="歌手详情" name="desc">
         <ArtistDescription :id="id" />
@@ -28,6 +28,7 @@ import { songType } from '@/assets/ts/type'
 import ArtistSong from './ArtistSong.vue'
 import ArtistAlbum from './ArtistAlbum.vue'
 import ArtistDescription from './ArtistDescription.vue'
+import ArtistMv from './ArtistMv.vue'
 
 defineProps<{
   id: number
