@@ -19,7 +19,7 @@ import LoadingAnimation from '@/components/loading/LoadingAnimation.vue'
 import useUserStore from '@/store/user'
 import { storeToRefs } from 'pinia'
 import UserProfile from './profile/UserProfile.vue'
-import UserPlaylist from './playlist/UserPlaylist.vue'
+import UserPlaylist from './content/UserPlaylist.vue'
 
 const { userDetail } = storeToRefs(useUserStore())
 

@@ -2,7 +2,7 @@
   <div class="playlist-wrap">
     <el-tabs v-model="activeTab">
       <el-tab-pane label="创建的歌单" name="created">
-        <UserPlaylistItem
+        <PlaylistItem
           v-for="item in createdPlaylist"
           :key="item.id"
           :info="item"
@@ -10,7 +10,7 @@
         />
       </el-tab-pane>
       <el-tab-pane label="收藏的歌单" name="starred">
-        <UserPlaylistItem
+        <PlaylistItem
           v-for="item in starredPlaylist"
           :key="item.id"
           :info="item"
@@ -27,7 +27,7 @@ import { getUserPlaylist } from '@/api/user'
 import { useRouter } from 'vue-router'
 import { playlistDetailType } from '@/assets/ts/type'
 import { resolvePlaylistDetail } from '@/utils/resolve'
-import UserPlaylistItem from './UserPlaylistItem.vue'
+import PlaylistItem from '@/components/playlist/PlaylistItem.vue'
 
 const props = defineProps<{
   uid: number
