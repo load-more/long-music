@@ -7,6 +7,7 @@ import {
   bannerType,
   albumDetailType,
   artistType,
+  artistDescType,
 } from '@/assets/ts/type'
 
 export const resolveSongsDetail = (data: any): songType[] => {
@@ -219,4 +220,15 @@ export const resolveArtist = (artist: any): artistType => {
     img1v1Url: artist.img1v1Url,
   }
   return obj
+}
+
+export const resolveArtistDesc = (introduction: any): artistDescType[] => {
+  const arr: artistDescType[] = []
+  introduction.forEach((item: any) => {
+    arr.push({
+      ti: item.ti,
+      txt: item.txt,
+    })
+  })
+  return arr
 }

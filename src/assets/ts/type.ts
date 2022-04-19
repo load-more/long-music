@@ -196,3 +196,8 @@ export interface artistType {
   mvSize: number
   img1v1Url: string
 }
+
+export interface artistDescType {
+  ti: string
+  txt: string
+}

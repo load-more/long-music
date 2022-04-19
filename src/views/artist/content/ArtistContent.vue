@@ -10,8 +10,8 @@
       <el-tab-pane label="MV" name="mv">
         mv
       </el-tab-pane>
-      <el-tab-pane label="歌手详情" name="detail">
-        detail
+      <el-tab-pane label="歌手详情" name="desc">
+        <ArtistDescription :id="id" />
       </el-tab-pane>
       <el-tab-pane label="相似歌手" name="similar">
         similar
@@ -27,6 +27,7 @@ import {
 import { songType } from '@/assets/ts/type'
 import ArtistSong from './ArtistSong.vue'
 import ArtistAlbum from './ArtistAlbum.vue'
+import ArtistDescription from './ArtistDescription.vue'
 
 defineProps<{
   id: number
