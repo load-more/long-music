@@ -5,6 +5,7 @@
 declare module 'vue' {
   export interface GlobalComponents {
     AlbumItem: typeof import('./src/components/album/AlbumItem.vue')['default']
+    ArtistItem: typeof import('./src/components/artist/ArtistItem.vue')['default']
     CommentsCpn: typeof import('./src/components/comments/CommentsCpn.vue')['default']
     CommentsItem: typeof import('./src/components/comments/CommentsItem.vue')['default']
     ElAvatar: typeof import('element-plus/es')['ElAvatar']

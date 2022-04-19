@@ -223,6 +223,27 @@ export const resolveArtist = (artist: any): artistType => {
   return obj
 }
 
+export const resolveArtists = (artists: any): artistType[] => {
+  const arr: artistType[] = []
+  artists.forEach((artist: any) => {
+    arr.push({
+      followed: artist.followed,
+      alias: artist.alias,
+      musicSize: artist.musicSize,
+      albumSize: artist.albumSize,
+      briefDesc: artist.briefDesc,
+      picUrl: artist.picUrl,
+      trans: artist.trans,
+      name: artist.name,
+      id: artist.id,
+      publishTime: artist.publishTime,
+      mvSize: artist.mvSize,
+      img1v1Url: artist.img1v1Url,
+    })
+  })
+  return arr
+}
+
 export const resolveArtistDesc = (introduction: any): artistDescType[] => {
   const arr: artistDescType[] = []
   introduction.forEach((item: any) => {

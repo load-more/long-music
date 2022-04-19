@@ -14,7 +14,7 @@
         <ArtistDescription :id="id" />
       </el-tab-pane>
       <el-tab-pane label="相似歌手" name="similar">
-        similar
+        <ArtistSimilar :id="id" />
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -29,6 +29,7 @@ import ArtistSong from './ArtistSong.vue'
 import ArtistAlbum from './ArtistAlbum.vue'
 import ArtistDescription from './ArtistDescription.vue'
 import ArtistMv from './ArtistMv.vue'
+import ArtistSimilar from './ArtistSimilar.vue'
 
 defineProps<{
   id: number
