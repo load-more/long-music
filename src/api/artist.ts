@@ -18,8 +18,8 @@ export const getArtistMv = (params: {
 
 export const getArtistAlbum = (params: {
   id: number
-  limit: number
-  offset: number
+  limit?: number
+  offset?: number
 }) => request({
   method: 'GET',
   url: '/artist/album',

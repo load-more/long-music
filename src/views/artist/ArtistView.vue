@@ -5,7 +5,7 @@
         <ArtistProfile :artist="(artist as artistType)" />
       </div>
       <div class="artist-content-container">
-        <ArtistContent :hot-songs="(hotSongs as songType[])"/>
+        <ArtistContent :hot-songs="(hotSongs as songType[])" :id="id" />
       </div>
     </el-scrollbar>
     <LoadingAnimation v-if="isLoading" />

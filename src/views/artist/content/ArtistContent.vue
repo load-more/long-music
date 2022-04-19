@@ -5,7 +5,7 @@
         <ArtistSong :hot-songs="hotSongs" />
       </el-tab-pane>
       <el-tab-pane label="专辑" name="album">
-        album
+        <ArtistAlbum :id="id" />
       </el-tab-pane>
       <el-tab-pane label="MV" name="mv">
         mv
@@ -26,8 +26,10 @@ import {
 } from 'vue'
 import { songType } from '@/assets/ts/type'
 import ArtistSong from './ArtistSong.vue'
+import ArtistAlbum from './ArtistAlbum.vue'
 
 defineProps<{
+  id: number
   hotSongs: songType[]
 }>()
 

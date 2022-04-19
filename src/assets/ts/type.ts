@@ -178,8 +178,8 @@ export interface albumDetailType {
   name: string
   id: number
   size: number
-  commentCount: number
-  shareCount: number
+  commentCount?: number
+  shareCount?: number
 }
 
 export interface artistType {

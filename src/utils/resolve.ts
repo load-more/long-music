@@ -182,6 +182,27 @@ export const resolveAlbumDetail = (album: any): albumDetailType => {
   return obj
 }
 
+export const resolveAlbums = (albums: any): albumDetailType[] => {
+  const arr: albumDetailType[] = []
+  albums.forEach((album: any) => {
+    const obj: albumDetailType = {
+      alias: album.alias,
+      artist: album.artist,
+      briefDesc: album.briefDesc,
+      publishTime: album.publishTime,
+      company: album.company,
+      picUrl: album.picUrl,
+      description: album.description,
+      tags: album.tags,
+      name: album.name,
+      id: album.id,
+      size: album.size,
+    }
+    arr.push(obj)
+  })
+  return arr
+}
+
 export const resolveArtist = (artist: any): artistType => {
   const obj: artistType = {
     followed: artist.followed,
