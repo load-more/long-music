@@ -3,19 +3,27 @@
     <el-image
       class="image"
       :src="artist?.img1v1Url"
+      @click="router.push({ name: 'artist', params: { id: artist?.id } })"
     ></el-image>
     <div class="name">
-      <span>{{ artist?.name }}</span>
+      <span
+        @click="router.push({ name: 'artist', params: { id: artist?.id } })"
+      >
+        {{ artist?.name }}
+      </span>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { artistType } from '@/assets/ts/type'
+import { useRouter } from 'vue-router'
 
 defineProps<{
   artist: artistType
 }>()
+
+const router = useRouter()
 </script>
 
 <style scoped lang="scss">

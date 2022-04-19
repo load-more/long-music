@@ -1,5 +1,5 @@
 <template>
-  <div class="album-item-wrap">
+  <div class="album-item-wrap" @click="router.push({ name: 'album', params: { id: album?.id } })">
     <div class="left">
       <el-image
         class="image"
@@ -29,10 +29,13 @@
 import { computed } from 'vue'
 import { formatTimestamp } from '@/utils/format'
 import { albumDetailType } from '@/assets/ts/type'
+import { useRouter } from 'vue-router'
 
 const props = defineProps<{
   album: albumDetailType
 }>()
+
+const router = useRouter()
 
 const publishTime = computed(() => {
   // 将时间戳格式化
