@@ -91,3 +91,14 @@ export const getMvUrl = (params: {
   url: '/mv/url',
   params,
 })
+
+export const getMvComments = (params: {
+  id: number
+  limit?: number
+  offset?: number
+  before?: number
+}) => request({
+  method: 'GET',
+  url: '/comment/mv',
+  params,
+})

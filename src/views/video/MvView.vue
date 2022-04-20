@@ -1,11 +1,12 @@
 <template>
   <div class="mv-container">
-    <el-scrollbar class="scrollbar">
+    <el-scrollbar class="scrollbar" v-show="!isLoading">
       <div class="inset-container">
         <div class="video-container">
           <span class="label">MV 详情</span>
           <VideoPlayer :video="(mvUrl as videoUrlType)" />
           <VideoDetail :detail="(mvDetail as mvDetailType)" :data="(mvData as mvDataType)" />
+          <CommentsCpn type="mv" :id="id" />
         </div>
         <div class="related-video-container">
           <span class="label">相关推荐</span>
@@ -13,6 +14,7 @@
         </div>
       </div>
     </el-scrollbar>
+    <LoadingAnimation v-if="isLoading" />
   </div>
 </template>
 
@@ -40,6 +42,8 @@ import type {
 import VideoPlayer from '@/components/video/VideoPlayer.vue'
 import VideoDetail from '@/components/video/VideoDetail.vue'
 import VideoRelated from '@/components/video/VideoRelated.vue'
+import CommentsCpn from '@/components/comments/CommentsCpn.vue'
+import LoadingAnimation from '@/components/loading/LoadingAnimation.vue'
 
 const route = useRoute()
 const id = Number(route.params.id)
@@ -47,6 +51,7 @@ const mvUrl = ref<videoUrlType>()
 const mvDetail = ref<mvDetailType>()
 const mvData = ref<mvDataType>()
 const relatedVideos = ref<relatedVideoType[]>([])
+const isLoading = ref(false)
 
 const getData = async () => {
   const { data: urlData } = await getMvUrl({ id })
@@ -60,7 +65,9 @@ const getData = async () => {
 }
 
 onBeforeMount(async () => {
+  isLoading.value = true
   await getData()
+  isLoading.value = false
 })
 </script>
 
