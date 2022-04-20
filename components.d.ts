@@ -37,6 +37,7 @@ declare module 'vue' {
     TagSelector: typeof import('./src/components/form/TagSelector.vue')['default']
     UserRelation: typeof import('./src/components/user-relation/UserRelation.vue')['default']
     UserRelationItem: typeof import('./src/components/user-relation/UserRelationItem.vue')['default']
+    VideoDetail: typeof import('./src/components/video/VideoDetail.vue')['default']
     VideoPlayer: typeof import('./src/components/video/VideoPlayer.vue')['default']
   }
 }

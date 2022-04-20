@@ -211,6 +211,40 @@ export interface mvType {
   publishTime: string
 }
 
+export interface mvDetailType {
+  id: number
+  name: string
+  artistId: number
+  artistName: string
+  briefDesc: string
+  desc: string
+  cover: string
+  playCount: number
+  subCount: number
+  shareCount: number
+  commentCount: number
+  duration: number
+  publishTime: string
+  artists: {
+    id: number
+    name: string
+    img1v1Url: string
+    followed: boolean
+  }[]
+  videoGroup: {
+    id: number
+    name: string
+    type: number
+  }[]
+}
+
+export interface mvDataType {
+  likedCount: number
+  shareCount: number
+  commentCount: number
+  liked: boolean
+}
+
 export interface videoUrlType {
   id: number
   url: string
