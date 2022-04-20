@@ -1,0 +1,93 @@
+import request from '@/utils/request'
+
+export const getVideoGroupList = () => request({
+  method: 'GET',
+  url: '/video/group/list',
+})
+
+export const getCategoryList = () => request({
+  method: 'GET',
+  url: '/video/category/list',
+})
+
+export const getVideosByGroupId = (params: {
+  id: number
+  offset?: number
+}) => request({
+  method: 'GET',
+  url: '/video/group',
+  params,
+})
+
+export const getAllVideos = (params: {
+  offset?: number
+}) => request({
+  method: 'GET',
+  url: '/video/timeline/all',
+  params,
+})
+
+export const getRecommendVideos = (params: {
+  offset?: number
+}) => request({
+  method: 'GET',
+  url: '/video/timeline/recommend',
+  params,
+})
+
+export const getRelatedVideos = (params: {
+  id: number
+}) => request({
+  method: 'GET',
+  url: '/related/allvideo',
+  params,
+})
+
+export const getVideoDetail = (params: {
+  id: number
+}) => request({
+  method: 'GET',
+  url: '/video/detail',
+  params,
+})
+
+export const getVideoData = (params: {
+  vid: number
+}) => request({
+  method: 'GET',
+  url: '/video/detail/info',
+  params,
+})
+
+export const getVideoUrl = (params: {
+  id: number
+}) => request({
+  method: 'GET',
+  url: '/video/url',
+  params,
+})
+
+export const getMvDetail = (params: {
+  mvid: number
+}) => request({
+  method: 'GET',
+  url: '/mv/detail',
+  params,
+})
+
+export const getMvData = (params: {
+  mvid: number
+}) => request({
+  method: 'GET',
+  url: '/mv/detail/info',
+  params,
+})
+
+export const getMvUrl = (params: {
+  id: number
+  r?: number
+}) => request({
+  method: 'GET',
+  url: '/mv/url',
+  params,
+})

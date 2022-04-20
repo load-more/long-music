@@ -210,3 +210,13 @@ export interface mvType {
   playCount: number
   publishTime: string
 }
+
+export interface videoUrlType {
+  id: number
+  url: string
+  r: number
+  size: number
+  fee: number
+  st: number
+  msg: string
+}

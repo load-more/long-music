@@ -79,6 +79,11 @@ const routes: RouteRecordRaw[] = [
         name: 'artist',
         component: () => import('@/views/artist/ArtistView.vue'),
       },
+      {
+        path: 'mv/:id',
+        name: 'mv',
+        component: () => import('@/views/video/MvView.vue'),
+      },
     ],
   },
   {

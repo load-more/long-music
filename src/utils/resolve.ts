@@ -9,6 +9,7 @@ import {
   artistType,
   artistDescType,
   mvType,
+  videoUrlType,
 } from '@/assets/ts/type'
 
 export const resolveSongsDetail = (data: any): songType[] => {
@@ -268,4 +269,17 @@ export const resolveMvs = (mvs: any): mvType[] => {
     })
   })
   return arr
+}
+
+export const resolveMvUrl = (data: any): videoUrlType => {
+  const obj: videoUrlType = {
+    id: data.id,
+    url: data.url,
+    r: data.r,
+    size: data.size,
+    fee: data.fee,
+    st: data.st,
+    msg: data.msg,
+  }
+  return obj
 }
