@@ -15,7 +15,11 @@
       </div>
       <div class="creator">
         <span class="label">创建者：</span>
-        <span class="content" :title="info.creator.nickname">{{ info.creator.nickname }}</span>
+        <span
+          class="content"
+          :title="info.creator.nickname"
+          @click.stop="router.push({ name: 'user', params: { id: info.creator.userId } })"
+        >{{ info.creator.nickname }}</span>
       </div>
       <div class="star-count hidden-xs-only">
         <span class="label">收藏量：</span>
@@ -32,10 +36,13 @@
 <script setup lang="ts">
 import { formatCount } from '@/utils/format'
 import { playlistDetailType } from '@/assets/ts/type'
+import { useRouter } from 'vue-router'
 
 defineProps<{
   info: playlistDetailType
 }>()
+
+const router = useRouter()
 </script>
 
 <style scoped lang="scss">

@@ -41,14 +41,20 @@
           :key="item.id"
           :title="songInfo.artists.map(item => item.name).join(' / ')"
         >
-          <span class="name">
+          <span
+            class="name"
+            @click.stop="router.push({ name: 'artist', params: { id: item.id } })"
+          >
             {{ item.name }}
           </span>
           <span class="seperator" v-if="index !== songInfo.artists.length - 1">&nbsp;/&nbsp;</span>
         </span>
       </div>
       <div class="album single-line-ellipsis">
-        <span :title="songInfo.album.name">{{ songInfo.album.name }}</span>
+        <span
+          :title="songInfo.album.name"
+          @click.stop="router.push({ name: 'album', params: { id: songInfo.album.id } })"
+        >{{ songInfo.album.name }}</span>
       </div>
       <div class="duration">
         <span>{{ formatDuration(songInfo.duration) }}</span>
@@ -75,7 +81,10 @@
           :title="songInfo.artists.map(item => item.name).join(' / ')"
         >
           <span v-for="(item, index) in songInfo.artists" :key="item.id">
-            <span class="name">
+            <span
+              class="name"
+              @click.stop="router.push({ name: 'artist', params: { id: item.id } })"
+            >
               {{ item.name }}
             </span>
             <span
@@ -101,6 +110,7 @@ import useMusicStore from '@/store/music'
 import { storeToRefs } from 'pinia'
 import emitter from '@/utils/emitter'
 import { songType } from '@/assets/ts/type'
+import { useRouter } from 'vue-router'
 
 const props = withDefaults(defineProps<{
   songInfo: songType
@@ -109,6 +119,8 @@ const props = withDefaults(defineProps<{
 }>(), {
   isPlaylistItem: true,
 })
+
+const router = useRouter()
 
 /* 双击播放音乐 */
 const musicStore = useMusicStore()
@@ -135,7 +147,7 @@ const handleDbClick = async () => {
 const isActive = computed(() => props.songInfo.id === currentSong.value.id)
 
 const handleClickMv = () => {
-  //
+  router.push({ name: 'mv', params: { id: props.songInfo.mv } })
 }
 </script>
 

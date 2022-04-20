@@ -4,6 +4,7 @@
       <el-image
         class="image"
         :src="mv?.imgurl16v9"
+        @click="router.push({ name: 'mv', params: { id: mv.id } })"
       ></el-image>
       <span class="play-count">
         <i class="iconfont icon-play"></i>&nbsp;{{ formatCount(mv?.playCount) }}
@@ -11,7 +12,10 @@
       <span class="duration">{{ formatDuration(mv?.duration) }}</span>
     </div>
     <div class="title single-line-ellipsis">
-      <span :title="mv?.name">{{ mv?.name }}</span>
+      <span
+        :title="mv?.name"
+        @click="router.push({ name: 'mv', params: { id: mv.id } })"
+      >{{ mv?.name }}</span>
     </div>
   </div>
 </template>
@@ -19,10 +23,13 @@
 <script setup lang="ts">
 import { formatCount, formatDuration } from '@/utils/format'
 import { mvType } from '@/assets/ts/type'
+import { useRouter } from 'vue-router'
 
 defineProps<{
   mv: mvType
 }>()
+
+const router = useRouter()
 </script>
 
 <style scoped lang="scss">

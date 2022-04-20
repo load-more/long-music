@@ -17,7 +17,10 @@
         ></i>
       </div>
       <div class="creator single-line-ellipsis">
-        <span class="name">{{ playlist?.creator.nickname }}</span>
+        <span
+          class="name"
+          @click="router.push({ name: 'user', params: { id: playlist?.creator.userId } })"
+        >{{ playlist?.creator.nickname }}</span>
         <span class="create-time" v-if="playlist?.createTime">创建时间：{{ createTime }}</span>
       </div>
       <div class="controls single-line-ellipsis">

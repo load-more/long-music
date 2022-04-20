@@ -13,7 +13,7 @@
       </div>
       <div class="song-info">
         <div
-          class="title"
+          class="title single-line-ellipsis"
           v-if="currentSong.name"
         >
           <span
@@ -30,19 +30,18 @@
           <span>匆匆岁月</span>
           <span>余音悠长</span>
         </div>
-        <div class="singer">
+        <div class="singer single-line-ellipsis">
           <span
             v-for="(item, index) in currentSong.artists" :key="item.id"
             :title="currentSong.artists.map((item) => item.name).join(' / ')"
           >
-            <span class="name">
+            <span class="name" @click="router.push({ name: 'artist', params: { id: item.id } })">
               {{ item.name }}
             </span>
             <span
               class="seperator"
               v-if="index !== currentSong.artists.length - 1"
-              >&nbsp;/&nbsp;</span
-            >
+            >&nbsp;/&nbsp;</span>
           </span>
         </div>
       </div>
@@ -211,6 +210,7 @@ onMounted(() => {
         }
         span, i {
           cursor: pointer;
+          @include hover-font;
         }
       }
       .title-holder {
@@ -228,16 +228,10 @@ onMounted(() => {
       }
       .singer {
         font-size: 14px;
-        span {
+        .name {
           cursor: pointer;
+          @include hover-font;
         }
-      }
-      .title, .singer {
-        width: 100%;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        @include hover-font;
       }
     }
   }
