@@ -1,10 +1,16 @@
 <template>
   <div class="mv-container">
-    <el-scrollbar>
-      <div class="video-container">
-        <span class="label">MV 详情</span>
-        <VideoPlayer :video="(mvUrl as videoUrlType)" />
-        <VideoDetail :detail="(mvDetail as mvDetailType)" :data="(mvData as mvDataType)" />
+    <el-scrollbar class="scrollbar">
+      <div class="inset-container">
+        <div class="video-container">
+          <span class="label">MV 详情</span>
+          <VideoPlayer :video="(mvUrl as videoUrlType)" />
+          <VideoDetail :detail="(mvDetail as mvDetailType)" :data="(mvData as mvDataType)" />
+        </div>
+        <div class="related-video-container">
+          <span class="label">相关推荐</span>
+          <VideoRelated :videos="relatedVideos" />
+        </div>
       </div>
     </el-scrollbar>
   </div>
@@ -13,17 +19,34 @@
 <script setup lang="ts">
 import { ref, onBeforeMount } from 'vue'
 import { useRoute } from 'vue-router'
-import { getMvUrl, getMvDetail, getMvData } from '@/api/video'
-import { resolveMvUrl, resolveMvDetail, resolveMvData } from '@/utils/resolve'
-import type { videoUrlType, mvDetailType, mvDataType } from '@/assets/ts/type'
+import {
+  getMvUrl,
+  getMvDetail,
+  getMvData,
+  getRelatedVideos,
+} from '@/api/video'
+import {
+  resolveMvUrl,
+  resolveMvDetail,
+  resolveMvData,
+  resolveRelatedVideos,
+} from '@/utils/resolve'
+import type {
+  videoUrlType,
+  mvDetailType,
+  mvDataType,
+  relatedVideoType,
+} from '@/assets/ts/type'
 import VideoPlayer from '@/components/video/VideoPlayer.vue'
 import VideoDetail from '@/components/video/VideoDetail.vue'
+import VideoRelated from '@/components/video/VideoRelated.vue'
 
 const route = useRoute()
 const id = Number(route.params.id)
 const mvUrl = ref<videoUrlType>()
 const mvDetail = ref<mvDetailType>()
 const mvData = ref<mvDataType>()
+const relatedVideos = ref<relatedVideoType[]>([])
 
 const getData = async () => {
   const { data: urlData } = await getMvUrl({ id })
@@ -32,25 +55,39 @@ const getData = async () => {
   mvDetail.value = resolveMvDetail(detailData.data)
   const { data: countData } = await getMvData({ mvid: id })
   mvData.value = resolveMvData(countData)
+  const { data: relatedVideoData } = await getRelatedVideos({ id })
+  relatedVideos.value = resolveRelatedVideos(relatedVideoData.data)
 }
 
-onBeforeMount(() => {
-  getData()
+onBeforeMount(async () => {
+  await getData()
 })
 </script>
 
 <style scoped lang="scss">
 .mv-container {
+  width: 100%;
   height: 100%;
-  .video-container {
-    padding: 20px;
-    width: 700px;
-    .label {
-      display: inline-block;
-      font-size: 20px;
-      font-weight: bold;
-      color: $font-color;
-      padding-bottom: 10px;
+  .scrollbar {
+    width: 100%;
+    .inset-container {
+      width: 100%;
+      display: flex;
+      .video-container {
+        padding: 20px;
+        width: 700px;
+      }
+      .related-video-container {
+        overflow: hidden;
+        padding: 20px;
+      }
+      .label {
+        display: inline-block;
+        font-size: 20px;
+        font-weight: bold;
+        color: $font-color;
+        padding-bottom: 10px;
+      }
     }
   }
 }

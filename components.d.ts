@@ -39,6 +39,7 @@ declare module 'vue' {
     UserRelationItem: typeof import('./src/components/user-relation/UserRelationItem.vue')['default']
     VideoDetail: typeof import('./src/components/video/VideoDetail.vue')['default']
     VideoPlayer: typeof import('./src/components/video/VideoPlayer.vue')['default']
+    VideoRelated: typeof import('./src/components/video/VideoRelated.vue')['default']
   }
 }
 

@@ -254,3 +254,15 @@ export interface videoUrlType {
   st: number
   msg: string
 }
+
+export interface relatedVideoType {
+  title: string
+  durationms: number
+  creator: {
+    userId: number
+    userName: string
+  }[]
+  playTime: number
+  coverUrl: string
+  vid: string
+}

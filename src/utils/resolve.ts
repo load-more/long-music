@@ -12,6 +12,7 @@ import {
   videoUrlType,
   mvDetailType,
   mvDataType,
+  relatedVideoType,
 } from '@/assets/ts/type'
 
 export const resolveSongsDetail = (data: any): songType[] => {
@@ -315,4 +316,19 @@ export const resolveMvData = (data: any): mvDataType => {
     liked: data.liked,
   }
   return obj
+}
+
+export const resolveRelatedVideos = (data: any): relatedVideoType[] => {
+  const arr: relatedVideoType[] = []
+  data.forEach((video: any) => {
+    arr.push({
+      title: video.title,
+      durationms: video.durationms,
+      creator: video.creator,
+      playTime: video.playTime,
+      coverUrl: video.coverUrl,
+      vid: video.vid,
+    })
+  })
+  return arr
 }
