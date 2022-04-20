@@ -4,7 +4,9 @@
       <el-tab-pane label="单曲" name="music">
         <SearchResultMusic @finish-loading="handleFinishLoading" />
       </el-tab-pane>
-      <el-tab-pane label="专辑" name="album"> Album </el-tab-pane>
+      <el-tab-pane label="专辑" name="album">
+        <SearchResultAlbum />
+      </el-tab-pane>
       <el-tab-pane label="歌手" name="singer"> Singer </el-tab-pane>
       <el-tab-pane label="歌单" name="playlist"> Playlist </el-tab-pane>
       <el-tab-pane label="用户" name="user"> User </el-tab-pane>
@@ -18,6 +20,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import SearchResultMusic from './SearchResultMusic.vue'
+import SearchResultAlbum from './SearchResultAlbum.vue'
 
 const emit = defineEmits(['finish-loading'])
 
