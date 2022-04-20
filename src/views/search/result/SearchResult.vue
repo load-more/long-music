@@ -10,7 +10,9 @@
       <el-tab-pane label="歌手" name="singer">
         <SearchResultArtist />
       </el-tab-pane>
-      <el-tab-pane label="歌单" name="playlist"> Playlist </el-tab-pane>
+      <el-tab-pane label="歌单" name="playlist">
+        <SearchResultPlaylist />
+      </el-tab-pane>
       <el-tab-pane label="用户" name="user"> User </el-tab-pane>
       <el-tab-pane label="歌词" name="lyrics"> Lyrics </el-tab-pane>
       <el-tab-pane label="视频" name="video"> Video </el-tab-pane>
@@ -24,6 +26,7 @@ import { ref } from 'vue'
 import SearchResultMusic from './SearchResultMusic.vue'
 import SearchResultAlbum from './SearchResultAlbum.vue'
 import SearchResultArtist from './SearchResultArtist.vue'
+import SearchResultPlaylist from './SearchResultPlaylist.vue'
 
 const emit = defineEmits(['finish-loading'])
 

@@ -1,5 +1,8 @@
 <template>
-  <div class="user-playlist-item-wrap">
+  <div
+    class="user-playlist-item-wrap"
+    @click.stop="router.push({ name: 'playlist', params: { id: info.id } })"
+  >
     <div class="left">
       <el-image
         class="image"
@@ -21,7 +24,10 @@
           @click.stop="router.push({ name: 'user', params: { id: info.creator.userId } })"
         >{{ info.creator.nickname }}</span>
       </div>
-      <div class="star-count hidden-xs-only">
+      <div
+        v-if="info.subscribedCount"
+        class="star-count hidden-xs-only"
+      >
         <span class="label">收藏量：</span>
         <span class="content">{{ formatCount(info.subscribedCount) }}</span>
       </div>
