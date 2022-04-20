@@ -1,5 +1,5 @@
 <template>
-  <div class="search-recommend-item-wrap" v-if="info && imgSrc">
+  <div class="search-recommend-item-wrap" @click="handleClickItem">
     <el-image :src="imgSrc" class="image" fit="cover"></el-image>
     <div class="right">
       <div class="title single-line-ellipsis">
@@ -14,58 +14,52 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { formatCount, formatTimestamp } from '@/utils/format'
+import { formatCount } from '@/utils/format'
+import type { searchMultiMatchType } from '@/assets/ts/type'
+import { useRouter } from 'vue-router'
 
-const props = defineProps({
-  category: {
-    type: String,
-    required: true,
-  },
-  data: {
-    type: Array,
-    required: true,
-  },
-})
-const info: any = props.data ? props.data[0] : null
+const props = defineProps<{
+  type: 'artist' | 'playlist' | 'album'
+  data: searchMultiMatchType
+}>()
+
+const router = useRouter()
+
 const imgSrc = computed(() => {
-  // playlist
-  if (props.category === 'playlist') return (info).coverImgUrl
-  // artist / album
-  if (props.category === 'artist' || props.category === 'album') return (info).picUrl
-  // concert
-  if (props.category === 'concert') return (info).cover
-  return null
+  if (props.type === 'playlist') return props.data.playlist![0].coverImgUrl
+  if (props.type === 'artist') return props.data.artist![0].picUrl
+  if (props.type === 'album') return props.data.album![0].picUrl
+  return ''
 })
 const title = computed(() => {
-  if (props.category === 'artist') {
-    if (info.alias.length) {
-      return `歌手：${info.name}（${info.alias.join('/')}）`
+  if (props.type === 'artist') {
+    if (props.data.artist![0].alias.length) {
+      return `歌手：${props.data.artist![0].name}（${props.data.artist![0].alias.join('/')}）`
     }
-    return `歌手：${info.name}`
+    return `歌手：${props.data.artist![0].name}`
   }
-  if (props.category === 'playlist') return `歌单：${info.name}`
-  if (props.category === 'album') return `专辑：${info.name}`
-  if (props.category === 'concert') return `演出：${info.title}`
-  return null
+  if (props.type === 'playlist') return `歌单：${props.data.playlist![0].name}`
+  if (props.type === 'album') return `专辑：${props.data.album![0].name}`
+  return ''
 })
 const desc = computed(() => {
-  if (props.category === 'artist') {
-    return `粉丝：${formatCount(info.fansSize)} 歌曲：${info.musicSize}`
+  if (props.type === 'artist') {
+    return `粉丝：${formatCount(props.data.artist![0].fansSize || 0)} 歌曲：
+    ${props.data.artist![0].musicSize}`
   }
-  if (props.category === 'playlist') {
-    return `歌曲：${info.trackCount} 播放：${formatCount(info.playCount)}`
+  if (props.type === 'playlist') {
+    return `歌曲：${props.data.playlist![0].trackCount} 播放：
+    ${formatCount(props.data.playlist![0].playCount)}`
   }
-  if (props.category === 'album') {
-    return `${info.artist.name}`
+  if (props.type === 'album') {
+    return `${props.data.album![0].artist.name}`
   }
-  if (props.category === 'concert') {
-    const start = formatTimestamp(info.time[0])
-    const end = formatTimestamp(info.time[1])
-    return `${start.month}月${start.date}日-${end.month}月${end.date}日
-     ${info.simpleAddress.address}`
-  }
-  return null
+  return ''
 })
+
+const handleClickItem = () => {
+  router.push({ name: props.type, params: { id: props.data[props.type]![0].id } })
+}
 </script>
 
 <style scoped lang="scss">
@@ -78,6 +72,7 @@ const desc = computed(() => {
   background-color: $item-bg-color;
   display: flex;
   align-items: center;
+  cursor: pointer;
   .image {
     width: 50px;
     height: 50px;

@@ -1,13 +1,18 @@
 <template>
-  <div class="search-recommend-wrap" v-if="matchResult['orders'].length">
+  <div class="search-recommend-wrap" v-if="matchResult?.orders.length">
     <span class="label">这些你可能感兴趣哦~</span>
     <div class="content">
-      <SearchRecommendItem
-        v-for="(item) in matchResult['orders']"
-        :key="item"
-        :category="item"
-        :data="matchResult[item]"
-      />
+      <div
+        class="item"
+        v-for="(cate) in matchResult?.orders"
+        :key="cate"
+      >
+        <SearchRecommendItem
+          v-if="cate === 'artist' || cate === 'playlist' || cate === 'album'"
+          :type="cate"
+          :data="(matchResult as searchMultiMatchType)"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -15,6 +20,7 @@
 <script setup lang="ts">
 import { ref, onBeforeMount } from 'vue'
 import { getSearchMatch } from '@/api/search'
+import type { searchMultiMatchType } from '@/assets/ts/type'
 import SearchRecommendItem from './SearchRecommendItem.vue'
 
 const props = defineProps<{
@@ -22,7 +28,7 @@ const props = defineProps<{
 }>()
 const emit = defineEmits(['finish-loading'])
 
-const matchResult = ref({ orders: [] })
+const matchResult = ref<searchMultiMatchType>()
 
 const getData = async () => {
   const { data: matchData } = await getSearchMatch({ keywords: props.keyword })

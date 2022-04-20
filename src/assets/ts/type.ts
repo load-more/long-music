@@ -195,6 +195,7 @@ export interface artistType {
   publishTime: number
   mvSize: number
   img1v1Url: string
+  fansSize?: number
 }
 
 export interface artistDescType {
@@ -265,4 +266,11 @@ export interface relatedVideoType {
   playTime: number
   coverUrl: string
   vid: string
+}
+
+export interface searchMultiMatchType {
+  orders: string[]
+  artist?: artistType[]
+  playlist?: playlistDetailType[]
+  album?: albumDetailType[]
 }
