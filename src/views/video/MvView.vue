@@ -31,13 +31,13 @@ import {
   resolveMvUrl,
   resolveMvDetail,
   resolveMvData,
-  resolveRelatedVideos,
+  resolveVideos,
 } from '@/utils/resolve'
 import type {
   videoUrlType,
   mvDetailType,
   mvDataType,
-  relatedVideoType,
+  videoType,
 } from '@/assets/ts/type'
 import VideoPlayer from '@/components/video/VideoPlayer.vue'
 import VideoDetail from '@/components/video/VideoDetail.vue'
@@ -50,7 +50,7 @@ const id = Number(route.params.id)
 const mvUrl = ref<videoUrlType>()
 const mvDetail = ref<mvDetailType>()
 const mvData = ref<mvDataType>()
-const relatedVideos = ref<relatedVideoType[]>([])
+const relatedVideos = ref<videoType[]>([])
 const isLoading = ref(false)
 
 const getData = async () => {
@@ -61,7 +61,7 @@ const getData = async () => {
   const { data: countData } = await getMvData({ mvid: id })
   mvData.value = resolveMvData(countData)
   const { data: relatedVideoData } = await getRelatedVideos({ id })
-  relatedVideos.value = resolveRelatedVideos(relatedVideoData.data)
+  relatedVideos.value = resolveVideos(relatedVideoData.data)
 }
 
 onBeforeMount(async () => {

@@ -39,10 +39,10 @@
 
 <script setup lang="ts">
 import { formatDuration } from '@/utils/format'
-import type { relatedVideoType } from '@/assets/ts/type'
+import type { videoType } from '@/assets/ts/type'
 
 defineProps<{
-  videos: relatedVideoType[]
+  videos: videoType[]
 }>()
 </script>
 

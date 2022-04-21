@@ -256,7 +256,7 @@ export interface videoUrlType {
   msg: string
 }
 
-export interface relatedVideoType {
+export interface videoType {
   title: string
   durationms: number
   creator: {

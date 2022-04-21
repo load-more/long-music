@@ -12,7 +12,7 @@ import {
   videoUrlType,
   mvDetailType,
   mvDataType,
-  relatedVideoType,
+  videoType,
 } from '@/assets/ts/type'
 
 export const resolveSongsDetail = (data: any): songType[] => {
@@ -318,8 +318,8 @@ export const resolveMvData = (data: any): mvDataType => {
   return obj
 }
 
-export const resolveRelatedVideos = (data: any): relatedVideoType[] => {
-  const arr: relatedVideoType[] = []
+export const resolveVideos = (data: any): videoType[] => {
+  const arr: videoType[] = []
   data.forEach((video: any) => {
     arr.push({
       title: video.title,
