@@ -40,6 +40,7 @@ declare module 'vue' {
     PlaylistItem: typeof import('./src/components/playlist/PlaylistItem.vue')['default']
     RegionSelector: typeof import('./src/components/form/RegionSelector.vue')['default']
     TagSelector: typeof import('./src/components/form/TagSelector.vue')['default']
+    UserItem: typeof import('./src/components/user/UserItem.vue')['default']
     UserRelation: typeof import('./src/components/user-relation/UserRelation.vue')['default']
     UserRelationItem: typeof import('./src/components/user-relation/UserRelationItem.vue')['default']
     VideoDetail: typeof import('./src/components/video/VideoDetail.vue')['default']
