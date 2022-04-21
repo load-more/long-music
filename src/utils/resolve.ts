@@ -62,6 +62,7 @@ export const resolveSearchSongsDetail = (songs: any[]): songType[] => {
       canPlay: item.privilege.st !== -200,
       hasSrc: item.privilege.fee !== 16,
       noCopyrightInfo: item.noCopyrightRcmd || { type: 0, typeDesc: '' },
+      lyrics: item.lyrics || [],
     }
     arr.push(obj)
   })

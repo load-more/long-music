@@ -155,6 +155,7 @@ export interface songType {
     type: number
     typeDesc: string
   } // 无版权信息
+  lyrics?: string[]
 }
 
 export interface albumDetailType {

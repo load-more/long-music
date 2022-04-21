@@ -36,6 +36,7 @@ declare module 'vue' {
     Loading: typeof import('element-plus/es')['ElLoadingDirective']
     LoadingAnimation: typeof import('./src/components/loading/LoadingAnimation.vue')['default']
     MusicListItem: typeof import('./src/components/music/MusicListItem.vue')['default']
+    MusicLyricItem: typeof import('./src/components/music/MusicLyricItem.vue')['default']
     MvItem: typeof import('./src/components/mv/MvItem.vue')['default']
     PlaylistItem: typeof import('./src/components/playlist/PlaylistItem.vue')['default']
     RegionSelector: typeof import('./src/components/form/RegionSelector.vue')['default']
