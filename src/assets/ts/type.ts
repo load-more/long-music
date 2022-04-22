@@ -260,13 +260,28 @@ export interface videoUrlType {
 export interface videoType {
   title: string
   durationms: number
-  creator: {
-    userId: number
-    userName: string
-  }[]
+  creator: userBriefType
   playTime: number
   coverUrl: string
   vid: string
+  height?: number
+  width?: number
+  description?: string
+  commentCount?: number
+  shareCount?: number
+  previewUrl?: string
+  previewDurationms?: number
+  praisedCount?: number
+  praised?: boolean
+  subscribed?: boolean
+  resolutions?: {
+    resolution: number
+    size: number
+  }[]
+  videoGroup?: {
+    id: number
+    name: string
+  }[]
 }
 
 export interface searchMultiMatchType {
@@ -274,4 +289,9 @@ export interface searchMultiMatchType {
   artist?: artistType[]
   playlist?: playlistDetailType[]
   album?: albumDetailType[]
+}
+
+export interface videoTagType {
+  id: number
+  name: string
 }

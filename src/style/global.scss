@@ -193,6 +193,10 @@ body {
     }
   }
 
+  .el-popper.video-tags-popper {
+    height: 300px;
+  }
+
   .el-popper.dropdown {
     background-color: $dropdown-bg-color !important;
     border: none !important;

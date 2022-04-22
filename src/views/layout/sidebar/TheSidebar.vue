@@ -11,7 +11,10 @@
       >
         <span>首页</span>
       </el-menu-item>
-      <el-menu-item index="3" disabled>
+      <el-menu-item
+        index="videos"
+        :route="{ name: 'videos' }"
+      >
         <span>视频</span>
       </el-menu-item>
       <el-menu-item index="4" disabled>

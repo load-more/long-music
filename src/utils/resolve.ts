@@ -13,6 +13,7 @@ import {
   mvDetailType,
   mvDataType,
   videoType,
+  videoTagType,
 } from '@/assets/ts/type'
 
 export const resolveSongsDetail = (data: any): songType[] => {
@@ -319,7 +320,7 @@ export const resolveMvData = (data: any): mvDataType => {
   return obj
 }
 
-export const resolveVideos = (data: any): videoType[] => {
+export const resolveBriefVideos = (data: any): videoType[] => {
   const arr: videoType[] = []
   data.forEach((video: any) => {
     arr.push({
@@ -329,6 +330,44 @@ export const resolveVideos = (data: any): videoType[] => {
       playTime: video.playTime,
       coverUrl: video.coverUrl,
       vid: video.vid,
+    })
+  })
+  return arr
+}
+
+export const resolveVideoTags = (data: any): videoTagType[] => {
+  const arr: videoTagType[] = []
+  data.forEach((tag: any) => {
+    arr.push({
+      id: tag.id,
+      name: tag.name,
+    })
+  })
+  return arr
+}
+
+export const resolveDetailVideos = (datas: any): videoType[] => {
+  const arr: videoType[] = []
+  datas.forEach((item: any) => {
+    arr.push({
+      title: item.data.title,
+      durationms: item.data.durationms,
+      creator: item.data.creator,
+      playTime: item.data.playTime,
+      coverUrl: item.data.coverUrl,
+      vid: item.data.vid,
+      height: item.data.height,
+      width: item.data.width,
+      description: item.data.description,
+      commentCount: item.data.commentCount,
+      shareCount: item.data.shareCount,
+      previewUrl: item.data.previewUrl,
+      previewDurationms: item.data.previewDurationms,
+      praisedCount: item.data.praisedCount,
+      praised: item.data.praised,
+      subscribed: item.data.subscribed,
+      resolutions: item.data.resolution,
+      videoGroup: item.data.videoGroup,
     })
   })
   return arr

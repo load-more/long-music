@@ -23,7 +23,7 @@
 import { ref, onBeforeMount, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { getSearchResult } from '@/api/search'
-import { resolveVideos } from '@/utils/resolve'
+import { resolveBriefVideos } from '@/utils/resolve'
 import MyPagination from '@/components/pagination/MyPagination.vue'
 import VideoItem from '@/components/video/VideoItem.vue'
 
@@ -46,7 +46,7 @@ const getPage = async (offset: number) => {
     limit: pageSize.value,
     offset: pageSize.value * offset,
   })
-  pageData.value = resolveVideos(data.result.videos)
+  pageData.value = resolveBriefVideos(data.result.videos)
   videoCount.value = data.result.videoCount
 }
 

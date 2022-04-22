@@ -31,7 +31,7 @@ import {
   resolveMvUrl,
   resolveMvDetail,
   resolveMvData,
-  resolveVideos,
+  resolveBriefVideos,
 } from '@/utils/resolve'
 import type {
   videoUrlType,
@@ -61,7 +61,7 @@ const getData = async () => {
   const { data: countData } = await getMvData({ mvid: id })
   mvData.value = resolveMvData(countData)
   const { data: relatedVideoData } = await getRelatedVideos({ id })
-  relatedVideos.value = resolveVideos(relatedVideoData.data)
+  relatedVideos.value = resolveBriefVideos(relatedVideoData.data)
 }
 
 onBeforeMount(async () => {
