@@ -74,13 +74,13 @@
               @click.stop="handleSearch(item.searchWord)"
             >
               <span class="index">{{ index + 1 }}</span>
-              <div class="right">
+              <div class="right single-line-ellipsis">
                 <div class="title">
                   <span class="word">{{ item.searchWord }}</span>
                   <span class="score">{{ item.score }}</span>
                   <img :src="item.iconUrl" v-if="item.iconUrl">
                 </div>
-                <div class="content" v-if="item.content">
+                <div class="content single-line-ellipsis" v-if="item.content">
                   <span>{{ item.content }}</span>
                 </div>
               </div>
@@ -185,6 +185,7 @@ const dialogVisible = ref(false)
 const popperVisible = ref(false)
 const router = useRouter()
 const scrollbarRef = ref<InstanceType<typeof ElScrollbar>>()
+const isSearched = ref(false)
 
 const getData = async () => {
   // 获取默认搜索关键词
@@ -200,6 +201,9 @@ onBeforeMount(() => {
 })
 
 const handleSearch = (word?: string) => {
+  // 关闭 popover
+  isSearched.value = true
+  popperVisible.value = false
   if (word) {
     keyword.value = word
   }
@@ -208,8 +212,6 @@ const handleSearch = (word?: string) => {
   }
   // 跳转页面
   router.push({ name: 'search', query: { kw: keyword.value } })
-  // 关闭 popover
-  popperVisible.value = false
   // 添加历史记录
   addSearchHistory(keyword.value)
   historyList.value = getSearchHistory()
@@ -327,7 +329,10 @@ const suggestItemLen = computed(() => Object.values(typeContent.value)
   .reduce((p: number, c: any) => p + c.length, suggestType.value.length))
 
 watch(keyword, () => {
-  popperVisible.value = true
+  if (!isSearched.value) {
+    popperVisible.value = true
+  }
+  isSearched.value = false
   activeHotIndex.value = -1
   activeSuggestIndex.value = -1
 })
@@ -499,9 +504,6 @@ const handlePressEnter = () => {
   .icon-search {
     cursor: pointer;
     @include hover-font;
-  }
-  span {
-    cursor: pointer;
   }
 }
 </style>
