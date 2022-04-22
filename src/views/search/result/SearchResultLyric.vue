@@ -9,7 +9,9 @@
       #default="{ currentPage, pageMap }"
     >
       <div class="music-list-wrap">
+        <MusicListTopBar />
         <MusicLyricItem
+          class="item"
           v-for="(song, index) in pageMap.get(currentPage - 1)"
           :key="song.id"
           :song-info="song"
@@ -28,6 +30,7 @@ import { getSearchResult } from '@/api/search'
 import { resolveSearchSongsDetail } from '@/utils/resolve'
 import MyPagination from '@/components/pagination/MyPagination.vue'
 import MusicLyricItem from '@/components/music/MusicLyricItem.vue'
+import MusicListTopBar from '@/components/music/MusicListTopBar.vue'
 
 const route = useRoute()
 const keyword = computed(() => {
@@ -66,10 +69,10 @@ onBeforeMount(() => {
 }
 .music-list-wrap {
   .item:nth-child(2n) {
-    background-color: $item-bg-color;
+    background-color: $bg-color-4;
   }
   .item:nth-child(2n - 1) {
-    background-color: $bg-color-4;
+    background-color: $item-bg-color;
   }
   .item:last-child {
     border-bottom-left-radius: 5px;

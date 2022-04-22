@@ -36,7 +36,7 @@ const keyword = computed(() => {
 })
 
 const videoCount = ref(0)
-const pageSize = ref(30)
+const pageSize = ref(32)
 const pageData = ref()
 
 const getPage = async (offset: number) => {

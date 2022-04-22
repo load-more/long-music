@@ -199,10 +199,17 @@ const handleClickCopy = () => {
 
 <style scoped lang="scss">
 .music-list-item-wrap {
-  border-radius: 15px;
   padding-bottom: 10px;
   &:hover {
     background-color: $bg-color-1;
+    .pc .operation {
+      .index {
+        display: none;
+      }
+      .icon-play-hollow {
+        display: block;
+      }
+    }
   }
   .pc {
     display: flex;
@@ -232,14 +239,6 @@ const handleClickCopy = () => {
       }
       .icon-play-hollow {
         display: none;
-      }
-    }
-    &:hover .operation {
-      .index {
-        display: none;
-      }
-      .icon-play-hollow {
-        display: block;
       }
     }
     .title {
@@ -323,57 +322,6 @@ const handleClickCopy = () => {
     }
     .btns {
       margin-right: 10px;
-    }
-  }
-  @media screen and (max-width: 768px) {
-    .mobile {
-      display: flex;
-      align-items: center;
-      background-color: $item-bg-color;
-      color: $font-color;
-      font-size: 14px;
-      padding: 10px 0;
-      border-radius: 5px;
-      margin-bottom: 5px;
-      line-height: 20px;
-      cursor: default;
-      &:hover {
-        background-color: $item-hover-bg-color;
-      }
-      .operation {
-        width: 40px;
-        text-align: center;
-        span, i {
-          display: inline-block;
-          box-sizing: border-box;
-          width: 30px;
-          text-align: center;
-        }
-        .icon-volume, .icon-close-volume {
-          color: $current-play-icon-color;
-        }
-        .icon-like, .icon-download {
-          cursor: pointer;
-          &:hover {
-            color: $font-active-color;
-          }
-        }
-      }
-      .mid {
-        width: 70%;
-        overflow: hidden;
-        .title {
-          font-size: 16px;
-          font-weight: bold;
-        }
-        .singer {
-          font-size: 13px;
-        }
-      }
-      .right {
-        flex: 1;
-        text-align: center;
-      }
     }
   }
 }

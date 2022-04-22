@@ -9,7 +9,9 @@
       #default="{ currentPage, pageMap }"
     >
       <div class="music-list-wrap">
+        <MusicListTopBar />
         <MusicListItem
+          class="item"
           v-for="(song, index) in pageMap.get(currentPage - 1)"
           :key="song.id"
           :song-info="song"
@@ -30,6 +32,7 @@ import { useRoute } from 'vue-router'
 import { resolveSearchSongsDetail } from '@/utils/resolve'
 import MyPagination from '@/components/pagination/MyPagination.vue'
 import MusicListItem from '@/components/music/MusicListItem.vue'
+import MusicListTopBar from '@/components/music/MusicListTopBar.vue'
 
 const emit = defineEmits(['finish-loading'])
 
@@ -68,6 +71,25 @@ onBeforeMount(async () => {
     color: $font-inactive-color;
     display: inline-block;
     margin-bottom: 10px;
+  }
+  .music-list-wrap {
+    .item:nth-child(2n) {
+      background-color: $bg-color-4;
+    }
+    .item:nth-child(2n - 1) {
+      background-color: $item-bg-color;
+    }
+    .item:last-child {
+      border-bottom-left-radius: 5px;
+      border-bottom-right-radius: 5px;
+    }
+    .item:hover {
+      background-color: $item-hover-bg-color;
+    }
+    .item:last-child:hover {
+      border-bottom-left-radius: 5px;
+      border-bottom-right-radius: 5px;
+    }
   }
 }
 </style>
