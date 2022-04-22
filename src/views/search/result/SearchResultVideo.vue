@@ -1,13 +1,21 @@
 <template>
   <div>
     <span class="video-count">为您找到 {{ videoCount }} 个视频</span>
-    <div class="item-wrap">
-      <VideoItem
-        v-for="(video) in videos"
-        :key="video.vid"
-        :video="video"
-      />
-    </div>
+    <MyPagination
+      :page-size="pageSize"
+      :total="videoCount"
+      :page-data="pageData"
+      @get-page="getPage"
+      #default="{ currentPage, pageMap }"
+    >
+      <div class="item-wrap">
+        <VideoItem
+          v-for="(video) in pageMap.get(currentPage - 1)"
+          :key="video.vid"
+          :video="video"
+        />
+      </div>
+    </MyPagination>
   </div>
 </template>
 
@@ -15,8 +23,8 @@
 import { ref, onBeforeMount, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { getSearchResult } from '@/api/search'
-import { videoType } from '@/assets/ts/type'
 import { resolveVideos } from '@/utils/resolve'
+import MyPagination from '@/components/pagination/MyPagination.vue'
 import VideoItem from '@/components/video/VideoItem.vue'
 
 const route = useRoute()
@@ -26,20 +34,24 @@ const keyword = computed(() => {
   }
   return route.query.kw
 })
-const videos = ref<videoType[]>([])
-const videoCount = ref(0)
 
-const getData = async () => {
+const videoCount = ref(0)
+const pageSize = ref(30)
+const pageData = ref()
+
+const getPage = async (offset: number) => {
   const { data } = await getSearchResult({
     type: 1014,
     keywords: keyword.value || '',
+    limit: pageSize.value,
+    offset: pageSize.value * offset,
   })
-  videos.value = resolveVideos(data.result.videos)
+  pageData.value = resolveVideos(data.result.videos)
   videoCount.value = data.result.videoCount
 }
 
 onBeforeMount(() => {
-  getData()
+  getPage(0)
 })
 </script>
 
@@ -52,5 +64,6 @@ onBeforeMount(() => {
 }
 .item-wrap {
   display: flex;
+  flex-wrap: wrap;
 }
 </style>

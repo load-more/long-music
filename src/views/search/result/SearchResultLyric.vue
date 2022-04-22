@@ -1,15 +1,23 @@
 <template>
   <div>
     <span class="song-count">为您找到 {{ songCount }} 首歌词</span>
-    <div class="music-list-wrap">
-      <MusicLyricItem
-        v-for="(song) in songs"
-        :key="song.id"
-        :song-info="song"
-        :song-index="0"
-        :is-playlist-item="false"
-      />
-    </div>
+    <MyPagination
+      :page-size="pageSize"
+      :total="songCount"
+      :page-data="pageData"
+      @get-page="getPage"
+      #default="{ currentPage, pageMap }"
+    >
+      <div class="music-list-wrap">
+        <MusicLyricItem
+          v-for="(song, index) in pageMap.get(currentPage - 1)"
+          :key="song.id"
+          :song-info="song"
+          :song-index="(currentPage - 1) * pageSize + index + 1"
+          :is-playlist-item="false"
+        />
+      </div>
+    </MyPagination>
   </div>
 </template>
 
@@ -17,8 +25,8 @@
 import { ref, onBeforeMount, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { getSearchResult } from '@/api/search'
-import { songType } from '@/assets/ts/type'
 import { resolveSearchSongsDetail } from '@/utils/resolve'
+import MyPagination from '@/components/pagination/MyPagination.vue'
 import MusicLyricItem from '@/components/music/MusicLyricItem.vue'
 
 const route = useRoute()
@@ -28,20 +36,24 @@ const keyword = computed(() => {
   }
   return route.query.kw
 })
-const songs = ref<songType[]>([])
-const songCount = ref(0)
 
-const getData = async () => {
+const songCount = ref(0)
+const pageSize = ref(30)
+const pageData = ref()
+
+const getPage = async (offset: number) => {
   const { data } = await getSearchResult({
     type: 1006,
     keywords: keyword.value || '',
+    limit: pageSize.value,
+    offset: pageSize.value * offset,
   })
-  songs.value = resolveSearchSongsDetail(data.result.songs)
+  pageData.value = resolveSearchSongsDetail(data.result.songs)
   songCount.value = data.result.songCount
 }
 
 onBeforeMount(() => {
-  getData()
+  getPage(0)
 })
 </script>
 

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="comment-item-wrap"
+    class="comments-list-wrap"
     v-for="(comment) in comments"
     :key="comment.commentId"
   >
@@ -65,7 +65,7 @@ const router = useRouter()
 </script>
 
 <style scoped lang="scss">
-.comment-item-wrap {
+.comments-list-wrap {
   display: flex;
   color: $font-color;
   border-radius: 10px;

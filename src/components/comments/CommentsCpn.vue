@@ -2,32 +2,27 @@
   <div class="song-comment-wrap">
     <div class="hot-comments" v-if="hotComments.length">
       <h2 class="label">热门评论({{ hotComments.length }})</h2>
-      <CommentsItem
+      <CommentsList
         :comments="hotComments"
       />
     </div>
-    <div class="new-comments" v-if="commentCount">
-      <h2 class="label">最新评论({{ commentCount }})</h2>
-      <div class="content" v-show="!isLoading">
-        <keep-alive>
-          <CommentsItem
-            :comments="newCommentsMap.get(currentPage - 1)"
-          />
-        </keep-alive>
-        <el-pagination
-          class="pagination"
-          layout="prev, pager, next"
+    <div class="new-comments" v-if="count">
+      <h2 class="label">最新评论({{ count }})</h2>
+      <div class="content">
+        <MyPagination
           :page-size="pageSize"
-          :total="commentCount"
-          v-model:current-page="currentPage"
-          @current-change="handleNewCommentsChange"
-          hide-on-single-page
+          :total="count"
+          :page-data="pageData"
+          @get-page="getPage"
+          #default="{ currentPage, pageMap }"
         >
-        </el-pagination>
+          <CommentsList
+            :comments="pageMap.get(currentPage - 1)"
+          />
+        </MyPagination>
       </div>
     </div>
-    <EmptyPlaceholder v-if="!hotComments.length && !commentCount" text="暂无评论" />
-    <LoadingAnimation class="loading-animation" v-if="isLoading" />
+    <EmptyPlaceholder v-if="!hotComments.length && !count" text="暂无评论" />
   </div>
 </template>
 
@@ -37,11 +32,11 @@ import { getMusicComment } from '@/api/music'
 import { getPlaylistComment } from '@/api/playlist'
 import { getAlbumComments } from '@/api/album'
 import { getMvComments } from '@/api/video'
-import LoadingAnimation from '@/components/loading/LoadingAnimation.vue'
 import EmptyPlaceholder from '@/components/empty-placeholder/EmptyPlaceholder.vue'
-import { commentType } from '@/assets/ts/type'
+import type { commentType } from '@/assets/ts/type'
 import { resolveComment } from '@/utils/resolve'
-import CommentsItem from './CommentsItem.vue'
+import MyPagination from '@/components/pagination/MyPagination.vue'
+import CommentsList from './CommentsList.vue'
 
 const props = defineProps<{
   type: 'song' | 'playlist' | 'album' | 'mv'
@@ -49,16 +44,12 @@ const props = defineProps<{
 }>()
 const emit = defineEmits(['finishLoading'])
 
-const commentCount = ref(0)
+const count = ref(0)
 const hotComments = ref<commentType[]>([])
 const pageSize = ref(20)
-const currentPage = ref(1)
-const newCommentsMap = ref(new Map())
-const isLoading = ref(false)
+const pageData = ref()
 
 const getComments = async (type: 'hot' | 'new' | 'all', offset: number) => {
-  if (type === 'new' && newCommentsMap.value.has(offset)) return
-  isLoading.value = true
   let data: any = null
   const params = {
     id: props.id,
@@ -91,26 +82,21 @@ const getComments = async (type: 'hot' | 'new' | 'all', offset: number) => {
   if (type === 'hot') {
     pushComments('hot')
   } else if (type === 'new') {
-    newCommentsMap.value.set(offset, pushComments('new'))
+    pageData.value = pushComments('new')
   } else {
     pushComments('hot')
-    newCommentsMap.value.set(offset, pushComments('new'))
-    commentCount.value = data.total
+    pageData.value = pushComments('new')
+    count.value = data.total
   }
-  isLoading.value = false
 }
 
-const getData = async () => {
+const getPage = async (offset: number) => {
+  await getComments('new', offset)
+}
+
+onBeforeMount(async () => {
   await getComments('all', 0)
-  emit('finishLoading', commentCount.value)
-}
-
-const handleNewCommentsChange = () => {
-  getComments('new', currentPage.value - 1)
-}
-
-onBeforeMount(() => {
-  getData()
+  emit('finishLoading', count.value)
 })
 </script>
 
@@ -121,14 +107,6 @@ onBeforeMount(() => {
     font-size: 18px;
     font-weight: bold;
     margin: 20px 0;
-  }
-  .pagination {
-    display: flex;
-    justify-content: center;
-  }
-  .loading-animation {
-    margin: 80px 0;
-    font-size: 3px;
   }
 }
 </style>

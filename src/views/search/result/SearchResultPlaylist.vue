@@ -1,14 +1,22 @@
 <template>
   <div>
     <span class="playlist-count">为您找到 {{ playlistCount }} 张歌单</span>
-    <div class="item-wrap">
-      <PlaylistItem
-        class="item"
-        v-for="(playlist) in playlists"
-        :key="playlist.id"
-        :info="playlist"
-      />
-    </div>
+    <MyPagination
+      :page-size="pageSize"
+      :total="playlistCount"
+      :page-data="pageData"
+      @get-page="getPage"
+      #default="{ currentPage, pageMap }"
+    >
+      <div class="item-wrap">
+        <PlaylistItem
+          class="item"
+          v-for="(playlist) in pageMap.get(currentPage - 1)"
+          :key="playlist.id"
+          :info="playlist"
+        />
+      </div>
+    </MyPagination>
   </div>
 </template>
 
@@ -16,8 +24,8 @@
 import { ref, onBeforeMount, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { getSearchResult } from '@/api/search'
-import { playlistDetailType } from '@/assets/ts/type'
 import { resolvePlaylistDetail } from '@/utils/resolve'
+import MyPagination from '@/components/pagination/MyPagination.vue'
 import PlaylistItem from '@/components/playlist/PlaylistItem.vue'
 
 const route = useRoute()
@@ -27,22 +35,28 @@ const keyword = computed(() => {
   }
   return route.query.kw
 })
-const playlists = ref<playlistDetailType[]>([])
-const playlistCount = ref(0)
 
-const getData = async () => {
+const playlistCount = ref(0)
+const pageSize = ref(30)
+const pageData = ref()
+
+const getPage = async (offset: number) => {
   const { data } = await getSearchResult({
     type: 1000,
     keywords: keyword.value || '',
+    limit: pageSize.value,
+    offset: pageSize.value * offset,
   })
+  const arr: any[] = []
   data.result.playlists.forEach((playlist: any) => {
-    playlists.value.push(resolvePlaylistDetail(playlist))
+    arr.push(resolvePlaylistDetail(playlist))
   })
+  pageData.value = arr
   playlistCount.value = data.result.playlistCount
 }
 
 onBeforeMount(() => {
-  getData()
+  getPage(0)
 })
 </script>
 

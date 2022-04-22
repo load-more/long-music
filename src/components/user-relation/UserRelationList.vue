@@ -3,7 +3,7 @@
     <div v-if="type === 'follows' || type === 'fans'" class="item-wrap">
       <div
         class="item"
-        v-for="(item) in relation"
+        v-for="(item) in users"
         :key="item.userId"
       >
         <div class="left">
@@ -67,7 +67,7 @@
     <div v-else class="item-wrap">
       <div
         class="item"
-        v-for="(item) in relation"
+        v-for="(item) in users"
         :key="item.userId"
       >
         <div class="left">
@@ -136,7 +136,7 @@ import { userBriefType } from '@/assets/ts/type'
 
 defineProps<{
   uid: number
-  relation: userBriefType[]
+  users: userBriefType[]
   type: 'follows' | 'fans' | 'subscribers'
 }>()
 const emit = defineEmits(['updateArray'])

@@ -1,27 +1,21 @@
 <template>
   <div class="user-relation-wrap">
-    <div class="user-relation-item-wrap" v-show="!isLoading">
-      <keep-alive>
-        <UserRelationItem
-          :uid="id"
-          :relation="pageMap.get(currentPage - 1)"
-          :type="type"
-          @update-array="handleUpdateArray(currentPage, $event)"
-        />
-      </keep-alive>
-      <el-pagination
-        class="pagination"
-        layout="prev, pager, next"
+    <div class="user-relation-item-wrap">
+      <MyPagination
         :page-size="pageSize"
         :total="count"
-        v-model:current-page="currentPage"
-        @current-change="handleCurrentChange"
-        hide-on-single-page
+        :page-data="pageData"
+        @get-page="getPage"
+        #default="{ currentPage, pageMap }"
       >
-      </el-pagination>
+        <UserRelationList
+          :uid="id"
+          :users="pageMap.get(currentPage - 1)"
+          :type="type"
+        />
+      </MyPagination>
     </div>
     <EmptyPlaceholder v-if="!count" :text="placeholderText" />
-    <LoadingAnimation class="loading-animation" v-if="isLoading" />
   </div>
 </template>
 
@@ -29,11 +23,11 @@
 import { onBeforeMount, ref, computed } from 'vue'
 import { getUserFollows, getUserFans } from '@/api/user'
 import { getPlaylistSubsribers } from '@/api/playlist'
-import LoadingAnimation from '@/components/loading/LoadingAnimation.vue'
 import EmptyPlaceholder from '@/components/empty-placeholder/EmptyPlaceholder.vue'
 import { userBriefType } from '@/assets/ts/type'
 import { resolveUserBrief } from '@/utils/resolve'
-import UserRelationItem from './UserRelationItem.vue'
+import MyPagination from '@/components/pagination/MyPagination.vue'
+import UserRelationList from './UserRelationList.vue'
 
 const props = defineProps<{
   id: number
@@ -43,9 +37,7 @@ const props = defineProps<{
 const emit = defineEmits(['finish-loading'])
 
 const pageSize = ref(30)
-const currentPage = ref(1)
-const pageMap = ref(new Map())
-const isLoading = ref(false)
+const pageData = ref()
 
 const placeholderText = computed(() => {
   if (props.type === 'follows') {
@@ -57,9 +49,7 @@ const placeholderText = computed(() => {
   return '暂无收藏者'
 })
 
-const getData = async (offset: number) => {
-  if (pageMap.value.has(offset)) return
-  isLoading.value = true
+const getPage = async (offset: number) => {
   let data
 
   if (props.type === 'follows') {
@@ -87,37 +77,15 @@ const getData = async (offset: number) => {
     const obj = resolveUserBrief(item)
     arr.push(obj)
   })
+  pageData.value = arr
+}
 
-  pageMap.value.set(offset, arr)
-  isLoading.value = false
+onBeforeMount(async () => {
+  await getPage(0)
   emit('finish-loading')
-}
-
-const handleCurrentChange = () => {
-  getData(currentPage.value - 1)
-}
-
-const handleUpdateArray = (page: number, uid: number) => {
-  const index = pageMap.value.get(page - 1).findIndex((item: userBriefType) => item.userId === uid)
-  pageMap.value.get(page - 1)[index].followed = true
-}
-
-onBeforeMount(() => {
-  getData(currentPage.value - 1)
 })
 </script>
 
 <style scoped lang="scss">
-.user-relation-wrap {
-  width: 100%;
-  height: 100%;
-  .pagination {
-    display: flex;
-    justify-content: center;
-  }
-  .loading-animation {
-    padding: 40px 0;
-    font-size: 3px;
-  }
-}
+
 </style>
