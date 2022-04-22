@@ -91,6 +91,12 @@ const handleBannerClick = async (index: number, banner: bannerType) => {
       playMusic()
     } else if (banner.targetType === 10) { // 专辑
       router.push({ name: 'album', params: { id: banner.targetId } })
+    } else if (banner.targetType === 100) { // 歌手
+      router.push({ name: 'artist', params: { id: banner.targetId } })
+    } else if (banner.targetType === 1000) { // 歌单
+      router.push({ name: 'playlist', params: { id: banner.targetId } })
+    } else if (banner.targetType === 1004) { // MV
+      router.push({ name: 'mv', params: { id: banner.targetId } })
     }
   }
 }

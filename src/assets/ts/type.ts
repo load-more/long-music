@@ -1,7 +1,7 @@
 export interface bannerType {
   imageUrl: string
   targetId: number
-  targetType: number // 3000: 网页; 1: 歌曲; 10: 专辑;
+  targetType: number // 3000: 网页; 1: 歌曲; 10: 专辑（参考搜索结果的 type）
   titleColor: string
   typeTitle: string
   url: string
