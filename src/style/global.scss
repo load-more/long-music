@@ -29,6 +29,17 @@ html, body, #app {
   -webkit-box-orient: vertical;
 }
 
+.image-inset-shadow {
+  box-shadow: 0 20px 20px rgba(rgb(0, 0, 0), 0.3) inset,
+  0 -20px 20px rgba(0, 0, 0, 0.3) inset;
+  -webkit-box-shadow: 0 20px 20px rgba(rgb(0, 0, 0), 0.3) inset,
+  0 -20px 20px rgba(0, 0, 0, 0.3) inset;
+  -moz-box-shadow: 0 20px 20px rgba(rgb(0, 0, 0), 0.3) inset,
+  0 -20px 20px rgba(0, 0, 0, 0.3) inset;
+  -o-box-shadow: 0 20px 20px rgba(rgb(0, 0, 0), 0.3) inset,
+  0 -20px 20px rgba(0, 0, 0, 0.3) inset;
+}
+
 body {
   // volume bar popper
   .el-popper.volume-popper {

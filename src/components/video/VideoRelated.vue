@@ -7,13 +7,13 @@
     >
       <div class="left">
         <div class="image-wrap">
-          <el-image
-            class="image"
-            :src="video?.coverUrl"
-          ></el-image>
+          <div
+            class="image image-inset-shadow"
+            :style="{'background-image': `url(${video?.coverUrl})`}"
+          ></div>
           <span class="play-count">
             <i class="iconfont icon-play"></i>
-            {{ video?.playTime }}
+            {{ formatCount(video?.playTime) }}
           </span>
           <span class="duration">{{ formatDuration(video?.durationms) }}</span>
         </div>
@@ -38,7 +38,7 @@
 </template>
 
 <script setup lang="ts">
-import { formatDuration } from '@/utils/format'
+import { formatDuration, formatCount } from '@/utils/format'
 import type { videoType } from '@/assets/ts/type'
 
 defineProps<{
@@ -61,6 +61,14 @@ defineProps<{
         font-size: 13px;
         .image {
           border-radius: 5px;
+          cursor: pointer;
+          height: 0;
+          padding-top: 60%;
+          background-position: center center;
+          background-repeat: no-repeat;
+          background-size: cover;
+          -webkit-background-size: cover;
+          -moz-background-size: cover;
         }
         .play-count {
           position: absolute;

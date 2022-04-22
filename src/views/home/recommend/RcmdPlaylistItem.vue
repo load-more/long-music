@@ -2,7 +2,7 @@
   <div class="rcmd-playlist-item-wrap">
     <div class="image-wrap">
       <div
-        class="image"
+        class="image image-inset-shadow"
         :style="{'background-image': `url(${info.picUrl})`}"
         @click="handleClickPlaylist"
       ></div>

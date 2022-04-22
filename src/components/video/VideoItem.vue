@@ -1,11 +1,11 @@
 <template>
   <div class="video-item-wrap">
     <div class="image-wrap">
-      <el-image
-        class="image"
-        :src="video?.coverUrl"
+      <div
+        class="image image-inset-shadow"
+        :style="{'background-image': `url(${video?.coverUrl})`}"
         @click="router.push({ name: 'video', params: { id: video?.vid } })"
-      ></el-image>
+      ></div>
       <span class="play-count">
         <i class="iconfont icon-play"></i>&nbsp;{{ formatCount(video?.playTime) }}
       </span>
@@ -38,11 +38,19 @@ const router = useRouter()
   padding-right: 20px;
   box-sizing: border-box;
   font-size: 14px;
+  color: $font-color;
   .image-wrap {
     position: relative;
     .image {
       border-radius: 5px;
       cursor: pointer;
+      height: 0;
+      padding-top: 60%;
+      background-position: center center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      -webkit-background-size: cover;
+      -moz-background-size: cover;
     }
     .play-count {
       position: absolute;
