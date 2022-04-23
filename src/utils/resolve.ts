@@ -9,11 +9,13 @@ import {
   artistType,
   artistDescType,
   mvType,
-  videoUrlType,
+  mvUrlType,
   mvDetailType,
   mvDataType,
   videoType,
   videoTagType,
+  videoUrlType,
+  videoDetailType,
 } from '@/assets/ts/type'
 
 export const resolveSongsDetail = (data: any): songType[] => {
@@ -276,8 +278,8 @@ export const resolveMvs = (mvs: any): mvType[] => {
   return arr
 }
 
-export const resolveMvUrl = (data: any): videoUrlType => {
-  const obj: videoUrlType = {
+export const resolveMvUrl = (data: any): mvUrlType => {
+  const obj: mvUrlType = {
     id: data.id,
     url: data.url,
     r: data.r,
@@ -371,4 +373,38 @@ export const resolveDetailVideos = (datas: any): videoType[] => {
     })
   })
   return arr
+}
+
+export const resolveVideoUrl = (data: any): videoUrlType => {
+  const obj: videoUrlType = {
+    id: data.id,
+    url: data.url,
+    size: data.size,
+    validityTime: data.validityTime,
+    needPay: data.needPay,
+    r: data.r,
+  }
+  return obj
+}
+
+export const resolveVideoDetail = (data: any): videoDetailType => {
+  const obj: videoDetailType = {
+    vid: data.vid,
+    creator: data.creator,
+    coverUrl: data.coverUrl,
+    title: data.title,
+    description: data.description,
+    durationms: data.durationms,
+    playTime: data.playTime,
+    praisedCount: data.praisedCount,
+    commentCount: data.commentCount,
+    shareCount: data.shareCount,
+    subscribeCount: data.subscribeCount,
+    publishTime: data.publishTime,
+    width: data.width,
+    height: data.height,
+    resolutions: data.resolutions,
+    videoGroup: data.videoGroup,
+  }
+  return obj
 }

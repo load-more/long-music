@@ -11,11 +11,11 @@
 
 <script setup lang="ts">
 import { withDefaults } from 'vue'
-import { videoUrlType } from '@/assets/ts/type'
+import { mvUrlType, videoUrlType } from '@/assets/ts/type'
 
 withDefaults(defineProps<{
   width?: number
-  video: videoUrlType
+  video: mvUrlType | videoUrlType
 }>(), {
   width: 700,
 })

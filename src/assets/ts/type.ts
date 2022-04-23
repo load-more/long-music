@@ -247,7 +247,7 @@ export interface mvDataType {
   liked: boolean
 }
 
-export interface videoUrlType {
+export interface mvUrlType {
   id: number
   url: string
   r: number
@@ -257,10 +257,52 @@ export interface videoUrlType {
   msg: string
 }
 
+export interface videoUrlType {
+  id: string
+  url: string
+  size: number
+  validityTime: number
+  needPay: boolean
+  r: number
+}
+
+export interface videoDetailType {
+  vid: string
+  creator: {
+    followed: boolean
+    userId: number
+    nickname: string
+    avatarUrl: string
+  }
+  coverUrl: string
+  title: string
+  description: string
+  durationms: number
+  playTime: number
+  praisedCount: number
+  commentCount: number
+  shareCount: number
+  subscribeCount: number
+  publishTime: number
+  width: number
+  height: number
+  resolutions: {
+    size: number
+    resolution: number
+  }[]
+  videoGroup: {
+    id: number
+    name: string
+  }[]
+}
+
 export interface videoType {
   title: string
   durationms: number
-  creator: userBriefType
+  creator: {
+    userId: number
+    userName: string
+  }[]
   playTime: number
   coverUrl: string
   vid: string

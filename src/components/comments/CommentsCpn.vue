@@ -31,7 +31,7 @@ import { ref, onBeforeMount } from 'vue'
 import { getMusicComment } from '@/api/music'
 import { getPlaylistComment } from '@/api/playlist'
 import { getAlbumComments } from '@/api/album'
-import { getMvComments } from '@/api/video'
+import { getMvComments, getVideoComments } from '@/api/video'
 import EmptyPlaceholder from '@/components/empty-placeholder/EmptyPlaceholder.vue'
 import type { commentType } from '@/assets/ts/type'
 import { resolveComment } from '@/utils/resolve'
@@ -39,8 +39,8 @@ import MyPagination from '@/components/pagination/MyPagination.vue'
 import CommentsList from './CommentsList.vue'
 
 const props = defineProps<{
-  type: 'song' | 'playlist' | 'album' | 'mv'
-  id: number
+  type: 'song' | 'playlist' | 'album' | 'mv' | 'video'
+  id: number | string
 }>()
 const emit = defineEmits(['finishLoading'])
 
@@ -52,7 +52,7 @@ const pageData = ref()
 const getComments = async (type: 'hot' | 'new' | 'all', offset: number) => {
   let data: any = null
   const params = {
-    id: props.id,
+    id: props.id as any,
     offset: pageSize.value * offset,
   }
   if (props.type === 'song') {
@@ -63,6 +63,8 @@ const getComments = async (type: 'hot' | 'new' | 'all', offset: number) => {
     data = (await getAlbumComments(params)).data
   } else if (props.type === 'mv') {
     data = (await getMvComments(params)).data
+  } else if (props.type === 'video') {
+    data = (await getVideoComments(params)).data
   }
 
   const pushComments = (t: 'hot' | 'new') => {

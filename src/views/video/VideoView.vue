@@ -1,16 +1,15 @@
 <template>
-  <div class="mv-container">
+  <div class="video-view-container">
     <el-scrollbar class="scrollbar" v-show="!isLoading">
       <div class="inset-container">
         <div class="video-container">
-          <span class="label">MV 详情</span>
-          <VideoPlayer :video="(mvUrl as mvUrlType)" />
+          <span class="label">视频详情</span>
+          <VideoPlayer :video="(videoUrl as videoUrlType)" />
           <VideoDetail
-            type="mv"
-            :detail="(mvDetail as mvDetailType)"
-            :data="(mvData as mvDataType)"
+            type="video"
+            :detail="(videoDetail as videoDetailType)"
           />
-          <CommentsCpn type="mv" :id="id" />
+          <CommentsCpn type="video" :id="id" />
         </div>
         <div class="related-video-container">
           <span class="label">相关推荐</span>
@@ -26,21 +25,18 @@
 import { ref, onBeforeMount } from 'vue'
 import { useRoute } from 'vue-router'
 import {
-  getMvUrl,
-  getMvDetail,
-  getMvData,
+  getVideoUrl,
+  getVideoDetail,
   getRelatedVideos,
 } from '@/api/video'
 import {
-  resolveMvUrl,
-  resolveMvDetail,
-  resolveMvData,
+  resolveVideoUrl,
+  resolveVideoDetail,
   resolveBriefVideos,
 } from '@/utils/resolve'
 import type {
-  mvUrlType,
-  mvDetailType,
-  mvDataType,
+  videoUrlType,
+  videoDetailType,
   videoType,
 } from '@/assets/ts/type'
 import VideoPlayer from '@/components/video/VideoPlayer.vue'
@@ -50,20 +46,17 @@ import CommentsCpn from '@/components/comments/CommentsCpn.vue'
 import LoadingAnimation from '@/components/loading/LoadingAnimation.vue'
 
 const route = useRoute()
-const id = Number(route.params.id)
-const mvUrl = ref<mvUrlType>()
-const mvDetail = ref<mvDetailType>()
-const mvData = ref<mvDataType>()
+const id = String(route.params.id)
+const videoUrl = ref<videoUrlType>()
+const videoDetail = ref<videoDetailType>()
 const relatedVideos = ref<videoType[]>([])
 const isLoading = ref(false)
 
 const getData = async () => {
-  const { data: urlData } = await getMvUrl({ id })
-  mvUrl.value = resolveMvUrl(urlData.data)
-  const { data: detailData } = await getMvDetail({ mvid: id })
-  mvDetail.value = resolveMvDetail(detailData.data)
-  const { data: countData } = await getMvData({ mvid: id })
-  mvData.value = resolveMvData(countData)
+  const { data: urlData } = await getVideoUrl({ id })
+  videoUrl.value = resolveVideoUrl(urlData.urls[0])
+  const { data: detailData } = await getVideoDetail({ id })
+  videoDetail.value = resolveVideoDetail(detailData.data)
   const { data: relatedVideoData } = await getRelatedVideos({ id })
   relatedVideos.value = resolveBriefVideos(relatedVideoData.data)
 }
@@ -76,7 +69,7 @@ onBeforeMount(async () => {
 </script>
 
 <style scoped lang="scss">
-.mv-container {
+.video-view-container {
   width: 100%;
   height: 100%;
   .scrollbar {

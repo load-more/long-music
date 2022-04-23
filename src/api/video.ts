@@ -36,7 +36,7 @@ export const getRecommendVideos = (params: {
 })
 
 export const getRelatedVideos = (params: {
-  id: number
+  id: number | string
 }) => request({
   method: 'GET',
   url: '/related/allvideo',
@@ -44,7 +44,7 @@ export const getRelatedVideos = (params: {
 })
 
 export const getVideoDetail = (params: {
-  id: number
+  id: string
 }) => request({
   method: 'GET',
   url: '/video/detail',
@@ -52,7 +52,7 @@ export const getVideoDetail = (params: {
 })
 
 export const getVideoData = (params: {
-  vid: number
+  vid: string
 }) => request({
   method: 'GET',
   url: '/video/detail/info',
@@ -60,7 +60,7 @@ export const getVideoData = (params: {
 })
 
 export const getVideoUrl = (params: {
-  id: number
+  id: string
 }) => request({
   method: 'GET',
   url: '/video/url',
@@ -100,5 +100,16 @@ export const getMvComments = (params: {
 }) => request({
   method: 'GET',
   url: '/comment/mv',
+  params,
+})
+
+export const getVideoComments = (params: {
+  id: number
+  limit?: number
+  offset?: number
+  before?: number
+}) => request({
+  method: 'GET',
+  url: '/comment/video',
   params,
 })
