@@ -240,6 +240,22 @@ export interface mvDetailType {
   }[]
 }
 
+export interface briefMvType {
+  id: number
+  cover: string
+  name: string
+  playCount: number
+  briefDesc: string
+  desc: string
+  artistName: string
+  artistId: number
+  duration: number
+  artists: {
+    id: number
+    name: string
+  }[]
+}
+
 export interface mvDataType {
   likedCount: number
   shareCount: number

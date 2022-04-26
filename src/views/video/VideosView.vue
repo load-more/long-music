@@ -6,7 +6,7 @@
           <VideosMain />
         </el-tab-pane>
         <el-tab-pane label="MV" name="mv">
-          mv
+          <MvsMain />
         </el-tab-pane>
       </el-tabs>
     </el-scrollbar>
@@ -16,6 +16,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import VideosMain from './videos/VideosMain.vue'
+import MvsMain from './mvs/MvsMain.vue'
 
 const activeTab = ref('video')
 </script>

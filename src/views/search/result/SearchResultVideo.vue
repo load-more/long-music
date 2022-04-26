@@ -12,6 +12,7 @@
         <VideoItem
           v-for="(video) in pageMap.get(currentPage - 1)"
           :key="video.vid"
+          type="video"
           :video="video"
         />
       </div>

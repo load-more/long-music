@@ -16,6 +16,7 @@ import {
   videoTagType,
   videoUrlType,
   videoDetailType,
+  briefMvType,
 } from '@/assets/ts/type'
 
 export const resolveSongsDetail = (data: any): songType[] => {
@@ -263,7 +264,7 @@ export const resolveArtistDesc = (introduction: any): artistDescType[] => {
   return arr
 }
 
-export const resolveMvs = (mvs: any): mvType[] => {
+export const resolveArtistMvs = (mvs: any): mvType[] => {
   const arr: mvType[] = []
   mvs.forEach((mv: any) => {
     arr.push({
@@ -407,4 +408,23 @@ export const resolveVideoDetail = (data: any): videoDetailType => {
     videoGroup: data.videoGroup,
   }
   return obj
+}
+
+export const resolveBriefMvs = (data: any): briefMvType[] => {
+  const arr: briefMvType[] = []
+  data.forEach((mv: any) => {
+    arr.push({
+      id: mv.id,
+      cover: mv.cover,
+      name: mv.name,
+      playCount: mv.playCount,
+      briefDesc: mv.briefDesc,
+      desc: mv.desc,
+      artistName: mv.artistName,
+      artistId: mv.artistId,
+      duration: mv.duration,
+      artists: mv.artists,
+    })
+  })
+  return arr
 }

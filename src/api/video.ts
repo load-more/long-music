@@ -113,3 +113,48 @@ export const getVideoComments = (params: {
   url: '/comment/video',
   params,
 })
+
+export const getAllMvs = (params: {
+  area?: '全部' | '内地' | '港台' | '欧美' | '日本' | '韩国',
+  type?: '全部' | '官方版' | '原生' | '现场版' | '网易出品',
+  order?: '上升最快' | '最热' | '最新',
+  limit?: number
+  offset?: number
+}) => request({
+  method: 'GET',
+  url: '/mv/all',
+  params,
+})
+
+export const getNewestMvs = (params: {
+  area?: '全部' | '内地' | '港台' | '欧美' | '日本' | '韩国',
+  limit?: number
+}) => request({
+  method: 'GET',
+  url: '/mv/first',
+  params,
+})
+
+export const getExclusiveMvs = (params: {
+  limit?: number
+  offset?: number
+}) => request({
+  method: 'GET',
+  url: '/mv/exclusive/rcmd',
+  params,
+})
+
+export const getRecommendMvs = () => request({
+  method: 'GET',
+  url: '/personalized/mv',
+})
+
+export const getTopMvs = (params: {
+  area?: '全部' | '内地' | '港台' | '欧美' | '日本' | '韩国',
+  limit?: number
+  offset?: number
+}) => request({
+  method: 'GET',
+  url: '/top/mv',
+  params,
+})

@@ -36,6 +36,7 @@
     <VideoItem
       v-for="(video) in videos"
       :key="video.vid"
+      type="video"
       :video="video"
     />
     <LoadingAnimation class="loading-animation" v-if="isLoading" />
