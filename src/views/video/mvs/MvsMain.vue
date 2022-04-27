@@ -1,7 +1,10 @@
 <template>
   <div>
     <div>
-      <el-button round>
+      <el-button
+        round
+        @click="router.push({ name: 'allVideos', query: { a: 1, o: 2 } })"
+      >
         最新<i class="iconfont icon-right-arrow"></i>
       </el-button>
       <div class="newest-mvs">
@@ -14,7 +17,10 @@
       </div>
     </div>
     <div>
-      <el-button round>
+      <el-button
+        round
+        @click="router.push({ name: 'allVideos', query: { o: 2 } })"
+      >
         热播<i class="iconfont icon-right-arrow"></i>
       </el-button>
       <div class="hot-mvs">
@@ -27,7 +33,10 @@
       </div>
     </div>
     <div>
-      <el-button round>
+      <el-button
+        round
+        @click="router.push({ name: 'allVideos', query: { t: 4, o: 2 } })"
+      >
         独家<i class="iconfont icon-right-arrow"></i>
       </el-button>
       <div class="exclusive-mvs">
@@ -66,7 +75,9 @@ import {
 import { briefMvType } from '@/assets/ts/type'
 import { resolveBriefMvs } from '@/utils/resolve'
 import VideoItem from '@/components/video/VideoItem.vue'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const newestMvs = ref<briefMvType[]>([])
 const hotMvs = ref<briefMvType[]>([])
 const exclusiveMvs = ref<briefMvType[]>([])
