@@ -137,3 +137,41 @@ $login-page-bg-color: $fg-color-1;
   justify-content: center;
   align-items: center;
 }
+
+@mixin bounce-in {
+  animation: bounce-in .25s ease-in backwards;
+}
+@mixin bounce-out {
+  animation: bounce-out .25s ease-in forwards;
+}
+@mixin bounce-hover {
+  animation: bounce-hover .25s ease-in-out forwards;
+}
+
+@keyframes bounce-out {
+  30% {
+    transform: scale(1.1);
+  }
+  to {
+    transform: scale(0);
+  }
+}
+@keyframes bounce-in {
+  from {
+    transform: scale(0);
+  }
+  70% {
+    transform: scale(1.1);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+@keyframes bounce-hover {
+  70% {
+    transform: scale(1.5);
+  }
+  to {
+    transform: scale(1.2);
+  }
+}

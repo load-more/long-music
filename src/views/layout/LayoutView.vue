@@ -39,9 +39,8 @@ emitter.on('onRemoveCurrentSong', () => {
 </script>
 
 <style scoped lang="scss">
-$headerHeight: 70px;
-$footerHeight: 80px;
-$sideWidth: 200px;
+$headerHeight: 40px;
+$footerHeight: 50px;
 #layout-container {
   width: 100%;
   height: 100%;
@@ -52,6 +51,7 @@ $sideWidth: 200px;
     height: $headerHeight;
     position: absolute;
     top: 0;
+    z-index: 99;
   }
   #footer-container {
     width: 100%;
@@ -61,26 +61,45 @@ $sideWidth: 200px;
   }
   #content-container {
     width: 100%;
-    box-sizing: border-box;
-    overflow: hidden;
-    padding-left: $sideWidth;
     position: absolute;
     top: $headerHeight;
     bottom: $footerHeight;
-    #main-container, #sidebar-container {
-      float: left;
-      height: 100%;
-    }
+    display: flex;
     #main-container {
-      width: 100%;
-      height: 100%;
-      background-color: $main-bg-color;
-    }
-    #sidebar-container {
-      width: $sideWidth;
-      margin-left: -100%;
+      flex: 1;
+      margin-left: 10px;
       position: relative;
-      left: -$sideWidth;
+      z-index: 1;
+      overflow: hidden;
+      &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        background-color: rgba(#fff, 0.2);
+        border-radius: 10px;
+      }
+      &::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        z-index: -1;
+        background-image: url('/rainBg.png');
+        background-position: center top;
+        background-size: cover;
+        background-attachment: fixed;
+        -webkit-filter: blur(20px);
+        -moz-filter: blur(20px);
+        -ms-filter: blur(20px);
+        -o-filter: blur(20px);
+        filter: blur(4px);
+        margin: -20px;
+      }
     }
     @media screen and (max-width: 768px) {
       padding-left: 0;

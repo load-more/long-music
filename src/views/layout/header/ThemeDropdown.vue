@@ -52,8 +52,12 @@ const handleCommand = (command: string) => {
   i {
     font-size: 18px;
     margin-right: 15px;
+    display: inline-block;
     cursor: pointer;
     @include hover-font;
+    &:hover {
+      @include bounce-hover;
+    }
   }
 }
 </style>

@@ -122,14 +122,13 @@ const handleDotMouseDown = (event: MouseEvent) => {
     color: $font-inactive-color;
   }
   .bar-wrap {
-    width: 400px;
+    width: 100%;
     height: 3px;
     border-radius: 100px;
     background-color: $bar-bg-color;
     display: flex;
     align-items: center;
     position: relative;
-    margin: 0 10px;
     .bar {
       background-color: $bar-color;
       border-radius: 100px;

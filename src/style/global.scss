@@ -9,6 +9,8 @@ html, body, #app {
   margin: 0;
   padding: 0;
   overflow-x: hidden;
+  background: url('/rainBg.png');
+  background-size: cover;
   /* 避免拖动鼠标选择到文字 */
   -moz-user-select: none;
   -khtml-user-select: none;

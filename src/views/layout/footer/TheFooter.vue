@@ -3,13 +3,12 @@
     <div class="overlay"></div>
     <div class="left">
       <div class="song-image-wrap">
-        <el-avatar
-          :shape="currentSong.album['picUrl'] ? 'square' : 'circle'"
-          :size="60"
+        <el-image
+          class="cover"
           :class="currentSong.album['picUrl'] ? 'song-image' : 'image-holder'"
           :src="currentSong.album['picUrl'] || '/album.png'"
           @click="router.push({ name: 'song', params: { id: currentSong.id } })"
-        ></el-avatar>
+        ></el-image>
       </div>
       <div class="song-info">
         <div
@@ -67,13 +66,6 @@
         <i class="iconfont icon-next" @click="changeSong(1)"></i>
         <i class="iconfont icon-lyrics hidden-xs-only"></i>
       </div>
-      <div class="progress-bar hidden-xs-only">
-        <MusicProgressBar
-          :duration="duration"
-          :current-time="currentTime"
-          @update-current-time="handleUpdateCurrentTime"
-        />
-      </div>
       <div class="mobile-progress-bar hidden-sm-and-up">
         <MusicProgressBar
           :duration="duration"
@@ -97,6 +89,14 @@
       </el-popover>
       <CurrentPlaylist v-model="isOpenList" />
       <i class="iconfont icon-list" @click="isOpenList = !isOpenList"></i>
+    </div>
+    <div class="progress-bar hidden-xs-only">
+      <MusicProgressBar
+        :show-label="false"
+        :duration="duration"
+        :current-time="currentTime"
+        @update-current-time="handleUpdateCurrentTime"
+      />
     </div>
   </div>
 </template>
@@ -160,8 +160,6 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 80px;
-  background-color: $footer-bg-color;
   position: relative;
   .overlay {
     display: none;
@@ -175,10 +173,15 @@ onMounted(() => {
       width: 70%;
     }
     .song-image-wrap {
-      height: 60px;
+      height: 100%;
       margin: 0 10px;
-      cursor: pointer;
+      display: flex;
+      align-items: center;
       .image-holder {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        cursor: pointer;
         animation: rotate ease-in-out 5s infinite;
         @keyframes rotate {
           0% {
@@ -189,11 +192,18 @@ onMounted(() => {
           }
         }
       }
+      .song-image {
+        cursor: pointer;
+        border-radius: 6px;
+        width: 45px;
+        height: 45px;
+      }
     }
     .song-info {
       flex: 1;
       overflow: hidden;
       display: flex;
+      height: 100%;
       flex-direction: column;
       justify-content: space-evenly;
       color: $font-color;
@@ -203,7 +213,6 @@ onMounted(() => {
       }
       .title {
         font-size: 16px;
-        margin-bottom: 10px;
         line-height: 20px;
         .icon-like {
           margin-left: 5px;
@@ -238,10 +247,10 @@ onMounted(() => {
   .mid {
     flex-shrink: 0;
     width: 500px;
-    height: 60px;
     display: flex;
+    height: 100%;
     flex-direction: column;
-    justify-content: space-evenly;
+    justify-content: center;
     @media screen and (max-width: 768px) {
       width: 30%;
     }
@@ -251,14 +260,13 @@ onMounted(() => {
       align-items: center;
       i {
         font-size: 16px;
+        display: inline-block;
         cursor: pointer;
         @include hover-font;
+        &:hover {
+          @include bounce-hover;
+        }
       }
-    }
-    .progress-bar {
-      width: 100%;
-      display: flex;
-      justify-content: center;
     }
     .mobile-progress-bar {
       position: absolute;
@@ -274,10 +282,20 @@ onMounted(() => {
     justify-content: flex-end;
     i {
       font-size: 16px;
+      display: inline-block;
       margin-right: 20px;
       cursor: pointer;
       @include hover-font;
+      &:hover {
+        @include bounce-hover;
+      }
     }
+  }
+  .progress-bar {
+    width: 100%;
+    position: absolute;
+    top: -3px;
+    z-index: 999;
   }
 }
 .disabled {

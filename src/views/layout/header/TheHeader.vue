@@ -1,9 +1,6 @@
 <template>
   <el-row class="container" v-loading.fullscreen.lock="isFullLoading">
     <div class="left">
-      <div>
-        <img src="@/assets/img/logo.png" alt="logo" @click="router.push({ name: 'home' })" />
-      </div>
     </div>
     <div class="mid">
       <SearchInput />
@@ -53,38 +50,30 @@ const isFullLoading = ref(false)
 
 <style scoped lang="scss">
 .container {
-  height: 70px;
-  background-color: $header-bg-color;
+  height: 40px;
   display: flex;
   justify-content: space-between;
+  background-color: rgba(#000, 0.1);
+  box-shadow: 0 5px 10px rgba(#000, 0.1);
+  transition: all .5s ease;
+  &:hover {
+    background-color: rgba(#000, 0.2);
+    box-shadow: 0 6px 10px rgba(#000, 0.2);
+  }
   .left {
-    height: 100%;
-    div {
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      width: 160px;
-      height: 100%;
-      img {
-        padding-left: 20px;
-        height: 60%;
-        cursor: pointer;
-        &:hover {
-          height: 65%;
-        }
-        transition: all 0.1s ease-in;
-      }
-    }
+    width: 160px;
   }
   .mid {
     display: flex;
     align-items: center;
     .icon-left-arrow, .icon-right-arrow, .icon-refresh {
+      display: inline-block;
       @include hover-font;
-      padding-left: 20px;
-    }
-    span {
+      margin-left: 20px;
       cursor: pointer;
+      &:hover {
+        @include bounce-hover;
+      }
     }
   }
   .right {

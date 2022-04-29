@@ -492,7 +492,25 @@ const handlePressEnter = () => {
   align-items: center;
   .el-input {
     width: 250px;
-    margin-left: 10px;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    transition: all .25s ease;
+    &:hover {
+      background-color: rgba(#000, .25);
+      border-color: rgba(#fff, .15);
+    }
+    :deep .el-input__inner {
+      background-color: transparent;
+      &::-webkit-input-placeholder {
+        color: $font-color;
+      }
+      &:-moz-placeholder {
+        color: $font-color;
+      }
+      &:-ms-input-placeholder {
+        color: $font-color;
+      }
+    }
   }
   .icon-microphone {
     @include hover-font;

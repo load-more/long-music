@@ -8,7 +8,6 @@
     <el-avatar
       class="avatar"
       fit="cover"
-      :size="30"
       :src="avatarUrl"
     ></el-avatar>
     <template #dropdown>
@@ -73,17 +72,13 @@ const handleCommand = async (command: string) => {
 </script>
 
 <style scoped lang="scss">
-.el-dropdown-link {
-  @include hover-font;
-  cursor: pointer;
-  i {
-    font-size: 12px;
-  }
-}
 .name-wrap {
   margin-right: 15px;
 }
 .avatar {
   cursor: pointer;
+  display: inline-block;
+  width: 30px;
+  height: 30px;
 }
 </style>
