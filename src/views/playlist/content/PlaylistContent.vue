@@ -100,17 +100,17 @@ emitter.on('onSendPlaylistSubscribers', (count) => {
   }
   .list {
     .item:nth-child(2n) {
-      background-color: $item-bg-color;
+      background-color: $item-color-1;
     }
     .item:nth-child(2n - 1) {
-      background-color: $bg-color-4;
+      background-color: $item-color-2;
     }
     .item:last-child {
       border-bottom-left-radius: 5px;
       border-bottom-right-radius: 5px;
     }
     .item:hover {
-      background-color: $item-hover-bg-color;
+      background-color: $item-hover-color;
     }
     .item:last-child:hover {
       border-bottom-left-radius: 5px;

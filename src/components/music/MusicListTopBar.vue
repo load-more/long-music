@@ -26,11 +26,11 @@
 .topbar {
   display: flex;
   font-size: 14px;
-  background-color: $item-bg-color;
+  background-color: $item-color-1;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
   > *:hover {
-    background-color: $item-hover-bg-color;
+    background-color: $item-hover-color;
   }
   > *:first-child:hover {
     background-color: unset;

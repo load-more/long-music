@@ -69,7 +69,7 @@ const handleClickItem = () => {
   padding: 10px;
   border-radius: 5px;
   margin-right: 10px;
-  background-color: $item-bg-color;
+  background-color: $item-color-1;
   display: flex;
   align-items: center;
   cursor: pointer;

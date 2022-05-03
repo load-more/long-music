@@ -178,8 +178,8 @@ onMounted(() => {
       display: flex;
       align-items: center;
       .image-holder {
-        width: 45px;
-        height: 45px;
+        width: 36px;
+        height: 36px;
         border-radius: 50%;
         cursor: pointer;
         animation: rotate ease-in-out 5s infinite;
@@ -195,8 +195,8 @@ onMounted(() => {
       .song-image {
         cursor: pointer;
         border-radius: 6px;
-        width: 45px;
-        height: 45px;
+        width: 36px;
+        height: 36px;
       }
     }
     .song-info {
@@ -212,7 +212,7 @@ onMounted(() => {
         width: inherit;
       }
       .title {
-        font-size: 16px;
+        font-size: 13px;
         line-height: 20px;
         .icon-like {
           margin-left: 5px;
@@ -236,7 +236,7 @@ onMounted(() => {
         overflow: hidden;
       }
       .singer {
-        font-size: 14px;
+        font-size: 12px;
         .name {
           cursor: pointer;
           @include hover-font;
@@ -301,7 +301,7 @@ onMounted(() => {
 .disabled {
   .overlay {
     display: block;
-    background-color: $footer-overlay-bg-color;
+    background-color: red;
     opacity: 0.4;
     position: absolute;
     width: 100%;

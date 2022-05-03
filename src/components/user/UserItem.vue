@@ -34,12 +34,12 @@ const router = useRouter()
   justify-content: space-between;
   align-items: center;
   padding: 10px;
-  background-color: $bg-color-3;
+  background-color: $item-color-1;
   border-radius: 15px;
   margin: 10px 0;
   cursor: pointer;
   &:hover {
-    background-color: $bg-color-1;
+    background-color: $item-hover-color;
   }
   .left {
     display: flex;

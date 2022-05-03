@@ -92,19 +92,13 @@ const handleDotMousedown = (event: MouseEvent) => {
     width: 5px;
     height: 100px;
     border-radius: 3px;
-    background-color: $bar-bg-color;
+    background-color: $theme-color-2;
     display: flex;
     flex-direction: column-reverse;
-    &:hover {
-      box-shadow: $bar-box-shadow;
-      .dot {
-        box-shadow: $bar-box-shadow;
-      }
-    }
     .bar {
       width: 5px;
       border-radius: 3px;
-      background-color: $bar-color;
+      background-color: $theme-color-1;
       min-height: 0;
       max-height: 100px;
     }
@@ -113,7 +107,7 @@ const handleDotMousedown = (event: MouseEvent) => {
       width: 10px;
       height: 10px;
       border-radius: 50%;
-      background-color: $bar-color;
+      background-color: $theme-color-1;
       margin-left: -2.5px;
       margin-bottom: -5px;
     }

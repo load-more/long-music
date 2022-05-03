@@ -172,7 +172,7 @@ onBeforeMount(async () => {
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background-color: $carousel-button-color;
+    background-color: $theme-color-1;
   }
   .el-carousel__item {
     display: flex;

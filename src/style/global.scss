@@ -48,9 +48,8 @@ body {
     width: 30px !important;
     min-width: 0;
     padding: 10px 0;
-    background-color: $popper-bg-color;
+    margin-left: -7px !important;
     border: none;
-    box-shadow: $popper-box-shadow;
   }
   .el-popper__arrow {
     transform: translate(10px, 0) !important;
@@ -61,7 +60,6 @@ body {
     width: 400px !important;
     height: 450px;
     padding: 0;
-    background-color: $search-bg-color;
     color: $font-inactive-color;
     border: none;
     .search-board-wrap {
@@ -88,14 +86,14 @@ body {
           padding: 0 20px;
         }
         .el-tag {
-          background-color: $search-tag-color;
+          background-color: $theme-color-1;
           color: $font-color;
           border: none;
           margin-right: 10px;
           margin-bottom: 10px;
           cursor: pointer;
           &:hover {
-            background-color: $search-tag-hover-color;
+            background-color: $theme-color-2;
           }
           i {
             color: $font-inactive-color;
@@ -115,7 +113,7 @@ body {
           border-radius: 10px;
           cursor: pointer;
           &:hover {
-            background-color: $item-hover-bg-color;
+            background-color: $item-hover-color;
           }
           .index {
             display: inline-block;
@@ -149,18 +147,19 @@ body {
           }
         }
         .active {
-          background-color: $item-hover-bg-color;
+          background-color: $item-hover-color;
         }
       }
     }
     .search-suggest-wrap {
       padding-bottom: 20px;
+      color: $font-color;
       .label {
         display: inline-block;
         font-size: 15px;
         margin: 10px 0;
         margin-left: 10px;
-        color: gray;
+        color: $font-inactive-color;
         span {
           font-weight: bold;
         }
@@ -176,15 +175,15 @@ body {
         margin: 0 25px;
         border-radius: 5px;
         &:hover {
-          background-color: $bg-color-1;
+          background-color: $item-hover-color;
         }
       }
       .alias {
-        color: gray;
+        color: $font-inactive-color;
         font-size: 12px;
       }
       .active {
-        background-color: $item-hover-bg-color;
+        background-color: $item-hover-color;
         .label-content, .iconfont {
           color: $font-color;
         }
@@ -200,9 +199,8 @@ body {
   }
 
   .el-popper.dropdown {
-    background-color: $dropdown-bg-color !important;
+    background-color: $popper-bg-color !important;
     border: none !important;
-    box-shadow: $dropdown-box-shadow !important;
     .el-dropdown-menu {
       background-color: unset;
     }
@@ -212,7 +210,7 @@ body {
   }
 
   .el-popper {
-    background-color: $bg-color-3 !important;
+    background-color: $popper-bg-color !important;
     border: none !important;
     .el-popper__arrow {
       display: none !important;
@@ -222,7 +220,7 @@ body {
   // current playlist drawer
   .el-overlay {
     // 设置遮罩层高度
-    bottom: 80px;
+    bottom: 43px;
     height: auto;
     .list-drawer {
       background-color: $popper-bg-color;
@@ -266,7 +264,7 @@ body {
           padding: 10px 0;
           margin-right: 20px;
           border-radius: 5px;
-          background-color: $item-bg-color;
+          background-color: $item-color-1;
           margin-bottom: 10px;
           display: flex;
           font-size: 12px;
@@ -278,9 +276,10 @@ body {
             .icon-play-hollow {
               display: none;
               cursor: pointer;
-              &:hover {
-                color: $font-active-color;
-              }
+              @include hover-font;
+            }
+            .icon-volume, .icon-close-volume {
+              color: $theme-color-1;
             }
             i {
               font-size: 12px;
@@ -298,10 +297,11 @@ body {
             width: 40px;
           }
           &:hover {
-            background-color: $bg-color-1;
+            background-color: $item-hover-color;
             .operation {
               .icon-play-hollow {
                 display: block;
+                @include bounce-in;
               }
               .index {
                 display: none;
@@ -310,7 +310,7 @@ body {
           }
         }
         .active {
-          background-color: $item-active-bg-color;
+          background-color: $item-active-color;
           .title, .singer {
             color: $font-active-color;
           }
@@ -330,51 +330,22 @@ body {
   }
 
   .el-dropdown__popper {
-    --el-dropdown-menuItem-hover-fill: var(--bg-color-4);
+    --el-dropdown-menuItem-hover-fill: rgb(80, 80, 80);
     --el-dropdown-menuItem-hover-color: #fff;
   }
 
   .el-select-dropdown__item.hover, .el-select-dropdown__item:hover {
     background-color: var(--bg-color-4);
   }
-}
 
-$themeDict: (
-  green: #15201a,
-  yellow: #563200,
-  red: #6f0f07,
-  blue: #01151c,
-  black: #000000,
-  pink: #a63c78,
-);
-@each $key, $value in $themeDict {
-  .#{$key}-gradient::after {
-    width: 300%;
-    height: 100%;
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    background: linear-gradient(
-      to right,
-      rgba($value, 0.6) 0%,
-      rgba($value, 0.6) 40%,
-      rgba($value, 0) 50%,
-      rgba($value, 0.6) 60%,
-      rgba($value, 0.6) 100%
-    );
-    animation: slide ease-in-out 3s infinite;
-    @keyframes slide {
-      0% {
-        -webkit-transform: translateX(-66.666%);
-      }
-      100% {
-        -webkit-transform: translateX(0);
-      }
-    }
+  .el-textarea .el-input__count {
+    background-color: unset;
   }
 }
 
 .primary-btn {
-  background-color: $fg-color-2 !important;
+  background-color: $theme-color-1 !important;
+  span {
+    color: #fff;
+  }
 }

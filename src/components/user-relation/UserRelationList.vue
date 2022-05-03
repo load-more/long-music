@@ -176,7 +176,7 @@ const handleClickFollow = async (uid: number) => {
     box-sizing: border-box;
     border-radius: 20px;
     &:hover {
-      background-color: $bg-color-1;
+      background-color: $item-hover-color;
     }
     .left {
       width: 80px;

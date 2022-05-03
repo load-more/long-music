@@ -79,14 +79,13 @@ const toggleReadMore = () => {
       height: 200px;
       border-radius: 10px;
       margin-right: 20px;
-      box-shadow: $image-box-shadow;
     }
   }
   .info {
     flex: 1;
     overflow: hidden;
     .title, .alias, .controls {
-      padding-bottom: 16px;
+      padding-bottom: 20px;
     }
     .controls i {
       padding-left: 5px;
@@ -96,37 +95,12 @@ const toggleReadMore = () => {
       min-width: 0;
       font-size: 22px;
       font-weight: bold;
-      .label {
-        font-size: 13px;
-        color: $title-label-color;
-        border: 1px solid $title-label-color;
-        padding: 1px 2px;
-        border-radius: 5px;
-        margin-right: 10px;
-      }
-      .icon-edit {
-        font-size: 28px;
-        font-weight: normal;
-        margin-left: 10px;
-        cursor: pointer;
-        @include hover-font;
-      }
-    }
-    .creator {
-      .name {
-        color: $creator-label-color;
-        font-size: 15px;
-        cursor: pointer;
-        margin-right: 10px;
-      }
-      .create-time {
-        font-size: 13px;
-      }
     }
     .song-detail {
+      margin-top: 20px;
       font-size: 15px;
       .label {
-        color: $font-inactive-color;
+        color: $label-color;
         font-weight: 800;
       }
       .content {

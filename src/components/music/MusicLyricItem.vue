@@ -201,7 +201,6 @@ const handleClickCopy = () => {
 .music-list-item-wrap {
   padding-bottom: 10px;
   &:hover {
-    background-color: $bg-color-1;
     .pc .operation {
       .index {
         display: none;
@@ -229,7 +228,7 @@ const handleClickCopy = () => {
         text-align: center;
       }
       .icon-volume, .icon-close-volume {
-        color: $current-play-icon-color;
+        color: $theme-color-1;
       }
       .icon-like, .icon-download, .icon-play-hollow {
         cursor: pointer;
@@ -327,7 +326,7 @@ const handleClickCopy = () => {
 }
 .active {
   > div {
-    background-color: $item-active-bg-color !important;
+    background-color: $item-active-color !important;
   }
 }
 </style>

@@ -244,7 +244,7 @@ const handleFollowOrUnfollow = async () => {
   .left {
     width: 200px;
     height: 200px;
-    margin-right: 10px;
+    margin-right: 20px;
     .avatar {
       width: 100%;
       height: 100%;
@@ -272,7 +272,7 @@ const handleFollowOrUnfollow = async () => {
       }
       .level {
         font-size: 12px;
-        background-color: $level-label-color;
+        background-color: $theme-color-1;
         padding: 1px 5px;
         border-radius: 20px;
         margin-right: 10px;
@@ -284,7 +284,7 @@ const handleFollowOrUnfollow = async () => {
         font-weight: bold;
         font-size: 12px;
         .icon-male, .icon-female {
-          color: $gender-icon-color;
+          color: $theme-color-1;
         }
       }
     }
@@ -302,7 +302,8 @@ const handleFollowOrUnfollow = async () => {
         }
         .label {
           font-size: 14px;
-          color: $font-inactive-color;
+          font-weight: 800;
+          color: $label-color;
         }
         .mid-wrap {
           display: flex;
@@ -339,7 +340,8 @@ const handleFollowOrUnfollow = async () => {
     }
     .bottom-profile {
       .label {
-        color: $font-inactive-color;
+        color: $label-color;
+        font-weight: 800;
         font-size: 15px;
       }
       .content {

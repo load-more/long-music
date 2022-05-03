@@ -1,5 +1,8 @@
 <template>
-  <el-row class="container" v-loading.fullscreen.lock="isFullLoading">
+  <el-row
+    class="container"
+    v-loading.fullscreen.lock="isFullLoading"
+  >
     <div class="left">
     </div>
     <div class="mid">

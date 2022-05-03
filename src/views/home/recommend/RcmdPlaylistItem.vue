@@ -67,7 +67,6 @@ const handleClickPlaylist = () => {
       }
     }
     .play-icon {
-      background-color: rgba($play-icon-bg-color, 0.6);
       width: 26px;
       height: 26px;
       border-radius: 50%;
@@ -81,11 +80,13 @@ const handleClickPlaylist = () => {
       transition: all 0.2s ease-in-out;
       i {
         font-size: 30px;
-        color: $play-icon-color;
         vertical-align: middle;
+        color: $theme-color-1;
+        &:hover {
+          color: $theme-color-2;
+        }
       }
       &:hover {
-        background-color: rgba($play-icon-bg-color, 0.9);
         opacity: 1;
         cursor: pointer;
       }

@@ -70,8 +70,8 @@ const router = useRouter()
   color: $font-color;
   border-radius: 10px;
   padding: 20px;
-  margin: 20px 0;
-  background-color: $bg-color-3;
+  margin: 10px 0;
+  background-color: $item-color-1;
   font-size: 14px;
   .left {
     margin-right: 20px;
@@ -82,11 +82,7 @@ const router = useRouter()
   .right {
     flex-grow: 1;
     .user-name {
-      cursor: pointer;
-      color: rgb(101, 101, 255);
-      &:hover {
-        color: $font-active-color;
-      }
+      @include user-name-color;
     }
     .comment {
       margin-bottom: 10px;
@@ -95,7 +91,7 @@ const router = useRouter()
       padding: 10px;
       margin-bottom: 10px;
       border-radius: 10px;
-      background-color: $bg-color-2;
+      background-color: $item-active-color;
     }
     .bottom {
       display: flex;

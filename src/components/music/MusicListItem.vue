@@ -171,11 +171,12 @@ const handleClickMv = () => {
         text-align: center;
       }
       .icon-volume, .icon-close-volume {
-        color: $current-play-icon-color;
+        color: $theme-color-1;
       }
       .icon-like, .icon-download, .icon-play-hollow {
         cursor: pointer;
         &:hover {
+          @include bounce-hover;
           color: $font-active-color;
         }
       }
@@ -188,6 +189,7 @@ const handleClickMv = () => {
         display: none;
       }
       .icon-play-hollow {
+        @include bounce-in;
         display: block;
       }
     }
@@ -200,8 +202,8 @@ const handleClickMv = () => {
         flex-shrink: 0;
         .tag {
           font-size: 12px;
-          color: red;
-          border: 1px solid red;
+          color: $type-color;
+          border: 1px solid $type-color;
           padding: 0 3px;
           border-radius: 5px;
           margin-left: 5px;
@@ -263,7 +265,7 @@ const handleClickMv = () => {
     .mobile {
       display: flex;
       align-items: center;
-      background-color: $item-bg-color;
+      background-color: $item-color-1;
       color: $font-color;
       font-size: 14px;
       padding: 10px 0;
@@ -272,7 +274,7 @@ const handleClickMv = () => {
       line-height: 20px;
       cursor: default;
       &:hover {
-        background-color: $item-hover-bg-color;
+        background-color: $item-hover-color;
       }
       .operation {
         width: 40px;
@@ -284,7 +286,7 @@ const handleClickMv = () => {
           text-align: center;
         }
         .icon-volume, .icon-close-volume {
-          color: $current-play-icon-color;
+          color: $theme-color-1;
         }
         .icon-like, .icon-download {
           cursor: pointer;
@@ -313,7 +315,7 @@ const handleClickMv = () => {
 }
 .active {
   > div {
-    background-color: $item-active-bg-color !important;
+    background-color: $item-active-color !important;
   }
 }
 </style>

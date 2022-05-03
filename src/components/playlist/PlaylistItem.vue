@@ -57,11 +57,11 @@ const router = useRouter()
   height: 90px;
   border-radius: 10px;
   margin-bottom: 10px;
-  background-color: $item-bg-color;
+  background-color: $item-color-1;
   color: $font-color;
   cursor: pointer;
   &:hover {
-    background-color: $item-hover-bg-color;
+    background-color: $item-hover-color;
   }
   .left {
     box-sizing: border-box;

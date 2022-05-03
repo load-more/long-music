@@ -74,7 +74,7 @@ const handleFinishLoading = () => {
     .keyword {
       font-size: 20px;
       font-weight: bold;
-      color: $search-keyword-color;
+      color: $theme-color-1;
     }
   }
   .scroll-bar {

@@ -17,7 +17,11 @@
       <div class="artist single-line-ellipsis">
         <span class="name">{{ album?.artist.name }}</span>
         <span class="publish-time" v-if="album?.publishTime">
-          创建时间：{{ publishTime }}</span>
+          <span class="label">
+            创建时间：
+          </span>
+          <span>{{ publishTime }}</span>
+        </span>
       </div>
       <div class="controls single-line-ellipsis">
         <el-button class="primary-btn" round>播放<i class="iconfont icon-play-circle"></i></el-button>
@@ -98,7 +102,6 @@ const toggleReadMore = () => {
       height: 200px;
       border-radius: 10px;
       margin-right: 20px;
-      box-shadow: $image-box-shadow;
     }
   }
   .info {
@@ -117,8 +120,8 @@ const toggleReadMore = () => {
       font-weight: bold;
       .label {
         font-size: 13px;
-        color: $title-label-color;
-        border: 1px solid $title-label-color;
+        color: $type-color;
+        border: 1px solid $type-color;
         padding: 1px 2px;
         border-radius: 5px;
         margin-right: 10px;
@@ -133,19 +136,21 @@ const toggleReadMore = () => {
     }
     .artist {
       .name {
-        color: $creator-label-color;
+        @include user-name-color;
         font-size: 15px;
-        cursor: pointer;
         margin-right: 10px;
       }
       .publish-time {
         font-size: 13px;
+        .label {
+          color: $label-color;
+        }
       }
     }
     .song-detail {
       font-size: 15px;
       .label {
-        color: $font-inactive-color;
+        color: $label-color;
         font-weight: 800;
       }
       .content {
@@ -154,13 +159,13 @@ const toggleReadMore = () => {
       .tags {
         padding-bottom: 10px;
         .content {
-          background-color: $playlist-tag-color;
+          background-color: $theme-color-1;
           padding: 1px 5px;
           margin-right: 5px;
           border-radius: 10px;
           cursor: pointer;
           &:hover {
-            background-color: $playlist-tag-hover-color;
+            background-color: $theme-color-2;
           }
         }
       }
@@ -181,7 +186,7 @@ const toggleReadMore = () => {
       }
     }
     .alias {
-      color: gray;
+      color: $font-inactive-color;
     }
   }
   @media screen and (max-width: 768px) {

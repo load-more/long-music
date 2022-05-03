@@ -125,12 +125,12 @@ const handleDotMouseDown = (event: MouseEvent) => {
     width: 100%;
     height: 3px;
     border-radius: 100px;
-    background-color: $bar-bg-color;
+    background-color: $theme-color-2;
     display: flex;
     align-items: center;
     position: relative;
     .bar {
-      background-color: $bar-color;
+      background-color: $theme-color-1;
       border-radius: 100px;
       border-top-right-radius: 0px;
       border-bottom-right-radius: 0px;
@@ -140,15 +140,15 @@ const handleDotMouseDown = (event: MouseEvent) => {
       width: 10px;
       height: 10px;
       border-radius: 50%;
-      background-color: $bar-color;
+      background-color: $theme-color-1;
       margin-left: -5px;
       display: none;
-      box-shadow: $bar-box-shadow;
     }
   }
   .bar-wrap:hover, .active {
-    height: 5px;
+    transform: scaleY(1.6);
     .dot {
+      transform: scaleY(0.625);
       display: block;
     }
   }

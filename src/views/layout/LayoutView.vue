@@ -40,7 +40,7 @@ emitter.on('onRemoveCurrentSong', () => {
 
 <style scoped lang="scss">
 $headerHeight: 40px;
-$footerHeight: 50px;
+$footerHeight: 43px;
 #layout-container {
   width: 100%;
   height: 100%;
@@ -65,41 +65,11 @@ $footerHeight: 50px;
     top: $headerHeight;
     bottom: $footerHeight;
     display: flex;
+    margin-bottom: 7px;
     #main-container {
       flex: 1;
       margin-left: 10px;
-      position: relative;
-      z-index: 1;
-      overflow: hidden;
-      &::before {
-        content: '';
-        position: absolute;
-        left: 0;
-        right: 0;
-        top: 0;
-        bottom: 0;
-        background-color: rgba(#fff, 0.2);
-        border-radius: 10px;
-      }
-      &::after {
-        content: '';
-        position: absolute;
-        left: 0;
-        right: 0;
-        top: 0;
-        bottom: 0;
-        z-index: -1;
-        background-image: url('/rainBg.png');
-        background-position: center top;
-        background-size: cover;
-        background-attachment: fixed;
-        -webkit-filter: blur(20px);
-        -moz-filter: blur(20px);
-        -ms-filter: blur(20px);
-        -o-filter: blur(20px);
-        filter: blur(4px);
-        margin: -20px;
-      }
+      @include glass-background;
     }
     @media screen and (max-width: 768px) {
       padding-left: 0;
