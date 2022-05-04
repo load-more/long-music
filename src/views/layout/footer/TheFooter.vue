@@ -1,14 +1,14 @@
 <template>
-  <div class="footer-wrap" :class="{'disabled': !currentSong.id}">
-    <div class="overlay"></div>
+  <div class="footer-wrap">
     <div class="left">
       <div class="song-image-wrap">
         <el-image
-          class="cover"
-          :class="currentSong.album['picUrl'] ? 'song-image' : 'image-holder'"
-          :src="currentSong.album['picUrl'] || '/album.png'"
+          class="cover song-image"
+          v-if="currentSong.id"
+          :src="currentSong.album['picUrl']"
           @click="router.push({ name: 'song', params: { id: currentSong.id } })"
         ></el-image>
+        <div v-else class="typing-words"><span class="line">匆匆岁月，余音悠长。</span></div>
       </div>
       <div class="song-info">
         <div
@@ -24,10 +24,6 @@
             <span v-if="currentSong.alias.length">&nbsp;({{ currentSong.alias[0] }})</span>
           </span>
           <i class="iconfont icon-like"></i>
-        </div>
-        <div class="title-holder" v-else>
-          <span>匆匆岁月</span>
-          <span>余音悠长</span>
         </div>
         <div class="singer single-line-ellipsis">
           <span
@@ -46,33 +42,35 @@
       </div>
     </div>
     <div class="mid">
-      <div class="play-controls">
-        <span class="hidden-xs-only">
-          <el-tooltip placement="top" :show-arrow="false">
-            <template #content>{{ playModeLabel[playModeIndex] }}</template>
-            <i
-              :class="`iconfont icon-${playMode[playModeIndex]}`"
-              @click="changePlayMode"
-            ></i>
-          </el-tooltip>
-        </span>
-        <i class="iconfont icon-previous" @click="changeSong(-1)"></i>
-        <i
-          class="iconfont icon-pause"
-          v-if="isPlayed"
-          @click="pauseMusic"
-        ></i>
-        <i class="iconfont icon-play" v-else @click="playMusic"></i>
-        <i class="iconfont icon-next" @click="changeSong(1)"></i>
-        <i class="iconfont icon-lyrics hidden-xs-only"></i>
-      </div>
-      <div class="mobile-progress-bar hidden-sm-and-up">
-        <MusicProgressBar
-          :duration="duration"
-          :current-time="currentTime"
-          :show-label="false"
-          @update-current-time="handleUpdateCurrentTime"
-        />
+      <div v-if="currentSong.id">
+        <div class="play-controls">
+          <span class="hidden-xs-only">
+            <el-tooltip placement="top" :show-arrow="false">
+              <template #content>{{ playModeLabel[playModeIndex] }}</template>
+              <i
+                :class="`iconfont icon-${playMode[playModeIndex]}`"
+                @click="changePlayMode"
+              ></i>
+            </el-tooltip>
+          </span>
+          <i class="iconfont icon-previous" @click="changeSong(-1)"></i>
+          <i
+            class="iconfont icon-pause"
+            v-if="isPlayed"
+            @click="pauseMusic"
+          ></i>
+          <i class="iconfont icon-play" v-else @click="playMusic"></i>
+          <i class="iconfont icon-next" @click="changeSong(1)"></i>
+          <i class="iconfont icon-lyrics hidden-xs-only"></i>
+        </div>
+        <div class="mobile-progress-bar hidden-sm-and-up">
+          <MusicProgressBar
+            :duration="duration"
+            :current-time="currentTime"
+            :show-label="false"
+            @update-current-time="handleUpdateCurrentTime"
+          />
+        </div>
       </div>
     </div>
     <div class="right hidden-xs-only">
@@ -90,7 +88,10 @@
       <CurrentPlaylist v-model="isOpenList" />
       <i class="iconfont icon-list" @click="isOpenList = !isOpenList"></i>
     </div>
-    <div class="progress-bar hidden-xs-only">
+    <div
+      class="progress-bar hidden-xs-only"
+      v-if="currentSong.id"
+    >
       <MusicProgressBar
         :show-label="false"
         :duration="duration"
@@ -161,9 +162,6 @@ onMounted(() => {
   justify-content: space-between;
   align-items: center;
   position: relative;
-  .overlay {
-    display: none;
-  }
   .left {
     width: 25%;
     height: 100%;
@@ -177,26 +175,40 @@ onMounted(() => {
       margin: 0 10px;
       display: flex;
       align-items: center;
-      .image-holder {
-        width: 36px;
-        height: 36px;
-        border-radius: 50%;
-        cursor: pointer;
-        animation: rotate ease-in-out 5s infinite;
-        @keyframes rotate {
-          0% {
-            transform: rotateZ(0);
-          }
-          100% {
-            transform: rotateZ(360deg);
-          }
-        }
-      }
       .song-image {
         cursor: pointer;
         border-radius: 6px;
         width: 36px;
         height: 36px;
+      }
+      .typing-words {
+        color: $font-color;
+        width: 154px;
+        .line {
+          display: inline-block;
+          border-right: 1px solid transparent;
+          font-size: 14px;
+          font-family: monospace;
+          white-space: nowrap;
+          overflow: hidden;
+          animation: typing 8s steps(11) infinite alternate, caret 1s infinite;
+        }
+        @keyframes typing {
+          from {
+            width: 0;
+          }
+          30% {
+            width: 100%;
+          }
+          to {
+            width: 100%;
+          }
+        }
+        @keyframes caret {
+          to {
+            border-right-color: #fff;
+          }
+        }
       }
     }
     .song-info {
@@ -221,19 +233,6 @@ onMounted(() => {
           cursor: pointer;
           @include hover-font;
         }
-      }
-      .title-holder {
-        font-family: 'yahei';
-        display: flex;
-        flex-direction: column;
-        span:nth-child(1) {
-          margin-bottom: 5px;
-        }
-        // 实现文字扫光效果
-        width: 64px;
-        position: relative;
-        color: $font-color;
-        overflow: hidden;
       }
       .singer {
         font-size: 12px;
@@ -296,18 +295,6 @@ onMounted(() => {
     position: absolute;
     top: -3px;
     z-index: 999;
-  }
-}
-.disabled {
-  .overlay {
-    display: block;
-    background-color: red;
-    opacity: 0.4;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    z-index: 9999;
-    cursor: not-allowed;
   }
 }
 </style>
