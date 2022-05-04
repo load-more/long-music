@@ -8,7 +8,7 @@
         <ArtistContent :hot-songs="(hotSongs as songType[])" :id="id" />
       </div>
     </el-scrollbar>
-    <LoadingAnimation v-if="isLoading" />
+    <WaveSpinner v-if="isLoading" />
   </div>
 </template>
 
@@ -18,7 +18,7 @@ import { getArtist } from '@/api/artist'
 import { useRoute } from 'vue-router'
 import type { artistType, songType } from '@/assets/ts/type'
 import { resolveArtist, resolveSearchSongsDetail } from '@/utils/resolve'
-import LoadingAnimation from '@/components/loading/LoadingAnimation.vue'
+import WaveSpinner from '@/components/loading/WaveSpinner.vue'
 import ArtistProfile from './profile/ArtistProfile.vue'
 import ArtistContent from './content/ArtistContent.vue'
 

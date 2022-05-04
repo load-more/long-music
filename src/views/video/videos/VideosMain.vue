@@ -39,7 +39,7 @@
       type="video"
       :video="video"
     />
-    <LoadingAnimation class="loading-animation" v-if="isLoading" />
+    <RoundSpinner class="loading-animation" v-if="isLoading" />
   </div>
 </template>
 
@@ -54,7 +54,7 @@ import {
 import { videoTagType, videoType } from '@/assets/ts/type'
 import { resolveVideoTags, resolveDetailVideos } from '@/utils/resolve'
 import VideoItem from '@/components/video/VideoItem.vue'
-import LoadingAnimation from '@/components/loading/LoadingAnimation.vue'
+import RoundSpinner from '@/components/loading/RoundSpinner.vue'
 
 const activeTagName = ref('全部')
 const activeTagId = ref(0)

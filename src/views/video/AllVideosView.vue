@@ -52,7 +52,7 @@
           </div>
         </MyPagination>
       </div>
-      <LoadingAnimation v-if="isLoading" />
+      <WaveSpinner v-if="isLoading" />
     </el-scrollbar>
   </div>
 </template>
@@ -64,7 +64,7 @@ import { getAllMvs } from '@/api/video'
 import { useRoute, useRouter } from 'vue-router'
 import VideoItem from '@/components/video/VideoItem.vue'
 import MyPagination from '@/components/pagination/MyPagination.vue'
-import LoadingAnimation from '@/components/loading/LoadingAnimation.vue'
+import WaveSpinner from '@/components/loading/WaveSpinner.vue'
 
 const route = useRoute()
 const router = useRouter()

@@ -8,7 +8,7 @@
         <CommentsCpn :id="songId" type="song" @finish-loading="handleFinishLoading" />
       </div>
     </el-scrollbar>
-    <LoadingAnimation v-if="isLoading" />
+    <WaveSpinner v-if="isLoading" />
   </div>
 </template>
 
@@ -16,7 +16,7 @@
 import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 import CommentsCpn from '@/components/comments/CommentsCpn.vue'
-import LoadingAnimation from '@/components/loading/LoadingAnimation.vue'
+import WaveSpinner from '@/components/loading/WaveSpinner.vue'
 import SongDetail from './detail/SongDetail.vue'
 
 const route = useRoute()

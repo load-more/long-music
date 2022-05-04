@@ -8,7 +8,7 @@
         <AlbumContent :id="id" :songs="albumSongs" :album-desc="album?.description || ''" />
       </div>
     </el-scrollbar>
-    <LoadingAnimation v-if="isLoading" />
+    <WaveSpinner v-if="isLoading" />
   </div>
 </template>
 
@@ -18,7 +18,7 @@ import { useRoute } from 'vue-router'
 import { getAlbumDetail } from '@/api/album'
 import { resolveAlbumDetail, resolveSearchSongsDetail } from '@/utils/resolve'
 import type { albumDetailType, songType } from '@/assets/ts/type'
-import LoadingAnimation from '@/components/loading/LoadingAnimation.vue'
+import WaveSpinner from '@/components/loading/WaveSpinner.vue'
 import AlbumProfile from './profile/AlbumProfile.vue'
 import AlbumContent from './content/AlbumContent.vue'
 

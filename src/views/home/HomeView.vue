@@ -10,13 +10,13 @@
         <RcmdPlaylist @finish-loading="handleFinishLoading" />
       </div>
     </el-scrollbar>
-    <LoadingAnimation v-if="isLoading" />
+    <WaveSpinner v-if="isLoading" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import LoadingAnimation from '@/components/loading/LoadingAnimation.vue'
+import WaveSpinner from '@/components/loading/WaveSpinner.vue'
 import HomeBanner from './banner/HomeBanner.vue'
 import RcmdPlaylist from './recommend/RcmdPlaylist.vue'
 

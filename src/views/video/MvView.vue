@@ -18,7 +18,7 @@
         </div>
       </div>
     </el-scrollbar>
-    <LoadingAnimation v-if="isLoading" />
+    <WaveSpinner v-if="isLoading" />
   </div>
 </template>
 
@@ -47,7 +47,7 @@ import VideoPlayer from '@/components/video/VideoPlayer.vue'
 import VideoDetail from '@/components/video/VideoDetail.vue'
 import VideoRelated from '@/components/video/VideoRelated.vue'
 import CommentsCpn from '@/components/comments/CommentsCpn.vue'
-import LoadingAnimation from '@/components/loading/LoadingAnimation.vue'
+import WaveSpinner from '@/components/loading/WaveSpinner.vue'
 
 const route = useRoute()
 const id = Number(route.params.id)

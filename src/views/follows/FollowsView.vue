@@ -11,7 +11,7 @@
         />
       </div>
     </el-scrollbar>
-    <LoadingAnimation v-if="isLoading" />
+    <WaveSpinner v-if="isLoading" />
   </div>
 </template>
 
@@ -20,7 +20,7 @@ import { onBeforeMount, ref } from 'vue'
 import { getUserDetail } from '@/api/user'
 import { useRoute } from 'vue-router'
 import UserRelation from '@/components/user-relation/UserRelation.vue'
-import LoadingAnimation from '@/components/loading/LoadingAnimation.vue'
+import WaveSpinner from '@/components/loading/WaveSpinner.vue'
 import useUserStore from '@/store/user'
 import { storeToRefs } from 'pinia'
 

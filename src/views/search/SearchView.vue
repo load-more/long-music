@@ -21,16 +21,19 @@
         />
       </div>
     </el-scrollbar>
-    <LoadingAnimation v-if="isLoading" />
+    <WaveSpinner v-if="isLoading" />
   </div>
 </template>
 
 <script setup lang="ts">
 import {
-  computed, ref, watch, nextTick,
+  computed,
+  ref,
+  watch,
+  nextTick,
 } from 'vue'
 import { useRoute } from 'vue-router'
-import LoadingAnimation from '@/components/loading/LoadingAnimation.vue'
+import WaveSpinner from '@/components/loading/WaveSpinner.vue'
 import SearchRecommend from './recommend/SearchRecommend.vue'
 import SearchResult from './result/SearchResult.vue'
 
@@ -42,13 +45,16 @@ const keyword = computed(() => {
   }
   return route.query.kw
 })
-watch(() => route.query, () => {
-  // 当路由的 query 内容改变，刷新组件
-  isShowCpn.value = false
-  nextTick(() => {
-    isShowCpn.value = true
-  })
-})
+watch(
+  () => route.query,
+  () => {
+    // 当路由的 query 内容改变，刷新组件
+    isShowCpn.value = false
+    nextTick(() => {
+      isShowCpn.value = true
+    })
+  },
+)
 
 const isLoading = ref(true)
 const loadedCount = ref(0)
@@ -68,7 +74,8 @@ const handleFinishLoading = () => {
     display: inline-block;
     margin-top: 20px;
     margin-left: 20px;
-    .left, .right {
+    .left,
+    .right {
       font-size: 16px;
     }
     .keyword {
@@ -80,7 +87,8 @@ const handleFinishLoading = () => {
   .scroll-bar {
     height: 100%;
   }
-  .search-recommend-container, .search-result-container {
+  .search-recommend-container,
+  .search-result-container {
     padding: 20px;
   }
 }

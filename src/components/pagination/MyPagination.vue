@@ -15,13 +15,13 @@
       >
       </el-pagination>
     </div>
-    <LoadingAnimation class="loading-animation" v-if="isLoading" />
+    <RoundSpinner class="loading-animation" v-if="isLoading" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import LoadingAnimation from '@/components/loading/LoadingAnimation.vue'
+import RoundSpinner from '@/components/loading/RoundSpinner.vue'
 
 const props = defineProps<{
   pageSize: number
@@ -58,7 +58,7 @@ const handleCurrentPageChange = () => {
   }
   .loading-animation {
     font-size: 3px;
-    padding: 20px;
+    padding: 20px 0;
   }
 }
 </style>

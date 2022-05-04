@@ -1,8 +1,5 @@
 <template>
-  <el-row
-    class="container"
-    v-loading.fullscreen.lock="isFullLoading"
-  >
+  <el-row class="container">
     <div class="left">
     </div>
     <div class="mid">
@@ -26,6 +23,11 @@
           :avatar-url="avatarUrl"
           @logout="isFullLoading = true"
         />
+        <teleport to="body">
+          <div class="spinner-wrap" v-if="isFullLoading">
+            <RoundSpinner />
+          </div>
+        </teleport>
       </div>
     </div>
   </el-row>
@@ -36,6 +38,7 @@ import { storeToRefs } from 'pinia'
 import useUserStore from '@/store/user'
 import { useRouter } from 'vue-router'
 import { ref } from 'vue'
+import RoundSpinner from '@/components/loading/RoundSpinner.vue'
 import SearchInput from './SearchInput.vue'
 import UserDropdown from './UserDropdown.vue'
 import ThemeDropdown from './ThemeDropdown.vue'
