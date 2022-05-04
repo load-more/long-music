@@ -7,6 +7,7 @@
         type="card"
         :autoplay="true"
         :interval="5000"
+        :height="`${imgHeight / 2}px`"
         @change="handleBannerChange"
       >
         <el-carousel-item
@@ -32,7 +33,7 @@
         v-if="bannerArr.length"
         :autoplay="true"
         :interval="5000"
-        height="278px"
+        :height="`${imgHeight}px`"
         @change="handleBannerChange"
       >
         <el-carousel-item
@@ -44,6 +45,7 @@
               class="image"
               :src="item.imageUrl"
               @click="handleBannerClick(index, item)"
+              :ref="index === activeIndex ? 'activeCarouselImage' : ''"
             ></el-image>
             <div
               class="label"
@@ -57,7 +59,11 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, ref } from 'vue'
+import {
+  onBeforeMount,
+  ref,
+  onMounted,
+} from 'vue'
 import { getHomeBanner } from '@/api/home'
 import { getMusicDetail } from '@/api/music'
 import useMusicStore from '@/store/music'
@@ -73,6 +79,7 @@ const { updateCurrentSong, playMusic } = useMusicStore()
 const bannerArr = ref<bannerType[]>([])
 const activeIndex = ref(0)
 const router = useRouter()
+const imgHeight = ref(document.body.clientWidth / 2.7)
 
 const getData = async () => {
   // 获取 banner
@@ -109,13 +116,16 @@ onBeforeMount(async () => {
   await getData()
   emit('finish-loading')
 })
+
+onMounted(() => {
+  window.addEventListener('resize', () => {
+    imgHeight.value = document.body.clientWidth / 2.7
+  })
+})
 </script>
 
 <style scoped lang="scss">
 .banner-wrap {
-  :deep .el-carousel__container {
-    height: 208px;
-  }
   .card-banner-carousel {
     .image-wrap {
       position: relative;
@@ -172,17 +182,18 @@ onBeforeMount(async () => {
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background-color: $theme-color-1;
+    background-color: #fff;
   }
   .el-carousel__item {
-    display: flex;
-    align-items: center;
     cursor: unset;
     &.is-active {
       .image {
         cursor: pointer;
       }
     }
+  }
+  :deep .el-carousel__indicator {
+    padding-bottom: 0;
   }
   :deep .el-carousel__mask {
     background-color: unset;
