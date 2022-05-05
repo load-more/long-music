@@ -24,42 +24,49 @@
           </span>
         </span>
       </div>
-      <div class="artist single-line-ellipsis">
-        <i class="iconfont icon-artist"></i>
-        <span
-          v-for="(item, index) in song?.artists"
-          :key="index"
-        >
-          <span class="name" :title="item.name">
-            {{ item.name }}
-          </span>
-          <span class="separator" v-if="index !== song!.artists.length - 1">|</span>
-        </span>
-      </div>
-      <div class="album single-line-ellipsis">
-        <span>
-          <i class="iconfont icon-album"></i>
-          <span class="name" :title="song?.album.name">{{ song?.album.name }}</span>
-        </span>
-        <span v-if="song?.album.tns.length">
-          <span>（</span>
+      <div class="bottom-wrap">
+        <div class="artist">
+          <i class="iconfont icon-artist"></i>
           <span
-            v-for="(item, index) in song.album.tns"
+            v-for="(item, index) in song?.artists"
             :key="index"
           >
-            <span>{{ item }}</span>
-            <span class="separator" v-if="index !== song.album.tns.length - 1">|</span>
+            <span class="name" :title="item.name">
+              {{ item.name }}
+            </span>
+            <span class="separator" v-if="index !== song!.artists.length - 1">|</span>
           </span>
-          <span>）</span>
-        </span>
+        </div>
+        <div class="album">
+          <span>
+            <i class="iconfont icon-album"></i>
+            <span class="name" :title="song?.album.name">{{ song?.album.name }}</span>
+          </span>
+          <span v-if="song?.album.tns.length">
+            <span>（</span>
+            <span
+              v-for="(item, index) in song.album.tns"
+              :key="index"
+            >
+              <span>{{ item }}</span>
+              <span class="separator" v-if="index !== song.album.tns.length - 1">|</span>
+            </span>
+            <span>）</span>
+          </span>
+        </div>
       </div>
     </div>
     <div class="main">
-      <el-image
-        class="cover-img"
-        :src="song?.album.picUrl"
-      ></el-image>
-      <SongLyric :id="id" class="lyric" />
+      <div class="cover-wrap">
+        <el-image
+          class="cover-img"
+          :src="song?.album.picUrl"
+        ></el-image>
+      </div>
+      <div class="lyric-wrap">
+        <SongLyric :id="id" class="lyric" />
+      </div>
+      <div class="recommend-wrap"></div>
     </div>
   </div>
 </template>
@@ -93,24 +100,27 @@ onBeforeMount(() => {
 <style scoped lang="scss">
 .song-detail-wrap {
   width: 100%;
-  color: $font-inactive-color;
+  color: $font-color;
   font-size: 14px;
   .main {
-    display: flex;
     padding-top: 20px;
     position: relative;
-    .cover-img {
-      width: 250px;
-      height: 250px;
-      flex-shrink: 0;
-      border-radius: 10px;
+    height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    .cover-wrap {
+      width: 20%;
+      .cover-img {
+        flex-shrink: 0;
+        border-radius: 10px;
+      }
     }
-    .lyric {
-      position: absolute;
-      left: 0;
-      right: 0;
-      margin: auto;
-      width: 400px;
+    .lyric-wrap {
+      width: 60%;
+    }
+    .recommend-wrap {
+      width: 20%;
     }
   }
   .info {
@@ -121,27 +131,22 @@ onBeforeMount(() => {
       font-weight: 700;
       margin-bottom: 10px;
     }
-    .artist, .album {
+    .alias {
+      color: $font-deep-color;
+    }
+    .bottom-wrap {
       margin-top: 10px;
-      display: inline-block;
-      width: 40%;
-    }
-    .artist {
-      text-align: end;
-      padding-right: 15px;
-      box-sizing: border-box;
-    }
-    .album {
-      text-align: start;
-    }
-    i {
-      margin-right: 5px;
+      @include flex-center;
+      .artist {
+        padding-right: 15px;
+      }
+      i {
+        margin-right: 5px;
+      }
     }
     .name {
       cursor: pointer;
-    }
-    .name:hover {
-      color: $font-color;
+      @include hover-font;
     }
     .separator {
       padding: 0 5px;

@@ -11,6 +11,7 @@ $theme-color-2: var(--theme-color-2);
 $font-color: #ddd;
 $font-inactive-color: gray;
 $font-active-color: #fff;
+$font-deep-color: rgb(197, 197, 197);
 
 // item
 $item-color-1: rgba(#000, .3);
@@ -33,6 +34,7 @@ $popper-bg-color: rgba(37, 37, 37, 0.85);
   $text-color: (
     'primary': $font-color,
     'regular': $font-color,
+    'secondary': $font-deep-color,
   ),
   $input: (
     'bg-color': $item-color-1,
@@ -142,7 +144,7 @@ $popper-bg-color: rgba(37, 37, 37, 0.85);
     right: 0;
     top: 0;
     bottom: 0;
-    background-color: rgba(gray, 0.3);
+    background-color: rgba(#000, 0.1);
     border-radius: 10px;
   }
   &::after {
@@ -157,11 +159,11 @@ $popper-bg-color: rgba(37, 37, 37, 0.85);
     background-position: center top;
     background-size: cover;
     background-attachment: fixed;
-    -webkit-filter: blur(20px);
-    -moz-filter: blur(20px);
-    -ms-filter: blur(20px);
-    -o-filter: blur(20px);
-    filter: blur(4px);
+    -webkit-filter: blur(10px);
+    -moz-filter: blur(10px);
+    -ms-filter: blur(10px);
+    -o-filter: blur(10px);
+    filter: blur(10px);
     margin: -20px;
   }
 }

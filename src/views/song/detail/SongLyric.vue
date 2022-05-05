@@ -93,7 +93,7 @@ onBeforeMount(async () => {
     transition: all 0.1s ease-in-out;
   }
   .active {
-    color: $font-active-color;
+    color: $theme-color-1;
     font-size: 16px;
   }
   .placeholder {

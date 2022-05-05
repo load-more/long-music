@@ -160,7 +160,6 @@ const toggleMenuState = (state: 0 | 1) => {
   if (state === 1) { // 展开 menu
     menu!.style.width = '200px'
     menu!.style.visibility = 'visible'
-    menu!.style.backgroundColor = 'rgba(0,0,0,0.5)'
     sidebar.value!.classList.add('is-expand')
   } else { // 收缩 menu
     menu!.style.width = '20px'
@@ -249,7 +248,7 @@ $menuItemHeight: 44px;
     border: none;
     border-radius: 10px;
     margin: 0 10px;
-    background-color: transparent;
+    @include glass-background;
     transition: all .25s ease-in .25s;
     z-index: 1;
     .shrink-icon {
@@ -302,7 +301,7 @@ $menuItemHeight: 44px;
       cursor: default;
     }
     .el-menu-item.is-active {
-      background-color: rgba(#000, 0.1);
+      background-color: rgba(#000, 0.2);
     }
     :deep .el-sub-menu__title {
       height: 44px;

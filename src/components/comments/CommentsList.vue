@@ -97,7 +97,7 @@ const router = useRouter()
       display: flex;
       justify-content: space-between;
       font-size: 14px;
-      color: $font-inactive-color;
+      color: $font-deep-color;
       i {
         margin-left: 20px;
         font-size: 14px;
