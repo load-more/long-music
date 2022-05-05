@@ -1,8 +1,24 @@
 <template>
-  <div class="sidebar-wrap">
-    <div class="icons-wrap" v-show="!isFixed">
-      <i class="iconfont icon-home"></i>
-      <i class="iconfont icon-video"></i>
+  <div class="sidebar-wrap" ref="sidebar">
+    <div class="icons-wrap">
+      <div class="icon-double-left-arrow-wrap">
+        <i
+          class="iconfont icon-double-left-arrow"
+          @click="toggleMenuState(1)"
+        ></i>
+      </div>
+      <div class="icon-wrap">
+        <i
+          class="iconfont icon-home"
+          @click="router.push({ name: 'home' })"
+        ></i>
+      </div>
+      <div class="icon-wrap">
+        <i
+          class="iconfont icon-video"
+          @click="router.push({ name: 'videos' })"
+        ></i>
+      </div>
     </div>
     <el-menu
       class="el-menu"
@@ -11,11 +27,10 @@
       router
     >
       <el-scrollbar class="scroll-bar">
-        <div class="fixed-icon">
+        <div class="shrink-icon">
           <i
-            class="iconfont icon-fixed"
-            id="fixed-icon"
-            @click="isFixed = !isFixed"
+            class="iconfont icon-double-right-arrow"
+            @click="toggleMenuState(0)"
           ></i>
         </div>
         <el-menu-item
@@ -104,16 +119,17 @@ import {
   onBeforeMount,
   reactive,
   ref,
-  watch,
 } from 'vue'
 import useUserStore from '@/store/user'
 import { storeToRefs } from 'pinia'
 import { getUserPlaylist } from '@/api/user'
 import { sidebarPlaylistType } from '@/assets/ts/type'
+import { useRouter } from 'vue-router'
 
 const { userDetail } = storeToRefs(useUserStore())
-
-const isFixed = ref(false)
+const router = useRouter()
+const isExpand = ref(false)
+const sidebar = ref<HTMLElement>()
 const createdPlaylist = reactive<sidebarPlaylistType[]>([])
 const starredPlaylist = reactive<sidebarPlaylistType[]>([])
 const getData = async () => {
@@ -138,21 +154,23 @@ onBeforeMount(() => {
   getData()
 })
 
-watch(isFixed, () => {
+const toggleMenuState = (state: 0 | 1) => {
   const menu = document.getElementById('sidebar-menu')
-  const fixedIcon = document.getElementById('fixed-icon')
-  if (isFixed.value === true) {
+  sidebar.value!.classList.remove('is-expand')
+  sidebar.value!.classList.remove('is-shrink')
+  if (state === 1) { // 展开 menu
     menu!.style.width = '200px'
     menu!.style.visibility = 'visible'
     menu!.style.backgroundColor = 'rgba(0,0,0,0.5)'
-    fixedIcon!.classList.add('fixed')
-  } else {
+    sidebar.value!.classList.add('is-expand')
+  } else { // 收缩 menu
     menu!.style.width = '20px'
     menu!.style.visibility = 'hidden'
     menu!.style.backgroundColor = 'transparent'
-    fixedIcon!.classList.remove('fixed')
+    sidebar.value!.classList.add('is-shrink')
   }
-})
+  isExpand.value = !isExpand.value
+}
 </script>
 
 <style scoped lang="scss">
@@ -162,33 +180,29 @@ $menuItemHeight: 44px;
   color: $font-color;
   height: 100%;
   position: relative;
-  &:hover {
-    .el-menu {
-      visibility: visible !important;
-      width: $sideWidth !important;
-      background-color: rgba(#000, .7) !important;
-    }
+  &.is-shrink {
     .icons-wrap {
       .iconfont {
-        @include bounce-out;
+        @include bounce-in;
+        animation-delay: 0.5s;
       }
     }
-    .fixed-icon {
+    .shrink-icon {
       .iconfont {
-        @include bounce-in;
+        @include bounce-out;
       }
     }
   }
-  &:not(:hover) {
+  &.is-expand {
     .icons-wrap {
       .iconfont {
-        @include bounce-in;
-        animation-delay: .5s;
+        @include bounce-out;
       }
     }
-    .fixed-icon {
+    .shrink-icon {
       .iconfont {
-        @include bounce-out;
+        @include bounce-in;
+        animation-delay: 0.5s;
       }
     }
   }
@@ -201,17 +215,32 @@ $menuItemHeight: 44px;
     display: flex;
     flex-direction: column;
     z-index: 0;
-    &::before {
-      content: '';
-      display: block;
-      height: 30px;
-    }
-    .iconfont {
-      display: inline-block;
+    .icon-wrap {
       height: 44px;
-      text-align: center;
-      line-height: 44px;
-      cursor: pointer;
+      @include flex-center;
+      .iconfont {
+        display: inline-block;
+        height: 16px;
+        cursor: pointer;
+        transition: all 0.1s ease-in-out;
+        &:hover {
+          transform: scale(1.2);
+        }
+      }
+    }
+    .icon-double-left-arrow-wrap {
+      height: 30px;
+      @include flex-center;
+      .iconfont {
+        display: inline-block;
+        font-size: 12px;
+        height: 12px;
+        cursor: pointer;
+        transition: all 0.1s ease-in-out;
+        &:hover {
+          transform: scale(1.2);
+        }
+      }
     }
   }
   .el-menu {
@@ -224,24 +253,35 @@ $menuItemHeight: 44px;
     background-color: transparent;
     transition: all .25s ease-in .25s;
     z-index: 1;
-    .fixed-icon {
-      height: 20px;
-      margin: 5px 10px;
-      text-align: end;
-      .icon-fixed {
-        display: inline-block;
+    .shrink-icon {
+      margin-right: 20px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      .iconfont {
+        font-size: 12px;
         cursor: pointer;
+        position: relative;
+        display: inline-block;
+        height: 13px;
+        transition: all 0.1s ease-in-out;
         &:hover {
-          @include bounce-hover;
+          transform: scale(1.2);
         }
-        &.fixed {
-          animation: fixed .25s ease-in forwards;
+      }
+    }
+    &:hover {
+      .shrink-icon {
+        .iconfont {
+          @include bounce-in;
         }
-        @keyframes fixed {
-          to {
-            transform: rotate(-45deg);
-            font-weight: bold;
-          }
+      }
+    }
+    &:not(:hover) {
+      .shrink-icon {
+        .iconfont {
+          @include bounce-out;
         }
       }
     }
