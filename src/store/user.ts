@@ -27,6 +27,7 @@ const userDetail: userDetailType = {
 export default defineStore('user', {
   state: () => ({
     userDetail,
+    isSidebarExpand: false,
   }),
   actions: {
     async init() {

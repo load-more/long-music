@@ -126,9 +126,8 @@ import { getUserPlaylist } from '@/api/user'
 import { sidebarPlaylistType } from '@/assets/ts/type'
 import { useRouter } from 'vue-router'
 
-const { userDetail } = storeToRefs(useUserStore())
+const { userDetail, isSidebarExpand } = storeToRefs(useUserStore())
 const router = useRouter()
-const isExpand = ref(false)
 const sidebar = ref<HTMLElement>()
 const createdPlaylist = reactive<sidebarPlaylistType[]>([])
 const starredPlaylist = reactive<sidebarPlaylistType[]>([])
@@ -169,7 +168,7 @@ const toggleMenuState = (state: 0 | 1) => {
     menu!.style.backgroundColor = 'transparent'
     sidebar.value!.classList.add('is-shrink')
   }
-  isExpand.value = !isExpand.value
+  isSidebarExpand.value = !!state
 }
 </script>
 

@@ -2,6 +2,7 @@
   <div class="banner-wrap">
     <div>
       <el-carousel
+        id="home-card-carousel"
         class="card-banner-carousel"
         v-if="bannerArr.length"
         type="card"
@@ -29,6 +30,7 @@
         </el-carousel-item>
       </el-carousel>
       <el-carousel
+        id="home-normal-carousel"
         class="normal-banner-carousel"
         v-if="bannerArr.length"
         :autoplay="true"
@@ -63,6 +65,7 @@ import {
   onBeforeMount,
   ref,
   onMounted,
+  watch,
 } from 'vue'
 import { getHomeBanner } from '@/api/home'
 import { getMusicDetail } from '@/api/music'
@@ -70,16 +73,18 @@ import useMusicStore from '@/store/music'
 import { bannerType } from '@/assets/ts/type'
 import { resolveSongsDetail, resolveBanners } from '@/utils/resolve'
 import { useRouter } from 'vue-router'
+import useUserStore from '@/store/user'
+import { storeToRefs } from 'pinia'
 
 const emit = defineEmits(['finish-loading'])
 
 const { updateCurrentSong, playMusic } = useMusicStore()
+const { isSidebarExpand } = storeToRefs(useUserStore())
 
 /* 渲染数据 */
 const bannerArr = ref<bannerType[]>([])
 const activeIndex = ref(0)
 const router = useRouter()
-const imgHeight = ref(document.body.clientWidth / 2.7)
 
 const getData = async () => {
   // 获取 banner
@@ -117,16 +122,42 @@ onBeforeMount(async () => {
   emit('finish-loading')
 })
 
+const changeImgHeight = () => {
+  if (isSidebarExpand.value) {
+    return (document.body.clientWidth - 270) / 2.7
+  }
+  return (document.body.clientWidth - 90) / 2.7
+}
+
+const imgHeight = ref(changeImgHeight())
+
 onMounted(() => {
   window.addEventListener('resize', () => {
-    imgHeight.value = document.body.clientWidth / 2.7
+    const cardCarousel = document.getElementById('home-card-carousel')
+    const normalCarousel = document.getElementById('home-normal-carousel')
+    cardCarousel?.classList.remove('is-expand')
+    normalCarousel?.classList.remove('is-expand')
+    imgHeight.value = changeImgHeight()
   })
+})
+
+watch(isSidebarExpand, () => {
+  const cardCarousel = document.getElementById('home-card-carousel')
+  const normalCarousel = document.getElementById('home-normal-carousel')
+  cardCarousel?.classList.add('is-expand')
+  normalCarousel?.classList.add('is-expand')
+  imgHeight.value = changeImgHeight()
 })
 </script>
 
 <style scoped lang="scss">
 .banner-wrap {
   .card-banner-carousel {
+    &.is-expand {
+      :deep .el-carousel__container {
+        transition: all 0.25s ease-in .25s;
+      }
+    }
     .image-wrap {
       position: relative;
       width: 100%;
@@ -154,6 +185,11 @@ onMounted(() => {
   }
   .normal-banner-carousel {
     display: none;
+    &.is-expand {
+      :deep .el-carousel__container {
+        transition: all 0.25s ease-in .25s;
+      }
+    }
     .image-wrap {
       position: relative;
       width: 100%;
@@ -191,9 +227,6 @@ onMounted(() => {
         cursor: pointer;
       }
     }
-  }
-  :deep .el-carousel__indicator {
-    padding-bottom: 0;
   }
   :deep .el-carousel__mask {
     background-color: unset;
