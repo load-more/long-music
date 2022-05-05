@@ -163,7 +163,8 @@ onMounted(() => {
   align-items: center;
   position: relative;
   .left {
-    width: 25%;
+    flex: 1;
+    overflow: hidden;
     height: 100%;
     display: flex;
     align-items: center;
@@ -275,7 +276,8 @@ onMounted(() => {
     }
   }
   .right {
-    width: 25%;
+    flex: 1;
+    overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: flex-end;
