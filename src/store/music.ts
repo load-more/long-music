@@ -215,6 +215,8 @@ export default defineStore('music', {
       setListType(type)
     },
     addSongToCurrentSongList(song: songType) {
+      // 去重
+      if (this.listenedSongSet.has(song.id)) return
       const index = this.currentSongList.findIndex((item) => item.id === this.currentSong.id)
       this.currentSongList.splice(index + 1, 0, song)
     },
