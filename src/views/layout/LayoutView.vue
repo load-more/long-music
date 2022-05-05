@@ -67,6 +67,7 @@ $footerHeight: 43px;
     display: flex;
     margin-bottom: 7px;
     #main-container {
+      border-radius: 10px;
       flex: 1;
       margin-left: 10px;
       @include glass-background;

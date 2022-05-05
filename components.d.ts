@@ -34,6 +34,7 @@ declare module 'vue' {
     EmptyPlaceholder: typeof import('./src/components/empty-placeholder/EmptyPlaceholder.vue')['default']
     ImageUpdater: typeof import('./src/components/form/ImageUpdater.vue')['default']
     InfiniteScroll: typeof import('element-plus/es')['ElInfiniteScroll']
+    Loading: typeof import('element-plus/es')['ElLoadingDirective']
     MusicListItem: typeof import('./src/components/music/MusicListItem.vue')['default']
     MusicListTopBar: typeof import('./src/components/music/MusicListTopBar.vue')['default']
     MusicLyricItem: typeof import('./src/components/music/MusicLyricItem.vue')['default']

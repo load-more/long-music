@@ -1,5 +1,5 @@
 <template>
-  <div class="spinner-wrap">
+  <div class="wave-spinner-wrap">
     <div class="spinner">
       <div class="rect1"></div>
       <div class="rect2"></div>
@@ -15,7 +15,7 @@
 </script>
 
 <style scoped lang="scss">
-.spinner-wrap {
+.wave-spinner-wrap {
   width: 100%;
   height: 100%;
   @include flex-center;
