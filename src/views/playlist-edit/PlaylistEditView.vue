@@ -1,16 +1,21 @@
 <template>
   <div class="playlist-edit-container">
-    <el-scrollbar class="scroll-bar">
+    <el-scrollbar class="scroll-bar" v-show="!isLoading">
       <div class="playlist-edit-form-container">
         <span class="label">编辑歌单信息</span>
-        <PlaylistEditForm />
+        <PlaylistEditForm @finish-loading="isLoading = false" />
       </div>
     </el-scrollbar>
+    <WaveSpinner v-if="isLoading" />
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
+import WaveSpinner from '@/components/loading/WaveSpinner.vue'
 import PlaylistEditForm from './form/PlaylistEditForm.vue'
+
+const isLoading = ref(true)
 </script>
 
 <style scoped lang="scss">

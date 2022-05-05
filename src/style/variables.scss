@@ -27,7 +27,7 @@ $popper-bg-color: rgba(37, 37, 37, 0.85);
   // bug: 无法解析 var()
   $colors: (
     'primary': (
-      'base': $font-color,
+      'base': $font-active-color,
     ),
   ),
   $text-color: (
@@ -66,6 +66,9 @@ $popper-bg-color: rgba(37, 37, 37, 0.85);
     'hover-color': $theme-color-1,
     'button-color': $font-color,
     'button-disabled-color': $font-color,
+  ),
+  $radio: (
+    'input-bg-color': transparent,
   ),
 );
 

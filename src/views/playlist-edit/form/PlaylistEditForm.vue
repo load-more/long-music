@@ -51,6 +51,8 @@ import ImageUpdater from '@/components/form/ImageUpdater.vue'
 import TagSelector from '@/components/form/TagSelector.vue'
 import { playlistEditFormType } from '@/assets/ts/type'
 
+const emit = defineEmits(['finishLoading'])
+
 /* 路由管理 */
 const route = useRoute()
 const router = useRouter()
@@ -72,6 +74,7 @@ onBeforeMount(async () => {
   playlistForm.tags = playlistData.playlist.tags
   playlistForm.desc = playlistData.playlist.description
   coverImgUrl.value = playlistData.playlist.coverImgUrl
+  emit('finishLoading')
 })
 
 /* 提交修改 */

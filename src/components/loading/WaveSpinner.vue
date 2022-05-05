@@ -22,8 +22,8 @@
 }
 .spinner {
   margin: 100px auto;
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   text-align: center;
   font-size: 10px;
 }
@@ -31,7 +31,7 @@
 .spinner > div {
   background-color: #fff;
   height: 100%;
-  width: 4px;
+  width: 3px;
   margin-right: 2px;
   display: inline-block;
   -webkit-animation: sk-stretchdelay 1.2s infinite ease-in-out;

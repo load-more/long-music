@@ -135,6 +135,8 @@ import ImageUpdater from '@/components/form/ImageUpdater.vue'
 import useUserStore from '@/store/user'
 import { storeToRefs } from 'pinia'
 
+const emit = defineEmits(['finishLoading'])
+
 /* 路由管理 */
 const router = useRouter()
 
@@ -163,6 +165,7 @@ const getData = async () => {
 }
 onBeforeMount(async () => {
   await getData()
+  emit('finishLoading')
 })
 
 const isFormChange = ref(true)

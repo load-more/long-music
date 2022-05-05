@@ -1,16 +1,21 @@
 <template>
   <div class="profile-edit-container">
-    <el-scrollbar class="scroll-bar">
+    <el-scrollbar class="scroll-bar" v-show="!isLoading">
       <div class="user-profile-edit-form-container">
         <span class="label">编辑资料</span>
-        <UserProfileEditForm />
+        <UserProfileEditForm @finish-loading="isLoading = false" />
       </div>
     </el-scrollbar>
+    <WaveSpinner v-if="isLoading" />
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
+import WaveSpinner from '@/components/loading/WaveSpinner.vue'
 import UserProfileEditForm from './form/UserProfileEditForm.vue'
+
+const isLoading = ref(true)
 </script>
 
 <style scoped lang="scss">
