@@ -28,7 +28,7 @@ const props = defineProps<{
   id: number
 }>()
 
-const { currentTime } = storeToRefs(useMusicStore())
+const { currentTime, currentSong } = storeToRefs(useMusicStore())
 
 const lyricMap = ref(new Map())
 const lyricOffsetTopMap = ref(new Map())
@@ -67,6 +67,7 @@ const changeCurrentLyric = (key: number) => {
 
 const currentTimeCache = ref(currentTime.value)
 watch(currentTime, () => {
+  if (currentSong.value.id !== props.id) return
   const arr = [...lyricMap.value.keys()]
   const delta = -0.5 // 时间偏差，使歌词提前或延迟显示
   const newTime = arr.find((item, index) => currentTime.value >= item + delta
@@ -93,8 +94,8 @@ onBeforeMount(async () => {
     transition: all 0.1s ease-in-out;
   }
   .active {
-    color: $theme-color-1;
-    font-size: 16px;
+    color: $font-active-color;
+    font-size: 18px;
   }
   .placeholder {
     height: 107px;

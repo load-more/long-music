@@ -31,7 +31,11 @@
             v-for="(item, index) in song?.artists"
             :key="index"
           >
-            <span class="name" :title="item.name">
+            <span
+              class="name"
+              :title="item.name"
+              @click="router.push({ name: 'artist', params: { id: item.id } })"
+            >
               {{ item.name }}
             </span>
             <span class="separator" v-if="index !== song!.artists.length - 1">|</span>
@@ -40,7 +44,11 @@
         <div class="album">
           <span>
             <i class="iconfont icon-album"></i>
-            <span class="name" :title="song?.album.name">{{ song?.album.name }}</span>
+            <span
+              class="name"
+              :title="song?.album.name"
+              @click="router.push({ name: 'album', params: { id: song?.album.id } })"
+            >{{ song?.album.name }}</span>
           </span>
           <span v-if="song?.album.tns.length">
             <span>（</span>
@@ -76,6 +84,7 @@ import { ref, onBeforeMount } from 'vue'
 import { getMusicDetail } from '@/api/music'
 import { songType } from '@/assets/ts/type'
 import { resolveSongsDetail } from '@/utils/resolve'
+import { useRouter } from 'vue-router'
 import SongLyric from './SongLyric.vue'
 
 const props = defineProps<{
@@ -84,6 +93,7 @@ const props = defineProps<{
 const emit = defineEmits(['finishLoading'])
 
 const song = ref<songType>()
+const router = useRouter()
 
 const getData = async () => {
   const { data } = await getMusicDetail({ ids: props.id })
