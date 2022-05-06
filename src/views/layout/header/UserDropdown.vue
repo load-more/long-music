@@ -38,6 +38,7 @@ import { logout } from '@/api/login'
 import { ElMessage } from 'element-plus'
 import useUserStore from '@/store/user'
 import { useRouter } from 'vue-router'
+import useMusicStore from '@/store/music'
 
 /* 路由管理 */
 const router = useRouter()
@@ -55,6 +56,10 @@ const handleCommand = async (command: string) => {
     if (rst.data.code === 200) {
       // 重置用户信息，即退出登录
       useUserStore().$reset()
+      // 暂停音乐
+      useMusicStore().pauseMusic()
+      // 重置音乐信息
+      useMusicStore().$reset()
       // 跳转到首页
       router.push({ name: 'login' })
       // 清除 localStorage
