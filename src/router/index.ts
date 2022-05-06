@@ -121,8 +121,6 @@ router.beforeEach(async (to, from) => {
   const {
     currentSong,
     currentPlaylistId,
-    volume,
-    currentTime,
   } = storeToRefs(musicStore)
   const {
     updateCurrentSong,
@@ -171,18 +169,9 @@ router.beforeEach(async (to, from) => {
     }
   }
   // 3. 读取音量
-  if (!volume.value) {
-    const v = getVolume()
-    if (Number.isNaN(v)) {
-      changeVolume(100)
-    } else {
-      changeVolume(v)
-    }
-  }
+  changeVolume(getVolume())
   // 4. 读取播放时间
-  if (!currentTime.value) {
-    changeCurrentTime(getCurrentTime())
-  }
+  changeCurrentTime(getCurrentTime())
 
   // 如果用户未登录且目标页面不是登录页，则跳转到登录页
   if (!userDetail.value.userId && to.name !== 'login') { // 注意，一定要写后面的判断逻辑，否则会死循环

@@ -33,6 +33,8 @@ export const setListType = (typeId: number) => {
 export const getVolume = () => {
   const volumeStr = window.localStorage.getItem(volume)
   if (!volumeStr && volumeStr !== '0') return 100
+  const v = Number(volumeStr)
+  if (Number.isNaN(v)) return 100
   return Number(volumeStr)
 }
 export const setVolume = (value: number) => {
