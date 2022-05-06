@@ -217,6 +217,15 @@ export default defineStore('music', {
       const index = this.currentSongList.findIndex((item) => item.id === this.currentSong.id)
       this.currentSongList.splice(index + 1, 0, song)
     },
+    removeSongFromCurrentSongList(id: number) {
+      // 如果删除的是当前播放歌曲，则先播放下一首
+      if (id === this.currentSong.id) {
+        this.changeSong(1)
+      }
+      // 删除歌曲
+      const index = this.currentSongList.findIndex((item) => item.id === id)
+      this.currentSongList.splice(index, 1)
+    },
     async updateCurrentLyricMap(id: number) {
       this.currentLyricMap = new Map()
       const { data } = await getMusicLyric({ id })

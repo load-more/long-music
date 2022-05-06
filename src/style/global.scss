@@ -268,7 +268,7 @@ body {
           margin-bottom: 10px;
           display: flex;
           font-size: 12px;
-          line-height: 20px;
+          line-height: 21px;
           color: $font-inactive-color;
           .operation {
             text-align: center;
@@ -295,6 +295,23 @@ body {
           }
           .duration {
             width: 40px;
+            text-align: center;
+            .icon-remove {
+              display: none;
+            }
+            &:hover {
+              .icon-remove {
+                cursor: pointer;
+                @include hover-font;
+                @include bounce-in;
+                font-size: 13px;
+                height: 20px;
+                display: inline-block;
+              }
+              span {
+                display: none;
+              }
+            }
           }
           &:hover {
             background-color: $item-hover-color;

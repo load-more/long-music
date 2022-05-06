@@ -58,6 +58,7 @@
           </div>
           <div class="duration single-line-ellipsis">
             <span>{{ formatDuration(item.duration) }}</span>
+            <i class="iconfont icon-remove" @click="removeSongFromCurrentSongList(item.id)"></i>
           </div>
         </div>
       </el-scrollbar>
@@ -97,6 +98,7 @@ const {
   updateCurrentSongList,
   resetCurrentSong,
   playMusic,
+  removeSongFromCurrentSongList,
 } = musicStore
 
 const clearList = () => {
