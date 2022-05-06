@@ -29,7 +29,11 @@ export const setListType = (typeId: number) => {
   window.localStorage.setItem(listType, String(typeId))
 }
 
-export const getVolume = () => Number(window.localStorage.getItem(volume))
+export const getVolume = () => {
+  const volumeStr = window.localStorage.getItem(volume)
+  if (!volumeStr && volumeStr !== '0') return 100
+  return Number(volumeStr)
+}
 export const setVolume = (value: number) => {
   window.localStorage.setItem(volume, String(value))
 }

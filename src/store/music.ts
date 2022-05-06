@@ -48,7 +48,7 @@ export default defineStore('music', {
     currentTime: 0,
     currentLyricMap: new Map(),
     currentLyric: '',
-    volume: 0,
+    volume: 100,
     playMode: [
       'order-play',
       'loop',
