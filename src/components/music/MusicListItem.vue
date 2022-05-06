@@ -3,11 +3,25 @@
     <div class="pc hidden-xs-only">
       <div class="operation">
         <span v-if="!isActive" class="index">{{ songIndex }}</span>
-        <i v-if="!isActive" @click="handlePlay" class="iconfont icon-play-hollow"></i>
+        <i
+          v-if="!isActive"
+          @click="handlePlay"
+          class="iconfont icon-play-hollow"
+          :class="{'can-not-play': !songInfo.canPlay}"
+        ></i>
         <i v-else-if="isPlayed" class="iconfont icon-volume"></i>
         <i v-else class="iconfont icon-close-volume"></i>
-        <i class="iconfont icon-like"></i>
-        <i class="iconfont icon-download" @click="handleDownload"></i>
+        <i
+          class="iconfont icon-favorite"
+          :class="{'is-liked': isLiked,
+          'can-not-play': !songInfo.canPlay}"
+          @click="handleLike"
+        ></i>
+        <i
+          class="iconfont icon-download"
+          @click="handleDownload"
+          :class="{'can-not-play': !songInfo.canPlay}"
+        ></i>
       </div>
       <div class="title">
         <span
@@ -15,12 +29,12 @@
           :title="`${songInfo.name} ${songInfo.alias ? '(' + songInfo.alias + ')' : ''}`"
         >
           <span
-            :style="{ color: songInfo.canPlay ? 'unset' : 'gray' }"
+            :class="{'can-not-play': !songInfo.canPlay}"
           >{{ songInfo.name }}</span>
           <span
             class="alias"
             v-if="songInfo.alias.length"
-            :style="{ color: songInfo.canPlay ? 'unset' : 'gray' }"
+            :class="{'can-not-play': !songInfo.canPlay}"
           >&nbsp;({{ songInfo.alias[0] }})</span>
         </span>
         <span class="tag-info">
@@ -107,7 +121,8 @@
 import { computed, withDefaults } from 'vue'
 import { formatDuration } from '@/utils/format'
 import useMusicStore from '@/store/music'
-import { getMusicUrl } from '@/api/music'
+import useUserStore from '@/store/user'
+import { getMusicUrl, likeMusic } from '@/api/music'
 import { storeToRefs } from 'pinia'
 import emitter from '@/utils/emitter'
 import { songType } from '@/assets/ts/type'
@@ -124,6 +139,10 @@ const props = withDefaults(defineProps<{
 
 const router = useRouter()
 
+const { likeList } = storeToRefs(useUserStore())
+const isLiked = computed(() => likeList.value.findIndex((item) => item
+  === props.songInfo.id) !== -1)
+
 /* 双击播放音乐 */
 const musicStore = useMusicStore()
 const {
@@ -136,7 +155,7 @@ const handlePlay = async () => {
   if (!props.songInfo.canPlay) {
     ElMessage({
       type: 'error',
-      message: '该歌曲无版权，暂时无法播放',
+      message: '该歌曲无版权',
       appendTo: document.body,
     })
     return
@@ -165,7 +184,7 @@ const handleDownload = async () => {
   if (!props.songInfo.canPlay) {
     ElMessage({
       type: 'error',
-      message: '该歌曲无版权，暂时无法下载',
+      message: '该歌曲无版权',
       appendTo: document.body,
     })
     return
@@ -179,10 +198,47 @@ const handleDownload = async () => {
   }
   window.open(musicUrl)
 }
+
+/* 喜欢音乐 */
+const handleLike = async () => {
+  if (!props.songInfo.canPlay) {
+    ElMessage({
+      type: 'error',
+      message: '该歌曲无版权',
+      appendTo: document.body,
+    })
+    return
+  }
+  const { data } = await likeMusic({
+    id: props.songInfo.id,
+    like: !isLiked.value,
+  })
+  if (data.code === 200) {
+    if (isLiked.value) {
+      likeList.value.splice(likeList.value.findIndex((item) => item === props.songInfo.id), 1)
+    } else {
+      likeList.value.push(props.songInfo.id)
+    }
+    ElMessage({
+      type: 'success',
+      message: '操作成功',
+      appendTo: document.body,
+    })
+  } else {
+    ElMessage({
+      type: 'error',
+      message: '操作失败',
+      appendTo: document.body,
+    })
+  }
+}
 </script>
 
 <style scoped lang="scss">
 .music-list-item-wrap {
+  .can-not-play {
+    color: $font-inactive-color;
+  }
   .pc {
     display: flex;
     color: $font-color;
@@ -203,12 +259,15 @@ const handleDownload = async () => {
       .icon-volume, .icon-close-volume {
         color: $theme-color-1;
       }
-      .icon-like, .icon-download, .icon-play-hollow {
+      .icon-favorite, .icon-download, .icon-play-hollow {
         cursor: pointer;
         &:hover {
           @include bounce-hover;
           color: $font-active-color;
         }
+      }
+      .icon-favorite.is-liked {
+        color: $type-color;
       }
       .icon-play-hollow {
         display: none;
@@ -318,11 +377,14 @@ const handleDownload = async () => {
         .icon-volume, .icon-close-volume {
           color: $theme-color-1;
         }
-        .icon-like, .icon-download {
+        .icon-favorite, .icon-download {
           cursor: pointer;
           &:hover {
             color: $font-active-color;
           }
+        }
+        .icon-favorite.is-liked {
+          color: $type-color;
         }
       }
       .mid {

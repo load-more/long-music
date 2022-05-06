@@ -44,3 +44,12 @@ export const checkMusic = (params: {
   url: '/check/music',
   params,
 })
+
+export const likeMusic = (params: {
+  id: number
+  like?: boolean
+}) => request({
+  method: 'GET',
+  url: '/like',
+  params,
+})

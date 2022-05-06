@@ -35,7 +35,11 @@
               <span>{{ currentSong.name }}</span>
               <span v-if="currentSong.alias.length">&nbsp;({{ currentSong.alias[0] }})</span>
             </span>
-            <i class="iconfont icon-like"></i>
+            <i
+              class="iconfont icon-favorite"
+              :class="{'is-liked': isLiked}"
+              @click="handleLike"
+            ></i>
           </div>
           <div class="singer single-line-ellipsis">
             <span
@@ -115,12 +119,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue'
+import {
+  ref,
+  watch,
+  onMounted,
+  computed,
+} from 'vue'
 import useMusicStore from '@/store/music'
+import useUserStore from '@/store/user'
 import { storeToRefs } from 'pinia'
 import { initTheme } from '@/utils/theme'
 import { useRouter } from 'vue-router'
 import { formatDuration } from '@/utils/format'
+import { likeMusic } from '@/api/music'
+import { ElMessage } from 'element-plus'
 import MusicProgressBar from './MusicProgressBar.vue'
 import MusicVolumeBar from './MusicVolumeBar.vue'
 import CurrentPlaylist from './CurrentPlaylist.vue'
@@ -140,7 +152,6 @@ const {
   currentLyricMap,
   currentLyric,
 } = storeToRefs(musicStore)
-
 const {
   playMusic,
   pauseMusic,
@@ -149,6 +160,10 @@ const {
   changeVolume,
   changeSong,
 } = musicStore
+
+const { likeList } = storeToRefs(useUserStore())
+const isLiked = computed(() => likeList.value.findIndex((item) => item
+  === currentSong.value.id) !== -1)
 
 /* 是否显示当前播放列表 */
 const isOpenList = ref(false)
@@ -177,6 +192,40 @@ watch(currentTime, () => {
     || (currentTime.value >= arr[arr.length - 1] + delta ? arr[arr.length - 1] : arr[0])
   currentLyric.value = currentLyricMap.value.get(newTime)
 })
+
+/* 喜欢音乐 */
+const handleLike = async () => {
+  if (!currentSong.value.canPlay) {
+    ElMessage({
+      type: 'error',
+      message: '该歌曲无版权，暂时无法喜欢',
+      appendTo: document.body,
+    })
+    return
+  }
+  const { data } = await likeMusic({
+    id: currentSong.value.id,
+    like: !isLiked.value,
+  })
+  if (data.code === 200) {
+    if (isLiked.value) {
+      likeList.value.splice(likeList.value.findIndex((item) => item === currentSong.value.id), 1)
+    } else {
+      likeList.value.push(currentSong.value.id)
+    }
+    ElMessage({
+      type: 'success',
+      message: '操作成功',
+      appendTo: document.body,
+    })
+  } else {
+    ElMessage({
+      type: 'error',
+      message: '操作失败',
+      appendTo: document.body,
+    })
+  }
+}
 </script>
 
 <style scoped lang="scss">
@@ -276,9 +325,14 @@ watch(currentTime, () => {
         }
         .title {
           font-size: 13px;
-          line-height: 20px;
-          .icon-like {
+          display: flex;
+          align-items: center;
+          .icon-favorite {
+            color: $font-inactive-color;
             margin-left: 5px;
+            &.is-liked {
+              color: $type-color;
+            }
           }
           span, i {
             cursor: pointer;

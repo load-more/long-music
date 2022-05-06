@@ -95,3 +95,11 @@ export const followOrUnfollow = (params: {
   url: '/follow',
   params,
 })
+
+export const getLikeList = (params: {
+  uid: number
+}) => request({
+  method: 'GET',
+  url: '/likelist',
+  params,
+})

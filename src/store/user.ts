@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { getUserDetail } from '@/api/user'
+import { getUserDetail, getLikeList } from '@/api/user'
 import { userDetailType } from '@/assets/ts/type'
 import { resolveUserDetail } from '@/utils/resolve'
 import { getUserId, setUserId } from '@/utils/storage'
@@ -24,10 +24,13 @@ const userDetail: userDetailType = {
   listenSongs: 0,
 }
 
+const likeList: number[] = []
+
 export default defineStore('user', {
   state: () => ({
     userDetail,
     isSidebarExpand: false,
+    likeList,
   }),
   actions: {
     async init() {
@@ -36,6 +39,8 @@ export default defineStore('user', {
         const uid = getUserId()
         const { data } = await getUserDetail({ uid })
         this.userDetail = resolveUserDetail(data)
+        const { data: likeListData } = await getLikeList({ uid })
+        this.likeList = likeListData.ids
       } catch {
         setUserId(0)
       }
