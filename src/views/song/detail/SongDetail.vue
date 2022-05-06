@@ -68,7 +68,7 @@
       <div class="cover-wrap">
         <el-image
           class="cover-img"
-          :src="song?.album.picUrl"
+          :src="`${song?.album.picUrl}?param=300y300`"
         ></el-image>
       </div>
       <div class="lyric-wrap">

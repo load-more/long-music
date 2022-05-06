@@ -1,6 +1,6 @@
 <template>
   <div class="search-recommend-item-wrap" @click="handleClickItem">
-    <el-image :src="imgSrc" class="image" fit="cover"></el-image>
+    <el-image :src="`${imgSrc}?param=50y50`" class="image" fit="cover"></el-image>
     <div class="right">
       <div class="title single-line-ellipsis">
         <span>{{ title }}</span>

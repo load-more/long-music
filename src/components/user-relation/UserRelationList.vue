@@ -9,7 +9,7 @@
         <div class="left">
           <el-avatar
             class="avatar"
-            :src="item.avatarUrl"
+            :src="`${item.avatarUrl}?param=80y80`"
             shape="circle"
             @click="handleClickRelation(item.userId)"
           ></el-avatar>
@@ -73,7 +73,7 @@
         <div class="left">
           <el-avatar
             class="avatar"
-            :src="item.avatarUrl"
+            :src="`${item.avatarUrl}?param=80y80`"
             shape="circle"
             @click="handleClickRelation(item.userId)"
           ></el-avatar>

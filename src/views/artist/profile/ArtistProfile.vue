@@ -3,7 +3,7 @@
     <div class="image-wrap">
       <el-image
         class="cover-image"
-        :src="artist?.img1v1Url"
+        :src="`${artist?.img1v1Url}?param=200y200`"
       />
     </div>
     <div class="info">

@@ -2,7 +2,7 @@
   <div class="artist-wrap">
     <el-image
       class="image"
-      :src="artist?.img1v1Url"
+      :src="`${artist?.img1v1Url}?param=300y300`"
       @click="router.push({ name: 'artist', params: { id: artist?.id } })"
     ></el-image>
     <div class="name">

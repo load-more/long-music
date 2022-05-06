@@ -3,7 +3,7 @@
     <div class="image-wrap">
       <el-image
         class="cover-image"
-        :src="playlist?.coverImgUrl"
+        :src="`${playlist?.coverImgUrl}?param=200y200`"
       />
     </div>
     <div class="info">

@@ -9,7 +9,7 @@
         >
           <el-avatar
             class="avatar"
-            :src="artist?.img1v1Url"
+            :src="`${artist?.img1v1Url}?param=40y40`"
           ></el-avatar>
           <span class="name">{{ artist?.name }}</span>
         </div>
@@ -51,7 +51,7 @@
         <div class="item">
           <el-avatar
             class="avatar"
-            :src="(detail as videoDetailType)?.creator.avatarUrl"
+            :src="`${(detail as videoDetailType)?.creator.avatarUrl}?param=40y40`"
           ></el-avatar>
           <span class="name">{{ (detail as videoDetailType)?.creator.nickname }}</span>
         </div>

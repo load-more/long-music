@@ -8,7 +8,7 @@
     <el-avatar
       class="avatar"
       fit="cover"
-      :src="avatarUrl"
+      :src="`${avatarUrl}?param=30y30`"
     ></el-avatar>
     <template #dropdown>
       <el-dropdown-menu>

@@ -79,7 +79,7 @@
               <div class="cover-wrap">
                 <el-image
                   class="cover-img"
-                  :src="item.coverImg"
+                  :src="`${item.coverImg}?param=30y30`"
                 ></el-image>
               </div>
               <span class="single-line-ellipsis" :title="item.title">
@@ -100,7 +100,7 @@
               <div class="cover-wrap">
                 <el-image
                   class="cover-img"
-                  :src="item.coverImg"
+                  :src="`${item.coverImg}?param=30y30`"
                 ></el-image>
               </div>
               <span class="single-line-ellipsis" :title="item.title">

@@ -2,7 +2,7 @@
   <div class="image-updater-wrap">
     <el-image
       class="image"
-      :src="imgUrl"
+      :src="`${imgUrl}?param=200y200`"
     ></el-image>
     <el-button @click="inputRef?.click()">{{ editButtonLabel }}</el-button>
     <input type="file" ref="inputRef" @change="handleFileChange" hidden />

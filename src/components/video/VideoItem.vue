@@ -3,13 +3,14 @@
     <div class="image-wrap">
       <div
         class="image image-inset-shadow"
-        :style="{'background-image': `url(${(video as videoType)?.coverUrl})`}"
+        :style="{'background-image': `url(${(video as videoType)?.coverUrl}?param=300y160)`}"
         @click="router.push({ name: 'video', params: { id: (video as videoType)?.vid } })"
-      ></div>
-      <span class="play-count">
-        <i class="iconfont icon-play"></i>&nbsp;{{ formatCount((video as videoType)?.playTime) }}
-      </span>
-      <span class="duration">{{ formatDuration((video as videoType)?.durationms) }}</span>
+      >
+        <span class="play-count">
+          <i class="iconfont icon-play"></i>&nbsp;{{ formatCount((video as videoType)?.playTime) }}
+        </span>
+        <span class="duration">{{ formatDuration((video as videoType)?.durationms) }}</span>
+      </div>
     </div>
     <div class="title single-line-ellipsis">
       <span
@@ -22,13 +23,14 @@
     <div class="image-wrap">
       <div
         class="image image-inset-shadow"
-        :style="{'background-image': `url(${(video as mvType)?.imgurl16v9})`}"
+        :style="{'background-image': `url(${(video as mvType)?.imgurl16v9}?param=300y160)`}"
         @click="router.push({ name: 'mv', params: { id: (video as mvType).id } })"
-      ></div>
-      <span class="play-count">
-        <i class="iconfont icon-play"></i>&nbsp;{{ formatCount((video as mvType)?.playCount) }}
-      </span>
-      <span class="duration">{{ formatDuration((video as mvType)?.duration) }}</span>
+      >
+        <span class="play-count">
+          <i class="iconfont icon-play"></i>&nbsp;{{ formatCount((video as mvType)?.playCount) }}
+        </span>
+        <span class="duration">{{ formatDuration((video as mvType)?.duration) }}</span>
+      </div>
     </div>
     <div class="title single-line-ellipsis">
       <span
@@ -41,12 +43,14 @@
     <div class="image-wrap">
       <div
         class="image image-inset-shadow"
-        :style="{'background-image': `url(${(video as briefMvType)?.cover})`}"
+        :style="{'background-image': `url(${(video as briefMvType)?.cover}?param=300y160)`}"
         @click="router.push({ name: 'mv', params: { id: (video as briefMvType)?.id } })"
-      ></div>
-      <span class="play-count">
-        <i class="iconfont icon-play"></i>&nbsp;{{ formatCount((video as briefMvType)?.playCount) }}
-      </span>
+      >
+        <span class="play-count">
+          <i class="iconfont icon-play"></i>&nbsp;{{ formatCount((video as briefMvType)
+            ?.playCount) }}
+        </span>
+      </div>
     </div>
     <div class="title single-line-ellipsis">
       <span
@@ -90,19 +94,19 @@ const router = useRouter()
       background-size: cover;
       -webkit-background-size: cover;
       -moz-background-size: cover;
-    }
-    .play-count {
-      position: absolute;
-      top: 5px;
-      right: 5px;
-      i {
-        font-size: 14px;
+      .play-count {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        i {
+          font-size: 14px;
+        }
       }
-    }
-    .duration {
-      position: absolute;
-      right: 5px;
-      bottom: 5px;
+      .duration {
+        position: absolute;
+        right: 5px;
+        bottom: 5px;
+      }
     }
   }
   .title {

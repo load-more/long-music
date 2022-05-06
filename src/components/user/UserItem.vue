@@ -3,7 +3,7 @@
     <div class="left">
       <el-avatar
         class="avatar"
-        :src="user?.avatarUrl"
+        :src="`${user?.avatarUrl}?param=60y60`"
       ></el-avatar>
       <span class="name single-line-ellipsis" :title="user?.nickname">{{ user?.nickname }}</span>
       <i v-if="user?.gender === 1" class="iconfont icon-male"></i>

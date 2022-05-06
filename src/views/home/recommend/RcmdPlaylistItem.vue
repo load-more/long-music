@@ -3,19 +3,20 @@
     <div class="image-wrap">
       <div
         class="image image-inset-shadow"
-        :style="{'background-image': `url(${info.picUrl})`}"
+        :style="{'background-image': `url(${info.picUrl}?param=300y300)`}"
         @click="handleClickPlaylist"
-      ></div>
-      <div class="play-icon">
-        <i class="iconfont icon-play-circle"></i>
+      >
+        <div class="play-count">
+          <i class="iconfont icon-play"></i>
+          <span>{{ formatCount(info.playCount) }}</span>
+        </div>
+        <div class="play-icon">
+          <i class="iconfont icon-play-circle"></i>
+        </div>
       </div>
     </div>
     <div class="title">
       <span @click="handleClickPlaylist">{{ info.name }}</span>
-    </div>
-    <div class="play-count">
-      <i class="iconfont icon-play"></i>
-      <span>{{ formatCount(info.playCount) }}</span>
     </div>
   </div>
 </template>
@@ -50,8 +51,8 @@ const handleClickPlaylist = () => {
   }
   .image-wrap {
     margin-right: 20px;
-    position: relative;
     .image {
+      position: relative;
       height: 0;
       padding-top: 100%;
       background-position: center center;
@@ -61,34 +62,39 @@ const handleClickPlaylist = () => {
       -moz-background-size: cover;
       border-radius: 10px;
       cursor: pointer;
-      // + 同级控制，~ 子对父控制，不加符号 父对子控制
-      &:hover + .play-icon {
+      &:hover .play-icon {
         opacity: 1;
       }
-    }
-    .play-icon {
-      width: 26px;
-      height: 26px;
-      border-radius: 50%;
-      position: absolute;
-      right: 10px;
-      bottom: 10px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      opacity: 0;
-      transition: all 0.2s ease-in-out;
-      i {
-        font-size: 30px;
-        vertical-align: middle;
-        color: $theme-color-1;
-        &:hover {
-          color: $theme-color-2;
+      .play-count {
+        color: white;
+        position: absolute;
+        top: 2px;
+        left: 5px;
+      }
+      .play-icon {
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        position: absolute;
+        right: 10px;
+        bottom: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        transition: all 0.2s ease-in-out;
+        i {
+          font-size: 30px;
+          vertical-align: middle;
+          color: $theme-color-1;
+          &:hover {
+            color: $theme-color-2;
+          }
         }
-      }
-      &:hover {
-        opacity: 1;
-        cursor: pointer;
+        &:hover {
+          opacity: 1;
+          cursor: pointer;
+        }
       }
     }
   }
@@ -111,12 +117,6 @@ const handleClickPlaylist = () => {
       @include hover-font;
       cursor: pointer;
     }
-  }
-  .play-count {
-    color: white;
-    position: absolute;
-    top: 2px;
-    left: 2px;
   }
 }
 </style>

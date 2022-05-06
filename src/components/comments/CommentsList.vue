@@ -6,7 +6,7 @@
   >
     <div class="left">
       <el-avatar
-        :src="comment.user.avatarUrl"
+        :src="`${comment.user.avatarUrl}?param=40y40`"
         class="avatar"
         @click="router.push({ name: 'user', params: { id: comment.user.userId } })"
       ></el-avatar>

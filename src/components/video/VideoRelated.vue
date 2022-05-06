@@ -9,13 +9,14 @@
         <div class="image-wrap">
           <div
             class="image image-inset-shadow"
-            :style="{'background-image': `url(${video?.coverUrl})`}"
-          ></div>
-          <span class="play-count">
-            <i class="iconfont icon-play"></i>
-            {{ formatCount(video?.playTime) }}
-          </span>
-          <span class="duration">{{ formatDuration(video?.durationms) }}</span>
+            :style="{'background-image': `url(${video?.coverUrl}?param=300y160)`}"
+          >
+            <span class="play-count">
+              <i class="iconfont icon-play"></i>
+              {{ formatCount(video?.playTime) }}
+            </span>
+            <span class="duration">{{ formatDuration(video?.durationms) }}</span>
+          </div>
         </div>
       </div>
       <div class="right">
@@ -69,19 +70,19 @@ defineProps<{
           background-size: cover;
           -webkit-background-size: cover;
           -moz-background-size: cover;
-        }
-        .play-count {
-          position: absolute;
-          top: 5px;
-          right: 5px;
-          i {
-            font-size: 12px;
+          .play-count {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            i {
+              font-size: 12px;
+            }
           }
-        }
-        .duration {
-          position: absolute;
-          bottom: 5px;
-          right: 5px;
+          .duration {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+          }
         }
       }
     }

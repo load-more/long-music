@@ -3,7 +3,7 @@
     <div class="image-wrap">
       <el-image
         class="cover-image"
-        :src="album?.picUrl"
+        :src="`${album?.picUrl}?param=200y200`"
       />
     </div>
     <div class="info">
@@ -15,7 +15,10 @@
         </span>
       </div>
       <div class="artist single-line-ellipsis">
-        <span class="name">{{ album?.artist.name }}</span>
+        <span
+          class="name"
+          @click="router.push({ name: 'artist', params: { id: album.artist.id } })"
+        >{{ album?.artist.name }}</span>
         <span class="publish-time" v-if="album?.publishTime">
           <span class="label">
             创建时间：
@@ -63,10 +66,13 @@
 import { ref, computed } from 'vue'
 import { formatTimestamp } from '@/utils/format'
 import { albumDetailType } from '@/assets/ts/type'
+import { useRouter } from 'vue-router'
 
 const props = defineProps<{
   album: albumDetailType
 }>()
+
+const router = useRouter()
 
 const publishTime = computed(() => {
   // 将时间戳格式化

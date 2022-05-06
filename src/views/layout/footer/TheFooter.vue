@@ -17,7 +17,7 @@
           <el-image
             class="cover song-image"
             v-if="currentSong.id"
-            :src="currentSong.album['picUrl']"
+            :src="`${currentSong.album['picUrl']}?param=50y50`"
             @click="router.push({ name: 'song', params: { id: currentSong.id } })"
           ></el-image>
           <div v-else class="typing-words"><span class="line">匆匆岁月，余音悠长。</span></div>

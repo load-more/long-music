@@ -6,7 +6,7 @@
     <div class="left">
       <el-image
         class="image"
-        :src="info.coverImgUrl"
+        :src="`${info.coverImgUrl}?param=80y80`"
       />
       <div class="title hidden-xs-only" :title="info.name">{{ info.name }}</div>
     </div>

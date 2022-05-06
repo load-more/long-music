@@ -3,7 +3,7 @@
     <div class="left">
       <el-image
         class="image"
-        :src="album?.picUrl"
+        :src="`${album?.picUrl}?param=80y80`"
       />
       <div class="title hidden-xs-only" :title="album?.name">{{ album?.name }}</div>
     </div>

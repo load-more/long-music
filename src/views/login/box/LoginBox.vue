@@ -148,13 +148,12 @@ onUnmounted(() => {
     bottom: 0;
     z-index: -1;
     background-image: url(./rainBg.png);
-    background-position: center top;
     background-size: cover;
     background-attachment: fixed;
-    -webkit-filter: blur(20px);
-    -moz-filter: blur(20px);
-    -ms-filter: blur(20px);
-    -o-filter: blur(20px);
+    -webkit-filter: blur(4px);
+    -moz-filter: blur(4px);
+    -ms-filter: blur(4px);
+    -o-filter: blur(4px);
     filter: blur(4px);
     margin: -20px;
   }

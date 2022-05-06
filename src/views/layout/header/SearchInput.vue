@@ -78,7 +78,7 @@
                 <div class="title">
                   <span class="word">{{ item.searchWord }}</span>
                   <span class="score">{{ item.score }}</span>
-                  <img :src="item.iconUrl" v-if="item.iconUrl">
+                  <img :src="`${item.iconUrl}?param=13y15`" v-if="item.iconUrl">
                 </div>
                 <div class="content single-line-ellipsis" v-if="item.content">
                   <span>{{ item.content }}</span>

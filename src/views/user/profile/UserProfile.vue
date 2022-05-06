@@ -3,7 +3,7 @@
     <div class="left">
       <el-avatar
         class="avatar"
-        :src="user?.avatarUrl"
+        :src="`${user?.avatarUrl}?param=200y200`"
         shape="circle"
       ></el-avatar>
     </div>
