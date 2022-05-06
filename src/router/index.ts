@@ -12,6 +12,7 @@ import {
   getListId,
   getVolume,
   getListType,
+  getCurrentTime,
 } from '@/utils/storage'
 
 const routes: RouteRecordRaw[] = [
@@ -117,8 +118,18 @@ router.beforeEach(async (to, from) => {
   const { userDetail } = storeToRefs(useUserStore())
 
   const musicStore = useMusicStore()
-  const { currentSong, currentPlaylistId, volume } = storeToRefs(musicStore)
-  const { updateCurrentSong, updateCurrentSongList, changeVolume } = musicStore
+  const {
+    currentSong,
+    currentPlaylistId,
+    volume,
+    currentTime,
+  } = storeToRefs(musicStore)
+  const {
+    updateCurrentSong,
+    updateCurrentSongList,
+    changeVolume,
+    changeCurrentTime,
+  } = musicStore
 
   // 如果用户未登录，则重新获取用户信息
   if (!userDetail.value.userId) {
@@ -167,6 +178,10 @@ router.beforeEach(async (to, from) => {
     } else {
       changeVolume(v)
     }
+  }
+  // 4. 读取播放时间
+  if (!currentTime.value) {
+    changeCurrentTime(getCurrentTime())
   }
 
   // 如果用户未登录且目标页面不是登录页，则跳转到登录页

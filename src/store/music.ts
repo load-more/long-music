@@ -8,6 +8,7 @@ import {
   setListId,
   setVolume,
   setListType,
+  setCurrentTime,
 } from '@/utils/storage'
 
 const currentSong: songType = {
@@ -123,6 +124,7 @@ export default defineStore('music', {
       })
       this.audio.addEventListener('timeupdate', () => {
         this.currentTime = this.audio.currentTime
+        setCurrentTime(this.currentTime)
       })
       // 当音乐结束
       this.audio.addEventListener('ended', async () => {

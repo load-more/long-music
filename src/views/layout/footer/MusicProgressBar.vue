@@ -21,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, nextTick } from 'vue'
 import { formatDuration } from '@/utils/format'
 
 const props = defineProps({
@@ -49,17 +49,19 @@ const currentTimeLabel = ref(props.currentTime)
 
 /* 监视 currentTime */
 watch(() => props.currentTime, () => {
-  // 当用户没有点击或拖拽进度条时，更新数据
-  if (bar.value && !isAdjustProgress.value) {
-    // 更新 currentTimeLabel
-    currentTimeLabel.value = props.currentTime
-    // 更新进度条
-    let per = '0px'
-    if (props.duration !== 0) { // 防止出现除以 0 等于 NaN
-      per = `${(props.currentTime / props.duration) * 100}%`
+  nextTick(() => {
+    // 当用户没有点击或拖拽进度条时，更新数据
+    if (!isAdjustProgress.value) {
+      // 更新 currentTimeLabel
+      currentTimeLabel.value = props.currentTime
+      // 更新进度条
+      let per = '0px'
+      if (props.duration !== 0) { // 防止出现除以 0 等于 NaN
+        per = `${(props.currentTime / props.duration) * 100}%`
+      }
+      bar.value!.style.width = per
     }
-    bar.value.style.width = per
-  }
+  })
 }, { immediate: true })
 
 const controlProgress = (offset: number, width: number) => {

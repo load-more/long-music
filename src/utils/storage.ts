@@ -8,6 +8,7 @@ const listType = 'list_type'
 const volume = 'volume'
 const searchHistory = 'search_history'
 const themeColor = 'theme_color'
+const currentTime = 'current_time'
 
 export const getUserId = () => Number(Decrypt(window.localStorage.getItem(userId) || ''))
 export const setUserId = (id: number) => {
@@ -36,6 +37,16 @@ export const getVolume = () => {
 }
 export const setVolume = (value: number) => {
   window.localStorage.setItem(volume, String(value))
+}
+
+export const getCurrentTime = () => {
+  const currentTimeStr = window.localStorage.getItem(currentTime)
+  const ct = Number(currentTimeStr)
+  if (Number.isNaN(ct)) return 0
+  return ct
+}
+export const setCurrentTime = (value: number) => {
+  window.localStorage.setItem(currentTime, String(value))
 }
 
 export const getSearchHistory = () => {
