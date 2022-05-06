@@ -1,13 +1,13 @@
 <template>
-  <div class="music-list-item-wrap" @dblclick="handleDbClick" :class="{ 'active': isActive }">
+  <div class="music-list-item-wrap" @dblclick="handlePlay" :class="{ 'active': isActive }">
     <div class="pc hidden-xs-only">
       <div class="operation">
         <span v-if="!isActive" class="index">{{ songIndex }}</span>
-        <i v-if="!isActive" @click="handleDbClick" class="iconfont icon-play-hollow"></i>
+        <i v-if="!isActive" @click="handlePlay" class="iconfont icon-play-hollow"></i>
         <i v-else-if="isPlayed" class="iconfont icon-volume"></i>
         <i v-else class="iconfont icon-close-volume"></i>
         <i class="iconfont icon-like"></i>
-        <i class="iconfont icon-download"></i>
+        <i class="iconfont icon-download" @click="handleDownload"></i>
       </div>
       <div class="title">
         <span
@@ -107,6 +107,7 @@
 import { computed, withDefaults } from 'vue'
 import { formatDuration } from '@/utils/format'
 import useMusicStore from '@/store/music'
+import { getMusicUrl } from '@/api/music'
 import { storeToRefs } from 'pinia'
 import emitter from '@/utils/emitter'
 import { songType } from '@/assets/ts/type'
@@ -131,7 +132,7 @@ const {
 } = storeToRefs(musicStore)
 const { updateCurrentSong, playMusic, addSongToCurrentSongList } = musicStore
 
-const handleDbClick = async () => {
+const handlePlay = async () => {
   if (!props.songInfo.canPlay) {
     ElMessage({
       type: 'error',
@@ -157,6 +158,26 @@ const isActive = computed(() => props.songInfo.id === currentSong.value.id)
 
 const handleClickMv = () => {
   router.push({ name: 'mv', params: { id: props.songInfo.mv } })
+}
+
+/* 下载音乐 */
+const handleDownload = async () => {
+  if (!props.songInfo.canPlay) {
+    ElMessage({
+      type: 'error',
+      message: '该歌曲无版权，暂时无法下载',
+      appendTo: document.body,
+    })
+    return
+  }
+  let musicUrl
+  if (props.songInfo.isVip) {
+    const { data } = await getMusicUrl({ id: props.songInfo.id })
+    musicUrl = data.data[0].url
+  } else {
+    musicUrl = `https://music.163.com/song/media/outer/url?id=${props.songInfo.id}.mp3`
+  }
+  window.open(musicUrl)
 }
 </script>
 
