@@ -111,6 +111,7 @@ import { storeToRefs } from 'pinia'
 import emitter from '@/utils/emitter'
 import { songType } from '@/assets/ts/type'
 import { useRouter } from 'vue-router'
+import { ElMessage } from 'element-plus'
 
 const props = withDefaults(defineProps<{
   songInfo: songType
@@ -131,6 +132,14 @@ const {
 const { updateCurrentSong, playMusic, addSongToCurrentSongList } = musicStore
 
 const handleDbClick = async () => {
+  if (!props.songInfo.canPlay) {
+    ElMessage({
+      type: 'error',
+      message: '该歌曲无版权，暂时无法播放',
+      appendTo: document.body,
+    })
+    return
+  }
   if (props.isPlaylistItem) { // 如果是歌单里的歌曲，直接切换整个播放列表
     // 更新播放列表
     emitter.emit('onChangeCurrentPlaylist', true)

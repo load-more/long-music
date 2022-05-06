@@ -151,14 +151,6 @@ export default defineStore('music', {
         this.listenedSongSet = new Set()
         this.listenedSongSet.add(this.currentSong.id)
       }
-      if (!this.currentSong.canPlay) {
-        ElMessage({
-          type: 'error',
-          message: '该歌曲无版权，暂时无法播放',
-          appendTo: document.body,
-        })
-        return
-      }
       if (this.currentSong.isVip) {
         ElMessage({
           type: 'warning',
