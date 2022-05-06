@@ -28,7 +28,7 @@ const props = defineProps<{
   id: number
 }>()
 
-const { currentTime, currentSong } = storeToRefs(useMusicStore())
+const { currentTime, currentSong, currentLyricMap } = storeToRefs(useMusicStore())
 
 const lyricMap = ref(new Map())
 const lyricOffsetTopMap = ref(new Map())
@@ -47,6 +47,7 @@ const getData = async () => {
     lyricMap.value.set(key, vArr[index])
     lyricOffsetTopMap.value.set(key, index * 36)
   })
+  currentLyricMap.value = lyricMap.value
 }
 
 const setItemRef = (el: any) => {
@@ -69,7 +70,7 @@ const currentTimeCache = ref(currentTime.value)
 watch(currentTime, () => {
   if (currentSong.value.id !== props.id) return
   const arr = [...lyricMap.value.keys()]
-  const delta = -0.5 // 时间偏差，使歌词提前或延迟显示
+  const delta = -0.3 // 时间偏差，使歌词提前或延迟显示
   const newTime = arr.find((item, index) => currentTime.value >= item + delta
     && currentTime.value < arr[index + 1] + delta)
     || (currentTime.value >= arr[arr.length - 1] + delta ? arr[arr.length - 1] : arr[0])

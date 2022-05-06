@@ -104,6 +104,12 @@ $popper-bg-color: rgba(37, 37, 37, 0.85);
 @mixin bounce-hover {
   animation: bounce-hover .25s ease-in-out forwards;
 }
+@mixin slide-down {
+  animation: slide-down .5s ease-in-out forwards;
+}
+@mixin slide-up {
+  animation: slide-up .5s ease-in-out forwards;
+}
 
 @keyframes bounce-out {
   30% {
@@ -130,6 +136,16 @@ $popper-bg-color: rgba(37, 37, 37, 0.85);
   }
   to {
     transform: scale(1.2);
+  }
+}
+@keyframes slide-down {
+  to {
+    transform: translateY(43px);
+  }
+}
+@keyframes slide-up {
+  from {
+    transform: translateY(43px);
   }
 }
 

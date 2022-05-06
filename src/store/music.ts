@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { songType } from '@/assets/ts/type'
-import { getMusicUrl } from '@/api/music'
+import { getMusicUrl, getMusicLyric } from '@/api/music'
+import { formatLyricTime } from '@/utils/format'
 import { ElMessage } from 'element-plus'
 import {
   setSongId,
@@ -45,6 +46,8 @@ export default defineStore('music', {
     isPlayed: false,
     duration: 0,
     currentTime: 0,
+    currentLyricMap: new Map(),
+    currentLyric: '',
     volume: 0,
     playMode: [
       'order-play',
@@ -137,6 +140,8 @@ export default defineStore('music', {
           await this.changeSong(1)
         }
       })
+      // 获取歌词
+      this.updateCurrentLyricMap(song.id)
     },
     playMusic() {
       // 将歌曲存入已播放集合中（不管能不能播放，都要存入）
@@ -219,6 +224,19 @@ export default defineStore('music', {
       if (this.listenedSongSet.has(song.id)) return
       const index = this.currentSongList.findIndex((item) => item.id === this.currentSong.id)
       this.currentSongList.splice(index + 1, 0, song)
+    },
+    async updateCurrentLyricMap(id: number) {
+      this.currentLyricMap = new Map()
+      const { data } = await getMusicLyric({ id })
+      // 处理歌词
+      // eslint-disable-next-line no-useless-escape
+      const kArr = data.lrc.lyric.match(/\[[\d+:\d+\.\d+]*\]/g)
+      // eslint-disable-next-line no-useless-escape
+      const vArr = data.lrc.lyric.split(/\[[\d+:\d+\.\d+]*\]/g).slice(1)
+      kArr.forEach((item: string, index: number) => {
+        const key = formatLyricTime(item.slice(1, item.length - 1))
+        this.currentLyricMap.set(key, vArr[index])
+      })
     },
   },
 })
