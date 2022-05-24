@@ -1,34 +1,18 @@
 import { defineStore } from 'pinia'
 import { getUserDetail, getLikeList } from '@/api/user'
-import { userDetailType } from '@/assets/ts/type'
-import { resolveUserDetail } from '@/utils/resolve'
+import { UserDetail, UserLevel } from '@/assets/types/user'
 import { getUserId, setUserId } from '@/utils/storage'
 
-const userDetail: userDetailType = {
-  userId: 0,
-  nickname: '',
-  gender: 0,
-  birthday: 0,
-  avatarUrl: '',
-  description: '',
-  province: 0,
-  city: 0,
-  followed: false,
-  signature: '',
-  followeds: 0,
-  follows: 0,
-  playlistCount: 0,
-  createTime: 0,
-  createDays: 0,
-  level: 0,
-  listenSongs: 0,
-}
+const userDetail: Partial<UserDetail> = {}
+
+const userLevel: Partial<UserLevel> = {}
 
 const likeList: number[] = []
 
 export default defineStore('user', {
   state: () => ({
     userDetail,
+    userLevel,
     isSidebarExpand: false,
     likeList,
   }),
@@ -38,7 +22,7 @@ export default defineStore('user', {
       try {
         const uid = getUserId()
         const { data } = await getUserDetail({ uid })
-        this.userDetail = resolveUserDetail(data)
+        this.userDetail = data
         const { data: likeListData } = await getLikeList({ uid })
         this.likeList = likeListData.ids
       } catch {

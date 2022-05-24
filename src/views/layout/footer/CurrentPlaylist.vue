@@ -36,28 +36,28 @@
             <i v-else class="iconfont icon-close-volume"></i>
           </div>
           <div class="title single-line-ellipsis">
-            <span :title="`${item.name} ${item.alias.length ? '(' + item.alias[0] + ')' : ''}`">
+            <span :title="`${item.name} ${item.alia.length ? '(' + item.alia[0] + ')' : ''}`">
               <span>{{ item.name }}</span>
-              <span v-if="item.alias.length">&nbsp;({{ item.alias[0] }})</span>
+              <span v-if="item.alia.length">&nbsp;({{ item.alia[0] }})</span>
             </span>
           </div>
           <div class="singer single-line-ellipsis">
             <span
-              v-for="(i, index) in item.artists"
+              v-for="(i, index) in item.ar"
               :key="i.id"
-              :title="item.artists.map(i => i.name).join(' / ')"
+              :title="item.ar.map(i => i.name).join(' / ')"
             >
               <span class="name">
                 {{ i.name }}
               </span>
               <span
                 class="seperator"
-                v-if="index !== item.artists.length - 1"
+                v-if="index !== item.ar.length - 1"
               >&nbsp;/&nbsp;</span>
             </span>
           </div>
           <div class="duration single-line-ellipsis">
-            <span>{{ formatDuration(item.duration) }}</span>
+            <span>{{ formatDuration(item.dt) }}</span>
             <i class="iconfont icon-remove" @click="removeSongFromCurrentSongList(item.id)"></i>
           </div>
         </div>
@@ -71,7 +71,7 @@ import { ref, watch } from 'vue'
 import useMusicStore from '@/store/music'
 import { storeToRefs } from 'pinia'
 import { formatDuration } from '@/utils/format'
-import { songType } from '@/assets/ts/type'
+import { Song } from '@/assets/types/song'
 
 const props = defineProps({
   modelValue: {
@@ -106,7 +106,7 @@ const clearList = () => {
   resetCurrentSong()
 }
 
-const onClickPlay = async (song: songType) => {
+const onClickPlay = async (song: Song) => {
   await updateCurrentSong(song)
   playMusic()
 }

@@ -17,7 +17,7 @@
           <el-image
             class="cover song-image"
             v-if="currentSong.id"
-            :src="`${currentSong.album['picUrl']}?param=50y50`"
+            :src="`${currentSong.al?.picUrl}?param=50y50`"
             @click="router.push({ name: 'song', params: { id: currentSong.id } })"
           ></el-image>
           <div v-else class="typing-words"><span class="line">匆匆岁月，余音悠长。</span></div>
@@ -28,12 +28,12 @@
             v-if="currentSong.name"
           >
             <span
-              :title="`${currentSong.name} ${ currentSong.alias.length ?
-              '(' + currentSong.alias[0] + ')' : '' }`"
+              :title="`${currentSong.name} ${ currentSong.alia?.length ?
+              '(' + currentSong.alia[0] + ')' : '' }`"
               @click="router.push({ name: 'song', params: { id: currentSong.id } })"
             >
               <span>{{ currentSong.name }}</span>
-              <span v-if="currentSong.alias.length">&nbsp;({{ currentSong.alias[0] }})</span>
+              <span v-if="currentSong.alia?.length">&nbsp;({{ currentSong.alia[0] }})</span>
             </span>
             <i
               class="iconfont icon-favorite"
@@ -43,15 +43,15 @@
           </div>
           <div class="singer single-line-ellipsis">
             <span
-              v-for="(item, index) in currentSong.artists" :key="item.id"
-              :title="currentSong.artists.map((item) => item.name).join(' / ')"
+              v-for="(item, index) in currentSong.ar" :key="item.id"
+              :title="currentSong.ar?.map((item) => item.name).join(' / ')"
             >
               <span class="name" @click="router.push({ name: 'artist', params: { id: item.id } })">
                 {{ item.name }}
               </span>
               <span
                 class="seperator"
-                v-if="index !== currentSong.artists.length - 1"
+                v-if="currentSong.ar && index !== currentSong.ar.length - 1"
               >&nbsp;/&nbsp;</span>
             </span>
           </div>
@@ -204,14 +204,14 @@ const handleLike = async () => {
     return
   }
   const { data } = await likeMusic({
-    id: currentSong.value.id,
+    id: currentSong.value.id!,
     like: !isLiked.value,
   })
   if (data.code === 200) {
     if (isLiked.value) {
       likeList.value.splice(likeList.value.findIndex((item) => item === currentSong.value.id), 1)
     } else {
-      likeList.value.push(currentSong.value.id)
+      likeList.value.push(currentSong.value.id!)
     }
     ElMessage({
       type: 'success',

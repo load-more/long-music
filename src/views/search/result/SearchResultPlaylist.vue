@@ -24,9 +24,9 @@
 import { ref, onBeforeMount, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { getSearchResult } from '@/api/search'
-import { resolvePlaylistDetail } from '@/utils/resolve'
 import MyPagination from '@/components/pagination/MyPagination.vue'
 import PlaylistItem from '@/components/playlist/PlaylistItem.vue'
+import { SearchPlaylist } from '@/assets/types/playlist'
 
 const route = useRoute()
 const keyword = computed(() => {
@@ -38,7 +38,7 @@ const keyword = computed(() => {
 
 const playlistCount = ref(0)
 const pageSize = ref(30)
-const pageData = ref()
+const pageData = ref<SearchPlaylist[]>([])
 
 const getPage = async (offset: number) => {
   const { data } = await getSearchResult({
@@ -47,11 +47,7 @@ const getPage = async (offset: number) => {
     limit: pageSize.value,
     offset: pageSize.value * offset,
   })
-  const arr: any[] = []
-  data.result.playlists.forEach((playlist: any) => {
-    arr.push(resolvePlaylistDetail(playlist))
-  })
-  pageData.value = arr
+  pageData.value = data.result.playlists
   playlistCount.value = data.result.playlistCount
 }
 

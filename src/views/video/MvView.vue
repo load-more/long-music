@@ -4,11 +4,12 @@
       <div class="inset-container">
         <div class="video-container">
           <span class="label">MV 详情</span>
-          <VideoPlayer :video="(mvUrl as mvUrlType)" />
+          <VideoPlayer v-if="mvUrl" :video="mvUrl" />
           <VideoDetail
             type="mv"
-            :detail="(mvDetail as mvDetailType)"
-            :data="(mvData as mvDataType)"
+            v-if="mvDetail && mvData"
+            :detail="mvDetail"
+            :data="mvData"
           />
           <CommentsCpn type="mv" :id="id" />
         </div>
@@ -31,41 +32,35 @@ import {
   getMvData,
   getRelatedVideos,
 } from '@/api/video'
-import {
-  resolveMvUrl,
-  resolveMvDetail,
-  resolveMvData,
-  resolveBriefVideos,
-} from '@/utils/resolve'
-import type {
-  mvUrlType,
-  mvDetailType,
-  mvDataType,
-  videoType,
-} from '@/assets/ts/type'
 import VideoPlayer from '@/components/video/VideoPlayer.vue'
 import VideoDetail from '@/components/video/VideoDetail.vue'
 import VideoRelated from '@/components/video/VideoRelated.vue'
 import CommentsCpn from '@/components/comments/CommentsCpn.vue'
 import WaveSpinner from '@/components/loading/WaveSpinner.vue'
+import {
+  MvUrl,
+  MvData,
+  MvDetail,
+  VideoBrief,
+} from '@/assets/types/video'
 
 const route = useRoute()
 const id = Number(route.params.id)
-const mvUrl = ref<mvUrlType>()
-const mvDetail = ref<mvDetailType>()
-const mvData = ref<mvDataType>()
-const relatedVideos = ref<videoType[]>([])
+const mvUrl = ref<MvUrl>()
+const mvDetail = ref<MvDetail>()
+const mvData = ref<MvData>()
+const relatedVideos = ref<VideoBrief[]>([])
 const isLoading = ref(false)
 
 const getData = async () => {
   const { data: urlData } = await getMvUrl({ id })
-  mvUrl.value = resolveMvUrl(urlData.data)
+  mvUrl.value = urlData.data
   const { data: detailData } = await getMvDetail({ mvid: id })
-  mvDetail.value = resolveMvDetail(detailData.data)
+  mvDetail.value = detailData.data
   const { data: countData } = await getMvData({ mvid: id })
-  mvData.value = resolveMvData(countData)
+  mvData.value = countData
   const { data: relatedVideoData } = await getRelatedVideos({ id })
-  relatedVideos.value = resolveBriefVideos(relatedVideoData.data)
+  relatedVideos.value = relatedVideoData.data
 }
 
 onBeforeMount(async () => {

@@ -26,19 +26,19 @@
       <div class="title">
         <span
           class="single-line-ellipsis"
-          :title="`${songInfo.name} ${songInfo.alias ? '(' + songInfo.alias + ')' : ''}`"
+          :title="`${songInfo.name} ${songInfo.alia.length ? '(' + songInfo.alia[0] + ')' : ''}`"
         >
           <span
             :class="{'can-not-play': !songInfo.canPlay}"
           >{{ songInfo.name }}</span>
           <span
             class="alias"
-            v-if="songInfo.alias.length"
+            v-if="songInfo.alia.length"
             :class="{'can-not-play': !songInfo.canPlay}"
-          >&nbsp;({{ songInfo.alias[0] }})</span>
+          >&nbsp;({{ songInfo.alia[0] }})</span>
         </span>
         <span class="tag-info">
-          <span v-if="!songInfo.noCopyrightInfo.typeDesc">
+          <span v-if="!songInfo.noCopyrightInfo || !songInfo.noCopyrightInfo.typeDesc">
             <span class="tag" v-if="songInfo.isVip">VIP</span>
             <span class="tag" v-if="songInfo.hasSq">SQ</span>
             <span class="tag mv" v-if="songInfo.mv" @click.stop="handleClickMv">MV</span>
@@ -51,9 +51,9 @@
       </div>
       <div class="singer single-line-ellipsis">
         <span
-          v-for="(item, index) in songInfo.artists"
+          v-for="(item, index) in songInfo.ar"
           :key="item.id"
-          :title="songInfo.artists.map(item => item.name).join(' / ')"
+          :title="songInfo.ar.map(item => item.name).join(' / ')"
         >
           <span
             class="name"
@@ -61,17 +61,17 @@
           >
             {{ item.name }}
           </span>
-          <span class="seperator" v-if="index !== songInfo.artists.length - 1">&nbsp;/&nbsp;</span>
+          <span class="seperator" v-if="index !== songInfo.ar.length - 1">&nbsp;/&nbsp;</span>
         </span>
       </div>
       <div class="album single-line-ellipsis">
         <span
-          :title="songInfo.album.name"
-          @click.stop="router.push({ name: 'album', params: { id: songInfo.album.id } })"
-        >{{ songInfo.album.name }}</span>
+          :title="songInfo.al.name"
+          @click.stop="router.push({ name: 'album', params: { id: songInfo.al.id } })"
+        >{{ songInfo.al.name }}</span>
       </div>
       <div class="duration">
-        <span>{{ formatDuration(songInfo.duration) }}</span>
+        <span>{{ formatDuration(songInfo.dt) }}</span>
       </div>
     </div>
     <div
@@ -107,16 +107,16 @@
       <div class="mid">
         <div
           class="title single-line-ellipsis"
-          :title="`${songInfo.name} ${songInfo.alias.length ? '(' + songInfo.alias[0] + ')' : ''}`"
+          :title="`${songInfo.name} ${songInfo.alia.length ? '(' + songInfo.alia[0] + ')' : ''}`"
         >
           <span>{{ songInfo.name }}</span>
-          <span v-if="songInfo.alias.length" class="alias">&nbsp;({{ songInfo.alias[0] }})</span>
+          <span v-if="songInfo.alia.length" class="alias">&nbsp;({{ songInfo.alia[0] }})</span>
         </div>
         <div
           class="singer single-line-ellipsis"
-          :title="songInfo.artists.map(item => item.name).join(' / ')"
+          :title="songInfo.ar.map(item => item.name).join(' / ')"
         >
-          <span v-for="(item, index) in songInfo.artists" :key="item.id">
+          <span v-for="(item, index) in songInfo.ar" :key="item.id">
             <span
               class="name"
               @click.stop="router.push({ name: 'artist', params: { id: item.id } })"
@@ -125,11 +125,11 @@
             </span>
             <span
               class="seperator"
-              v-if="index !== songInfo.artists.length - 1"
+              v-if="index !== songInfo.ar.length - 1"
             >&nbsp;/&nbsp;</span>
           </span>
           <span> - </span>
-          <span>{{ songInfo.album.name }}</span>
+          <span>{{ songInfo.al.name }}</span>
         </div>
       </div>
       <div class="right">
@@ -147,12 +147,12 @@ import useUserStore from '@/store/user'
 import { storeToRefs } from 'pinia'
 import emitter from '@/utils/emitter'
 import { getMusicUrl, likeMusic } from '@/api/music'
-import { songType } from '@/assets/ts/type'
+import { Song } from '@/assets/types/song'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 
 const props = withDefaults(defineProps<{
-  songInfo: songType
+  songInfo: Song
   songIndex: number
   isPlaylistItem: boolean
 }>(), {

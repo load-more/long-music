@@ -2,25 +2,25 @@
   <div class="artist-wrap">
     <el-image
       class="image"
-      :src="`${artist?.img1v1Url}?param=300y300`"
-      @click="router.push({ name: 'artist', params: { id: artist?.id } })"
+      :src="`${artist.img1v1Url}?param=300y300`"
+      @click="router.push({ name: 'artist', params: { id: artist.id } })"
     ></el-image>
     <div class="name">
       <span
-        @click="router.push({ name: 'artist', params: { id: artist?.id } })"
+        @click="router.push({ name: 'artist', params: { id: artist.id } })"
       >
-        {{ artist?.name }}
+        {{ artist.name }}
       </span>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { artistType } from '@/assets/ts/type'
+import { Artist } from '@/assets/types/artist'
 import { useRouter } from 'vue-router'
 
 defineProps<{
-  artist: artistType
+  artist: Artist
 }>()
 
 const router = useRouter()

@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { songType } from '@/assets/ts/type'
+import { Song } from '@/assets/types/song'
 import { getMusicUrl, getMusicLyric } from '@/api/music'
 import { formatLyricTime } from '@/utils/format'
 import { ElMessage } from 'element-plus'
@@ -11,31 +11,9 @@ import {
   setCurrentTime,
 } from '@/utils/storage'
 
-const currentSong: songType = {
-  id: 0,
-  name: '',
-  alias: [],
-  tns: [],
-  artists: [],
-  album: {
-    id: 0,
-    name: '',
-    picUrl: '',
-    tns: [],
-  },
-  duration: 0,
-  mv: 0,
-  hasSq: false,
-  isVip: false,
-  canPlay: false,
-  hasSrc: false,
-  noCopyrightInfo: {
-    type: 0,
-    typeDesc: '',
-  },
-}
+const currentSong: Partial<Song> = {}
 
-const currentSongList: songType[] = []
+const currentSongList: Song[] = []
 
 export default defineStore('music', {
   state: () => ({
@@ -68,35 +46,13 @@ export default defineStore('music', {
   }),
   actions: {
     resetCurrentSong() {
-      this.currentSong = {
-        id: 0,
-        name: '',
-        alias: [],
-        tns: [],
-        artists: [],
-        album: {
-          id: 0,
-          name: '',
-          picUrl: '',
-          tns: [],
-        },
-        duration: 0,
-        mv: 0,
-        hasSq: false,
-        isVip: false,
-        canPlay: false,
-        hasSrc: false,
-        noCopyrightInfo: {
-          type: 0,
-          typeDesc: '',
-        },
-      }
+      this.currentSong = {}
       this.audio = new Audio()
       this.isPlayed = false
       this.duration = 0
       this.currentTime = 0
     },
-    async updateCurrentSong(song: songType) {
+    async updateCurrentSong(song: Song) {
       // 暂停之前音乐的播放
       this.pauseMusic()
       // 覆盖 currentSong
@@ -205,7 +161,7 @@ export default defineStore('music', {
       // 自动播放
       this.playMusic()
     },
-    updateCurrentSongList(id: number, list: songType[], type: number = 1) {
+    updateCurrentSongList(id: number, list: Song[], type: number = 1) {
       this.currentSongList = list
       this.listenedSongSet = new Set()
       this.currentPlaylistId = id
@@ -213,7 +169,7 @@ export default defineStore('music', {
       setListId(id)
       setListType(type)
     },
-    addSongToCurrentSongList(song: songType) {
+    addSongToCurrentSongList(song: Song) {
       // 去重
       if (this.listenedSongSet.has(song.id)) return
       const index = this.currentSongList.findIndex((item) => item.id === this.currentSong.id)

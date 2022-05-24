@@ -1,21 +1,21 @@
 <template>
-  <div class="album-item-wrap" @click="router.push({ name: 'album', params: { id: album?.id } })">
+  <div class="album-item-wrap" @click="router.push({ name: 'album', params: { id: album.id } })">
     <div class="left">
       <el-image
         class="image"
-        :src="`${album?.picUrl}?param=80y80`"
+        :src="`${album.picUrl}?param=80y80`"
       />
-      <div class="title hidden-xs-only" :title="album?.name">{{ album?.name }}</div>
+      <div class="title hidden-xs-only" :title="album.name">{{ album.name }}</div>
     </div>
     <div class="right">
-      <div class="title hidden-sm-and-up" :title="album?.name">{{ album?.name }}</div>
+      <div class="title hidden-sm-and-up" :title="album.name">{{ album.name }}</div>
       <div class="song-count">
         <span class="label">歌曲：</span>
-        <span class="content">{{ album?.size }}</span>
+        <span class="content">{{ album.size }}</span>
       </div>
       <div class="creator">
         <span class="label">歌手：</span>
-        <span class="content" :title="album?.artist.name">{{ album?.artist.name }}</span>
+        <span class="content" :title="album.artist.name">{{ album.artist.name }}</span>
       </div>
       <div class="publish-time">
         <span class="label">发行时间：</span>
@@ -28,11 +28,11 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { formatTimestamp } from '@/utils/format'
-import { albumDetailType } from '@/assets/ts/type'
+import { Album } from '@/assets/types/album'
 import { useRouter } from 'vue-router'
 
 const props = defineProps<{
-  album: albumDetailType
+  album: Album
 }>()
 
 const router = useRouter()

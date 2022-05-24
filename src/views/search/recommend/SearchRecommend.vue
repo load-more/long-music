@@ -4,13 +4,13 @@
     <div class="content">
       <div
         class="item"
-        v-for="(cate) in matchResult?.orders"
+        v-for="(cate) in matchResult.orders"
         :key="cate"
       >
         <SearchRecommendItem
-          v-if="cate === 'artist' || cate === 'playlist' || cate === 'album'"
+          v-if="matchResult && (cate === 'artist' || cate === 'playlist' || cate === 'album')"
           :type="cate"
-          :data="(matchResult as searchMultiMatchType)"
+          :data="matchResult"
         />
       </div>
     </div>
@@ -20,7 +20,7 @@
 <script setup lang="ts">
 import { ref, onBeforeMount } from 'vue'
 import { getSearchMatch } from '@/api/search'
-import type { searchMultiMatchType } from '@/assets/ts/type'
+import type { SearchMultiMatch } from '@/assets/types/search'
 import SearchRecommendItem from './SearchRecommendItem.vue'
 
 const props = defineProps<{
@@ -28,7 +28,7 @@ const props = defineProps<{
 }>()
 const emit = defineEmits(['finish-loading'])
 
-const matchResult = ref<searchMultiMatchType>()
+const matchResult = ref<SearchMultiMatch>()
 
 const getData = async () => {
   const { data: matchData } = await getSearchMatch({ keywords: props.keyword })

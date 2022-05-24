@@ -31,12 +31,12 @@ import emitter from '@/utils/emitter'
 import useMusicStore from '@/store/music'
 import CommentsCpn from '@/components/comments/CommentsCpn.vue'
 import MusicListItem from '@/components/music/MusicListItem.vue'
-import { songType } from '@/assets/ts/type'
+import { Song } from '@/assets/types/song'
 import MusicListTopBar from '@/components/music/MusicListTopBar.vue'
 
 const props = defineProps<{
   id: number
-  songs: songType[]
+  songs: Song[]
   albumDesc: string
 }>()
 

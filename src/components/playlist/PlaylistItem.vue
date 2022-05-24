@@ -41,11 +41,11 @@
 
 <script setup lang="ts">
 import { formatCount } from '@/utils/format'
-import { playlistDetailType } from '@/assets/ts/type'
+import { PlaylistDetail } from '@/assets/types/playlist'
 import { useRouter } from 'vue-router'
 
 defineProps<{
-  info: playlistDetailType
+  info: PlaylistDetail
 }>()
 
 const router = useRouter()

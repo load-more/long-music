@@ -24,15 +24,15 @@
             {{ comment.content }}
           </span>
         </div>
-        <div class="replied-comment" v-if="comment.beReplied.user.userId">
+        <div class="replied-comment" v-if="comment.beReplied[0]">
           <span
             class="user-name"
-            @click="router.push({ name: 'user', params: { id: comment.beReplied.user.userId } })"
+            @click="router.push({ name: 'user', params: { id: comment.beReplied[0].user.userId } })"
           >
-            @{{ comment.beReplied.user.nickname }}:
+            @{{ comment.beReplied[0].user.nickname }}:
           </span>
           <span class="content">
-            {{ comment.beReplied.content }}
+            {{ comment.beReplied[0].content }}
           </span>
         </div>
       </div>
@@ -55,10 +55,10 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import { commentType } from '@/assets/ts/type'
+import { Comment } from '@/assets/types/comment'
 
 defineProps<{
-  comments: commentType[]
+  comments: Comment[]
 }>()
 
 const router = useRouter()

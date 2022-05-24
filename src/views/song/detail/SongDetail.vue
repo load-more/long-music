@@ -6,21 +6,26 @@
           {{ song?.name }}
         </span>
       </div>
-      <div class="alias single-line-ellipsis" v-if="song?.alias.length || song?.tns.length">
-        <span v-if="song?.alias.length">
+      <div class="alias single-line-ellipsis" v-if="song?.alia.length || song?.tns?.length">
+        <span v-if="song?.alia.length">
           <span
-            v-for="(item, index) in song.alias"
+            v-for="(item, index) in song.alia"
             :key="index"
           >
-            {{ item }}<span class="separator" v-if="index !== song.alias.length - 1">|</span>
+            {{ item }}<span
+              class="separator"
+              v-if="song && (index !== song.alia.length - 1)"
+            >|</span>
           </span>
         </span>
-        <span v-if="song.tns.length">
+        <span v-if="song.tns?.length">
           <span
             v-for="(item, index) in song.tns"
             :key="index"
           >
-            {{ item }}<span class="separator" v-if="index !== song.tns.length - 1">|</span>
+            {{ item }}<span
+              class="separator" v-if="song && song.tns && (index !== song?.tns.length - 1)"
+            >|</span>
           </span>
         </span>
       </div>
@@ -28,7 +33,7 @@
         <div class="artist">
           <i class="iconfont icon-artist"></i>
           <span
-            v-for="(item, index) in song?.artists"
+            v-for="(item, index) in song?.ar"
             :key="index"
           >
             <span
@@ -38,7 +43,7 @@
             >
               {{ item.name }}
             </span>
-            <span class="separator" v-if="index !== song!.artists.length - 1">|</span>
+            <span class="separator" v-if="song?.ar && index !== song?.ar.length - 1">|</span>
           </span>
         </div>
         <div class="album">
@@ -46,18 +51,21 @@
             <i class="iconfont icon-album"></i>
             <span
               class="name"
-              :title="song?.album.name"
-              @click="router.push({ name: 'album', params: { id: song?.album.id } })"
-            >{{ song?.album.name }}</span>
+              :title="song?.al.name"
+              @click="router.push({ name: 'album', params: { id: song?.al.id } })"
+            >{{ song?.al.name }}</span>
           </span>
-          <span v-if="song?.album.tns.length">
+          <span v-if="song?.al.tns.length">
             <span>（</span>
             <span
-              v-for="(item, index) in song.album.tns"
+              v-for="(item, index) in song.al.tns"
               :key="index"
             >
               <span>{{ item }}</span>
-              <span class="separator" v-if="index !== song.album.tns.length - 1">|</span>
+              <span
+                class="separator"
+                v-if="song && (index !== song.al.tns.length - 1)"
+              >|</span>
             </span>
             <span>）</span>
           </span>
@@ -68,7 +76,7 @@
       <div class="cover-wrap">
         <el-image
           class="cover-img"
-          :src="`${song?.album.picUrl}?param=300y300`"
+          :src="`${song?.al.picUrl}?param=300y300`"
         ></el-image>
       </div>
       <div class="lyric-wrap">
@@ -82,7 +90,7 @@
 <script setup lang="ts">
 import { ref, onBeforeMount } from 'vue'
 import { getMusicDetail } from '@/api/music'
-import { songType } from '@/assets/ts/type'
+import { Song } from '@/assets/types/song'
 import { resolveSongsDetail } from '@/utils/resolve'
 import { useRouter } from 'vue-router'
 import SongLyric from './SongLyric.vue'
@@ -92,7 +100,7 @@ const props = defineProps<{
 }>()
 const emit = defineEmits(['finishLoading'])
 
-const song = ref<songType>()
+const song = ref<Song>()
 const router = useRouter()
 
 const getData = async () => {

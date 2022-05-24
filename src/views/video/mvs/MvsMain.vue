@@ -72,38 +72,37 @@ import {
   getExclusiveMvs,
   getTopMvs,
 } from '@/api/video'
-import { briefMvType } from '@/assets/ts/type'
-import { resolveBriefMvs } from '@/utils/resolve'
+import { MvBrief } from '@/assets/types/video'
 import VideoItem from '@/components/video/VideoItem.vue'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
-const newestMvs = ref<briefMvType[]>([])
-const hotMvs = ref<briefMvType[]>([])
-const exclusiveMvs = ref<briefMvType[]>([])
-const topMvs = ref<briefMvType[]>([])
+const newestMvs = ref<MvBrief[]>([])
+const hotMvs = ref<MvBrief[]>([])
+const exclusiveMvs = ref<MvBrief[]>([])
+const topMvs = ref<MvBrief[]>([])
 
 const getData = async () => {
   const { data: newestData } = await getNewestMvs({
     limit: 8,
   })
-  newestMvs.value = resolveBriefMvs(newestData.data)
+  newestMvs.value = newestData.data
 
   const { data: hotData } = await getAllMvs({
     order: '最热',
     limit: 8,
   })
-  hotMvs.value = resolveBriefMvs(hotData.data)
+  hotMvs.value = hotData.data
 
   const { data: exclusiveData } = await getExclusiveMvs({
     limit: 8,
   })
-  exclusiveMvs.value = resolveBriefMvs(exclusiveData.data)
+  exclusiveMvs.value = exclusiveData.data
 
   const { data: topData } = await getTopMvs({
     limit: 10,
   })
-  topMvs.value = resolveBriefMvs(topData.data)
+  topMvs.value = topData.data
 }
 
 onBeforeMount(() => {

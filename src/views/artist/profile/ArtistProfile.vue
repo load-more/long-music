@@ -3,17 +3,17 @@
     <div class="image-wrap">
       <el-image
         class="cover-image"
-        :src="`${artist?.img1v1Url}?param=200y200`"
+        :src="`${artist.img1v1Url}?param=200y200`"
       />
     </div>
     <div class="info">
       <div class="title single-line-ellipsis">
-        <span>{{ artist?.name }}</span>
+        <span>{{ artist.name }}</span>
       </div>
       <div class="alias single-line-ellipsis">
-        <span v-for="(item, index) in artist?.alias" :key="index">
+        <span v-for="(item, index) in artist.alias" :key="index">
           <span>{{ item }}</span>
-          <span v-if="index !== artist?.alias.length - 1">&nbsp;/&nbsp;</span>
+          <span v-if="index !== artist.alias.length - 1">&nbsp;/&nbsp;</span>
         </span>
       </div>
       <div class="controls single-line-ellipsis">
@@ -23,15 +23,15 @@
         <div class="song-data single-line-ellipsis">
           <span class="item">
             <span class="label">单曲：</span>
-            <span class="content">{{ artist?.musicSize }}</span>
+            <span class="content">{{ artist.musicSize }}</span>
           </span>
           <span class="item">
             <span class="label">专辑：</span>
-            <span class="content">{{ artist?.albumSize }}</span>
+            <span class="content">{{ artist.albumSize }}</span>
           </span>
           <span class="item">
             <span class="label">MV：</span>
-            <span class="content">{{ artist?.mvSize }}</span>
+            <span class="content">{{ artist.mvSize }}</span>
           </span>
         </div>
         <div class="desc single-line-ellipsis" ref="descRef">
@@ -39,7 +39,7 @@
           <span
             class="content"
             @click="toggleReadMore"
-          >{{ artist?.briefDesc }}</span>
+          >{{ artist.briefDesc }}</span>
         </div>
       </div>
     </div>
@@ -48,10 +48,10 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { artistType } from '@/assets/ts/type'
+import { Artist } from '@/assets/types/artist'
 
 defineProps<{
-  artist: artistType
+  artist: Artist
 }>()
 
 /* 点击介绍查看更多 */

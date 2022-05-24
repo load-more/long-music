@@ -24,7 +24,7 @@
 import {
   ref,
 } from 'vue'
-import { songType } from '@/assets/ts/type'
+import { Song } from '@/assets/types/song'
 import ArtistSong from './ArtistSong.vue'
 import ArtistAlbum from './ArtistAlbum.vue'
 import ArtistDescription from './ArtistDescription.vue'
@@ -33,7 +33,7 @@ import ArtistSimilar from './ArtistSimilar.vue'
 
 defineProps<{
   id: number
-  hotSongs: songType[]
+  hotSongs: Song[]
 }>()
 
 const activeTab = ref('song')

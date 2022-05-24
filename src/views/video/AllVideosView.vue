@@ -59,12 +59,12 @@
 
 <script setup lang="ts">
 import { ref, onBeforeMount, watch } from 'vue'
-import { resolveBriefMvs } from '@/utils/resolve'
 import { getAllMvs } from '@/api/video'
 import { useRoute, useRouter } from 'vue-router'
 import VideoItem from '@/components/video/VideoItem.vue'
 import MyPagination from '@/components/pagination/MyPagination.vue'
 import WaveSpinner from '@/components/loading/WaveSpinner.vue'
+import { MvBrief } from '@/assets/types/video'
 
 const route = useRoute()
 const router = useRouter()
@@ -76,7 +76,7 @@ const activeType = ref(Number(route.query.t) || 0)
 const activeOrder = ref(Number(route.query.o) || 0)
 const pageSize = ref(32)
 const count = ref(0)
-const pageData = ref()
+const pageData = ref<MvBrief[]>([])
 const isLoading = ref(false)
 
 const getPage = async (offset: number) => {
@@ -88,7 +88,7 @@ const getPage = async (offset: number) => {
     limit: 20,
     offset: pageSize.value * offset,
   })
-  pageData.value = resolveBriefMvs(data.data)
+  pageData.value = data.data
   count.value = data.count
   isLoading.value = false
 }

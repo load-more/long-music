@@ -23,9 +23,9 @@
 import { ref, onBeforeMount, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { getSearchResult } from '@/api/search'
-import { resolveAlbums } from '@/utils/resolve'
 import MyPagination from '@/components/pagination/MyPagination.vue'
 import AlbumItem from '@/components/album/AlbumItem.vue'
+import { Album } from '@/assets/types/album'
 
 const route = useRoute()
 const keyword = computed(() => {
@@ -37,7 +37,7 @@ const keyword = computed(() => {
 
 const albumCount = ref(0)
 const pageSize = ref(30)
-const pageData = ref()
+const pageData = ref<Album[]>([])
 
 const getPage = async (offset: number) => {
   const { data } = await getSearchResult({
@@ -46,7 +46,7 @@ const getPage = async (offset: number) => {
     offset: pageSize.value * offset,
     limit: pageSize.value,
   })
-  pageData.value = resolveAlbums(data.result.albums)
+  pageData.value = data.result.albums
   albumCount.value = data.result.albumCount
 }
 

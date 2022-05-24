@@ -32,7 +32,7 @@ const { userDetail } = storeToRefs(useUserStore())
 const isLoading = ref(true)
 const loadedCount = ref(0)
 const route = useRoute()
-const uid = Number(route.params.id) || userDetail.value.userId
+const uid = Number(route.params.id) || userDetail.value.profile?.userId!
 
 const handleFinishLoading = () => {
   loadedCount.value += 1

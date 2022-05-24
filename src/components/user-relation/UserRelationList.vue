@@ -21,7 +21,7 @@
               @click="handleClickRelation(item.userId)"
             >{{ item.nickname }}</span>
             <el-button
-              v-if="userDetail.userId === uid"
+              v-if="userDetail.profile?.userId === uid"
               size="small"
               round
             >
@@ -29,8 +29,8 @@
               &nbsp;私信
             </el-button>
             <el-button
-              v-if="userDetail.userId !== uid &&
-                    userDetail.userId !== item.userId &&
+              v-if="userDetail.profile?.userId !== uid &&
+                    userDetail.profile?.userId !== item.userId &&
                     !item.followed"
               size="small"
               round
@@ -40,8 +40,8 @@
               &nbsp;关注
             </el-button>
             <el-button
-              v-if="userDetail.userId !== uid &&
-                    userDetail.userId !== item.userId &&
+              v-if="userDetail.profile?.userId !== uid &&
+                    userDetail.profile?.userId !== item.userId &&
                     item.followed"
               size="small"
               disabled
@@ -56,9 +56,15 @@
               <span>{{ item.signature }}</span>
             </div>
             <div class="info">
-              <span class="single-line-ellipsis">歌单：{{ item.playlistCount }}</span>
-              <span class="single-line-ellipsis">粉丝：{{ item.followeds }}</span>
-              <span class="single-line-ellipsis">关注：{{ item.follows }}</span>
+              <span
+                class="single-line-ellipsis"
+              >歌单：{{ (item as UserRelation).playlistCount }}</span>
+              <span
+                class="single-line-ellipsis"
+              >粉丝：{{ (item as UserRelation).followeds }}</span>
+              <span
+                class="single-line-ellipsis"
+              >关注：{{ (item as UserRelation).follows }}</span>
             </div>
           </div>
         </div>
@@ -85,7 +91,7 @@
               @click="handleClickRelation(item.userId)"
             >{{ item.nickname }}</span>
             <el-button
-              v-if="userDetail.userId === uid"
+              v-if="userDetail.profile?.userId === uid"
               size="small"
               round
             >
@@ -93,8 +99,8 @@
               &nbsp;私信
             </el-button>
             <el-button
-              v-if="userDetail.userId !== uid &&
-                    userDetail.userId !== item.userId &&
+              v-if="userDetail.profile?.userId !== uid &&
+                    userDetail.profile?.userId !== item.userId &&
                     !item.followed"
               size="small"
               round
@@ -104,8 +110,8 @@
               &nbsp;关注
             </el-button>
             <el-button
-              v-if="userDetail.userId !== uid &&
-                    userDetail.userId !== item.userId &&
+              v-if="userDetail.profile?.userId !== uid &&
+                    userDetail.profile?.userId !== item.userId &&
                     item.followed"
               size="small"
               disabled
@@ -132,11 +138,11 @@ import useUserStore from '@/store/user'
 import { storeToRefs } from 'pinia'
 import { followOrUnfollow } from '@/api/user'
 import { ElMessage } from 'element-plus'
-import { userBriefType } from '@/assets/ts/type'
+import type { User, UserRelation } from '@/assets/types/user'
 
 defineProps<{
   uid: number
-  users: userBriefType[]
+  users: User[] | UserRelation[]
   type: 'follows' | 'fans' | 'subscribers'
 }>()
 const emit = defineEmits(['updateArray'])

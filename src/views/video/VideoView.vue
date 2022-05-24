@@ -4,10 +4,11 @@
       <div class="inset-container">
         <div class="video-container">
           <span class="label">视频详情</span>
-          <VideoPlayer :video="(videoUrl as videoUrlType)" />
+          <VideoPlayer v-if="videoUrl" :video="videoUrl" />
           <VideoDetail
             type="video"
-            :detail="(videoDetail as videoDetailType)"
+            v-if="videoDetail"
+            :detail="videoDetail"
           />
           <CommentsCpn type="video" :id="id" />
         </div>
@@ -29,36 +30,31 @@ import {
   getVideoDetail,
   getRelatedVideos,
 } from '@/api/video'
-import {
-  resolveVideoUrl,
-  resolveVideoDetail,
-  resolveBriefVideos,
-} from '@/utils/resolve'
-import type {
-  videoUrlType,
-  videoDetailType,
-  videoType,
-} from '@/assets/ts/type'
 import VideoPlayer from '@/components/video/VideoPlayer.vue'
 import VideoDetail from '@/components/video/VideoDetail.vue'
 import VideoRelated from '@/components/video/VideoRelated.vue'
 import CommentsCpn from '@/components/comments/CommentsCpn.vue'
 import WaveSpinner from '@/components/loading/WaveSpinner.vue'
+import type {
+  VideoBrief,
+  VideoDetail as VideoDetailType,
+  VideoUrl,
+} from '@/assets/types/video'
 
 const route = useRoute()
 const id = String(route.params.id)
-const videoUrl = ref<videoUrlType>()
-const videoDetail = ref<videoDetailType>()
-const relatedVideos = ref<videoType[]>([])
+const videoUrl = ref<VideoUrl>()
+const videoDetail = ref<VideoDetailType>()
+const relatedVideos = ref<VideoBrief[]>([])
 const isLoading = ref(false)
 
 const getData = async () => {
-  const { data: urlData } = await getVideoUrl({ id })
-  videoUrl.value = resolveVideoUrl(urlData.urls[0])
+  const { data: urlData } = await getVideoUrl({ id });
+  [videoUrl.value] = urlData.urls
   const { data: detailData } = await getVideoDetail({ id })
-  videoDetail.value = resolveVideoDetail(detailData.data)
+  videoDetail.value = detailData.data
   const { data: relatedVideoData } = await getRelatedVideos({ id })
-  relatedVideos.value = resolveBriefVideos(relatedVideoData.data)
+  relatedVideos.value = relatedVideoData.data
 }
 
 onBeforeMount(async () => {

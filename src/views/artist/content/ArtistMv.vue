@@ -13,18 +13,17 @@
 import { ref, onBeforeMount } from 'vue'
 import VideoItem from '@/components/video/VideoItem.vue'
 import { getArtistMv } from '@/api/artist'
-import { mvType } from '@/assets/ts/type'
-import { resolveArtistMvs } from '@/utils/resolve'
+import { Mv } from '@/assets/types/video'
 
 const props = defineProps<{
   id: number
 }>()
 
-const mvs = ref<mvType[]>([])
+const mvs = ref<Mv[]>([])
 
 const getData = async () => {
   const { data } = await getArtistMv({ id: props.id })
-  mvs.value = resolveArtistMvs(data.mvs)
+  mvs.value = data.mvs
 }
 
 onBeforeMount(() => {

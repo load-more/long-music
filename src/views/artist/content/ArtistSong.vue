@@ -18,11 +18,11 @@
 
 <script setup lang="ts">
 import MusicListItem from '@/components/music/MusicListItem.vue'
-import { songType } from '@/assets/ts/type'
+import { Song } from '@/assets/types/song'
 import MusicListTopBar from '@/components/music/MusicListTopBar.vue'
 
 defineProps<{
-  hotSongs: songType[]
+  hotSongs: Song[]
 }>()
 </script>
 

@@ -79,11 +79,11 @@
               <div class="cover-wrap">
                 <el-image
                   class="cover-img"
-                  :src="`${item.coverImg}?param=30y30`"
+                  :src="`${item.coverImgUrl}?param=30y30`"
                 ></el-image>
               </div>
-              <span class="single-line-ellipsis" :title="item.title">
-                {{ item.title }}
+              <span class="single-line-ellipsis" :title="item.name">
+                {{ item.name }}
               </span>
             </el-menu-item>
           </el-sub-menu>
@@ -100,11 +100,11 @@
               <div class="cover-wrap">
                 <el-image
                   class="cover-img"
-                  :src="`${item.coverImg}?param=30y30`"
+                  :src="`${item.coverImgUrl}?param=30y30`"
                 ></el-image>
               </div>
-              <span class="single-line-ellipsis" :title="item.title">
-                {{ item.title }}
+              <span class="single-line-ellipsis" :title="item.name">
+                {{ item.name }}
               </span>
             </el-menu-item>
           </el-sub-menu>
@@ -123,28 +123,23 @@ import {
 import useUserStore from '@/store/user'
 import { storeToRefs } from 'pinia'
 import { getUserPlaylist } from '@/api/user'
-import { sidebarPlaylistType } from '@/assets/ts/type'
+import { UserPlaylist } from '@/assets/types/user'
 import { useRouter } from 'vue-router'
 
 const { userDetail, isSidebarExpand } = storeToRefs(useUserStore())
 const router = useRouter()
 const sidebar = ref<HTMLElement>()
-const createdPlaylist = reactive<sidebarPlaylistType[]>([])
-const starredPlaylist = reactive<sidebarPlaylistType[]>([])
+const createdPlaylist = reactive<UserPlaylist[]>([])
+const starredPlaylist = reactive<UserPlaylist[]>([])
 const getData = async () => {
-  const { data } = await getUserPlaylist({ uid: userDetail.value.userId })
-  data.playlist.forEach((item: any) => {
-    const obj: sidebarPlaylistType = {
-      id: item.id,
-      coverImg: item.coverImgUrl,
-      title: item.name,
-    }
-    if (item.creator.userId === userDetail.value.userId) {
+  const { data } = await getUserPlaylist({ uid: userDetail.value.profile?.userId! })
+  data.playlist.forEach((item: UserPlaylist) => {
+    if (item.creator.userId === userDetail.value.profile?.userId) {
       // 如果是用户创建的歌单
-      createdPlaylist.push(obj)
+      createdPlaylist.push(item)
     } else {
       // 如果是用户收藏的歌单
-      starredPlaylist.push(obj)
+      starredPlaylist.push(item)
     }
   })
 }

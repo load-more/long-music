@@ -3,24 +3,24 @@
     <div class="left">
       <el-avatar
         class="avatar"
-        :src="`${user?.avatarUrl}?param=60y60`"
+        :src="`${user.avatarUrl}?param=60y60`"
       ></el-avatar>
-      <span class="name single-line-ellipsis" :title="user?.nickname">{{ user?.nickname }}</span>
-      <i v-if="user?.gender === 1" class="iconfont icon-male"></i>
-      <i v-if="user?.gender === 2" class="iconfont icon-female"></i>
+      <span class="name single-line-ellipsis" :title="user.nickname">{{ user.nickname }}</span>
+      <i v-if="user.gender === 1" class="iconfont icon-male"></i>
+      <i v-if="user.gender === 2" class="iconfont icon-female"></i>
     </div>
     <div class="right">
-      <span class="two-lines-ellipsis" :title="user?.signature">{{ user?.signature }}</span>
+      <span class="two-lines-ellipsis" :title="user.signature">{{ user.signature }}</span>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { userBriefType } from '@/assets/ts/type'
+import { User } from '@/assets/types/user'
 import { useRouter } from 'vue-router'
 
 defineProps<{
-  user: userBriefType
+  user: User
 }>()
 
 const router = useRouter()

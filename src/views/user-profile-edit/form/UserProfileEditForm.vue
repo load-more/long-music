@@ -153,7 +153,7 @@ const profileForm = reactive({
 const { userDetail } = storeToRefs(useUserStore())
 
 const getData = async () => {
-  const uid = userDetail.value.userId
+  const uid = userDetail.value.profile?.userId!
   const { data } = await getUserDetail({ uid })
   profileForm.nickname = data.profile.nickname
   profileForm.gender = data.profile.gender

@@ -12,18 +12,17 @@
 import { ref, onBeforeMount } from 'vue'
 import AlbumItem from '@/components/album/AlbumItem.vue'
 import { getArtistAlbum } from '@/api/artist'
-import { albumDetailType } from '@/assets/ts/type'
-import { resolveAlbums } from '@/utils/resolve'
+import { Album } from '@/assets/types/album'
 
 const props = defineProps<{
   id: number
 }>()
 
-const albums = ref<albumDetailType[]>([])
+const albums = ref<Album[]>([])
 
 const getData = async () => {
   const { data } = await getArtistAlbum({ id: props.id })
-  albums.value = resolveAlbums(data.hotAlbums)
+  albums.value = data.hotAlbums
 }
 
 onBeforeMount(() => {

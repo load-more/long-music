@@ -12,18 +12,17 @@
 import { ref, onBeforeMount } from 'vue'
 import ArtistItem from '@/components/artist/ArtistItem.vue'
 import { getArtistSimi } from '@/api/artist'
-import { artistType } from '@/assets/ts/type'
-import { resolveArtists } from '@/utils/resolve'
+import { Artist } from '@/assets/types/artist'
 
 const props = defineProps<{
   id: number
 }>()
 
-const similarArtists = ref<artistType[]>([])
+const similarArtists = ref<Artist[]>([])
 
 const getData = async () => {
   const { data } = await getArtistSimi({ id: props.id })
-  similarArtists.value = resolveArtists(data.artists)
+  similarArtists.value = data.artists
 }
 
 onBeforeMount(() => {

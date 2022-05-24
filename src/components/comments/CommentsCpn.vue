@@ -33,8 +33,7 @@ import { getPlaylistComment } from '@/api/playlist'
 import { getAlbumComments } from '@/api/album'
 import { getMvComments, getVideoComments } from '@/api/video'
 import EmptyPlaceholder from '@/components/empty-placeholder/EmptyPlaceholder.vue'
-import type { commentType } from '@/assets/ts/type'
-import { resolveComment } from '@/utils/resolve'
+import type { Comment } from '@/assets/types/comment'
 import MyPagination from '@/components/pagination/MyPagination.vue'
 import CommentsList from './CommentsList.vue'
 
@@ -45,7 +44,7 @@ const props = defineProps<{
 const emit = defineEmits(['finishLoading'])
 
 const count = ref(0)
-const hotComments = ref<commentType[]>([])
+const hotComments = ref<Comment[]>([])
 const pageSize = ref(20)
 const pageData = ref()
 
@@ -67,18 +66,12 @@ const getComments = async (type: 'hot' | 'new' | 'all', offset: number) => {
     data = (await getVideoComments(params)).data
   }
 
-  const pushComments = (t: 'hot' | 'new') => {
-    const raw = t === 'hot' ? data.hotComments : data.comments
-    const arr: commentType[] = []
-    raw.forEach((item: any) => {
-      const obj: commentType = resolveComment(item)
-      if (t === 'hot') {
-        hotComments.value.push(obj)
-      } else {
-        arr.push(obj)
-      }
-    })
-    return arr
+  const pushComments = (t: 'hot' | 'new'): Comment[] => {
+    if (t === 'hot') {
+      hotComments.value = data.hotComments
+      return []
+    }
+    return data.comments as Comment[]
   }
 
   if (type === 'hot') {

@@ -19,8 +19,8 @@
         <i class="iconfont icon-notice"></i>
         <ThemeDropdown />
         <UserDropdown
-          :nickname="nickname"
-          :avatar-url="avatarUrl"
+          :nickname="profile?.nickname || ''"
+          :avatar-url="profile?.avatarUrl || ''"
           @logout="isFullLoading = true"
         />
         <teleport to="body">
@@ -48,7 +48,7 @@ const router = useRouter()
 
 /* 渲染顶部栏用户数据 */
 const { userDetail } = storeToRefs(useUserStore())
-const { nickname, avatarUrl } = userDetail.value
+const { profile } = userDetail.value
 
 /* 退出登录 */
 const isFullLoading = ref(false)

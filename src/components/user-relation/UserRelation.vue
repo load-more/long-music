@@ -24,8 +24,7 @@ import { onBeforeMount, ref, computed } from 'vue'
 import { getUserFollows, getUserFans } from '@/api/user'
 import { getPlaylistSubsribers } from '@/api/playlist'
 import EmptyPlaceholder from '@/components/empty-placeholder/EmptyPlaceholder.vue'
-import { userBriefType } from '@/assets/ts/type'
-import { resolveUserBrief } from '@/utils/resolve'
+import { User } from '@/assets/types/user'
 import MyPagination from '@/components/pagination/MyPagination.vue'
 import UserRelationList from './UserRelationList.vue'
 
@@ -50,34 +49,29 @@ const placeholderText = computed(() => {
 })
 
 const getPage = async (offset: number) => {
-  let data
+  let userArr: User[] = []
 
   if (props.type === 'follows') {
-    data = (await getUserFollows({
+    userArr = (await getUserFollows({
       uid: props.id,
       limit: pageSize.value,
       offset: pageSize.value * offset,
     })).data.follow
   } else if (props.type === 'fans') {
-    data = (await getUserFans({
+    userArr = (await getUserFans({
       uid: props.id,
       limit: pageSize.value,
       offset: pageSize.value * offset,
     })).data.followeds
   } else if (props.type === 'subscribers') {
-    data = (await getPlaylistSubsribers({
+    userArr = (await getPlaylistSubsribers({
       id: props.id,
       limit: pageSize.value,
       offset: pageSize.value * offset,
     })).data.subscribers
   }
 
-  const arr: userBriefType[] = []
-  data.forEach((item: any) => {
-    const obj = resolveUserBrief(item)
-    arr.push(obj)
-  })
-  pageData.value = arr
+  pageData.value = userArr
 }
 
 onBeforeMount(async () => {

@@ -4,7 +4,7 @@
       <div class="list-wrap">
         <RcmdListItem
           class="list-item"
-          v-for="(item) in rcmdArr"
+          v-for="(item) in rcmdPlaylist"
           :key="item.id"
           :info="item"
         />
@@ -16,27 +16,19 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, onBeforeMount } from 'vue'
+import { ref, onBeforeMount } from 'vue'
 import { getRecommendPlaylist } from '@/api/playlist'
-import { rcmdPlaylistType } from '@/assets/ts/type'
+import { RecommendPlaylist } from '@/assets/types/home'
 import RcmdListItem from './RcmdPlaylistItem.vue'
 
 const emit = defineEmits(['finish-loading'])
 
 /* 渲染数据 */
-const rcmdArr = reactive<rcmdPlaylistType[]>([])
+const rcmdPlaylist = ref<RecommendPlaylist[]>([])
 const getData = async () => {
   // 获取推荐歌单
   const { data: rcmdData } = await getRecommendPlaylist()
-  rcmdData.recommend.forEach((item: any) => {
-    const obj: rcmdPlaylistType = {
-      id: item.id,
-      name: item.name,
-      picUrl: item.picUrl,
-      playCount: item.playcount,
-    }
-    rcmdArr.push(obj)
-  })
+  rcmdPlaylist.value = rcmdData.recommend
 }
 onBeforeMount(async () => {
   await getData()

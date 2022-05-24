@@ -11,19 +11,18 @@
 
 <script setup lang="ts">
 import { ref, onBeforeMount } from 'vue'
-import { artistDescType } from '@/assets/ts/type'
-import { resolveArtistDesc } from '@/utils/resolve'
+import { ArtistDesc } from '@/assets/types/artist'
 import { getArtistDesc } from '@/api/artist'
 
 const props = defineProps<{
   id: number
 }>()
 
-const desc = ref<artistDescType[]>([])
+const desc = ref<ArtistDesc[]>([])
 
 const getData = async () => {
   const { data } = await getArtistDesc({ id: props.id })
-  desc.value = resolveArtistDesc(data.introduction)
+  desc.value = data.introduction
 }
 
 onBeforeMount(() => {

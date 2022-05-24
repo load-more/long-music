@@ -24,9 +24,9 @@
 import { ref, onBeforeMount, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { getSearchResult } from '@/api/search'
-import { resolveArtists } from '@/utils/resolve'
 import MyPagination from '@/components/pagination/MyPagination.vue'
 import ArtistItem from '@/components/artist/ArtistItem.vue'
+import { Artist } from '@/assets/types/artist'
 
 const route = useRoute()
 const keyword = computed(() => {
@@ -38,7 +38,7 @@ const keyword = computed(() => {
 
 const artistCount = ref(0)
 const pageSize = ref(30)
-const pageData = ref()
+const pageData = ref<Artist[]>([])
 
 const getPage = async (offset: number) => {
   const { data } = await getSearchResult({
@@ -47,7 +47,7 @@ const getPage = async (offset: number) => {
     limit: pageSize.value,
     offset: pageSize.value * offset,
   })
-  pageData.value = resolveArtists(data.result.artists)
+  pageData.value = data.result.artists
   artistCount.value = data.result.artistCount
 }
 

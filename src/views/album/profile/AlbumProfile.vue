@@ -47,7 +47,7 @@
           </span>
           <span class="item">
             <span class="label">分享：</span>
-            <span class="content">{{ album?.shareCount }}</span>
+            <span class="content">{{ album.info.shareCount }}</span>
           </span>
         </div>
         <div class="desc single-line-ellipsis" ref="descRef">
@@ -65,11 +65,11 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { formatTimestamp } from '@/utils/format'
-import { albumDetailType } from '@/assets/ts/type'
+import { Album } from '@/assets/types/album'
 import { useRouter } from 'vue-router'
 
 const props = defineProps<{
-  album: albumDetailType
+  album: Album
 }>()
 
 const router = useRouter()

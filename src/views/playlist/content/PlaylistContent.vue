@@ -33,7 +33,7 @@ import useMusicStore from '@/store/music'
 import CommentsCpn from '@/components/comments/CommentsCpn.vue'
 import MusicListItem from '@/components/music/MusicListItem.vue'
 import UserRelation from '@/components/user-relation/UserRelation.vue'
-import { songType } from '@/assets/ts/type'
+import { Song } from '@/assets/types/song'
 import { resolveSongsDetail } from '@/utils/resolve'
 import MusicListTopBar from '@/components/music/MusicListTopBar.vue'
 
@@ -47,7 +47,7 @@ const musicStore = useMusicStore()
 const { updateCurrentSongList } = musicStore
 
 /* 渲染数据 */
-const songArr = ref<songType[]>([])
+const songArr = ref<Song[]>([])
 
 const getData = async () => {
   const { data } = await getPlaylistAllSongs({ id: props.uid })

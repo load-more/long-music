@@ -70,8 +70,8 @@ import {
 import { getHomeBanner } from '@/api/home'
 import { getMusicDetail } from '@/api/music'
 import useMusicStore from '@/store/music'
-import { bannerType } from '@/assets/ts/type'
-import { resolveSongsDetail, resolveBanners } from '@/utils/resolve'
+import { Banner, targetType } from '@/assets/types/home'
+import { resolveSongsDetail } from '@/utils/resolve'
 import { useRouter } from 'vue-router'
 import useUserStore from '@/store/user'
 import { storeToRefs } from 'pinia'
@@ -82,32 +82,32 @@ const { updateCurrentSong, playMusic } = useMusicStore()
 const { isSidebarExpand } = storeToRefs(useUserStore())
 
 /* 渲染数据 */
-const bannerArr = ref<bannerType[]>([])
+const bannerArr = ref<Banner[]>([])
 const activeIndex = ref(0)
 const router = useRouter()
 
 const getData = async () => {
   // 获取 banner
   const { data } = await getHomeBanner()
-  bannerArr.value = resolveBanners(data.banners)
+  bannerArr.value = data.banners
 }
 
-const handleBannerClick = async (index: number, banner: bannerType) => {
+const handleBannerClick = async (index: number, banner: Banner) => {
   if (index === activeIndex.value) {
-    if (banner.targetType === 3000) { // 网址
+    if (banner.targetType === targetType.webpage) {
       window.open(banner.url, '_blank')
-    } else if (banner.targetType === 1) { // 歌曲
+    } else if (banner.targetType === targetType.song) {
       const { data } = await getMusicDetail({ ids: banner.targetId })
       const song = resolveSongsDetail(data)[0]
       await updateCurrentSong(song)
       playMusic()
-    } else if (banner.targetType === 10) { // 专辑
+    } else if (banner.targetType === targetType.album) {
       router.push({ name: 'album', params: { id: banner.targetId } })
-    } else if (banner.targetType === 100) { // 歌手
+    } else if (banner.targetType === targetType.singer) {
       router.push({ name: 'artist', params: { id: banner.targetId } })
-    } else if (banner.targetType === 1000) { // 歌单
+    } else if (banner.targetType === targetType.playlist) {
       router.push({ name: 'playlist', params: { id: banner.targetId } })
-    } else if (banner.targetType === 1004) { // MV
+    } else if (banner.targetType === targetType.mv) {
       router.push({ name: 'mv', params: { id: banner.targetId } })
     }
   }

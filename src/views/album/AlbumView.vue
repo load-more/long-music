@@ -2,7 +2,7 @@
   <div class="album-container">
     <el-scrollbar class="scrollbar" v-show="!isLoading">
       <div class="album-profile-container">
-        <AlbumProfile :album="(album as albumDetailType)" />
+        <AlbumProfile v-if="album" :album="album" />
       </div>
       <div class="album-content-container">
         <AlbumContent :id="id" :songs="albumSongs" :album-desc="album?.description || ''" />
@@ -16,8 +16,9 @@
 import { onBeforeMount, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { getAlbumDetail } from '@/api/album'
-import { resolveAlbumDetail, resolveSearchSongsDetail } from '@/utils/resolve'
-import type { albumDetailType, songType } from '@/assets/ts/type'
+import { resolveSearchSongsDetail } from '@/utils/resolve'
+import type { Album } from '@/assets/types/album'
+import type { Song } from '@/assets/types/song'
 import WaveSpinner from '@/components/loading/WaveSpinner.vue'
 import AlbumProfile from './profile/AlbumProfile.vue'
 import AlbumContent from './content/AlbumContent.vue'
@@ -25,13 +26,13 @@ import AlbumContent from './content/AlbumContent.vue'
 const route = useRoute()
 
 const id = Number(route.params.id)
-const album = ref<albumDetailType>()
-const albumSongs = ref<songType[]>([])
+const album = ref<Album>()
+const albumSongs = ref<Song[]>([])
 const isLoading = ref(false)
 
 const getData = async () => {
   const { data } = await getAlbumDetail({ id })
-  album.value = resolveAlbumDetail(data.album)
+  album.value = data.album
   albumSongs.value = resolveSearchSongsDetail(data.songs)
 }
 onBeforeMount(async () => {

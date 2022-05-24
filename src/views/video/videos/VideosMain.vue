@@ -51,15 +51,14 @@ import {
   getRecommendVideos,
   getVideosByGroupId,
 } from '@/api/video'
-import { videoTagType, videoType } from '@/assets/ts/type'
-import { resolveVideoTags, resolveDetailVideos } from '@/utils/resolve'
 import VideoItem from '@/components/video/VideoItem.vue'
 import RoundSpinner from '@/components/loading/RoundSpinner.vue'
+import { VideoBrief, VideoTag } from '@/assets/types/video'
 
 const activeTagName = ref('全部')
 const activeTagId = ref(0)
-const tags = ref<videoTagType[]>([])
-const videos = ref<videoType[]>([])
+const tags = ref<VideoTag[]>([])
+const videos = ref<VideoBrief[]>([])
 const popperVisible = ref(false)
 const offset = ref(0)
 const isLoading = ref(false)
@@ -67,7 +66,7 @@ const isDisableScroll = ref(false)
 
 const getData = async () => {
   const { data } = await getVideoGroupList()
-  tags.value = resolveVideoTags(data.data)
+  tags.value = data.data
 }
 
 onBeforeMount(() => {
@@ -100,7 +99,7 @@ const loadVideos = async () => {
   } else {
     data = await getVideosByGroupId({ id: activeTagId.value, offset: offset.value })
   }
-  videos.value.push(...resolveDetailVideos(data.data.datas))
+  videos.value.push(...data.data.datas.map((item: { data: VideoBrief }) => item.data))
   offset.value += 1
   isLoading.value = false
   isDisableScroll.value = false

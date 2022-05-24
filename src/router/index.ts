@@ -6,7 +6,6 @@ import { getMusicDetail } from '@/api/music'
 import { getPlaylistAllSongs } from '@/api/playlist'
 import { getAlbumDetail } from '@/api/album'
 import { resolveSongsDetail, resolveSearchSongsDetail } from '@/utils/resolve'
-import { songType } from '@/assets/ts/type'
 import {
   getSongId,
   getListId,
@@ -130,7 +129,7 @@ router.beforeEach(async (to, from) => {
   } = musicStore
 
   // 如果用户未登录，则重新获取用户信息
-  if (!userDetail.value.userId) {
+  if (!userDetail.value.profile) {
     await useUserStore().init()
   }
 
@@ -142,7 +141,7 @@ router.beforeEach(async (to, from) => {
       // 获取一首歌曲的信息
       const { data } = await getMusicDetail({ ids: id })
       if (data.songs.length) {
-        const song: songType = resolveSongsDetail(data)[0]
+        const song = resolveSongsDetail(data)[0]
         await updateCurrentSong(song)
       }
     }
@@ -156,13 +155,13 @@ router.beforeEach(async (to, from) => {
         // 获取一个歌单全部歌曲的信息
         const { data } = await getPlaylistAllSongs({ id })
         if (data.songs.length) {
-          const arr: songType[] = resolveSongsDetail(data)
+          const arr = resolveSongsDetail(data)
           updateCurrentSongList(id, arr)
         }
       } else if (type === 2) { // 如果是专辑
         const { data } = await getAlbumDetail({ id })
         if (data.songs.length) {
-          const arr: songType[] = resolveSearchSongsDetail(data.songs)
+          const arr = resolveSearchSongsDetail(data.songs)
           updateCurrentSongList(id, arr, 2)
         }
       }
@@ -174,11 +173,11 @@ router.beforeEach(async (to, from) => {
   changeCurrentTime(getCurrentTime())
 
   // 如果用户未登录且目标页面不是登录页，则跳转到登录页
-  if (!userDetail.value.userId && to.name !== 'login') { // 注意，一定要写后面的判断逻辑，否则会死循环
+  if (!userDetail.value.profile && to.name !== 'login') { // 注意，一定要写后面的判断逻辑，否则会死循环
     return { name: 'login' }
   }
   // 如果用户已登录且目标页面是登录页，则停止跳转
-  if (userDetail.value.userId && to.name === 'login') {
+  if (userDetail.value.profile && to.name === 'login') {
     return from.fullPath
   }
   return true

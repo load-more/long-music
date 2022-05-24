@@ -9,24 +9,24 @@
         <div class="image-wrap">
           <div
             class="image image-inset-shadow"
-            :style="{'background-image': `url(${video?.coverUrl}?param=300y160)`}"
+            :style="{'background-image': `url(${video.coverUrl}?param=300y160)`}"
           >
             <span class="play-count">
               <i class="iconfont icon-play"></i>
-              {{ formatCount(video?.playTime) }}
+              {{ formatCount(video.playTime) }}
             </span>
-            <span class="duration">{{ formatDuration(video?.durationms) }}</span>
+            <span class="duration">{{ formatDuration(video.durationms) }}</span>
           </div>
         </div>
       </div>
       <div class="right">
         <div class="title two-lines-ellipsis">
-          <span>{{ video?.title }}</span>
+          <span>{{ video.title }}</span>
         </div>
         <div class="creator two-lines-ellipsis">
           <span>by:&nbsp;</span>
           <span
-            v-for="(creator, index) in video?.creator"
+            v-for="(creator, index) in video.creator"
             :key="creator.userId"
           >
             <span>{{ creator.userName }}</span>
@@ -40,10 +40,10 @@
 
 <script setup lang="ts">
 import { formatDuration, formatCount } from '@/utils/format'
-import type { videoType } from '@/assets/ts/type'
+import { VideoBrief } from '@/assets/types/video'
 
 defineProps<{
-  videos: videoType[]
+  videos: VideoBrief[]
 }>()
 </script>
 

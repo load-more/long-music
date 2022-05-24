@@ -3,72 +3,72 @@
     <div class="image-wrap">
       <div
         class="image image-inset-shadow"
-        :style="{'background-image': `url(${(video as videoType)?.coverUrl}?param=300y160)`}"
-        @click="router.push({ name: 'video', params: { id: (video as videoType)?.vid } })"
+        :style="{'background-image': `url(${(video as VideoBrief).coverUrl}?param=300y160)`}"
+        @click="router.push({ name: 'video', params: { id: (video as VideoBrief).vid } })"
       >
         <span class="play-count">
-          <i class="iconfont icon-play"></i>&nbsp;{{ formatCount((video as videoType)?.playTime) }}
+          <i class="iconfont icon-play"></i>&nbsp;{{ formatCount((video as VideoBrief).playTime) }}
         </span>
-        <span class="duration">{{ formatDuration((video as videoType)?.durationms) }}</span>
+        <span class="duration">{{ formatDuration((video as VideoBrief).durationms) }}</span>
       </div>
     </div>
     <div class="title single-line-ellipsis">
       <span
-        :title="(video as videoType)?.title"
-        @click="router.push({ name: 'video', params: { id: (video as videoType)?.vid } })"
-      >{{ (video as videoType)?.title }}</span>
+        :title="(video as VideoBrief).title"
+        @click="router.push({ name: 'video', params: { id: (video as VideoBrief).vid } })"
+      >{{ (video as VideoBrief).title }}</span>
     </div>
   </div>
   <div class="video-item-wrap" v-else-if="type === 'artistMv'">
     <div class="image-wrap">
       <div
         class="image image-inset-shadow"
-        :style="{'background-image': `url(${(video as mvType)?.imgurl16v9}?param=300y160)`}"
-        @click="router.push({ name: 'mv', params: { id: (video as mvType).id } })"
+        :style="{'background-image': `url(${(video as Mv).imgurl16v9}?param=300y160)`}"
+        @click="router.push({ name: 'mv', params: { id: (video as Mv).id } })"
       >
         <span class="play-count">
-          <i class="iconfont icon-play"></i>&nbsp;{{ formatCount((video as mvType)?.playCount) }}
+          <i class="iconfont icon-play"></i>&nbsp;{{ formatCount((video as Mv).playCount) }}
         </span>
-        <span class="duration">{{ formatDuration((video as mvType)?.duration) }}</span>
+        <span class="duration">{{ formatDuration((video as Mv).duration) }}</span>
       </div>
     </div>
     <div class="title single-line-ellipsis">
       <span
-        :title="(video as mvType)?.name"
-        @click="router.push({ name: 'mv', params: { id: (video as mvType).id } })"
-      >{{ (video as mvType)?.name }}</span>
+        :title="(video as Mv).name"
+        @click="router.push({ name: 'mv', params: { id: (video as Mv).id } })"
+      >{{ (video as Mv).name }}</span>
     </div>
   </div>
   <div class="video-item-wrap" v-else>
     <div class="image-wrap">
       <div
         class="image image-inset-shadow"
-        :style="{'background-image': `url(${(video as briefMvType)?.cover}?param=300y160)`}"
-        @click="router.push({ name: 'mv', params: { id: (video as briefMvType)?.id } })"
+        :style="{'background-image': `url(${(video as MvBrief).cover}?param=300y160)`}"
+        @click="router.push({ name: 'mv', params: { id: (video as MvBrief).id } })"
       >
         <span class="play-count">
-          <i class="iconfont icon-play"></i>&nbsp;{{ formatCount((video as briefMvType)
-            ?.playCount) }}
+          <i class="iconfont icon-play"
+          ></i>&nbsp;{{ formatCount((video as MvBrief).playCount) }}
         </span>
       </div>
     </div>
     <div class="title single-line-ellipsis">
       <span
-        :title="(video as briefMvType)?.name"
-        @click="router.push({ name: 'mv', params: { id: (video as briefMvType)?.id } })"
-      >{{ (video as briefMvType)?.name }}</span>
+        :title="(video as MvBrief).name"
+        @click="router.push({ name: 'mv', params: { id: (video as MvBrief).id } })"
+      >{{ (video as MvBrief).name }}</span>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { formatCount, formatDuration } from '@/utils/format'
-import type { videoType, mvType, briefMvType } from '@/assets/ts/type'
+import type { Mv, MvBrief, VideoBrief } from '@/assets/types/video'
 import { useRouter } from 'vue-router'
 
 defineProps<{
   type: 'video' | 'mv' | 'artistMv'
-  video: videoType | mvType | briefMvType
+  video: VideoBrief | Mv | MvBrief
 }>()
 
 const router = useRouter()

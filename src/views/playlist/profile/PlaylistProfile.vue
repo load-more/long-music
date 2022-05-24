@@ -12,7 +12,7 @@
         <span>{{ playlist?.name }}</span>
         <i
           class="iconfont icon-edit"
-          v-if="userDetail.userId === playlist?.creator.userId"
+          v-if="userDetail.profile?.userId === playlist?.creator.userId"
           @click="router.push({ name: 'editPlaylist', params: { id: playlist!.id } })"
         ></i>
       </div>
@@ -81,8 +81,7 @@ import {
 import { getPlaylistDetail } from '@/api/playlist'
 import { formatCount, formatTimestamp } from '@/utils/format'
 import emitter from '@/utils/emitter'
-import { playlistDetailType } from '@/assets/ts/type'
-import { resolvePlaylistDetail } from '@/utils/resolve'
+import { PlaylistDetail } from '@/assets/types/playlist'
 import useUserStore from '@/store/user'
 import { storeToRefs } from 'pinia'
 
@@ -95,7 +94,7 @@ const emit = defineEmits(['finish-loading'])
 const router = useRouter()
 
 /* 渲染数据 */
-const playlist = ref<playlistDetailType>()
+const playlist = ref<PlaylistDetail>()
 const { userDetail } = storeToRefs(useUserStore())
 
 const createTime = computed(() => {
@@ -111,11 +110,10 @@ onBeforeMount(async () => {
   const { data } = await getPlaylistDetail({
     id: props.uid,
   })
-  playlist.value = resolvePlaylistDetail(data.playlist)
-  playlist.value.shareCount = data.playlist.shareCount
+  playlist.value = data.playlist
 
   emit('finish-loading')
-  emitter.emit('onSendPlaylistSubscribers', playlist.value.subscribedCount)
+  emitter.emit('onSendPlaylistSubscribers', playlist.value!.subscribedCount)
 })
 
 /* 点击介绍查看更多 */

@@ -15,12 +15,12 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { formatCount } from '@/utils/format'
-import type { searchMultiMatchType } from '@/assets/ts/type'
+import type { SearchMultiMatch } from '@/assets/types/search'
 import { useRouter } from 'vue-router'
 
 const props = defineProps<{
   type: 'artist' | 'playlist' | 'album'
-  data: searchMultiMatchType
+  data: SearchMultiMatch
 }>()
 
 const router = useRouter()

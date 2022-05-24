@@ -24,9 +24,9 @@
 import { ref, onBeforeMount, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { getSearchResult } from '@/api/search'
-import { resolveBriefVideos } from '@/utils/resolve'
 import MyPagination from '@/components/pagination/MyPagination.vue'
 import VideoItem from '@/components/video/VideoItem.vue'
+import { VideoBrief } from '@/assets/types/video'
 
 const route = useRoute()
 const keyword = computed(() => {
@@ -38,7 +38,7 @@ const keyword = computed(() => {
 
 const videoCount = ref(0)
 const pageSize = ref(32)
-const pageData = ref()
+const pageData = ref<VideoBrief[]>([])
 
 const getPage = async (offset: number) => {
   const { data } = await getSearchResult({
@@ -47,7 +47,7 @@ const getPage = async (offset: number) => {
     limit: pageSize.value,
     offset: pageSize.value * offset,
   })
-  pageData.value = resolveBriefVideos(data.result.videos)
+  pageData.value = data.result.videos
   videoCount.value = data.result.videoCount
 }
 

@@ -29,7 +29,7 @@ const { userDetail } = storeToRefs(useUserStore())
 const route = useRoute()
 const nickname = ref('')
 const followsCount = ref(0)
-const uid = Number(route.params.id) || userDetail.value.userId
+const uid = Number(route.params.id) || userDetail.value.profile?.userId!
 const getData = async () => {
   const { data } = await getUserDetail({ uid })
   nickname.value = data.profile.nickname

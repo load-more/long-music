@@ -24,9 +24,9 @@
 import { ref, onBeforeMount, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { getSearchResult } from '@/api/search'
-import { resolveUserBrief } from '@/utils/resolve'
 import MyPagination from '@/components/pagination/MyPagination.vue'
 import UserItem from '@/components/user/UserItem.vue'
+import { SearchPlaylist } from '@/assets/types/playlist'
 
 const route = useRoute()
 const keyword = computed(() => {
@@ -38,7 +38,7 @@ const keyword = computed(() => {
 
 const userCount = ref(0)
 const pageSize = ref(30)
-const pageData = ref()
+const pageData = ref<SearchPlaylist[]>([])
 
 const getPage = async (offset: number) => {
   const { data } = await getSearchResult({
@@ -47,11 +47,7 @@ const getPage = async (offset: number) => {
     limit: pageSize.value,
     offset: pageSize.value * offset,
   })
-  const arr: any[] = []
-  data.result.userprofiles.forEach((user: any) => {
-    arr.push(resolveUserBrief(user))
-  })
-  pageData.value = arr
+  pageData.value = data.result.userprofiles
   userCount.value = data.result.userprofileCount
 }
 

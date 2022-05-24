@@ -171,7 +171,7 @@ import {
 } from '@/utils/storage'
 import { useRouter } from 'vue-router'
 import type { ElScrollbar } from 'element-plus'
-import { searchSuggestType } from '@/assets/ts/type'
+import { SearchSuggest } from '@/assets/types/search'
 import { getMusicDetail } from '@/api/music'
 import { resolveSongsDetail } from '@/utils/resolve'
 import useMusicStore from '@/store/music'
@@ -249,7 +249,7 @@ const typeIcon = {
   albums: 'album',
   playlists: 'playlist',
 }
-const typeContent = ref<searchSuggestType>({
+const typeContent = ref<SearchSuggest>({
   songs: [],
   artists: [],
   albums: [],

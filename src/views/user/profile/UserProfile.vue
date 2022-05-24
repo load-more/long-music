@@ -3,7 +3,7 @@
     <div class="left">
       <el-avatar
         class="avatar"
-        :src="`${user?.avatarUrl}?param=200y200`"
+        :src="`${user?.profile.avatarUrl}?param=200y200`"
         shape="circle"
       ></el-avatar>
     </div>
@@ -11,10 +11,10 @@
       <div class="top-profile">
         <div class="info-wrap">
           <div class="info">
-            <span class="name">{{ user?.nickname }}</span>
+            <span class="name">{{ user?.profile.nickname }}</span>
           </div>
           <el-tooltip
-            v-if="userId === uid"
+            v-if="profile?.userId === uid"
             placement="top"
             :show-arrow="false"
             popper-class="level-popper"
@@ -23,27 +23,27 @@
               当前等级：Lv.{{ user?.level }}<br />
               距离下一等级还需：<br />
               1. 听歌：{{
-                (user!.nextPlayCount && user!.nowPlayCount)
-                ? user!.nextPlayCount - user!.nowPlayCount
+                (userLevel.nextPlayCount && userLevel.nowPlayCount)
+                ? userLevel.nextPlayCount - userLevel.nowPlayCount
                 : 0
               }}
               首<br />
               2. 登录：{{
-                (user!.nextLoginCount && user!.nowLoginCount)
-                ? user!.nextLoginCount - user!.nowLoginCount
+                (userLevel.nextLoginCount && userLevel.nowLoginCount)
+                ? userLevel.nextLoginCount - userLevel.nowLoginCount
                 : 0
               }} 天
             </template>
             <span class="level my-level">Lv.{{ user?.level }}</span>
           </el-tooltip>
           <span class="level" v-else>Lv.{{ user?.level }}</span>
-          <span class="gender" v-if="user?.gender">
-            <i :class="`iconfont icon-${genderArr[user.gender]}`"></i>
+          <span class="gender" v-if="user?.profile.gender">
+            <i :class="`iconfont icon-${genderArr[user.profile.gender]}`"></i>
           </span>
         </div>
         <div>
           <el-button
-            v-if="userId === uid"
+            v-if="profile?.userId === uid"
             @click="router.push({ name: 'editProfile' })"
             round
           >
@@ -58,7 +58,7 @@
             &nbsp;私信
           </el-button>
           <el-button
-            v-if="userId !== uid && user?.followed"
+            v-if="profile?.userId !== uid && user?.profile.followed"
             @click="handleFollowOrUnfollow"
             round
           >
@@ -66,7 +66,7 @@
             &nbsp;已关注
           </el-button>
           <el-button
-            v-if="userId !== uid && !user?.followed"
+            v-if="profile?.userId !== uid && !user?.profile.followed"
             @click="handleFollowOrUnfollow"
             round
           >
@@ -77,12 +77,12 @@
       </div>
       <div class="mid-profile">
         <div class="item left-item" @click="handleClickFollow">
-          <span class="num">{{ user?.follows }}</span>
+          <span class="num">{{ user?.profile.follows }}</span>
           <span class="label">关注</span>
         </div>
         <div class="item mid-item">
           <div class="mid-wrap" @click="handleClickFans">
-            <span class="num">{{ user?.followeds }}</span>
+            <span class="num">{{ user?.profile.followeds }}</span>
             <span class="label">粉丝</span>
           </div>
         </div>
@@ -105,7 +105,7 @@
           <span
             class="content"
             @click="toggleReadMore"
-          >{{ user?.signature }}</span>
+          >{{ user?.profile.signature }}</span>
         </div>
       </div>
     </div>
@@ -123,40 +123,36 @@ import regionData from '@/assets/ts/region'
 import useUserStore from '@/store/user'
 import { storeToRefs } from 'pinia'
 import { ElMessage } from 'element-plus'
-import { userDetailType } from '@/assets/ts/type'
-import { resolveUserDetail } from '@/utils/resolve'
+import { UserDetail } from '@/assets/types/user'
 
 const props = defineProps<{
   uid: number
 }>()
 const emit = defineEmits(['finish-loading'])
 
-const { userDetail } = storeToRefs(useUserStore())
-const { userId } = userDetail.value
+const { userDetail, userLevel } = storeToRefs(useUserStore())
+const { profile } = userDetail.value
 
 /* 路由管理 */
 const router = useRouter()
 
 /* 渲染数据 */
-const user = ref<userDetailType>()
+const user = ref<UserDetail>()
 const genderArr = ['unknown', 'male', 'female']
 
 const getData = async () => {
   // 如果是用户本身，则直接取 userDetail 的数据
-  if (props.uid === userId) {
-    user.value = userDetail.value
+  if (props.uid === profile?.userId) {
+    user.value = userDetail.value as UserDetail
   } else {
     // 如果是其他用户，则发送请求
     const { data: detailData } = await getUserDetail({ uid: props.uid })
-    user.value = resolveUserDetail(detailData)
+    user.value = detailData
   }
   // 获取用户等级信息
-  if (userId === props.uid) {
+  if (profile?.userId === props.uid && userLevel.value.level === undefined) {
     const { data: levelData } = await getUserLevel()
-    user.value.nextPlayCount = levelData.data.nextPlayCount
-    user.value.nowPlayCount = levelData.data.nowPlayCount
-    user.value.nextLoginCount = levelData.data.nextLoginCount
-    user.value.nowLoginCount = levelData.data.nowLoginCount
+    userLevel.value = levelData.data
   }
   // 数据加载完成
   emit('finish-loading')
@@ -178,13 +174,13 @@ const createTime = computed(() => {
 const region = computed(() => {
   let province = ''
   let city = ''
-  if (user.value?.province) {
+  if (user.value?.profile.province) {
     regionData.forEach((p) => {
-      if (p.code === String(user.value?.province)) {
+      if (p.code === String(user.value?.profile.province)) {
         province = p.value
         if (p.children.length) {
           p.children.forEach((c) => {
-            if (c.code === String(user.value?.city)) {
+            if (c.code === String(user.value?.profile.city)) {
               city = c.value
               return null
             }
@@ -224,13 +220,13 @@ const toggleReadMore = () => {
 /* 关注或取消关注 */
 const handleFollowOrUnfollow = async () => {
   const { data } = await followOrUnfollow({
-    id: user.value?.userId!,
-    t: user.value?.followed ? 0 : 1,
+    id: user.value?.profile.userId!,
+    t: user.value?.profile.followed ? 0 : 1,
   })
   if (data.code === 200) {
     ElMessage({
       type: 'success',
-      message: user.value?.followed ? '已取消关注！' : '关注成功！',
+      message: user.value?.profile.followed ? '已取消关注！' : '关注成功！',
       appendTo: document.body,
     })
   }

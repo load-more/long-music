@@ -24,7 +24,7 @@ import UserPlaylist from './content/UserPlaylist.vue'
 const { userDetail } = storeToRefs(useUserStore())
 
 const route = useRoute()
-const uid = Number(route.params.id) || userDetail.value.userId
+const uid = Number(route.params.id) || userDetail.value.profile?.userId!
 const isLoading = ref(true)
 
 const loadedCount = ref(0)

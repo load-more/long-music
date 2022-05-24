@@ -4,7 +4,7 @@
       <div class="creator">
         <div
           class="item"
-          v-for="(artist) in (detail as mvDetailType)?.artists"
+          v-for="(artist) in (detail as MvDetail).artists"
           :key="artist?.id"
         >
           <el-avatar
@@ -15,14 +15,14 @@
         </div>
       </div>
       <div class="title">
-        <span>{{ (detail as mvDetailType)?.name }}</span>
+        <span>{{ (detail as MvDetail).name }}</span>
       </div>
       <div class="info">
         <span class="publish-time">
           发布：{{ detail?.publishTime }}
         </span>
         <span class="play-count">
-          播放：{{ (detail as mvDetailType)?.playCount }}
+          播放：{{ (detail as MvDetail).playCount }}
         </span>
       </div>
       <div class="tags">
@@ -38,8 +38,8 @@
         <el-button round>
           <i class="iconfont icon-thumb-up-line"></i>点赞({{ data?.likedCount }})</el-button>
         <el-button round>
-          <i class="iconfont icon-collection"></i>收藏({{ (detail as mvDetailType)
-          ?.subCount }})</el-button>
+          <i class="iconfont icon-collection"
+          ></i>收藏({{ (detail as MvDetail).subCount }})</el-button>
         <el-button round>
           <i class="iconfont icon-share"></i>分享({{ data?.shareCount }})</el-button>
         <el-button round>
@@ -51,20 +51,20 @@
         <div class="item">
           <el-avatar
             class="avatar"
-            :src="`${(detail as videoDetailType)?.creator.avatarUrl}?param=40y40`"
+            :src="`${(detail as VideoDetail).creator.avatarUrl}?param=40y40`"
           ></el-avatar>
-          <span class="name">{{ (detail as videoDetailType)?.creator.nickname }}</span>
+          <span class="name">{{ (detail as VideoDetail).creator.nickname }}</span>
         </div>
       </div>
       <div class="title">
-        <span>{{ (detail as videoDetailType)?.title }}</span>
+        <span>{{ (detail as VideoDetail).title }}</span>
       </div>
       <div class="info">
         <span class="publish-time">
           发布：{{ detail?.publishTime }}
         </span>
         <span class="play-count">
-          播放：{{ (detail as videoDetailType)?.playTime }}
+          播放：{{ (detail as VideoDetail).playTime }}
         </span>
       </div>
       <div class="tags">
@@ -78,14 +78,14 @@
       </div>
       <div class="btns">
         <el-button round>
-          <i class="iconfont icon-thumb-up-line"></i>点赞({{ (detail as videoDetailType)
-          ?.praisedCount }})</el-button>
+          <i class="iconfont icon-thumb-up-line"></i>点赞({{ (detail as VideoDetail)
+          .praisedCount }})</el-button>
         <el-button round>
-          <i class="iconfont icon-collection"></i>收藏({{ (detail as videoDetailType)
-          ?.subscribeCount }})</el-button>
+          <i class="iconfont icon-collection"></i>收藏({{ (detail as VideoDetail)
+          .subscribeCount }})</el-button>
         <el-button round>
-          <i class="iconfont icon-share"></i>分享({{ (detail as videoDetailType)
-          ?.shareCount }})</el-button>
+          <i class="iconfont icon-share"></i>分享({{ (detail as VideoDetail)
+          .shareCount }})</el-button>
         <el-button round>
           <i class="iconfont icon-download"></i>下载</el-button>
       </div>
@@ -94,12 +94,12 @@
 </template>
 
 <script setup lang="ts">
-import type { mvDetailType, mvDataType, videoDetailType } from '@/assets/ts/type'
+import { MvData, MvDetail, VideoDetail } from '@/assets/types/video'
 
 defineProps<{
   type: 'mv' | 'video'
-  detail: mvDetailType | videoDetailType
-  data?: mvDataType
+  detail: MvDetail | VideoDetail
+  data?: MvData
 }>()
 </script>
 

@@ -8,7 +8,7 @@
       >
         <div class="play-count">
           <i class="iconfont icon-play"></i>
-          <span>{{ formatCount(info.playCount) }}</span>
+          <span>{{ formatCount(info.playcount) }}</span>
         </div>
         <div class="play-icon">
           <i class="iconfont icon-play-circle"></i>
@@ -24,10 +24,10 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import { formatCount } from '@/utils/format'
-import { rcmdPlaylistType } from '@/assets/ts/type'
+import { RecommendPlaylist } from '@/assets/types/home'
 
 const props = defineProps<{
-  info: rcmdPlaylistType
+  info: RecommendPlaylist
 }>()
 
 const router = useRouter()
